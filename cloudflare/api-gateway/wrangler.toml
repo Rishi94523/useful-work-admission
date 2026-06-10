@@ -1,0 +1,9 @@
+name = "pouw-api-gateway"
+main = "src/index.ts"
+compatibility_date = "2026-06-01"
+
+[observability]
+enabled = true
+
+# Configure after the FastAPI service has a public HTTPS origin:
+#   wrangler secret put POUW_API_ORIGIN

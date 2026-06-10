@@ -35,6 +35,7 @@ export type {
   CaptchaResult,
   CaptchaTask,
   CaptchaError,
+  CaptchaProgress,
   Prediction,
   VerificationResponse,
   WidgetState,

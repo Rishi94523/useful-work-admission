@@ -16,7 +16,7 @@ from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
 
 from app.config import get_settings
-from app.api import captcha, verification, federated
+from app.api import captcha, verification, federated, metrics, sites
 from app.api.captcha import inference_log  # Import shared inference log
 from app.models import init_db, close_db
 from app.utils.redis_client import init_redis, close_redis
@@ -193,6 +193,8 @@ async def ready_check():
 app.include_router(captcha.router, prefix="/api/v1", tags=["CAPTCHA"])
 app.include_router(verification.router, prefix="/api/v1", tags=["Verification"])
 app.include_router(federated.router, prefix="/api/v1", tags=["Federated Learning"])
+app.include_router(metrics.router, prefix="/api/v1", tags=["Metrics"])
+app.include_router(sites.router, prefix="/api/v1", tags=["Sites"])
 
 
 # Root endpoint

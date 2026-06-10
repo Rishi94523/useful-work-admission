@@ -12,8 +12,14 @@ export type {
   CaptchaConfig,
   CaptchaResult,
   CaptchaError,
+  CaptchaProgress,
   WidgetState,
 } from '@pouw/widget';
 
 // Vanilla JS wrapper
 export { createCaptcha } from './vanilla';
+export {
+  validateCaptchaToken,
+  type ValidateCaptchaTokenOptions,
+  type ValidateCaptchaTokenResult,
+} from './server';

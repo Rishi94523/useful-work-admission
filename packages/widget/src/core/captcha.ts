@@ -15,6 +15,8 @@ import type {
   TimingData,
   VerificationResponse,
   CaptchaTask,
+  CaptchaProgress,
+  PipelineProgress,
 } from '../types';
 import { ApiClient, getClientMetadata } from './api-client';
 import { Config } from './config';
@@ -90,6 +92,10 @@ export class PoUWCaptcha {
       // Step 1: Initialize session
       this.widget.setState('loading');
       this.widget.setMessage('Initializing security check...');
+      this.invokeProgress({
+        stage: 'initializing',
+        progress: 0,
+      });
 
       timer.start('init');
       const metadata = getClientMetadata();
@@ -103,6 +109,12 @@ export class PoUWCaptcha {
         sessionId: this.session.sessionId,
         difficulty: this.session.difficulty,
         isShardTask: this.session.isShardTask(),
+      });
+      this.invokeProgress({
+        stage: 'assigned',
+        progress: 0,
+        difficulty: this.session.difficulty,
+        segment: this.getCurrentSegment(),
       });
 
       // Step 2-4: Execute task (ShardTask or legacy CaptchaTask)
@@ -121,6 +133,13 @@ export class PoUWCaptcha {
         // Human verification required
         this.session.verificationData = submitResponse.verification;
         this.session.state = 'verifying';
+        this.invokeProgress({
+          stage: 'verifying',
+          progress: 1,
+          difficulty: this.session.difficulty,
+          segment: this.getCurrentSegment(),
+          pipeline: submitResponse.pipeline,
+        });
         this.widget.showVerification(submitResponse.verification);
 
         // Wait for verification to complete
@@ -134,9 +153,17 @@ export class PoUWCaptcha {
         const result = this.createResult(
           submitResponse.captchaToken,
           new Date(submitResponse.expiresAt!),
-          false
+          false,
+          submitResponse.pipeline
         );
 
+        this.invokeProgress({
+          stage: 'complete',
+          progress: 1,
+          difficulty: this.session.difficulty,
+          segment: this.getCurrentSegment(),
+          pipeline: submitResponse.pipeline,
+        });
         this.invokeCallback('onSuccess', submitResponse.captchaToken);
         return result;
       } else if (submitResponse.success === false) {
@@ -199,6 +226,12 @@ export class PoUWCaptcha {
     const externalProgress = shardTask.onProgress;
     shardTask.onProgress = (progress) => {
       this.widget.setProgress(progress * 100);
+      this.invokeProgress({
+        stage: 'computing',
+        progress,
+        difficulty: this.session!.difficulty,
+        segment: this.getCurrentSegment(),
+      });
       externalProgress?.(progress);
     };
 
@@ -246,6 +279,13 @@ export class PoUWCaptcha {
       proof,
       timing
     );
+    this.invokeProgress({
+      stage: 'submitted',
+      progress: 1,
+      difficulty: this.session!.difficulty,
+      segment: this.getCurrentSegment(),
+      pipeline: submitResponse.pipeline,
+    });
 
     return { prediction, submitResponse };
   }
@@ -318,6 +358,12 @@ export class PoUWCaptcha {
       proofOfWork,
       timing
     );
+    this.invokeProgress({
+      stage: 'submitted',
+      progress: 1,
+      difficulty: this.session!.difficulty,
+      pipeline: submitResponse.pipeline,
+    });
 
     return { prediction, submitResponse };
   }
@@ -493,13 +539,15 @@ export class PoUWCaptcha {
   private createResult(
     token: string,
     expiresAt: Date,
-    verificationPerformed: boolean
+    verificationPerformed: boolean,
+    pipeline?: PipelineProgress
   ): CaptchaResult {
     return {
       token,
       expiresAt,
       sessionId: this.session!.sessionId,
       verificationPerformed,
+      pipeline,
     };
   }
 
@@ -552,6 +600,27 @@ export class PoUWCaptcha {
         this.config.error(`Callback ${name} error:`, error);
       }
     }
+  }
+
+  private invokeProgress(progress: CaptchaProgress): void {
+    const callback = this.config.getCallbacks().onProgress;
+    if (typeof callback === 'function') {
+      try {
+        callback(progress);
+      } catch (error) {
+        this.config.error('Callback onProgress error:', error);
+      }
+    }
+  }
+
+  private getCurrentSegment(): [number, number] | undefined {
+    const shardTask = this.session?.getShardTask();
+    if (!shardTask) return undefined;
+    const segmentStart = shardTask.segmentStart ?? 0;
+    return [
+      segmentStart,
+      segmentStart + shardTask.expectedLayers,
+    ];
   }
 
   /**

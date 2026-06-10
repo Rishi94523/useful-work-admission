@@ -33,7 +33,19 @@ class DomainConfig(Base):
     api_key_hash: Mapped[str] = mapped_column(
         String(64),
         nullable=False,
-        comment="Hashed API key",
+        comment="SHA-256 hash of the public site key",
+    )
+    site_key_prefix: Mapped[Optional[str]] = mapped_column(
+        String(32),
+        nullable=True,
+        unique=True,
+        index=True,
+        comment="Non-secret key prefix for dashboard lookup",
+    )
+    secret_key_hash: Mapped[Optional[str]] = mapped_column(
+        String(64),
+        nullable=True,
+        comment="SHA-256 hash of server-side validation secret",
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean,
@@ -67,6 +79,12 @@ class DomainConfig(Base):
         DateTime,
         nullable=False,
         default=datetime.utcnow,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
     )
 
     def __repr__(self) -> str:

@@ -8,6 +8,7 @@ from app.utils.security import (
     generate_captcha_token,
     hash_api_key,
     verify_api_key,
+    key_prefix,
 )
 from app.utils.hashing import sha256_hash, generate_random_token
 
@@ -17,6 +18,7 @@ __all__ = [
     "generate_captcha_token",
     "hash_api_key",
     "verify_api_key",
+    "key_prefix",
     "sha256_hash",
     "generate_random_token",
 ]

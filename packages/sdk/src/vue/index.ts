@@ -19,6 +19,7 @@ export interface UsePoUWCaptchaOptions {
   theme?: 'light' | 'dark' | 'auto';
   language?: string;
   invisible?: boolean;
+  onProgress?: CaptchaConfig['onProgress'];
 }
 
 /**
@@ -88,6 +89,7 @@ export function usePoUWCaptcha(
         token.value = null;
         isVerified.value = false;
       },
+      onProgress: options.onProgress,
     };
 
     captcha = new PoUWCaptcha(config);

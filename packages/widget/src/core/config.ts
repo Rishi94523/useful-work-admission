@@ -2,13 +2,27 @@
  * Configuration management for PoUW CAPTCHA Widget
  */
 
-import type { CaptchaConfig, CaptchaError, VerificationData } from '../types';
+import type {
+  CaptchaConfig,
+  CaptchaError,
+  CaptchaProgress,
+  VerificationData,
+} from '../types';
 
 /**
  * Default configuration values
  */
 export const DEFAULT_CONFIG: Required<
-  Omit<CaptchaConfig, 'container' | 'siteKey' | 'onSuccess' | 'onError' | 'onExpire' | 'onVerificationRequired'>
+  Omit<
+    CaptchaConfig,
+    | 'container'
+    | 'siteKey'
+    | 'onSuccess'
+    | 'onError'
+    | 'onExpire'
+    | 'onProgress'
+    | 'onVerificationRequired'
+  >
 > & Pick<CaptchaConfig, 'container' | 'siteKey'> = {
   apiUrl: 'https://api.pouw.dev/v1',
   siteKey: '',
@@ -51,6 +65,7 @@ export class Config {
     onSuccess?: (token: string) => void;
     onError?: (error: CaptchaError) => void;
     onExpire?: () => void;
+    onProgress?: (progress: CaptchaProgress) => void;
     onVerificationRequired?: (data: VerificationData) => void;
   };
 
@@ -61,6 +76,7 @@ export class Config {
       onSuccess: userConfig.onSuccess,
       onError: userConfig.onError,
       onExpire: userConfig.onExpire,
+      onProgress: userConfig.onProgress,
       onVerificationRequired: userConfig.onVerificationRequired,
     };
 
@@ -70,6 +86,7 @@ export class Config {
       onSuccess: userConfig.onSuccess,
       onError: userConfig.onError,
       onExpire: userConfig.onExpire,
+      onProgress: userConfig.onProgress,
       onVerificationRequired: userConfig.onVerificationRequired,
     } as Required<CaptchaConfig>;
 

@@ -3,6 +3,10 @@ Security utilities for JWT and token management.
 """
 
 import logging
+import hashlib
+import hmac
+import secrets
+import uuid
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
@@ -72,7 +76,13 @@ def verify_jwt_token(token: str) -> Optional[Dict[str, Any]]:
         return None
 
 
-def generate_captcha_token(session_id: str, domain: str) -> str:
+def generate_captcha_token(
+    session_id: str,
+    domain: str,
+    site_key_prefix: Optional[str] = None,
+    action: Optional[str] = None,
+    work_units: Optional[int] = None,
+) -> str:
     """
     Generate a CAPTCHA completion token.
 
@@ -86,9 +96,13 @@ def generate_captcha_token(session_id: str, domain: str) -> str:
     return create_jwt_token(
         data={
             "type": "captcha_token",
+            "jti": str(uuid.uuid4()),
             "session_id": session_id,
             "domain": domain,
             "completed_at": datetime.utcnow().isoformat(),
+            "site_key_prefix": site_key_prefix,
+            "action": action,
+            "work_units": work_units,
         },
         expires_delta=timedelta(seconds=settings.captcha_token_expiry_seconds),
     )
@@ -104,7 +118,7 @@ def hash_api_key(api_key: str) -> str:
     Returns:
         Hashed API key
     """
-    return pwd_context.hash(api_key)
+    return hashlib.sha256(api_key.encode("utf-8")).hexdigest()
 
 
 def verify_api_key(plain_key: str, hashed_key: str) -> bool:
@@ -118,22 +132,32 @@ def verify_api_key(plain_key: str, hashed_key: str) -> bool:
     Returns:
         True if valid
     """
-    return pwd_context.verify(plain_key, hashed_key)
+    expected = hash_api_key(plain_key)
+    if len(hashed_key) == 64:
+        return hmac.compare_digest(expected, hashed_key)
+
+    # Backward-compatible fallback for any legacy bcrypt-hashed keys.
+    try:
+        return pwd_context.verify(plain_key, hashed_key)
+    except Exception:
+        return False
 
 
-def generate_api_key() -> str:
-    """Generate a new API key."""
-    import secrets
-
-    # Format: pk_live_xxxx for public keys
+def generate_api_key(prefix: str = "pk_live") -> str:
+    """Generate a new public site key."""
     random_part = secrets.token_urlsafe(32)
-    return f"pk_live_{random_part}"
+    return f"{prefix}_{random_part}"
 
 
-def generate_secret_key() -> str:
-    """Generate a new secret key."""
-    import secrets
-
-    # Format: sk_live_xxxx for secret keys
+def generate_secret_key(prefix: str = "sk_live") -> str:
+    """Generate a new server-side validation secret."""
     random_part = secrets.token_urlsafe(32)
-    return f"sk_live_{random_part}"
+    return f"{prefix}_{random_part}"
+
+
+def key_prefix(api_key: str) -> str:
+    """Return a non-secret prefix suitable for logs and dashboards."""
+    parts = api_key.split("_", 2)
+    if len(parts) >= 3:
+        return f"{parts[0]}_{parts[1]}_{parts[2][:8]}"
+    return api_key[:16]

@@ -38,6 +38,7 @@ from app.core.risk_scorer import RiskScorer
 from app.ml.inference_validator import InferenceValidator
 from app.utils.security import create_jwt_token, verify_jwt_token, generate_captcha_token
 from app.utils.redis_client import get_redis
+from app.services.site_registry import SiteRegistry, SiteRegistryError
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -53,6 +54,8 @@ async def init_captcha(
     request: CaptchaInitRequest,
     db: AsyncSession = Depends(get_db),
     x_forwarded_for: Optional[str] = Header(default=None),
+    origin: Optional[str] = Header(default=None),
+    referer: Optional[str] = Header(default=None),
 ):
     """
     Initialize a new CAPTCHA session.
@@ -67,6 +70,19 @@ async def init_captcha(
         client_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else "unknown"
 
         redis = await get_redis()
+        registry = SiteRegistry(db)
+        try:
+            registered_site = await registry.resolve_site(
+                site_key=request.site_key,
+                origin=origin,
+                referer=referer,
+            )
+        except SiteRegistryError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=str(exc),
+            )
+
         risk_scorer = RiskScorer(redis)
         task_coordinator = TaskCoordinator(db, redis)
 
@@ -75,16 +91,25 @@ async def init_captcha(
             user_agent=request.client_metadata.user_agent,
             site_key=request.site_key,
         )
-        difficulty = task_coordinator.get_difficulty_tier(risk_score)
+        client_fingerprint = risk_scorer.generate_client_id(
+            client_ip,
+            request.client_metadata.user_agent,
+        )
+        adjusted_risk_score = min(
+            1.0,
+            risk_score * registered_site.config.difficulty_multiplier,
+        )
+        difficulty = task_coordinator.get_difficulty_tier(adjusted_risk_score)
 
         session_token = str(uuid.uuid4())
         expires_at = datetime.utcnow() + timedelta(seconds=settings.captcha_token_expiry_seconds)
 
         session = Session(
-            domain=_extract_domain(request.site_key),
+            domain=registered_site.config.domain,
             session_token=session_token,
-            risk_score=risk_score,
+            risk_score=adjusted_risk_score,
             difficulty_tier=difficulty,
+            client_fingerprint=client_fingerprint,
             status="pending",
             expires_at=expires_at,
         )
@@ -95,12 +120,18 @@ async def init_captcha(
             session_id=session.id,
             difficulty=difficulty,
         )
+        task.metadata_ = {
+            **(task.metadata_ or {}),
+            "site_key_prefix": registered_site.site_key_prefix,
+        }
 
         challenge_token = create_jwt_token(
             data={
                 "session_id": str(session.id),
                 "task_id": str(task.id),
                 "difficulty": difficulty,
+                "domain": registered_site.config.domain,
+                "site_key_prefix": registered_site.site_key_prefix,
             },
             expires_delta=timedelta(seconds=settings.captcha_token_expiry_seconds),
         )
@@ -193,6 +224,14 @@ async def submit_captcha(
         run = await pipeline.get_run(uuid.UUID(run_id)) if run_id else None
 
         if not report.valid:
+            risk_scorer = RiskScorer(redis)
+            await risk_scorer.record_proof_outcome(
+                client_id=session.client_fingerprint,
+                site_key_prefix=(task.metadata_ or {}).get("site_key_prefix"),
+                valid=False,
+                reason=report.reason,
+                completion_time_ms=request.timing.total_ms,
+            )
             session.status = "failed"
             task.status = "failed"
             if run is not None and run.claimed_by_task == task.id:
@@ -224,6 +263,13 @@ async def submit_captcha(
                 logger.info("Stale segment for run %s; crediting solver only", run_id)
 
         task.status = "completed"
+        risk_scorer = RiskScorer(redis)
+        await risk_scorer.record_proof_outcome(
+            client_id=session.client_fingerprint,
+            site_key_prefix=(task.metadata_ or {}).get("site_key_prefix"),
+            valid=True,
+            completion_time_ms=request.timing.total_ms,
+        )
 
         # Record the pieced-together prediction when the run completes
         prediction_row = None
@@ -325,6 +371,8 @@ async def submit_captcha(
         captcha_token = generate_captcha_token(
             session_id=str(session.id),
             domain=session.domain,
+            site_key_prefix=(task.metadata_ or {}).get("site_key_prefix"),
+            work_units=expected_layers,
         )
         expires_at = datetime.utcnow() + timedelta(
             seconds=settings.captcha_token_expiry_seconds
@@ -410,7 +458,7 @@ async def _log_inference(
 async def validate_captcha(
     token: str,
     db: AsyncSession = Depends(get_db),
-    x_pouw_site_key: Optional[str] = Header(default=None),
+    x_pouw_secret_key: Optional[str] = Header(default=None),
 ):
     """
     Validate a CAPTCHA token (server-to-server).
@@ -422,6 +470,11 @@ async def validate_captcha(
         payload = verify_jwt_token(token)
         if not payload:
             return CaptchaValidateResponse(valid=False)
+        if payload.get("type") != "captcha_token":
+            return CaptchaValidateResponse(valid=False)
+        token_id = payload.get("jti")
+        if not token_id:
+            return CaptchaValidateResponse(valid=False)
 
         session_id = payload.get("session_id")
         if not session_id:
@@ -430,6 +483,28 @@ async def validate_captcha(
         session = await _get_session(db, session_id)
         if not session or session.status != "completed":
             return CaptchaValidateResponse(valid=False)
+        if payload.get("domain") != session.domain:
+            return CaptchaValidateResponse(valid=False)
+        if not x_pouw_secret_key:
+            return CaptchaValidateResponse(valid=False)
+
+        registry = SiteRegistry(db)
+        secret_ok = await registry.validate_secret_for_domain(
+            domain=session.domain,
+            secret_key=x_pouw_secret_key,
+        )
+        if not secret_ok:
+            return CaptchaValidateResponse(valid=False)
+
+        redis = await get_redis()
+        replay_key = f"captcha_token_used:{token_id}"
+        if await redis.get(replay_key):
+            return CaptchaValidateResponse(valid=False)
+        await redis.setex(
+            replay_key,
+            settings.captcha_token_expiry_seconds,
+            str(session.id),
+        )
 
         token_exp = payload.get("exp")
         if token_exp and datetime.fromtimestamp(token_exp) < datetime.utcnow():
@@ -447,13 +522,6 @@ async def validate_captcha(
     except Exception as e:
         logger.exception(f"Error validating CAPTCHA: {e}")
         return CaptchaValidateResponse(valid=False)
-
-
-# Helper functions
-
-def _extract_domain(site_key: str) -> str:
-    """Extract domain from site key (simplified)."""
-    return "example.com"
 
 
 def _encode_sample_data(sample: Sample) -> Optional[str]:

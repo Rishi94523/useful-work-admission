@@ -22,6 +22,7 @@ export interface UsePoUWCaptchaOptions {
   onSuccess?: (token: string) => void;
   onError?: (error: CaptchaError) => void;
   onExpire?: () => void;
+  onProgress?: CaptchaConfig['onProgress'];
 }
 
 /**
@@ -89,6 +90,7 @@ export function usePoUWCaptcha(
         setToken(null);
         options.onExpire?.();
       },
+      onProgress: options.onProgress,
     };
 
     captchaRef.current = new PoUWCaptcha(config);

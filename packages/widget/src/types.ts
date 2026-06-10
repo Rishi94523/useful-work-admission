@@ -67,9 +67,9 @@ export interface ShardTask {
   /** Number of layers client should compute */
   expectedLayers: number;
   /** Index of the first layer in this segment (distributed pipeline) */
-  segmentStart: number;
+  segmentStart?: number;
   /** Total layers in the model */
-  totalLayers: number;
+  totalLayers?: number;
   /** Pipeline run this segment contributes to */
   runId?: string;
   /** Difficulty tier */
@@ -80,6 +80,8 @@ export interface ShardTask {
   labels: string[];
   /** Model checksum (hash of layer checksums) */
   modelChecksum?: string;
+  /** Optional test/known-label key for seeded evaluation samples */
+  groundTruthKey?: string;
   /** Progress callback */
   onProgress?: (progress: number) => void;
 }
@@ -131,6 +133,8 @@ export interface CaptchaConfig {
   onError?: (error: CaptchaError) => void;
   /** Callback when CAPTCHA expires */
   onExpire?: () => void;
+  /** Callback for progress and pipeline contribution updates */
+  onProgress?: (progress: CaptchaProgress) => void;
   /** Callback for verification UI */
   onVerificationRequired?: (data: VerificationData) => void;
   /** Enable debug logging */
@@ -155,6 +159,19 @@ export interface CaptchaResult {
   sessionId: string;
   /** Whether human verification was performed */
   verificationPerformed: boolean;
+  /** Distributed pipeline progress, when returned by the server */
+  pipeline?: PipelineProgress;
+}
+
+/**
+ * Progress callback payload for integration observability
+ */
+export interface CaptchaProgress {
+  stage: 'initializing' | 'assigned' | 'computing' | 'submitted' | 'verifying' | 'complete';
+  progress: number;
+  difficulty?: 'normal' | 'suspicious' | 'bot_like';
+  segment?: [number, number];
+  pipeline?: PipelineProgress;
 }
 
 /**

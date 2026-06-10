@@ -31,6 +31,11 @@ from app.schemas.common import (
     ErrorResponse,
     SuccessResponse,
 )
+from app.schemas.sites import (
+    SiteRegisterRequest,
+    SiteRegisterResponse,
+    SitePublicConfigResponse,
+)
 
 __all__ = [
     "CaptchaInitRequest",
@@ -56,4 +61,7 @@ __all__ = [
     "VerificationData",
     "ErrorResponse",
     "SuccessResponse",
+    "SiteRegisterRequest",
+    "SiteRegisterResponse",
+    "SitePublicConfigResponse",
 ]

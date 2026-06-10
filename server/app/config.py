@@ -51,6 +51,14 @@ class Settings(BaseSettings):
     captcha_token_expiry_seconds: int = Field(
         default=300, description="CAPTCHA token expiry in seconds"
     )
+    admin_api_key: Optional[str] = Field(
+        default=None,
+        description="Optional admin key required for site registration in production",
+    )
+    allow_debug_site_autocreate: bool = Field(
+        default=True,
+        description="Auto-create pk_demo/pk_test domains in debug mode",
+    )
 
     # CORS
     allowed_origins: List[str] = Field(
@@ -78,7 +86,7 @@ class Settings(BaseSettings):
         default="https://cdn.pouw.dev/samples",
         description="CDN URL for samples",
     )
-    default_model: str = Field(default="cifar10-mobilenet", description="Default model")
+    default_model: str = Field(default="mnist-tiny", description="Default model")
     inference_timeout_ms: int = Field(default=10000, description="Inference timeout")
 
     # Task Coordinator
@@ -115,6 +123,16 @@ class Settings(BaseSettings):
     )
     consensus_threshold: float = Field(default=0.8, description="Consensus threshold")
     discard_threshold: float = Field(default=0.6, description="Discard threshold")
+
+    # Economics / evaluation estimates
+    estimated_compute_usd_per_billion_ops: float = Field(
+        default=0.20,
+        description="Rough compute-cost estimate for one billion dense ops",
+    )
+    estimated_label_value_usd: float = Field(
+        default=0.03,
+        description="Rough value estimate per human-verified label",
+    )
 
     # Rate Limiting
     rate_limit_requests_per_minute: int = Field(

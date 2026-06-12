@@ -43,7 +43,64 @@ def apply_activation(values: np.ndarray, activation: str) -> np.ndarray:
         shifted = values.astype(np.float64) - np.max(values)
         e = np.exp(shifted)
         return (e / e.sum()).astype(np.float32)
+    if activation == "sigmoid":
+        return (1.0 / (1.0 + np.exp(-values.astype(np.float64)))).astype(np.float32)
+    if activation == "tanh":
+        return np.tanh(values).astype(np.float32)
     return values.astype(np.float32)
+
+
+def apply_post_ops(values: np.ndarray, layer: dict) -> np.ndarray:
+    """Post-op chain after the affine computation, like the browser client."""
+    ops = layer.get("postOps") or []
+    if not ops and layer.get("activation") not in (None, "", "linear"):
+        ops = [{"op": layer["activation"]}]
+    current = values
+    for op in ops:
+        kind = op["op"]
+        if kind == "maxpool2d":
+            c, h, w = op["shape"]
+            pool = op.get("pool") or 2
+            oh, ow = h // pool, w // pool
+            t = current.reshape(c, h, w)[:, : oh * pool, : ow * pool]
+            t = t.reshape(c, oh, pool, ow, pool)
+            current = t.max(axis=(2, 4)).reshape(-1).astype(np.float32)
+        elif kind in ("flatten", "linear"):
+            pass
+        else:
+            current = apply_activation(current, kind)
+    return current
+
+
+def forward_pre_activation(current: np.ndarray, layer: dict) -> np.ndarray:
+    """Affine layer compute (dense or conv2d), float32 like the browser."""
+    if layer["type"] == "conv2d":
+        in_ch, in_h, in_w = layer["inputShape"]
+        out_ch, out_h, out_w = layer["outputShape"]
+        kh, kw = layer["kernel"]
+        w = np.asarray(layer["weights"], dtype=np.float32).reshape(
+            out_ch, in_ch, kh, kw
+        )
+        b = np.asarray(layer["biases"], dtype=np.float32)
+        x3 = current.astype(np.float64).reshape(in_ch, in_h, in_w)
+        z = np.zeros((out_ch, out_h, out_w))
+        for u in range(kh):
+            for v in range(kw):
+                z += np.tensordot(
+                    w[:, :, u, v].astype(np.float64),
+                    x3[:, u : u + out_h, v : v + out_w],
+                    axes=(1, 0),
+                )
+        z += b.astype(np.float64)[:, None, None]
+        return z.reshape(-1).astype(np.float32)
+
+    in_size = layer["inputShape"][-1]
+    out_size = layer["outputShape"][-1]
+    w = np.asarray(layer["weights"], dtype=np.float32).reshape(out_size, in_size)
+    b = np.asarray(layer["biases"], dtype=np.float32)
+    return (current.astype(np.float64) @ w.T.astype(np.float64) + b).astype(
+        np.float32
+    )
 
 
 def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
@@ -81,13 +138,9 @@ def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
     pre_activations = []
     current = x
     for layer in layers:
-        in_size = layer["inputShape"][-1]
-        out_size = layer["outputShape"][-1]
-        w = np.asarray(layer["weights"], dtype=np.float32).reshape(out_size, in_size)
-        b = np.asarray(layer["biases"], dtype=np.float32)
-        z = (current.astype(np.float64) @ w.T.astype(np.float64) + b).astype(np.float32)
+        z = forward_pre_activation(current, layer)
         pre_activations.append(z)
-        current = apply_activation(z, layer["activation"])
+        current = apply_post_ops(z, layer)
     compute_ms = max(15, int((time.time() - start) * 1000))
 
     prediction = None
@@ -175,6 +228,7 @@ def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
 
     return {
         "difficulty": data["difficulty"],
+        "model": task.get("modelName", "?"),
         "segment": [segment_start, segment_start + len(pre_activations)],
         "success": result["success"],
         "token": bool(result.get("captchaToken")),
@@ -215,7 +269,8 @@ def main():
                 failures += 1
             print(
                 f"solve {i + 1}: {'OK ' if ok else 'FAIL'} "
-                f"[{outcome['difficulty']}] segment {outcome['segment']} | {status}"
+                f"[{outcome['difficulty']}] {outcome['model']} "
+                f"segment {outcome['segment']} | {status}"
             )
 
     print(f"\n{args.solves - failures}/{args.solves} solves OK, "

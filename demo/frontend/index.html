@@ -1798,10 +1798,11 @@
 
         for (let index = 0; index < layers.length; index++) {
           // Keep the raw pre-activation: that's what the server's secret
-          // projection checks verify without re-running the layer.
-          const pre = forwardDensePreActivation(current, layers[index]);
+          // projection checks verify without re-running the layer. Works for
+          // any affine layer type (dense matmul or conv2d).
+          const pre = forwardPreActivation(current, layers[index]);
           preActivations.push(pre);
-          current = applyActivationVec(pre, layers[index].activation);
+          current = applyPostOpsVec(pre, layers[index]);
           onProgress((index + 1) / layers.length);
           await sleep(80);
         }
@@ -1881,6 +1882,11 @@
         return new Float32Array(bytes.buffer);
       }
 
+      function forwardPreActivation(input, layer) {
+        if (layer.type === 'conv2d') return forwardConv2dPreActivation(input, layer);
+        return forwardDensePreActivation(input, layer);
+      }
+
       function forwardDensePreActivation(input, layer) {
         const inputSize = layer.inputShape[layer.inputShape.length - 1];
         const outputSize = layer.outputShape[layer.outputShape.length - 1];
@@ -1894,6 +1900,78 @@
           output[out] = sum; // pre-activation; activation applied separately
         }
 
+        return output;
+      }
+
+      // Valid, stride-1 convolution in channel-major (C, H, W) layout —
+      // matches the server wire format: weights[((oc*inCh + ic)*kh + u)*kw + v]
+      function forwardConv2dPreActivation(input, layer) {
+        const [inCh, inH, inW] = layer.inputShape;
+        const [outCh, outH, outW] = layer.outputShape;
+        const kh = (layer.kernel && layer.kernel[0]) || inH - outH + 1;
+        const kw = (layer.kernel && layer.kernel[1]) || inW - outW + 1;
+        const output = new Float32Array(outCh * outH * outW);
+
+        for (let oc = 0; oc < outCh; oc++) {
+          for (let oy = 0; oy < outH; oy++) {
+            for (let ox = 0; ox < outW; ox++) {
+              let sum = layer.biases[oc];
+              for (let ic = 0; ic < inCh; ic++) {
+                for (let u = 0; u < kh; u++) {
+                  const inRow = (ic * inH + oy + u) * inW + ox;
+                  const wRow = ((oc * inCh + ic) * kh + u) * kw;
+                  for (let v = 0; v < kw; v++) {
+                    sum += input[inRow + v] * layer.weights[wRow + v];
+                  }
+                }
+              }
+              output[(oc * outH + oy) * outW + ox] = sum;
+            }
+          }
+        }
+
+        return output;
+      }
+
+      // Post-op chain (activation, maxpool, flatten) applied after the affine
+      // computation; the server re-applies the same chain during verification.
+      function applyPostOpsVec(values, layer) {
+        const postOps =
+          layer.postOps && layer.postOps.length
+            ? layer.postOps
+            : layer.activation && layer.activation !== 'linear'
+              ? [{ op: layer.activation }]
+              : [];
+        let current = values;
+        for (const postOp of postOps) {
+          if (postOp.op === 'maxpool2d') {
+            current = maxPool2d(current, postOp.shape, postOp.pool || 2);
+          } else if (postOp.op !== 'flatten' && postOp.op !== 'linear') {
+            current = applyActivationVec(current, postOp.op);
+          }
+        }
+        return current;
+      }
+
+      function maxPool2d(values, shape, pool) {
+        const [channels, height, width] = shape;
+        const outH = Math.floor(height / pool);
+        const outW = Math.floor(width / pool);
+        const output = new Float32Array(channels * outH * outW);
+        for (let c = 0; c < channels; c++) {
+          for (let oy = 0; oy < outH; oy++) {
+            for (let ox = 0; ox < outW; ox++) {
+              let max = -Infinity;
+              for (let py = 0; py < pool; py++) {
+                for (let px = 0; px < pool; px++) {
+                  const idx = (c * height + oy * pool + py) * width + ox * pool + px;
+                  if (values[idx] > max) max = values[idx];
+                }
+              }
+              output[(c * outH + oy) * outW + ox] = max;
+            }
+          }
+        }
         return output;
       }
 

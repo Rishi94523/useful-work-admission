@@ -9,20 +9,23 @@ server re-running the computation. Three mechanisms, cheapest first:
    proof hash. The server recomputes these hashes from the submitted data, so
    a proof cannot be replayed for another task or detached from its outputs.
 
-2. Freivalds-style projection checks — the core mechanism. For each dense
-   layer (z = W·x + b) the server holds K SECRET random projection vectors r
-   and the precomputed s = W·r (computed once per model load, never per
-   request). A submitted pre-activation z is checked via
+2. Freivalds-style projection checks — the core mechanism. Every provable
+   layer is an affine operator (z = L·x + b): dense layers (L = matmul),
+   conv2d layers (L = convolution), and by extension any matmul-shaped op
+   (attention Q/K/V projections, embeddings-as-matmul). The server holds K
+   SECRET random projection vectors r and the precomputed s = Lᵀ·r (computed
+   once per model load via layer.project(), never per request). A submitted
+   pre-activation z is checked via
 
        r · z  ≈  s · x  +  r · b
 
-   which costs O(in + out) multiplications instead of the O(in × out) the
-   client had to spend. Because r is secret and random, a fabricated z that
-   was not actually computed passes K independent checks with negligible
-   probability. The layer input x is always known to the server: it is either
-   the sample input (segment start 0) or the activation handed over from the
-   previously verified segment, so every layer in a distributed pipeline is
-   verifiable.
+   which costs O(in + out) multiplications instead of the O(in × out) (dense)
+   or O(out × k² × in_ch) (conv) the client had to spend. Because r is secret
+   and random, a fabricated z that was not actually computed passes K
+   independent checks with negligible probability. The layer input x is
+   always known to the server: it is either the sample input (segment start
+   0) or the activation handed over from the previously verified segment, so
+   every layer in a distributed pipeline is verifiable.
 
 3. Probabilistic spot audits — a small fraction of submissions get a full
    recompute of the segment. This bounds the damage of any adaptive attack
@@ -135,8 +138,6 @@ class ProofVerifier:
         key = (model.checksum, layer_index)
         if key not in self._projections:
             layer = model.layers[layer_index]
-            w = layer.weights.astype(np.float64)
-            b = layer.biases.astype(np.float64)
             projections = []
             for k in range(NUM_PROJECTIONS):
                 seed_material = (
@@ -145,7 +146,9 @@ class ProofVerifier:
                 seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
                 rng = np.random.default_rng(seed)
                 r = rng.standard_normal(layer.output_size)
-                projections.append((r, w @ r, float(r @ b)))
+                # s = Lᵀr and r·b, layer-type-specific but verified identically
+                s, r_dot_b = layer.project(r)
+                projections.append((r, s, r_dot_b))
             self._projections[key] = projections
         return self._projections[key]
 
@@ -221,9 +224,10 @@ class ProofVerifier:
                     )
                     return report
 
-            # Server applies the (cheap) activation itself; the result feeds
-            # the next layer's check and is what the pipeline stores.
-            x = model.apply_activation(z, layer.activation)
+            # Server applies the (cheap) post-ops itself — activation,
+            # pooling, flatten; the result feeds the next layer's check and
+            # is what the pipeline stores.
+            x = model.apply_layer_post_ops(z, layer_index)
         report.checks_run.append("projections")
 
         # --- Probabilistic spot audit --------------------------------------

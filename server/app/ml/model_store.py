@@ -7,9 +7,24 @@ checksums (one per layer over the exact wire bytes, plus a model checksum
 that is a hash of the layer checksums, so clients holding only a segment of
 the model can still verify integrity).
 
+Layer model
+-----------
+A model is a sequence of PROVABLE layers. Each provable layer is an affine
+operator ``z = L·x + b`` — dense (L = matmul) or conv2d (L = convolution) —
+followed by a chain of cheap, server-applied POST-OPS (relu, softmax,
+maxpool2d, flatten). Clients compute and submit the pre-activation ``z`` of
+each provable layer; the server verifies ``z`` with secret projections (see
+proof_verifier) and applies the post-ops itself to produce the next layer's
+input. Because every provable layer is affine, the same projection identity
+
+    r · z  =  (Lᵀ r) · x  +  r · b
+
+verifies dense and convolutional work alike, so new architectures only need
+to implement ``forward`` and ``project``.
+
 Adding a new dataset/model to the system means dropping a new manifest +
-weights directory into ``models/`` — no code changes required as long as the
-layers are dense (the only layer type the browser shard engine executes).
+weights directory into ``models/`` — no code changes required for any
+combination of dense and conv2d layers.
 """
 
 from __future__ import annotations
@@ -22,7 +37,7 @@ import logging
 import struct
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 from PIL import Image
@@ -33,9 +48,65 @@ logger = logging.getLogger(__name__)
 DEFAULT_MODELS_DIR = Path(__file__).resolve().parents[3] / "models"
 
 
+# ---------------------------------------------------------------------------
+# Post-ops: cheap O(n) transforms the server applies between provable layers
+# ---------------------------------------------------------------------------
+
+def apply_post_ops(z: np.ndarray, post_ops: Sequence[dict]) -> np.ndarray:
+    """
+    Apply a layer's post-op chain to its flat pre-activation vector.
+
+    Every op is O(n) — orders of magnitude cheaper than the affine layer the
+    client computed — so the server can run them during verification without
+    giving up the compute asymmetry. Mirrored exactly by the browser client.
+    """
+    h = np.asarray(z, dtype=np.float64)
+    for op in post_ops:
+        kind = op["op"]
+        if kind == "relu":
+            h = np.maximum(h, 0.0)
+        elif kind == "softmax":
+            shifted = h - np.max(h)
+            e = np.exp(shifted)
+            h = e / e.sum()
+        elif kind == "sigmoid":
+            h = 1.0 / (1.0 + np.exp(-h))
+        elif kind == "tanh":
+            h = np.tanh(h)
+        elif kind == "maxpool2d":
+            c, height, width = op["shape"]
+            pool = int(op.get("pool", 2))
+            oh, ow = height // pool, width // pool
+            t = h.reshape(c, height, width)[:, : oh * pool, : ow * pool]
+            t = t.reshape(c, oh, pool, ow, pool)
+            h = t.max(axis=(2, 4)).reshape(-1)
+        elif kind == "flatten":
+            h = h.reshape(-1)
+        elif kind == "linear":
+            pass
+        else:
+            raise ValueError(f"unknown post-op {kind!r}")
+    return h
+
+
+def post_ops_output_size(input_size: int, post_ops: Sequence[dict]) -> int:
+    """Flat size after applying a post-op chain to ``input_size`` elements."""
+    size = input_size
+    for op in post_ops:
+        if op["op"] == "maxpool2d":
+            c, height, width = op["shape"]
+            pool = int(op.get("pool", 2))
+            size = c * (height // pool) * (width // pool)
+    return size
+
+
+# ---------------------------------------------------------------------------
+# Provable layers
+# ---------------------------------------------------------------------------
+
 @dataclass
 class DenseLayer:
-    """A dense layer with trained weights and its wire-format checksum."""
+    """A dense affine layer ``z = x·W + b`` with its wire-format checksum."""
 
     index: int
     name: str
@@ -45,6 +116,38 @@ class DenseLayer:
     weights: np.ndarray  # shape (input_size, output_size), float32
     biases: np.ndarray  # shape (output_size,), float32
     checksum: str
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "dense"
+
+    def __post_init__(self) -> None:
+        if not self.post_ops and self.activation and self.activation != "linear":
+            self.post_ops = [{"op": self.activation}]
+
+    @property
+    def compute_ops(self) -> int:
+        """Multiply-accumulates the client spends on this layer."""
+        return self.input_size * self.output_size
+
+    @property
+    def projection_ops(self) -> int:
+        """Multiplications per secret-projection check (O(in + out))."""
+        return self.input_size + self.output_size
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        """Reference pre-activation (float64). Used for audits/tests only."""
+        return np.asarray(x, dtype=np.float64) @ self.weights.astype(
+            np.float64
+        ) + self.biases.astype(np.float64)
+
+    def project(self, r: np.ndarray) -> Tuple[np.ndarray, float]:
+        """
+        Freivalds precomputation: return (s, r·b) with s = Lᵀr = W·r so that
+        r·z = s·x + r·b for any honest z = x·W + b.
+        """
+        w = self.weights.astype(np.float64)
+        b = self.biases.astype(np.float64)
+        return w @ r, float(r @ b)
 
     def wire_payload(self) -> dict:
         """
@@ -62,6 +165,7 @@ class DenseLayer:
             "inputShape": [1, self.input_size],
             "outputShape": [1, self.output_size],
             "activation": self.activation,
+            "postOps": list(self.post_ops),
         }
 
     def compute_checksum(self) -> str:
@@ -71,6 +175,127 @@ class DenseLayer:
         h.update(np.ascontiguousarray(self.biases, dtype="<f4").tobytes())
         return h.hexdigest()
 
+
+@dataclass
+class Conv2DLayer:
+    """
+    A valid (no padding), stride-1 2D convolution ``z = W * x + b``.
+
+    Tensors are flattened channel-major (C, H, W) row-major on the wire and in
+    pipeline handoffs. Weights are stored (out_ch, in_ch, kh, kw); the wire
+    flattening ``weights[((oc*inCh + ic)*kh + u)*kw + v]`` matches the dense
+    layer's output-major convention.
+    """
+
+    index: int
+    name: str
+    activation: str
+    in_channels: int
+    out_channels: int
+    kernel: Tuple[int, int]
+    input_shape: Tuple[int, int, int]  # (in_ch, H, W)
+    weights: np.ndarray  # (out_ch, in_ch, kh, kw), float32
+    biases: np.ndarray  # (out_ch,), float32
+    checksum: str
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "conv2d"
+
+    def __post_init__(self) -> None:
+        if not self.post_ops and self.activation and self.activation != "linear":
+            self.post_ops = [{"op": self.activation}]
+
+    @property
+    def output_shape(self) -> Tuple[int, int, int]:
+        _, height, width = self.input_shape
+        kh, kw = self.kernel
+        return (self.out_channels, height - kh + 1, width - kw + 1)
+
+    @property
+    def input_size(self) -> int:
+        return int(np.prod(self.input_shape))
+
+    @property
+    def output_size(self) -> int:
+        return int(np.prod(self.output_shape))
+
+    @property
+    def compute_ops(self) -> int:
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        return oh * ow * oc * self.in_channels * kh * kw
+
+    @property
+    def projection_ops(self) -> int:
+        return self.input_size + self.output_size
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        """Reference pre-activation (float64, flat). Audits/tests only."""
+        c, height, width = self.input_shape
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        x3 = np.asarray(x, dtype=np.float64).reshape(c, height, width)
+        w = self.weights.astype(np.float64)
+        z = np.zeros((oc, oh, ow))
+        for u in range(kh):
+            for v in range(kw):
+                patch = x3[:, u : u + oh, v : v + ow]
+                z += np.tensordot(w[:, :, u, v], patch, axes=(1, 0))
+        z += self.biases.astype(np.float64)[:, None, None]
+        return z.reshape(-1)
+
+    def project(self, r: np.ndarray) -> Tuple[np.ndarray, float]:
+        """
+        Freivalds precomputation for convolution: s = Lᵀr is the transposed
+        convolution of r with the kernels (computed ONCE per model version),
+        after which each verification is a single O(in)+O(out) dot product —
+        the asymmetry grows with kernel size × channels.
+        """
+        c, height, width = self.input_shape
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        r3 = np.asarray(r, dtype=np.float64).reshape(oc, oh, ow)
+        w = self.weights.astype(np.float64)
+        s3 = np.zeros((c, height, width))
+        for u in range(kh):
+            for v in range(kw):
+                s3[:, u : u + oh, v : v + ow] += np.tensordot(
+                    w[:, :, u, v], r3, axes=(0, 0)
+                )
+        r_dot_b = float(
+            np.sum(self.biases.astype(np.float64) * r3.sum(axis=(1, 2)))
+        )
+        return s3.reshape(-1), r_dot_b
+
+    def wire_payload(self) -> dict:
+        return {
+            "name": self.name,
+            "type": "conv2d",
+            "weights": np.ascontiguousarray(self.weights, dtype=np.float32)
+            .flatten()
+            .tolist(),
+            "biases": self.biases.astype(np.float32).tolist(),
+            "inputShape": list(self.input_shape),
+            "outputShape": list(self.output_shape),
+            "kernel": list(self.kernel),
+            "activation": self.activation,
+            "postOps": list(self.post_ops),
+        }
+
+    def compute_checksum(self) -> str:
+        """SHA-256 over the exact float32 LE bytes a client receives."""
+        h = hashlib.sha256()
+        h.update(np.ascontiguousarray(self.weights, dtype="<f4").tobytes())
+        h.update(np.ascontiguousarray(self.biases, dtype="<f4").tobytes())
+        return h.hexdigest()
+
+
+ProvableLayer = DenseLayer  # legacy alias; layers are duck-typed
+
+
+# ---------------------------------------------------------------------------
+# Model spec
+# ---------------------------------------------------------------------------
 
 @dataclass
 class ModelSpec:
@@ -83,7 +308,7 @@ class ModelSpec:
     input_shape: List[int]
     preprocessing: str
     checksum: str
-    layers: List[DenseLayer] = field(default_factory=list)
+    layers: List = field(default_factory=list)
     metrics: dict = field(default_factory=dict)
 
     @property
@@ -92,38 +317,38 @@ class ModelSpec:
 
     @property
     def input_size(self) -> int:
-        return self.layers[0].input_size
+        return int(np.prod(self.input_shape))
+
+    @property
+    def total_compute_ops(self) -> int:
+        return sum(layer.compute_ops for layer in self.layers)
 
     def shard_payloads(self, start: int, end: int) -> List[dict]:
         """Wire payloads (with checksums) for the layer segment [start, end)."""
         payloads = []
         for layer in self.layers[start:end]:
+            wire = layer.wire_payload()
             payloads.append(
                 {
                     "index": layer.index,
                     "name": layer.name,
-                    "layerType": "dense",
-                    "inputShape": [1, layer.input_size],
-                    "outputShape": [1, layer.output_size],
+                    "layerType": layer.layer_type,
+                    "inputShape": wire["inputShape"],
+                    "outputShape": wire["outputShape"],
                     "activation": layer.activation,
                     "checksum": layer.checksum,
-                    "layers": [layer.wire_payload()],
+                    "layers": [wire],
                 }
             )
         return payloads
 
     def apply_activation(self, z: np.ndarray, activation: str) -> np.ndarray:
-        if activation == "relu":
-            return np.maximum(z, 0.0)
-        if activation == "softmax":
-            shifted = z - np.max(z)
-            e = np.exp(shifted)
-            return e / e.sum()
-        if activation == "sigmoid":
-            return 1.0 / (1.0 + np.exp(-z))
-        if activation == "tanh":
-            return np.tanh(z)
-        return z
+        """Apply a single named activation (legacy dense path)."""
+        return apply_post_ops(z, [{"op": activation}] if activation else [])
+
+    def apply_layer_post_ops(self, z: np.ndarray, layer_index: int) -> np.ndarray:
+        """Apply layer ``layer_index``'s post-op chain to its pre-activation."""
+        return apply_post_ops(z, self.layers[layer_index].post_ops)
 
     def forward_segment(
         self, x: np.ndarray, start: int, end: int
@@ -131,16 +356,16 @@ class ModelSpec:
         """
         Reference forward pass over layers [start, end).
 
-        Returns (pre_activations per layer, final post-activation). Used only
+        Returns (pre_activations per layer, final post-op output). Used only
         for spot audits and tests — routine validation uses the projection
         checks in proof_verifier, which never run this.
         """
         pre_activations: List[np.ndarray] = []
         h = np.asarray(x, dtype=np.float64)
         for layer in self.layers[start:end]:
-            z = h @ layer.weights.astype(np.float64) + layer.biases.astype(np.float64)
+            z = layer.forward(h)
             pre_activations.append(z)
-            h = self.apply_activation(z, layer.activation)
+            h = apply_post_ops(z, layer.post_ops)
         return pre_activations, h
 
     def predict(self, x: np.ndarray) -> np.ndarray:
@@ -154,11 +379,14 @@ class ModelSpec:
         """Convert raw sample bytes into the model's input vector."""
         if sample_blob:
             try:
-                side = int(np.sqrt(self.input_size))
+                if len(self.input_shape) == 3:
+                    _, height, width = self.input_shape
+                else:
+                    height = width = int(np.sqrt(self.input_size))
                 image = (
                     Image.open(io.BytesIO(sample_blob))
                     .convert("L")
-                    .resize((side, side))
+                    .resize((width, height))
                 )
                 pixels = np.asarray(image, dtype=np.float32) / 255.0
                 return pixels.flatten().tolist()
@@ -181,6 +409,44 @@ def decode_input_data(encoded: str) -> List[float]:
     """Decode base64 float32 data back to a list."""
     raw = base64.b64decode(encoded)
     return list(struct.unpack(f"<{len(raw) // 4}f", raw))
+
+
+# ---------------------------------------------------------------------------
+# Manifest loading
+# ---------------------------------------------------------------------------
+
+def _load_layer(layer_manifest: dict, weights: np.lib.npyio.NpzFile):
+    i = layer_manifest["index"]
+    layer_type = layer_manifest.get("type", "dense")
+    post_ops = list(layer_manifest.get("post_ops", []))
+
+    if layer_type == "dense":
+        return DenseLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest["activation"],
+            input_size=layer_manifest["input_size"],
+            output_size=layer_manifest["output_size"],
+            weights=weights[f"W{i}"].astype(np.float32),
+            biases=weights[f"b{i}"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            post_ops=post_ops,
+        )
+    if layer_type == "conv2d":
+        return Conv2DLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest.get("activation", "linear"),
+            in_channels=layer_manifest["in_channels"],
+            out_channels=layer_manifest["out_channels"],
+            kernel=tuple(layer_manifest["kernel"]),
+            input_shape=tuple(layer_manifest["input_shape"]),
+            weights=weights[f"W{i}"].astype(np.float32),
+            biases=weights[f"b{i}"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            post_ops=post_ops,
+        )
+    raise ValueError(f"unknown layer type {layer_type!r}")
 
 
 class ModelStore:
@@ -228,24 +494,15 @@ class ModelStore:
             raise ValueError(f"weights file hash mismatch for {manifest['name']}")
 
         weights = np.load(weights_path)
-        layers: List[DenseLayer] = []
+        layers = []
         for layer_manifest in manifest["layers"]:
-            i = layer_manifest["index"]
-            layer = DenseLayer(
-                index=i,
-                name=layer_manifest["name"],
-                activation=layer_manifest["activation"],
-                input_size=layer_manifest["input_size"],
-                output_size=layer_manifest["output_size"],
-                weights=weights[f"W{i}"].astype(np.float32),
-                biases=weights[f"b{i}"].astype(np.float32),
-                checksum=layer_manifest["checksum"],
-            )
+            layer = _load_layer(layer_manifest, weights)
             # Verify each layer's declared checksum against the actual weights
             actual = layer.compute_checksum()
             if actual != layer.checksum:
                 raise ValueError(
-                    f"layer checksum mismatch for {manifest['name']} layer {i}"
+                    f"layer checksum mismatch for {manifest['name']} "
+                    f"layer {layer.index}"
                 )
             layers.append(layer)
 

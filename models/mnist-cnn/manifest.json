@@ -1,0 +1,129 @@
+{
+  "name": "mnist-cnn",
+  "version": "1.0.0",
+  "task_type": "image_classification",
+  "labels": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "input": {
+    "shape": [
+      1,
+      28,
+      28
+    ],
+    "preprocessing": "grayscale 28x28, normalize /255, flatten row-major"
+  },
+  "weights_file": "weights.npz",
+  "checksum": "b76341374c39145d41ba99f80836eb2fb4888414d4eac5ce40dd042651a1ba83",
+  "layers": [
+    {
+      "index": 0,
+      "name": "conv_1",
+      "type": "conv2d",
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        },
+        {
+          "op": "maxpool2d",
+          "pool": 2,
+          "shape": [
+            8,
+            26,
+            26
+          ]
+        }
+      ],
+      "checksum": "439ad62457680b31aa37a18b7484dc12a5a7bf9889dddab850c136223d3278c7",
+      "in_channels": 1,
+      "out_channels": 8,
+      "kernel": [
+        3,
+        3
+      ],
+      "input_shape": [
+        1,
+        28,
+        28
+      ]
+    },
+    {
+      "index": 1,
+      "name": "conv_2",
+      "type": "conv2d",
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        },
+        {
+          "op": "maxpool2d",
+          "pool": 2,
+          "shape": [
+            16,
+            11,
+            11
+          ]
+        },
+        {
+          "op": "flatten"
+        }
+      ],
+      "checksum": "860c93db328e0eedec9d9bd2bcf1502b2ec6ae4cf27e1bf506cea60ba970a20b",
+      "in_channels": 8,
+      "out_channels": 16,
+      "kernel": [
+        3,
+        3
+      ],
+      "input_shape": [
+        8,
+        13,
+        13
+      ]
+    },
+    {
+      "index": 2,
+      "name": "dense_hidden",
+      "type": "dense",
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        }
+      ],
+      "checksum": "34ba39dc32056c5bf7847195c6659cd44fab5cdf8548fe1ce201f3443b00059f",
+      "input_size": 400,
+      "output_size": 64
+    },
+    {
+      "index": 3,
+      "name": "dense_output",
+      "type": "dense",
+      "activation": "softmax",
+      "post_ops": [
+        {
+          "op": "softmax"
+        }
+      ],
+      "checksum": "aec12acdbe1a5d8e886776bf7f25e5bc57fb684b63bc2064b8ac5b3d17b9a510",
+      "input_size": 64,
+      "output_size": 10
+    }
+  ],
+  "metrics": {
+    "test_accuracy": 0.9846
+  },
+  "trained_at": "2026-06-12T13:15:27.851689+00:00",
+  "weights_file_sha256": "73f5dba5c4b01822ceba6fdd8236191230e7ad29466db736f9504c161f144478"
+}

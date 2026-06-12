@@ -1,81 +1,195 @@
 {
-  "generated_at": "2026-06-10T04:29:34.257325+00:00",
-  "samples": 30,
+  "generated_at": "2026-06-12T13:39:26.886936+00:00",
+  "samples": 100,
   "seed": 42,
-  "model": {
-    "name": "mnist-tiny",
-    "version": "2.0.1",
-    "layers": 3,
-    "labels": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9"
-    ],
-    "checksum": "c64988cfa8a084345c2fac4d7be804655287759aaa98c2c5db62bbc239532edc",
-    "metrics": {
-      "test_accuracy": 0.9809
-    }
-  },
-  "complexity": {
-    "full_model_compute_ops": 109184,
-    "full_model_projection_verify_ops": 4712,
-    "full_model_asymmetry_ratio": 23.171,
-    "num_secret_projections": 4,
-    "segments": [
-      {
-        "segment": [
-          0,
-          1
+  "input_source": "mnist_test_set",
+  "models": [
+    {
+      "model": {
+        "name": "mnist-cnn",
+        "version": "1.0.0",
+        "layers": 4,
+        "layer_types": [
+          "conv2d",
+          "conv2d",
+          "dense",
+          "dense"
         ],
-        "compute_ops": 100352,
-        "projection_verify_ops": 3648,
-        "asymmetry_ratio": 27.509
+        "labels": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "checksum": "b76341374c39145d41ba99f80836eb2fb4888414d4eac5ce40dd042651a1ba83",
+        "metrics": {
+          "test_accuracy": 0.9846
+        }
       },
-      {
-        "segment": [
-          1,
-          2
-        ],
-        "compute_ops": 8192,
-        "projection_verify_ops": 768,
-        "asymmetry_ratio": 10.667
+      "complexity": {
+        "full_model_compute_ops": 214304,
+        "full_model_projection_verify_ops": 40072,
+        "full_model_asymmetry_ratio": 5.348,
+        "num_secret_projections": 4,
+        "segments": [
+          {
+            "segment": [
+              0,
+              1
+            ],
+            "layer_type": "conv2d",
+            "compute_ops": 48672,
+            "projection_verify_ops": 24768,
+            "asymmetry_ratio": 1.965
+          },
+          {
+            "segment": [
+              1,
+              2
+            ],
+            "layer_type": "conv2d",
+            "compute_ops": 139392,
+            "projection_verify_ops": 13152,
+            "asymmetry_ratio": 10.599
+          },
+          {
+            "segment": [
+              2,
+              3
+            ],
+            "layer_type": "dense",
+            "compute_ops": 25600,
+            "projection_verify_ops": 1856,
+            "asymmetry_ratio": 13.793
+          },
+          {
+            "segment": [
+              3,
+              4
+            ],
+            "layer_type": "dense",
+            "compute_ops": 640,
+            "projection_verify_ops": 296,
+            "asymmetry_ratio": 2.162
+          }
+        ]
       },
-      {
-        "segment": [
-          2,
-          3
-        ],
-        "compute_ops": 640,
-        "projection_verify_ops": 296,
-        "asymmetry_ratio": 2.162
+      "correctness": {
+        "distributed_labels_matched_direct": 100,
+        "label_match_rate": 1.0,
+        "honest_segments_verified": 400,
+        "honest_segment_accept_rate": 1.0,
+        "distributed_labels_matched_ground_truth": 99,
+        "ground_truth_accuracy": 0.99
+      },
+      "attack_checks": {
+        "tamper_trials": 100,
+        "tamper_rejections": 100,
+        "tamper_rejection_rate": 1.0,
+        "audit_trials": 100,
+        "audit_rejections": 100,
+        "audit_rejection_rate": 1.0
+      },
+      "latency_ms": {
+        "direct_full_inference_mean": 0.4912,
+        "direct_full_inference_p95": 0.7107,
+        "segment_projection_verify_mean": 0.6107,
+        "segment_projection_verify_p95": 1.6242
       }
-    ]
-  },
-  "correctness": {
-    "distributed_labels_matched_direct": 30,
-    "label_match_rate": 1.0,
-    "honest_segments_verified": 90,
-    "honest_segment_accept_rate": 1.0
-  },
-  "attack_checks": {
-    "tamper_trials": 30,
-    "tamper_rejections": 30,
-    "tamper_rejection_rate": 1.0,
-    "audit_trials": 30,
-    "audit_rejections": 30,
-    "audit_rejection_rate": 1.0
-  },
-  "latency_ms": {
-    "direct_full_inference_mean": 0.1654,
-    "direct_full_inference_p95": 0.3522,
-    "segment_projection_verify_mean": 0.0999,
-    "segment_projection_verify_p95": 0.2893
-  }
+    },
+    {
+      "model": {
+        "name": "mnist-tiny",
+        "version": "2.0.1",
+        "layers": 3,
+        "layer_types": [
+          "dense",
+          "dense",
+          "dense"
+        ],
+        "labels": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "checksum": "c64988cfa8a084345c2fac4d7be804655287759aaa98c2c5db62bbc239532edc",
+        "metrics": {
+          "test_accuracy": 0.9809
+        }
+      },
+      "complexity": {
+        "full_model_compute_ops": 109184,
+        "full_model_projection_verify_ops": 4712,
+        "full_model_asymmetry_ratio": 23.171,
+        "num_secret_projections": 4,
+        "segments": [
+          {
+            "segment": [
+              0,
+              1
+            ],
+            "layer_type": "dense",
+            "compute_ops": 100352,
+            "projection_verify_ops": 3648,
+            "asymmetry_ratio": 27.509
+          },
+          {
+            "segment": [
+              1,
+              2
+            ],
+            "layer_type": "dense",
+            "compute_ops": 8192,
+            "projection_verify_ops": 768,
+            "asymmetry_ratio": 10.667
+          },
+          {
+            "segment": [
+              2,
+              3
+            ],
+            "layer_type": "dense",
+            "compute_ops": 640,
+            "projection_verify_ops": 296,
+            "asymmetry_ratio": 2.162
+          }
+        ]
+      },
+      "correctness": {
+        "distributed_labels_matched_direct": 100,
+        "label_match_rate": 1.0,
+        "honest_segments_verified": 300,
+        "honest_segment_accept_rate": 1.0,
+        "distributed_labels_matched_ground_truth": 100,
+        "ground_truth_accuracy": 1.0
+      },
+      "attack_checks": {
+        "tamper_trials": 100,
+        "tamper_rejections": 100,
+        "tamper_rejection_rate": 1.0,
+        "audit_trials": 100,
+        "audit_rejections": 100,
+        "audit_rejection_rate": 1.0
+      },
+      "latency_ms": {
+        "direct_full_inference_mean": 0.0985,
+        "direct_full_inference_p95": 0.1516,
+        "segment_projection_verify_mean": 0.0572,
+        "segment_projection_verify_p95": 0.1151
+      }
+    }
+  ]
 }

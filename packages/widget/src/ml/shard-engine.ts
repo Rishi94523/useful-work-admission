@@ -45,6 +45,10 @@ class NeuralLayer {
   public readonly inputShape: number[];
   public readonly outputShape: number[];
   public readonly activation: string;
+  public readonly kernel?: number[];
+  public readonly postOps: NonNullable<
+    ModelShard['layers'][0]['postOps']
+  >;
 
   constructor(config: ModelShard['layers'][0]) {
     this.name = config.name;
@@ -54,13 +58,23 @@ class NeuralLayer {
     this.inputShape = config.inputShape;
     this.outputShape = config.outputShape;
     this.activation = config.activation;
+    this.kernel = config.kernel;
+    // Legacy payloads carry only an activation name; treat it as a one-op chain
+    this.postOps =
+      config.postOps && config.postOps.length > 0
+        ? config.postOps
+        : config.activation && config.activation !== 'linear'
+          ? [{ op: config.activation }]
+          : [];
   }
 
   /**
-   * Execute forward pass through this layer, returning the RAW pre-activation
-   * output. The pre-activation is the proof material the server verifies via
-   * secret projection checks; the activation is applied separately (and
-   * re-applied server-side) before feeding the next layer.
+   * Execute the layer's affine computation (z = L·x + b), returning the RAW
+   * pre-activation output. Every provable layer type is affine — dense
+   * (matmul) or conv2d (convolution) — which is exactly what lets the server
+   * verify z with secret projection checks instead of recomputing it. The
+   * post-ops are applied separately (and re-applied server-side) before
+   * feeding the next layer.
    */
   forward(input: Float32Array): Float32Array {
     const startTime = performance.now();
@@ -73,12 +87,6 @@ class NeuralLayer {
       case 'dense':
       case 'fully_connected':
         output = this.denseForward(input);
-        break;
-      case 'maxpool2d':
-        output = this.maxPoolForward(input);
-        break;
-      case 'flatten':
-        output = this.flattenForward(input);
         break;
       default:
         throw new Error(`Unsupported layer type: ${this.type}`);
@@ -97,45 +105,32 @@ class NeuralLayer {
   }
 
   /**
-   * 2D Convolution forward pass (simplified)
+   * Valid (no padding), stride-1 2D convolution in channel-major (C, H, W)
+   * layout, matching the server's wire format exactly:
+   * weights[((oc*inCh + ic)*kh + u)*kw + v], tensors flattened (C, H, W).
    */
   private conv2dForward(input: Float32Array): Float32Array {
-    const [batch, inHeight, inWidth, inChannels] = this.inputShape;
-    const [_, outHeight, outWidth, outChannels] = this.outputShape;
-    const kernelSize = Math.sqrt(
-      this.weights.length / (outChannels * inChannels)
-    );
-    const stride = 1;
-    const padding = 0;
+    const [inChannels, inHeight, inWidth] = this.inputShape;
+    const [outChannels, outHeight, outWidth] = this.outputShape;
+    const kh = this.kernel?.[0] ?? inHeight - outHeight + 1;
+    const kw = this.kernel?.[1] ?? inWidth - outWidth + 1;
 
-    const output = new Float32Array(batch * outHeight * outWidth * outChannels);
+    const output = new Float32Array(outChannels * outHeight * outWidth);
 
-    // Simplified convolution - in production use TensorFlow.js or ONNX
-    for (let b = 0; b < batch; b++) {
-      for (let oc = 0; oc < outChannels; oc++) {
-        for (let oh = 0; oh < outHeight; oh++) {
-          for (let ow = 0; ow < outWidth; ow++) {
-            let sum = this.biases[oc];
-            for (let ic = 0; ic < inChannels; ic++) {
-              for (let kh = 0; kh < kernelSize; kh++) {
-                for (let kw = 0; kw < kernelSize; kw++) {
-                  const ih = oh * stride + kh - padding;
-                  const iw = ow * stride + kw - padding;
-                  if (ih >= 0 && ih < inHeight && iw >= 0 && iw < inWidth) {
-                    const inputIdx =
-                      ((b * inHeight + ih) * inWidth + iw) * inChannels + ic;
-                    const weightIdx =
-                      ((oc * inChannels + ic) * kernelSize + kh) * kernelSize +
-                      kw;
-                    sum += input[inputIdx] * this.weights[weightIdx];
-                  }
-                }
+    for (let oc = 0; oc < outChannels; oc++) {
+      for (let oy = 0; oy < outHeight; oy++) {
+        for (let ox = 0; ox < outWidth; ox++) {
+          let sum = this.biases[oc];
+          for (let ic = 0; ic < inChannels; ic++) {
+            for (let u = 0; u < kh; u++) {
+              const inRow = (ic * inHeight + oy + u) * inWidth + ox;
+              const wRow = ((oc * inChannels + ic) * kh + u) * kw;
+              for (let v = 0; v < kw; v++) {
+                sum += input[inRow + v] * this.weights[wRow + v];
               }
             }
-            const outIdx =
-              ((b * outHeight + oh) * outWidth + ow) * outChannels + oc;
-            output[outIdx] = sum;
           }
+          output[(oc * outHeight + oy) * outWidth + ox] = sum;
         }
       }
     }
@@ -163,51 +158,40 @@ class NeuralLayer {
   }
 
   /**
-   * Max Pooling forward pass
+   * Apply the layer's post-op chain (activation, pooling, flatten) to its
+   * pre-activation output. Cheap O(n) ops, mirrored exactly server-side.
    */
-  private maxPoolForward(input: Float32Array): Float32Array {
-    const [batch, inHeight, inWidth, channels] = this.inputShape;
-    const poolSize = 2;
-    const stride = 2;
-    const outHeight = Math.floor(inHeight / stride);
-    const outWidth = Math.floor(inWidth / stride);
-
-    const output = new Float32Array(batch * outHeight * outWidth * channels);
-
-    for (let b = 0; b < batch; b++) {
-      for (let c = 0; c < channels; c++) {
-        for (let oh = 0; oh < outHeight; oh++) {
-          for (let ow = 0; ow < outWidth; ow++) {
-            let maxVal = -Infinity;
-            for (let ph = 0; ph < poolSize; ph++) {
-              for (let pw = 0; pw < poolSize; pw++) {
-                const ih = oh * stride + ph;
-                const iw = ow * stride + pw;
-                const idx = ((b * inHeight + ih) * inWidth + iw) * channels + c;
-                maxVal = Math.max(maxVal, input[idx]);
-              }
-            }
-            const outIdx =
-              ((b * outHeight + oh) * outWidth + ow) * channels + c;
-            output[outIdx] = maxVal;
-          }
-        }
+  applyPostOps(data: Float32Array): Float32Array {
+    let current = data;
+    for (const op of this.postOps) {
+      switch (op.op) {
+        case 'relu':
+          current = current.map((x) => Math.max(0, x));
+          break;
+        case 'softmax':
+          current = this.softmax(current);
+          break;
+        case 'sigmoid':
+          current = current.map((x) => 1 / (1 + Math.exp(-x)));
+          break;
+        case 'tanh':
+          current = current.map((x) => Math.tanh(x));
+          break;
+        case 'maxpool2d':
+          current = this.maxPool2d(current, op.shape ?? [], op.pool ?? 2);
+          break;
+        case 'flatten':
+        case 'linear':
+          break;
+        default:
+          throw new Error(`Unsupported post-op: ${op.op}`);
       }
     }
-
-    return output;
+    return current;
   }
 
   /**
-   * Flatten layer
-   */
-  private flattenForward(input: Float32Array): Float32Array {
-    // Just reshape - data stays the same
-    return input;
-  }
-
-  /**
-   * Apply activation function
+   * Apply activation function (legacy single-op path)
    */
   applyActivation(data: Float32Array): Float32Array {
     switch (this.activation) {
@@ -223,6 +207,37 @@ class NeuralLayer {
       default:
         return data;
     }
+  }
+
+  /**
+   * Channel-major max pooling (floor cropping, matching the server)
+   */
+  private maxPool2d(
+    data: Float32Array,
+    shape: number[],
+    pool: number
+  ): Float32Array {
+    const [channels, height, width] = shape;
+    const outHeight = Math.floor(height / pool);
+    const outWidth = Math.floor(width / pool);
+    const output = new Float32Array(channels * outHeight * outWidth);
+
+    for (let c = 0; c < channels; c++) {
+      for (let oy = 0; oy < outHeight; oy++) {
+        for (let ox = 0; ox < outWidth; ox++) {
+          let maxVal = -Infinity;
+          for (let py = 0; py < pool; py++) {
+            for (let px = 0; px < pool; px++) {
+              const idx = (c * height + oy * pool + py) * width + ox * pool + px;
+              maxVal = Math.max(maxVal, data[idx]);
+            }
+          }
+          output[(c * outHeight + oy) * outWidth + ox] = maxVal;
+        }
+      }
+    }
+
+    return output;
   }
 
   /**
@@ -338,7 +353,7 @@ export class ShardInferenceEngine {
 
       const layerStartTime = performance.now();
       const pre = layer.forward(current);
-      current = layer.applyActivation(pre);
+      current = layer.applyPostOps(pre);
       const layerEndTime = performance.now();
 
       preActivations.push(pre);

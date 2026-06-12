@@ -3,27 +3,34 @@
 End-to-end description of the production core built around a **real trained
 model**, **verifiable computation**, and a **distributed labeling pipeline**.
 
-## 1. The model (plug-and-play)
+## 1. The models (plug-and-play, multi-architecture)
 
 Models live in `models/<name>/`:
 
 ```
-models/mnist-tiny/
-├── manifest.json   # layers, labels, preprocessing, REAL SHA-256 checksums
-└── weights.npz     # trained float32 weights
+models/mnist-tiny/      # dense MLP  784→128→64→10        (98.09% test acc)
+models/mnist-cnn/       # conv net   conv(1→8)→conv(8→16)→400→64→10 (98.46%)
+├── manifest.json       # layers, labels, post-ops, REAL SHA-256 checksums
+└── weights.npz         # trained float32 weights
 ```
 
-- `mnist-tiny` is a 784→128→64→10 MLP trained on real MNIST in pure NumPy
-  (`scripts/train_mnist_numpy.py`), ~97.5% test accuracy in ~15s of training.
+- Both are trained on real MNIST in pure NumPy (`scripts/train_mnist_numpy.py`
+  and `scripts/train_mnist_cnn_numpy.py` — the CNN trains with im2col
+  convolution + backprop in ~2 minutes).
+- A model is a sequence of **provable affine layers** (`dense`, `conv2d`)
+  each followed by a chain of cheap **post-ops** (`relu`, `softmax`,
+  `maxpool2d`, `flatten`) that the server replays itself during verification.
 - **Checksums are real and layered**: each layer's checksum is SHA-256 over
-  the exact float32 bytes a browser receives; the model checksum is a hash of
-  the layer checksums. A client holding only a *segment* of the model can
+  the exact float32 bytes a browser receives (dense: weights flattened
+  (out, in); conv: (oc, ic, kh, kw)); the model checksum is a hash of the
+  layer checksums. A client holding only a *segment* of the model can
   therefore still verify integrity (`crypto.subtle.digest` over the
   `Float32Array` bytes) before executing anything.
 - Adding a new dataset/model = dropping a new manifest + weights directory
   into `models/`. The server (`app/ml/model_store.py`) loads and
-  integrity-verifies everything at startup. No code changes needed for new
-  dense models.
+  integrity-verifies everything at startup; the pipeline rotates new runs
+  across all loaded models. No code changes needed for any mix of dense and
+  conv2d layers.
 
 ## 2. Distributed inference pipeline (the "piecing together")
 
@@ -53,30 +60,36 @@ The server verifies three ways, cheapest first:
    and bound with the task id, sample id, and segment position into a single
    proof hash. Proofs can't be replayed across tasks or detached from data.
 
-2. **Freivalds-style secret projections** — for each dense layer
-   `z = W·x + b`, the server holds K=4 secret random vectors `r` and the
-   precomputed `s = W·r` (once per model load, never per request). It checks
+2. **Freivalds-style secret projections** — every provable layer is an
+   affine operator `z = L·x + b` (dense matmul OR convolution). The server
+   holds K=4 secret random vectors `r` per layer and the precomputed
+   `s = Lᵀ·r` (once per model load, never per request — for conv layers `s`
+   is the transposed convolution of `r` with the kernels). It checks
 
    ```
    r · z  ≈  s · x  +  r · b
    ```
 
    which costs **O(in + out)** multiplications versus the **O(in × out)**
-   the client had to spend. `r` is derived from the server secret key (so
-   workers agree and clients can't reconstruct it). A fabricated `z` passes
-   4 independent secret projections with negligible probability. The layer
-   input `x` is always known server-side: the sample input at segment 0, or
-   the previous solver's verified activation afterward. Activations are
-   recomputed server-side from submitted pre-activations (elementwise, cheap).
+   (dense) or **O(out × k² × in_ch)** (conv) the client had to spend. `r` is
+   derived from the server secret key (so workers agree and clients can't
+   reconstruct it). A fabricated `z` passes 4 independent secret projections
+   with negligible probability. The layer input `x` is always known
+   server-side: the sample input at segment 0, or the previous solver's
+   verified activation afterward. Post-ops (activation, pooling, flatten)
+   are recomputed server-side from submitted pre-activations (O(n), cheap).
 
 3. **Probabilistic spot audits** — ~8% of submissions get a full segment
    recompute, bounding any adaptive attack on the projection checks.
 
-The asymmetry grows with model size: for the 784×128 layer verification is
-already ~27× cheaper than recomputation; for production-scale layers it's
-100×+. Tests in `server/tests/test_proof_verifier.py` cover honest clients
-(including multi-user piecing), fabricated outputs, single-value tampering,
-wrong-input precompute attacks, replays, hash mismatches, and audit catches.
+The asymmetry follows a scaling law: it grows with layer width for dense
+layers (~27× for 784×128) and with kernel² × channels for convolutions
+(1.97× for the 1→8-channel input layer, 10.6× for 8→16, >40× for
+production-scale 32→64 layers). Tests in `server/tests/test_proof_verifier.py`
+cover honest clients on both architectures (including multi-user piecing and
+a real MNIST digit), fabricated outputs, single-value tampering, wrong-input
+precompute attacks, replays, hash mismatches, audit catches, and the
+asymmetry scaling law.
 
 ## 4. Human verification → golden dataset → retraining
 
@@ -102,8 +115,9 @@ wrong-input precompute attacks, replays, hash mismatches, and audit catches.
 ## Running it
 
 ```bash
-# 1. Train the model (downloads MNIST, ~30s total)
+# 1. Train the models (downloads MNIST; MLP ~30s, CNN ~2min)
 server/venv/Scripts/python scripts/train_mnist_numpy.py
+server/venv/Scripts/python scripts/train_mnist_cnn_numpy.py
 
 # 2. Seed real samples
 cd server && venv/Scripts/python ../scripts/seed_data.py --count 200
@@ -113,14 +127,21 @@ venv/Scripts/python -m uvicorn app.main:app --port 8000
 
 # 4. Demo at http://localhost:8000/demo, dashboard at /dashboard
 #    Pipeline state: GET /api/v1/pipeline/runs
+#    Economics/research metrics: GET /api/v1/metrics/economics
 
-# 5. Simulate solvers (watch runs get pieced together)
+# 5. Simulate solvers (watch runs get pieced together across both models)
 venv/Scripts/python ../scripts/e2e_client.py --solves 12
 
 # 6. Retrain from human-verified labels
 venv/Scripts/python ../scripts/retrain_from_golden.py --min-verifications 1
+
+# 7. Regenerate the evaluation report (docs/evaluation/latest.md)
+venv/Scripts/python ../scripts/evaluate_pouw.py --samples 100
 ```
 
-Measured on this machine: 30 distributed solves → 10 completed runs →
-**21/21 pieced-together labels matched the true MNIST labels**; retraining on
-human-verified labels took accuracy 97.53% → 98.09% (v2.0.0 → v2.0.1).
+Measured on this machine: 30 live distributed solves across both models, all
+verified; **46/46 completed pipeline-run labels matched the true MNIST
+labels** (40 dense + 6 CNN); offline evaluation on 100 real MNIST test images
+shows 100% distributed/direct agreement for both architectures and 100%/99%
+ground-truth labeling accuracy (dense/CNN). Retraining on human-verified
+labels took the dense model 97.53% → 98.09% (v2.0.0 → v2.0.1).

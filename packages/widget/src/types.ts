@@ -27,23 +27,40 @@ export interface ModelShard {
 }
 
 /**
+ * A cheap transform applied after a provable layer's affine computation
+ * (mirrored server-side during verification)
+ */
+export interface PostOpConfig {
+  /** Operation: relu, softmax, sigmoid, tanh, maxpool2d, flatten */
+  op: string;
+  /** Pool size for maxpool2d (default 2) */
+  pool?: number;
+  /** (C, H, W) shape of the tensor entering a maxpool2d op */
+  shape?: number[];
+}
+
+/**
  * Neural layer configuration for shard execution
  */
 export interface NeuralLayerConfig {
   /** Layer name */
   name: string;
-  /** Layer type (conv2d, dense, maxpool2d, flatten) */
+  /** Provable layer type (dense, conv2d) */
   type: string;
-  /** Layer weights as flat array */
+  /** Layer weights as flat array (dense: [out][in]; conv2d: [oc][ic][kh][kw]) */
   weights: number[];
   /** Layer biases as flat array */
   biases: number[];
-  /** Input shape */
+  /** Input shape (dense: [1, in]; conv2d: [C, H, W]) */
   inputShape: number[];
-  /** Output shape */
+  /** Output shape (dense: [1, out]; conv2d: [OC, OH, OW]) */
   outputShape: number[];
-  /** Activation function (relu, softmax, sigmoid, tanh, linear) */
+  /** Activation function (legacy single-op form) */
   activation: string;
+  /** Kernel size (kh, kw) for conv2d layers */
+  kernel?: number[];
+  /** Post-op chain applied after the affine computation */
+  postOps?: PostOpConfig[];
 }
 
 /**

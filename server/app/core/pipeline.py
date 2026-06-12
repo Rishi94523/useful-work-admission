@@ -78,16 +78,18 @@ class PipelineCoordinator:
 
         Prefers continuing an in-flight run (so partial computations get
         pieced together quickly); starts a new run on the least-served sample
-        otherwise.
+        otherwise. When no model is pinned, in-flight runs of ANY loaded model
+        are continued and new runs rotate randomly across the model store, so
+        every architecture (dense MLP, CNN, …) keeps labeling its dataset.
         """
-        if model is None:
-            model = get_model_store().get_default()
-
+        store = get_model_store()
         segment_layers = SEGMENT_LAYERS_BY_DIFFICULTY.get(difficulty, 1)
         now = datetime.utcnow()
 
         run = await self._find_claimable_run(model, now)
         if run is None:
+            if model is None:
+                model = random.choice(store.list_models())
             sample = await self._select_sample()
             run = PipelineRun(
                 sample_id=sample.id,
@@ -101,6 +103,7 @@ class PipelineCoordinator:
             self.db.add(run)
             await self.db.flush()
         else:
+            model = store.get(run.model_name)
             sample = await self._get_sample(run.sample_id)
 
         segment_start = run.next_layer
@@ -132,24 +135,39 @@ class PipelineCoordinator:
         )
 
     async def _find_claimable_run(
-        self, model: ModelSpec, now: datetime
+        self, model: Optional[ModelSpec], now: datetime
     ) -> Optional[PipelineRun]:
-        """Oldest in-flight, unclaimed (or claim-expired) run for this model."""
-        result = await self.db.execute(
+        """
+        Oldest in-flight, unclaimed (or claim-expired) run. When ``model`` is
+        None, runs of any model still loaded at the same version qualify
+        (version-isolated: runs for rotated-out checkpoints are never resumed).
+        """
+        query = (
             select(PipelineRun)
             .where(
                 PipelineRun.status == "in_progress",
-                PipelineRun.model_name == model.name,
-                PipelineRun.model_version == model.version,
                 or_(
                     PipelineRun.claimed_until.is_(None),
                     PipelineRun.claimed_until < now,
                 ),
             )
             .order_by(PipelineRun.updated_at.asc())
-            .limit(1)
         )
-        return result.scalar_one_or_none()
+        if model is not None:
+            query = query.where(
+                PipelineRun.model_name == model.name,
+                PipelineRun.model_version == model.version,
+            )
+            result = await self.db.execute(query.limit(1))
+            return result.scalar_one_or_none()
+
+        store = get_model_store()
+        result = await self.db.execute(query.limit(20))
+        for run in result.scalars().all():
+            loaded = store.get(run.model_name)
+            if loaded is not None and loaded.version == run.model_version:
+                return run
+        return None
 
     async def _select_sample(self) -> Sample:
         """Least-served sample; creates a synthetic fallback if pool is empty."""

@@ -53,11 +53,13 @@ async def get_economics_metrics(db: AsyncSession = Depends(get_db)) -> dict[str,
         if end <= start:
             continue
 
+        # Layer-type-generic accounting: dense and conv layers both report
+        # their true multiply-accumulate cost and O(in+out) projection cost.
         segment_ops = 0
         segment_verify_ops = 0
         for layer in model.layers[start:end]:
-            segment_ops += layer.input_size * layer.output_size
-            segment_verify_ops += NUM_PROJECTIONS * (layer.input_size + layer.output_size)
+            segment_ops += layer.compute_ops
+            segment_verify_ops += NUM_PROJECTIONS * layer.projection_ops
 
         assigned_segments += 1
         assigned_ops += segment_ops
@@ -99,8 +101,8 @@ async def get_economics_metrics(db: AsyncSession = Depends(get_db)) -> dict[str,
             "golden_labels": golden_count,
         },
         "work": {
-            "assigned_dense_ops": assigned_ops,
-            "verified_dense_ops": verified_ops,
+            "assigned_compute_ops": assigned_ops,
+            "verified_compute_ops": verified_ops,
             "routine_projection_verify_ops": projection_verify_ops,
             "estimated_ops_saved_vs_recompute": avoided_verify_ops,
             "verification_asymmetry_ratio": (

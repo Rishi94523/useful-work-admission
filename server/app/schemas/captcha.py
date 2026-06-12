@@ -43,6 +43,17 @@ class ModelMeta(APIModel):
     checksum: str
 
 
+class PostOpConfig(APIModel):
+    """A cheap transform applied after a provable layer (relu, maxpool2d, …)."""
+
+    op: str
+    pool: Optional[int] = None
+    shape: Optional[List[int]] = Field(
+        default=None,
+        description="(C, H, W) shape of the tensor entering a maxpool2d op",
+    )
+
+
 class NeuralLayerConfig(APIModel):
     name: str
     type: str
@@ -51,6 +62,13 @@ class NeuralLayerConfig(APIModel):
     input_shape: List[int]
     output_shape: List[int]
     activation: str
+    kernel: Optional[List[int]] = Field(
+        default=None, description="(kh, kw) for conv2d layers"
+    )
+    post_ops: List[PostOpConfig] = Field(
+        default_factory=list,
+        description="Post-op chain the client applies before the next layer",
+    )
 
 
 class ModelShardInfo(APIModel):

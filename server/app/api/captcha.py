@@ -119,6 +119,7 @@ async def init_captcha(
         task, sample, shard_task = await task_coordinator.assign_task(
             session_id=session.id,
             difficulty=difficulty,
+            preferred_model=request.preferred_model,
         )
         task.metadata_ = {
             **(task.metadata_ or {}),
@@ -152,6 +153,7 @@ async def init_captcha(
             expected_time_ms=shard_task.expected_time_ms,
             labels=shard_task.labels,
             model_checksum=shard_task.model_checksum,
+            pad_len=shard_task.pad_len,
         )
 
         await db.commit()

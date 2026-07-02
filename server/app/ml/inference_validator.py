@@ -127,6 +127,7 @@ class InferenceValidator:
             task_id=proof.task_id,
             sample_id=proof.sample_id,
             prediction_hash=prediction_hash,
+            context=shard_meta.get("context") or {},
         )
 
         if not report.valid:

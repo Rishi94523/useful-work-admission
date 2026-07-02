@@ -55,6 +55,8 @@ class SegmentAssignment:
     segment_start: int
     segment_end: int
     input_vector: List[float]
+    # extra verification context (e.g. pad_len for LLM attention masks)
+    context: dict = None
 
     @property
     def layer_count(self) -> int:
@@ -89,8 +91,11 @@ class PipelineCoordinator:
         run = await self._find_claimable_run(model, now)
         if run is None:
             if model is None:
-                model = random.choice(store.list_models())
-            sample = await self._select_sample()
+                # browser rotation only serves models every client can run
+                model = random.choice(
+                    [m for m in store.list_models() if m.auto_serve]
+                )
+            sample = await self._select_sample(model)
             run = PipelineRun(
                 sample_id=sample.id,
                 model_name=model.name,
@@ -113,10 +118,21 @@ class PipelineCoordinator:
         run.claimed_until = now + timedelta(seconds=CLAIM_TTL_SECONDS)
         await self.db.flush()
 
+        # verification context: deterministic per sample, needed by EVERY
+        # segment of a text run (attention pad mask), so recompute cheaply
+        context = {}
+        if model.input_kind == "text":
+            text = (sample.data_blob or b"").decode("utf-8", errors="replace")
+            _, pad_len = model.tokenize_prompt(text)
+            context["pad_len"] = pad_len
+
         if run.activation is not None:
             input_vector = [float(v) for v in run.activation]
         else:
-            input_vector = model.preprocess_sample(sample.data_blob, sample.data_url)
+            input_vector, prep_context = model.prepare_input(
+                sample.data_blob, sample.data_url
+            )
+            context.update(prep_context)
 
         logger.debug(
             "Claimed segment [%d,%d) of run %s for task %s",
@@ -132,6 +148,7 @@ class PipelineCoordinator:
             segment_start=segment_start,
             segment_end=segment_end,
             input_vector=input_vector,
+            context=context,
         )
 
     async def _find_claimable_run(
@@ -165,21 +182,51 @@ class PipelineCoordinator:
         result = await self.db.execute(query.limit(20))
         for run in result.scalars().all():
             loaded = store.get(run.model_name)
-            if loaded is not None and loaded.version == run.model_version:
+            if (
+                loaded is not None
+                and loaded.version == run.model_version
+                and loaded.auto_serve
+            ):
                 return run
         return None
 
-    async def _select_sample(self) -> Sample:
-        """Least-served sample; creates a synthetic fallback if pool is empty."""
+    async def _select_sample(self, model: ModelSpec) -> Sample:
+        """
+        Least-served sample of the model's input kind (image models get
+        image samples, text/LLM models get text samples); synthesizes a
+        fallback if the pool is empty.
+        """
+        data_type = "text" if model.input_kind == "text" else "image"
         result = await self.db.execute(
-            select(Sample).order_by(Sample.times_served.asc()).limit(10)
+            select(Sample)
+            .where(Sample.data_type == data_type)
+            .order_by(Sample.times_served.asc())
+            .limit(10)
         )
         samples = result.scalars().all()
         if samples:
             sample = random.choice(samples)
+        elif data_type == "text":
+            sample = await self._create_fallback_text_sample()
         else:
             sample = await self._create_fallback_sample()
         sample.times_served += 1
+        return sample
+
+    async def _create_fallback_text_sample(self) -> Sample:
+        """Synthetic review so LLM runs work before text seeding."""
+        text = "The product exceeded all my expectations, truly fantastic!"
+        blob = text.encode("utf-8")
+        sample = Sample(
+            data_type="text",
+            model_type="sentiment",
+            data_hash=hashlib.sha256(blob).hexdigest(),
+            data_blob=blob,
+            metadata_={"true_label": "positive", "is_dummy": True},
+        )
+        self.db.add(sample)
+        await self.db.flush()
+        logger.warning("Text sample pool empty — created fallback sample %s", sample.id)
         return sample
 
     async def _get_sample(self, sample_id: uuid.UUID) -> Sample:

@@ -37,6 +37,8 @@ class ShardTask:
     expected_time_ms: int = 0
     labels: list = field(default_factory=list)
     model_checksum: str = ""
+    # left-pad length for LLM attention masks (0 for image models)
+    pad_len: int = 0
 
 
 class TaskCoordinator:
@@ -84,10 +86,13 @@ class TaskCoordinator:
         self,
         session_id: uuid.UUID,
         difficulty: str,
+        preferred_model: str | None = None,
     ) -> Tuple[Task, Sample, ShardTask]:
         """
         Assign the next pipeline segment to a session.
 
+        ``preferred_model`` pins a specific model (e.g. an LLM excluded from
+        automatic rotation); unknown names fall back to normal rotation.
         Returns (Task row, Sample, wire-ready ShardTask).
         """
         tier_config = self.DIFFICULTY_TIERS.get(
@@ -95,9 +100,11 @@ class TaskCoordinator:
         )
         task_id = uuid.uuid4()
 
+        pinned = get_model_store().get(preferred_model) if preferred_model else None
         assignment: SegmentAssignment = await self.pipeline.claim_segment(
             task_id=task_id,
             difficulty=difficulty,
+            model=pinned,
         )
         model = assignment.model
 
@@ -119,6 +126,7 @@ class TaskCoordinator:
             expected_time_ms=tier_config["inference_time_ms"],
             labels=model.labels,
             model_checksum=model.checksum,
+            pad_len=int((assignment.context or {}).get("pad_len", 0)),
         )
 
         known_label = (assignment.sample.metadata_ or {}).get("known_label")
@@ -145,6 +153,8 @@ class TaskCoordinator:
                     # The exact input the client must have used; the verifier
                     # replays projection checks against this.
                     "input_vector": [float(v) for v in assignment.input_vector],
+                    # verification context (LLM pad mask etc.)
+                    "context": assignment.context or {},
                 }
             },
         )

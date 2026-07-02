@@ -31,6 +31,16 @@ def hash_tensor(values) -> str:
 
 def verify_shard_checksum(shard) -> bool:
     layer = shard["layers"][0]
+    if layer["type"] in ("gqa_attention", "swiglu_mlp"):
+        # int8 weight bytes + f32 scales (+ f32 biases for attention)
+        parts = [base64.b64decode(layer["weightsB64"])]
+        parts.append(np.asarray(layer["scales"], dtype="<f4").tobytes())
+        if layer["type"] == "gqa_attention":
+            parts.append(np.asarray(layer["biases"], dtype="<f4").tobytes())
+        return hashlib.sha256(b"".join(parts)).hexdigest() == shard["checksum"]
+    if layer["type"] == "candidate_logits":
+        w = np.asarray(layer["weights"], dtype="<f4").tobytes()
+        return hashlib.sha256(w).hexdigest() == shard["checksum"]
     if layer.get("quantized"):
         w = np.asarray(layer["weights"], dtype="<i1").tobytes()
         b = np.asarray(layer["biases"], dtype="<i4").tobytes()
@@ -69,6 +79,9 @@ def apply_post_ops(
         # post-ops operate on the Z sub-block of the [Q|K|V|S|O|Z] concat
         seq, d = layer["seq"], layer["dModel"]
         current = current[4 * seq * d + seq * seq :]
+    elif layer["type"] in ("gqa_attention", "swiglu_mlp"):
+        # final sub-block (Z or D) is always the trailing seq*d values
+        current = current[-(layer["seq"] * layer["dModel"]) :]
     for op in ops:
         kind = op["op"]
         if kind == "maxpool2d":
@@ -113,9 +126,131 @@ def softmax_rows(s: np.ndarray) -> np.ndarray:
     return e / e.sum(axis=-1, keepdims=True)
 
 
+# --- LLM helpers (mirror server/app/ml/llm_layers.py exactly) ---------------
+
+def apply_input_ops(values: np.ndarray, ops) -> np.ndarray:
+    """rmsnorm / last_token chains applied to a layer's input."""
+    h = values.astype(np.float64)
+    for op in ops or []:
+        if op["op"] == "rmsnorm":
+            seq = int(op.get("seq", 1))
+            w = np.asarray(op["weight"], dtype=np.float64)
+            eps = float(op.get("eps", 1e-6))
+            t = h.reshape(seq, -1)
+            h = (t / np.sqrt(np.mean(t * t, axis=-1, keepdims=True) + eps) * w).reshape(-1)
+        elif op["op"] == "last_token":
+            h = h.reshape(int(op["seq"]), int(op["dim"]))[-1]
+    return h
+
+
+def rope_cos_sin(seq: int, head_dim: int, theta: float):
+    inv_freq = theta ** (-np.arange(0, head_dim, 2, dtype=np.float64) / head_dim)
+    angles = np.arange(seq, dtype=np.float64)[:, None] * inv_freq[None, :]
+    cos = np.concatenate([np.cos(angles), np.cos(angles)], axis=-1)
+    sin = np.concatenate([np.sin(angles), np.sin(angles)], axis=-1)
+    return cos, sin
+
+
+def apply_rope(x: np.ndarray, cos: np.ndarray, sin: np.ndarray) -> np.ndarray:
+    half = x.shape[-1] // 2
+    rotated = np.concatenate([-x[..., half:], x[..., :half]], axis=-1)
+    return x * cos[:, None, :] + rotated * sin[:, None, :]
+
+
+def dequant_slab(flat_i8: np.ndarray, scales: np.ndarray, out: int, in_: int) -> np.ndarray:
+    """int8 (out*in,) + per-out-channel scales -> f32 (out, in)."""
+    return flat_i8[: out * in_].reshape(out, in_).astype(np.float32) * scales[
+        :out
+    ].astype(np.float32)[:, None]
+
+
+def forward_gqa_attention(current: np.ndarray, layer: dict, pad_len: int) -> np.ndarray:
+    seq, d = layer["seq"], layer["dModel"]
+    n_heads, n_kv, hd = layer["nHeads"], layer["nKvHeads"], layer["headDim"]
+    q_dim, kv_dim = n_heads * hd, n_kv * hd
+
+    i8 = np.frombuffer(base64.b64decode(layer["weightsB64"]), dtype=np.int8)
+    scales = np.asarray(layer["scales"], dtype=np.float32)
+    biases = np.asarray(layer["biases"], dtype=np.float32)
+    pos_w = pos_s = 0
+    mats = {}
+    for name, out, in_ in (
+        ("q", q_dim, d), ("k", kv_dim, d), ("v", kv_dim, d), ("o", d, q_dim)
+    ):
+        mats[name] = dequant_slab(i8[pos_w:], scales[pos_s:], out, in_)
+        pos_w += out * in_
+        pos_s += out
+    bq, bk, bv = biases[:q_dim], biases[q_dim : q_dim + kv_dim], biases[q_dim + kv_dim :]
+
+    xn = apply_input_ops(current, layer.get("inputOps")).reshape(seq, d)
+    q = (xn @ mats["q"].astype(np.float64).T + bq).astype(np.float32).astype(np.float64)
+    k = (xn @ mats["k"].astype(np.float64).T + bk).astype(np.float32).astype(np.float64)
+    v = (xn @ mats["v"].astype(np.float64).T + bv).astype(np.float32).astype(np.float64)
+
+    cos, sin = rope_cos_sin(seq, hd, float(layer["ropeTheta"]))
+    q = apply_rope(q.reshape(seq, n_heads, hd), cos, sin)
+    k = apply_rope(k.reshape(seq, n_kv, hd), cos, sin)
+    v = v.reshape(seq, n_kv, hd)
+
+    group = n_heads // n_kv
+    s = np.empty((n_heads, seq, seq))
+    for h in range(n_heads):
+        s[h] = q[:, h, :] @ k[:, h // group, :].T
+    s = s.astype(np.float32).astype(np.float64)
+
+    i = np.arange(seq)[:, None]
+    j = np.arange(seq)[None, :]
+    allowed = (j <= i) & ((j >= pad_len) | (i < pad_len))
+    scaled = np.where(allowed[None], s / np.sqrt(hd), -1e30)
+    p = softmax_rows(scaled)
+
+    o = np.empty((seq, q_dim))
+    for h in range(n_heads):
+        o[:, h * hd : (h + 1) * hd] = p[h] @ v[:, h // group, :]
+    o = o.astype(np.float32).astype(np.float64)
+    z = (o @ mats["o"].astype(np.float64).T).astype(np.float32)
+
+    return np.concatenate(
+        [q.reshape(-1), k.reshape(-1), v.reshape(-1), s.reshape(-1), o.reshape(-1), z.astype(np.float64).reshape(-1)]
+    ).astype(np.float32)
+
+
+def forward_swiglu_mlp(current: np.ndarray, layer: dict) -> np.ndarray:
+    seq, d, ffn = layer["seq"], layer["dModel"], layer["ffnDim"]
+    i8 = np.frombuffer(base64.b64decode(layer["weightsB64"]), dtype=np.int8)
+    scales = np.asarray(layer["scales"], dtype=np.float32)
+    wg = dequant_slab(i8, scales, ffn, d)
+    wu = dequant_slab(i8[ffn * d :], scales[ffn:], ffn, d)
+    wd = dequant_slab(i8[2 * ffn * d :], scales[2 * ffn :], d, ffn)
+
+    xn = apply_input_ops(current, layer.get("inputOps")).reshape(seq, d)
+    g = (xn @ wg.astype(np.float64).T).astype(np.float32).astype(np.float64)
+    u = (xn @ wu.astype(np.float64).T).astype(np.float32).astype(np.float64)
+    h = (g / (1.0 + np.exp(-g))) * u
+    dv = (h @ wd.astype(np.float64).T).astype(np.float32)
+    return np.concatenate(
+        [g.reshape(-1), u.reshape(-1), dv.astype(np.float64).reshape(-1)]
+    ).astype(np.float32)
+
+
+def forward_candidate_logits(current: np.ndarray, layer: dict) -> np.ndarray:
+    d = layer["dModel"]
+    n_labels = layer["outputShape"][-1]
+    w = np.asarray(layer["weights"], dtype=np.float32).reshape(n_labels, d)
+    xn = apply_input_ops(current, layer.get("inputOps"))
+    return (xn @ w.astype(np.float64).T).astype(np.float32)
+
+
 def forward_pre_activation(current: np.ndarray, layer: dict) -> np.ndarray:
-    """Provable layer compute (dense/conv2d/token_dense/attention)."""
+    """Provable layer compute (dense/conv2d/token_dense/attention/LLM)."""
     quantized = layer.get("quantized", False)
+
+    if layer["type"] == "gqa_attention":
+        return forward_gqa_attention(current, layer, int(layer.get("_padLen", 0)))
+    if layer["type"] == "swiglu_mlp":
+        return forward_swiglu_mlp(current, layer)
+    if layer["type"] == "candidate_logits":
+        return forward_candidate_logits(current, layer)
 
     if layer["type"] == "token_dense":
         seq, in_size = layer["inputShape"]
@@ -212,20 +347,22 @@ def forward_pre_activation(current: np.ndarray, layer: dict) -> np.ndarray:
     )
 
 
-def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
-    init = client.post(
-        f"{api}/captcha/init",
-        json={
-            "siteKey": "pk_demo_1234567890",
-            "clientMetadata": {
-                "userAgent": f"e2e-client/{solver_id}",
-                "language": "en-US",
-                "timezone": "UTC",
-                "screenWidth": 1920,
-                "screenHeight": 1080,
-            },
+def solve_once(
+    client: httpx.Client, api: str, solver_id: int, preferred_model: str = None
+) -> dict:
+    payload = {
+        "siteKey": "pk_demo_1234567890",
+        "clientMetadata": {
+            "userAgent": f"e2e-client/{solver_id}",
+            "language": "en-US",
+            "timezone": "UTC",
+            "screenWidth": 1920,
+            "screenHeight": 1080,
         },
-    )
+    }
+    if preferred_model:
+        payload["preferredModel"] = preferred_model
+    init = client.post(f"{api}/captcha/init", json=payload)
     init.raise_for_status()
     data = init.json()
     task = data["task"]
@@ -242,6 +379,8 @@ def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
     total_layers = task["totalLayers"]
     layers = [l for shard in task["shards"] for l in shard["layers"]]
     is_final = segment_start + len(layers) >= total_layers
+    for layer in layers:  # LLM attention layers need the pad mask length
+        layer["_padLen"] = task.get("padLen", 0)
 
     start = time.time()
     pre_activations = []
@@ -350,14 +489,19 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--solves", type=int, default=8)
     parser.add_argument("--api", default="http://localhost:8000/api/v1")
+    parser.add_argument(
+        "--model",
+        default=None,
+        help="pin a model (e.g. llm-qwen2-sentiment for the distributed LLM PoC)",
+    )
     args = parser.parse_args()
 
     failures = 0
     completed_runs = 0
-    with httpx.Client(timeout=30) as client:
+    with httpx.Client(timeout=120) as client:
         for i in range(args.solves):
             try:
-                outcome = solve_once(client, args.api, i)
+                outcome = solve_once(client, args.api, i, preferred_model=args.model)
             except Exception as exc:
                 print(f"solve {i + 1}: ERROR {exc}")
                 failures += 1

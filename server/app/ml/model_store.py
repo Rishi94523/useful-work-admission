@@ -115,6 +115,16 @@ def apply_post_ops(
         elif kind == "mean_pool_tokens":
             seq, dim = int(op["seq"]), int(op["dim"])
             h = h.reshape(seq, dim).mean(axis=0)
+        elif kind == "rmsnorm":
+            seq = int(op.get("seq", 1))
+            weight = np.asarray(op["weight"], dtype=np.float64)
+            eps = float(op.get("eps", 1e-6))
+            t = h.reshape(seq, -1) if seq > 1 else h.reshape(1, -1)
+            variance = np.mean(t * t, axis=-1, keepdims=True)
+            h = (t / np.sqrt(variance + eps) * weight).reshape(h.shape)
+        elif kind == "last_token":
+            seq, dim = int(op["seq"]), int(op["dim"])
+            h = h.reshape(seq, dim)[-1]
         elif kind == "linear":
             pass
         else:
@@ -759,6 +769,18 @@ class ModelSpec:
     metrics: dict = field(default_factory=dict)
     # Quantized models take integer pixel inputs (0..255) instead of 0..1
     input_quantized: bool = False
+    # "image" or "text" — used to pick matching samples from the pool
+    input_kind: str = "image"
+    # LLM text models: browser clients can't run these yet, so they are
+    # excluded from automatic pipeline rotation (explicit request only)
+    auto_serve: bool = True
+    # LLM text models: tokenizer + prompt template + mmap'd embedding matrix
+    tokenizer_file: Optional[str] = None
+    prompt_template: Optional[str] = None
+    embedding_file: Optional[str] = None
+    model_dir: Optional[Path] = None
+    _tokenizer: Optional[object] = field(default=None, repr=False)
+    _embeddings: Optional[np.ndarray] = field(default=None, repr=False)
 
     @property
     def total_layers(self) -> int:
@@ -804,32 +826,91 @@ class ModelSpec:
         submitted concatenation; ``layer_input`` feeds residual connections.
         """
         layer = self.layers[layer_index]
-        if layer.layer_type == "attention":
+        if hasattr(layer, "z_output"):
+            # multi-part submissions ([Q|K|V|S|O|Z], [G|U|D], …): post-ops
+            # operate on the final sub-block
             z = layer.z_output(z)
         return apply_post_ops(z, layer.post_ops, layer_input=layer_input)
 
     def forward_segment(
-        self, x: np.ndarray, start: int, end: int
+        self, x: np.ndarray, start: int, end: int, pad_len: int = 0
     ) -> tuple[List[np.ndarray], np.ndarray]:
         """
         Reference forward pass over layers [start, end).
 
         Returns (pre_activations per layer, final post-op output). Used only
         for spot audits and tests — routine validation uses the projection
-        checks in proof_verifier, which never run this.
+        checks in proof_verifier, which never run this. ``pad_len`` is the
+        left-padding length for LLM attention masks.
         """
+        from app.ml.llm_layers import GQAAttentionLayer, SwigluMlpLayer
+
         pre_activations: List[np.ndarray] = []
         h = np.asarray(x, dtype=np.float64)
         for offset, layer in enumerate(self.layers[start:end]):
-            z = layer.forward(h)
+            if isinstance(layer, (GQAAttentionLayer, SwigluMlpLayer)):
+                z = layer.forward(h, pad_len=pad_len)
+            else:
+                z = layer.forward(h)
             pre_activations.append(z)
             h = self.apply_layer_post_ops(z, start + offset, layer_input=h)
         return pre_activations, h
 
-    def predict(self, x: np.ndarray) -> np.ndarray:
+    def predict(self, x: np.ndarray, pad_len: int = 0) -> np.ndarray:
         """Full forward pass returning class probabilities."""
-        _, h = self.forward_segment(x, 0, self.total_layers)
+        _, h = self.forward_segment(x, 0, self.total_layers, pad_len=pad_len)
         return h
+
+    # -- text (LLM) input preparation ------------------------------------
+
+    def _get_tokenizer(self):
+        if self._tokenizer is None:
+            from tokenizers import Tokenizer
+
+            self._tokenizer = Tokenizer.from_file(
+                str((self.model_dir or Path(".")) / self.tokenizer_file)
+            )
+        return self._tokenizer
+
+    def _get_embeddings(self) -> np.ndarray:
+        if self._embeddings is None:
+            # float16 .npy, memory-mapped: rows are read on demand so the
+            # multi-hundred-MB vocabulary never fully loads into RAM
+            self._embeddings = np.load(
+                (self.model_dir or Path(".")) / self.embedding_file, mmap_mode="r"
+            )
+        return self._embeddings
+
+    @property
+    def seq(self) -> int:
+        return getattr(self.layers[0], "seq", 1)
+
+    def tokenize_prompt(self, text: str) -> tuple[List[int], int]:
+        """Format the prompt, tokenize, left-pad/truncate to ``seq``."""
+        prompt = (self.prompt_template or "{text}").format(text=text.strip())
+        ids = self._get_tokenizer().encode(prompt).ids
+        if len(ids) > self.seq:
+            ids = ids[-self.seq :]
+        pad_len = self.seq - len(ids)
+        # left-pad with the first prompt token; masked out of attention
+        ids = [ids[0]] * pad_len + ids
+        return ids, pad_len
+
+    def prepare_input(
+        self, sample_blob: Optional[bytes], sample_url: Optional[str] = None
+    ) -> tuple[List[float], dict]:
+        """
+        Input vector + context for a new pipeline run. Image models: the
+        pixel vector. Text models: token ids are embedded server-side (cheap
+        lookup) and the left-pad length is returned for attention masking.
+        """
+        if self.input_kind == "text":
+            text = (sample_blob or b"").decode("utf-8", errors="replace")
+            ids, pad_len = self.tokenize_prompt(text)
+            embeddings = self._get_embeddings()
+            vec = np.asarray(embeddings[ids], dtype=np.float32).reshape(-1)
+            return [float(v) for v in vec], {"pad_len": pad_len}
+        return self.preprocess_sample(sample_blob, sample_url), {}
 
     def preprocess_sample(
         self, sample_blob: Optional[bytes], sample_url: Optional[str] = None
@@ -971,6 +1052,65 @@ def _load_layer(layer_manifest: dict, weights: np.lib.npyio.NpzFile):
             checksum=layer_manifest["checksum"],
             post_ops=post_ops,
         )
+    if layer_type == "gqa_attention":
+        from app.ml.llm_layers import GQAAttentionLayer
+
+        return GQAAttentionLayer(
+            index=i,
+            name=layer_manifest["name"],
+            seq=layer_manifest["seq"],
+            d_model=layer_manifest["d_model"],
+            n_heads=layer_manifest["n_heads"],
+            n_kv_heads=layer_manifest["n_kv_heads"],
+            head_dim=layer_manifest["head_dim"],
+            rope_theta=layer_manifest["rope_theta"],
+            wq=weights[f"W{i}q"].astype(np.int8),
+            sq=weights[f"S{i}q"].astype(np.float32),
+            wk=weights[f"W{i}k"].astype(np.int8),
+            sk=weights[f"S{i}k"].astype(np.float32),
+            wv=weights[f"W{i}v"].astype(np.int8),
+            sv=weights[f"S{i}v"].astype(np.float32),
+            wo=weights[f"W{i}o"].astype(np.int8),
+            so=weights[f"S{i}o"].astype(np.float32),
+            bq=weights[f"b{i}q"].astype(np.float32),
+            bk=weights[f"b{i}k"].astype(np.float32),
+            bv=weights[f"b{i}v"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            input_ops=list(layer_manifest.get("input_ops", [])),
+            post_ops=post_ops,
+        )
+    if layer_type == "swiglu_mlp":
+        from app.ml.llm_layers import SwigluMlpLayer
+
+        return SwigluMlpLayer(
+            index=i,
+            name=layer_manifest["name"],
+            seq=layer_manifest["seq"],
+            d_model=layer_manifest["d_model"],
+            ffn_dim=layer_manifest["ffn_dim"],
+            wg=weights[f"W{i}g"].astype(np.int8),
+            sg=weights[f"S{i}g"].astype(np.float32),
+            wu=weights[f"W{i}u"].astype(np.int8),
+            su=weights[f"S{i}u"].astype(np.float32),
+            wd=weights[f"W{i}d"].astype(np.int8),
+            sd=weights[f"S{i}d"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            input_ops=list(layer_manifest.get("input_ops", [])),
+            post_ops=post_ops,
+        )
+    if layer_type == "candidate_logits":
+        from app.ml.llm_layers import CandidateLogitsLayer
+
+        return CandidateLogitsLayer(
+            index=i,
+            name=layer_manifest["name"],
+            seq=layer_manifest["seq"],
+            d_model=layer_manifest["d_model"],
+            weights=weights[f"W{i}"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            input_ops=list(layer_manifest.get("input_ops", [])),
+            post_ops=post_ops,
+        )
     raise ValueError(f"unknown layer type {layer_type!r}")
 
 
@@ -1049,6 +1189,12 @@ class ModelStore:
             layers=layers,
             metrics=manifest.get("metrics", {}),
             input_quantized=bool(manifest["input"].get("quantized", False)),
+            input_kind=manifest["input"].get("kind", "image"),
+            auto_serve=bool(manifest.get("pipeline", {}).get("auto_serve", True)),
+            tokenizer_file=manifest["input"].get("tokenizer_file"),
+            prompt_template=manifest["input"].get("prompt_template"),
+            embedding_file=manifest["input"].get("embedding_file"),
+            model_dir=model_dir,
         )
 
     def get(self, name: str) -> Optional[ModelSpec]:

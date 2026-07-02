@@ -33,6 +33,11 @@ class ClientMetadata(APIModel):
 class CaptchaInitRequest(APIModel):
     site_key: str = Field(..., min_length=10, description="Site API key")
     client_metadata: ClientMetadata = Field(..., description="Client information")
+    preferred_model: Optional[str] = Field(
+        default=None,
+        description="Pin a specific model (e.g. an LLM excluded from browser "
+        "rotation); unknown names fall back to normal rotation",
+    )
 
 
 class ModelMeta(APIModel):
@@ -66,11 +71,15 @@ class PostOpConfig(APIModel):
         default=None, description="Dequantize scale for quantized logits"
     )
     seq: Optional[int] = Field(
-        default=None, description="Token count for mean_pool_tokens"
+        default=None, description="Token count for mean_pool_tokens/rmsnorm"
     )
     dim: Optional[int] = Field(
-        default=None, description="Token dimension for mean_pool_tokens"
+        default=None, description="Token dimension for mean_pool_tokens/last_token"
     )
+    weight: Optional[List[float]] = Field(
+        default=None, description="Elementwise weight vector for rmsnorm"
+    )
+    eps: Optional[float] = Field(default=None, description="rmsnorm epsilon")
 
 
 class PatchifyConfig(APIModel):
@@ -108,6 +117,24 @@ class NeuralLayerConfig(APIModel):
     patchify: Optional[PatchifyConfig] = Field(
         default=None, description="Patch extraction for token_dense layers"
     )
+    weights_b64: Optional[str] = Field(
+        default=None,
+        description="Base64 int8 weight bytes for large (LLM) layers; used "
+        "with per-channel scales instead of the JSON weights list",
+    )
+    scales: Optional[List[float]] = Field(
+        default=None, description="Per-output-channel dequantization scales"
+    )
+    input_ops: List[PostOpConfig] = Field(
+        default_factory=list,
+        description="Ops applied to the layer INPUT before the affine "
+        "computation (e.g. rmsnorm, last_token); replayed server-side",
+    )
+    n_heads: Optional[int] = Field(default=None, description="GQA query heads")
+    n_kv_heads: Optional[int] = Field(default=None, description="GQA KV heads")
+    head_dim: Optional[int] = Field(default=None, description="GQA head dim")
+    rope_theta: Optional[float] = Field(default=None, description="RoPE theta")
+    ffn_dim: Optional[int] = Field(default=None, description="SwiGLU FFN dim")
 
 
 class ModelShardInfo(APIModel):
@@ -159,6 +186,10 @@ class ShardTaskInfo(APIModel):
     expected_time_ms: int
     labels: List[str]
     model_checksum: str
+    pad_len: int = Field(
+        default=0,
+        description="Left-pad length for LLM attention masks (text models)",
+    )
 
 
 class CaptchaInitResponse(APIModel):

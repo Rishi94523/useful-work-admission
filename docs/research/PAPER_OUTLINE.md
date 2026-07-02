@@ -37,8 +37,15 @@ sourced from CAPTCHA traffic.
    primitive composed — Q/K/V/output projections as affine checks, the
    bilinear products S = Q·Kᵀ and O = softmax(S)·V as Freivalds
    matrix-product checks over submitted-and-verified intermediates, with
-   softmax/normalization replayed server-side at O(seq²) cost. This is the
-   path to distributed LLM inference over CAPTCHA traffic.
+   softmax/normalization replayed server-side at O(seq²) cost.
+5b. **Distributed verified LLM inference (demonstrated)**: a real
+   Qwen2.5-0.5B-Instruct decomposes into 49 provable segments (GQA attention
+   with RoPE folded into the projection precompute + SwiGLU MLP with a
+   server-replayed silu gate + candidate-logits head) and performs zero-shot
+   text labeling through the live pipeline, every segment verified without
+   recomputation. To our knowledge the first LLM forward pass distributed
+   across mutually-untrusted anonymous sessions with per-segment algebraic
+   verification.
 6. A useful-value pipeline that turns completed runs and selective human
    checks into golden labels and periodic retraining (the model improves from
    the human feedback it harvests: 97.53% → 98.09% measured on mnist-tiny).

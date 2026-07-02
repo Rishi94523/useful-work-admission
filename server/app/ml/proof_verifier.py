@@ -202,6 +202,172 @@ class ProofVerifier:
         scale = max(1.0, float(np.max(np.abs(lhs))), float(np.max(np.abs(rhs))))
         return float(np.max(np.abs(lhs - rhs))) <= PROJECTION_RTOL * scale
 
+    def _gqa_projections(self, model: ModelSpec, layer_index: int, layer) -> List[dict]:
+        """
+        Secret vectors for one GQA attention unit. RoPE is a fixed orthogonal
+        per-position rotation, so it folds into the precompute: the affine
+        check for the ROTATED Q uses r_eff = Rᵀr (inverse rotation), giving
+        r·vec(RoPE(XnW+b)) = Σ_t (Wᵀ r_eff_t)·xn_t + r_eff·b.
+        """
+        from app.ml.llm_layers import apply_rope, rope_cos_sin
+
+        key = (model.checksum, layer_index, "gqa")
+        if key not in self._projections:
+            cos, sin = rope_cos_sin(layer.seq, layer.head_dim, layer.rope_theta)
+            wq = layer.dequant("q").astype(np.float64)  # (out, in)
+            wk = layer.dequant("k").astype(np.float64)
+            wv = layer.dequant("v").astype(np.float64)
+            wo = layer.dequant("o").astype(np.float64)
+            rounds = []
+            for k in range(NUM_PROJECTIONS):
+                seed_material = (
+                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}:gqa"
+                ).encode("utf-8")
+                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
+                rng = np.random.default_rng(seed)
+                rq = rng.standard_normal((layer.seq, layer.n_heads, layer.head_dim))
+                rk = rng.standard_normal((layer.seq, layer.n_kv_heads, layer.head_dim))
+                rv = rng.standard_normal((layer.seq, layer.n_kv_heads, layer.head_dim))
+                rz = rng.standard_normal((layer.seq, layer.d_model))
+                u = rng.standard_normal(layer.seq)
+                w = rng.standard_normal(layer.head_dim)
+                rq_eff = apply_rope(rq, cos, -sin).reshape(layer.seq, -1)
+                rk_eff = apply_rope(rk, cos, -sin).reshape(layer.seq, -1)
+                rv_flat = rv.reshape(layer.seq, -1)
+                rounds.append(
+                    {
+                        "rq": rq.reshape(layer.seq, -1),
+                        "rk": rk.reshape(layer.seq, -1),
+                        "rv": rv_flat,
+                        "rz": rz,
+                        "u": u,
+                        "w": w,
+                        "sq": rq_eff @ wq,  # (seq, d_model)
+                        "sk": rk_eff @ wk,
+                        "sv": rv_flat @ wv,
+                        "sz": rz @ wo,  # (seq, q_dim)
+                        "rbq": float(np.sum(rq_eff @ layer.bq.astype(np.float64))),
+                        "rbk": float(np.sum(rk_eff @ layer.bk.astype(np.float64))),
+                        "rbv": float(np.sum(rv_flat @ layer.bv.astype(np.float64))),
+                    }
+                )
+            self._projections[key] = rounds
+        return self._projections[key]
+
+    def _verify_gqa_attention(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        x: np.ndarray,
+        z: np.ndarray,
+        pad_len: int,
+    ) -> Optional[str]:
+        """
+        Verify a GQA attention submission [Q|K|V|S|O|Z]: affine checks for the
+        RoPE'd Q/K and V/Z, per-head Freivalds product checks for S = Q·Kᵀ and
+        O = P·V with the masked softmax P computed by the SERVER.
+        """
+        from app.ml.llm_layers import attention_probs
+        from app.ml.model_store import apply_post_ops
+
+        parts = layer.extract(z)
+        xn = apply_post_ops(x, layer.input_ops).reshape(layer.seq, layer.d_model)
+        p_matrix = attention_probs(parts["S"], layer.head_dim, pad_len)
+        hd = layer.head_dim
+
+        for rd in self._gqa_projections(model, layer_index, layer):
+            checks = (
+                ("Q", parts["Q"].reshape(layer.seq, -1), rd["rq"], rd["sq"], rd["rbq"]),
+                ("K", parts["K"].reshape(layer.seq, -1), rd["rk"], rd["sk"], rd["rbk"]),
+                ("V", parts["V"].reshape(layer.seq, -1), rd["rv"], rd["sv"], rd["rbv"]),
+            )
+            for name, sub, r, s, rb in checks:
+                lhs = float(np.sum(r * sub))
+                rhs = float(np.sum(s * xn)) + rb
+                if not self._close(lhs, rhs):
+                    return f"gqa {name} projection failed at layer {layer_index}"
+
+            lhs = float(np.sum(rd["rz"] * parts["Z"]))
+            rhs = float(np.sum(rd["sz"] * parts["O"]))
+            if not self._close(lhs, rhs):
+                return f"gqa Z projection failed at layer {layer_index}"
+
+            u, w = rd["u"], rd["w"]
+            for h in range(layer.n_heads):
+                g = layer.kv_group(h)
+                q_h = parts["Q"][:, h, :]
+                k_g = parts["K"][:, g, :]
+                v_g = parts["V"][:, g, :]
+                if not self._vectors_close(parts["S"][h] @ u, q_h @ (k_g.T @ u)):
+                    return f"gqa score product failed at layer {layer_index} head {h}"
+                o_h = parts["O"][:, h * hd : (h + 1) * hd]
+                if not self._vectors_close(o_h @ w, p_matrix[h] @ (v_g @ w)):
+                    return f"gqa output product failed at layer {layer_index} head {h}"
+
+        return None
+
+    def _swiglu_projections(self, model: ModelSpec, layer_index: int, layer) -> List[dict]:
+        key = (model.checksum, layer_index, "swiglu")
+        if key not in self._projections:
+            wg = layer.dequant("g").astype(np.float64)  # (ffn, d)
+            wu = layer.dequant("u").astype(np.float64)
+            wd = layer.dequant("d").astype(np.float64)  # (d, ffn)
+            rounds = []
+            for k in range(NUM_PROJECTIONS):
+                seed_material = (
+                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}:swiglu"
+                ).encode("utf-8")
+                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
+                rng = np.random.default_rng(seed)
+                rg = rng.standard_normal((layer.seq, layer.ffn_dim))
+                ru = rng.standard_normal((layer.seq, layer.ffn_dim))
+                rdv = rng.standard_normal((layer.seq, layer.d_model))
+                rounds.append(
+                    {
+                        "rg": rg,
+                        "ru": ru,
+                        "rd": rdv,
+                        "sg": rg @ wg,  # (seq, d)
+                        "su": ru @ wu,
+                        "sd": rdv @ wd,  # (seq, ffn)
+                    }
+                )
+            self._projections[key] = rounds
+        return self._projections[key]
+
+    def _verify_swiglu(
+        self, model: ModelSpec, layer_index: int, layer, x: np.ndarray, z: np.ndarray
+    ) -> Optional[str]:
+        """
+        Verify a SwiGLU MLP submission [G|U|D]: G and U affine in the normed
+        input; H = silu(G)⊙U computed by the SERVER from the verified G, U
+        (O(ffn) elementwise); D affine in that server-computed H.
+        """
+        from app.ml.llm_layers import silu
+        from app.ml.model_store import apply_post_ops
+
+        parts = layer.extract(z)
+        xn = apply_post_ops(x, layer.input_ops).reshape(layer.seq, layer.d_model)
+        h_matrix = silu(parts["G"]) * parts["U"]
+
+        for rd in self._swiglu_projections(model, layer_index, layer):
+            for name, sub, r, s in (
+                ("G", parts["G"], rd["rg"], rd["sg"]),
+                ("U", parts["U"], rd["ru"], rd["su"]),
+            ):
+                lhs = float(np.sum(r * sub))
+                rhs = float(np.sum(s * xn))
+                if not self._close(lhs, rhs):
+                    return f"swiglu {name} projection failed at layer {layer_index}"
+
+            lhs = float(np.sum(rd["rd"] * parts["D"]))
+            rhs = float(np.sum(rd["sd"] * h_matrix))
+            if not self._close(lhs, rhs):
+                return f"swiglu D projection failed at layer {layer_index}"
+
+        return None
+
     def _verify_attention(
         self, model: ModelSpec, layer_index: int, layer, x: np.ndarray, z: np.ndarray
     ) -> Optional[str]:
@@ -258,8 +424,10 @@ class ProofVerifier:
         sample_id: str,
         prediction_hash: str = "",
         force_audit: bool = False,
+        context: Optional[dict] = None,
     ) -> VerificationReport:
         """Verify one submitted segment of layers [start, start+len)."""
+        pad_len = int((context or {}).get("pad_len", 0))
         layer_count = len(pre_activations)
         segment_end = segment_start + layer_count
         report = VerificationReport(valid=False)
@@ -315,6 +483,26 @@ class ProofVerifier:
                         failure,
                     )
                     return report
+            elif layer.layer_type == "gqa_attention":
+                failure = self._verify_gqa_attention(
+                    model, layer_index, layer, x, z, pad_len
+                )
+                if failure:
+                    report.reason = failure
+                    logger.warning(
+                        "GQA check failed: task=%s layer=%d (%s)",
+                        task_id, layer_index, failure,
+                    )
+                    return report
+            elif layer.layer_type == "swiglu_mlp":
+                failure = self._verify_swiglu(model, layer_index, layer, x, z)
+                if failure:
+                    report.reason = failure
+                    logger.warning(
+                        "SwiGLU check failed: task=%s layer=%d (%s)",
+                        task_id, layer_index, failure,
+                    )
+                    return report
             elif getattr(layer, "exact", False):
                 # EXACT mod-p verification (quantized layers): every honest
                 # value is an integer, so equality is bit-for-bit — no float
@@ -340,9 +528,17 @@ class ProofVerifier:
                         )
                         return report
             else:
+                # layers with input-ops (e.g. candidate_logits: last_token +
+                # rmsnorm) are affine in the TRANSFORMED input, which the
+                # server derives itself in O(n)
+                x_eff = (
+                    layer.transformed_input(x)
+                    if hasattr(layer, "transformed_input")
+                    else x
+                )
                 for r, s, rb in self._layer_projections(model, layer_index):
                     lhs = float(r @ z)
-                    rhs = float(s @ x) + rb
+                    rhs = float(s @ x_eff) + rb
                     scale = max(1.0, abs(lhs), abs(rhs))
                     if abs(lhs - rhs) > PROJECTION_RTOL * scale:
                         report.reason = (
@@ -370,7 +566,10 @@ class ProofVerifier:
         )
         if not all_exact and (force_audit or random.random() < self.audit_rate):
             expected_pre, _ = model.forward_segment(
-                np.asarray(input_vector, dtype=np.float64), segment_start, segment_end
+                np.asarray(input_vector, dtype=np.float64),
+                segment_start,
+                segment_end,
+                pad_len=pad_len,
             )
             for offset, z_submitted in enumerate(pre_activations):
                 diff = np.max(

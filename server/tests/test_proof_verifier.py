@@ -523,6 +523,101 @@ class TestAttentionVerification:
         assert "attention output product" in report.reason
 
 
+@pytest.fixture(scope="module")
+def llm_model():
+    spec = get_model_store().get("llm-qwen2-sentiment")
+    if spec is None:
+        pytest.skip("LLM not imported (run scripts/import_hf_llm.py)")
+    return spec
+
+
+class TestLLMVerification:
+    """
+    Real Qwen2.5-0.5B blocks verify with the same primitives: GQA attention
+    (RoPE folded into projections, per-head product checks, server-side
+    masked softmax) and SwiGLU MLP (server-replayed silu gate).
+    """
+
+    @pytest.fixture(scope="class")
+    def llm_input(self, llm_model):
+        text = "Fantastic quality and arrived earlier than expected."
+        vec, ctx = llm_model.prepare_input(text.encode("utf-8"))
+        return vec, {"pad_len": ctx["pad_len"]}
+
+    def _submit(self, model, verifier, layer_index, x, z, context, task="t"):
+        pre = [[float(v) for v in np.asarray(z, dtype=np.float32)]]
+        hashes = [canonical_vector_hash(pre[0])]
+        ph = compute_proof_hash(task, "s", layer_index, 1, hashes, "")
+        return verifier.verify_segment(
+            model, layer_index, x, pre, hashes, ph, task, "s", context=context
+        )
+
+    def test_honest_attention_unit_passes(self, llm_model, verifier, llm_input):
+        vec, ctx = llm_input
+        layer = llm_model.layers[0]
+        z = layer.forward(np.asarray(vec, dtype=np.float64), pad_len=ctx["pad_len"])
+        report = self._submit(llm_model, verifier, 0, vec, z, ctx)
+        assert report.valid, report.reason
+
+    def test_honest_mlp_unit_passes(self, llm_model, verifier, llm_input):
+        vec, ctx = llm_input
+        _, act1 = llm_model.forward_segment(
+            np.asarray(vec, dtype=np.float64), 0, 1, pad_len=ctx["pad_len"]
+        )
+        layer = llm_model.layers[1]
+        z = layer.forward(act1, pad_len=ctx["pad_len"])
+        report = self._submit(
+            llm_model, verifier, 1, [float(v) for v in act1], z, ctx
+        )
+        assert report.valid, report.reason
+
+    @pytest.mark.parametrize("block", ["Q", "K", "V", "S", "O", "Z"])
+    def test_tampered_attention_block_caught(
+        self, llm_model, verifier, llm_input, block
+    ):
+        vec, ctx = llm_input
+        layer = llm_model.layers[0]
+        z = layer.forward(np.asarray(vec, dtype=np.float64), pad_len=ctx["pad_len"])
+        z = z.copy()
+        z[layer.offsets()[block][0] + 5] += 1.0
+        report = self._submit(llm_model, verifier, 0, vec, z, ctx, task="cheat")
+        assert not report.valid
+
+    def test_skipped_silu_gate_caught(self, llm_model, verifier, llm_input):
+        """D computed from plain G⊙U instead of silu(G)⊙U must fail."""
+        from app.ml.llm_layers import SwigluMlpLayer
+
+        vec, ctx = llm_input
+        _, act1 = llm_model.forward_segment(
+            np.asarray(vec, dtype=np.float64), 0, 1, pad_len=ctx["pad_len"]
+        )
+        layer: SwigluMlpLayer = llm_model.layers[1]
+        z = layer.forward(act1, pad_len=ctx["pad_len"]).copy()
+        parts = layer.extract(z)
+        fake_d = (parts["G"] * parts["U"]) @ layer.dequant("d").astype(np.float64).T
+        offs = layer.offsets()
+        z[offs["D"][0] : offs["D"][1]] = fake_d.reshape(-1)
+        report = self._submit(
+            llm_model, verifier, 1, [float(v) for v in act1], z, ctx, task="cheat"
+        )
+        assert not report.valid
+        assert "swiglu D" in report.reason
+
+    def test_candidate_head_verifies_and_labels(self, llm_model, verifier, llm_input):
+        vec, ctx = llm_input
+        n = llm_model.total_layers
+        _, act = llm_model.forward_segment(
+            np.asarray(vec, dtype=np.float64), 0, n - 1, pad_len=ctx["pad_len"]
+        )
+        layer = llm_model.layers[n - 1]
+        z = layer.forward(act)
+        report = self._submit(
+            llm_model, verifier, n - 1, [float(v) for v in act], z, ctx
+        )
+        assert report.valid, report.reason
+        assert report.predicted_label == "positive"
+
+
 class TestVerificationCost:
     def test_projection_check_is_cheaper_than_recompute(self, model):
         """

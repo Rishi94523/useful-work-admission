@@ -175,8 +175,37 @@ images shows 100% distributed/direct agreement for every architecture,
 off-by-one detection on quantized models). Retraining on human-verified
 labels took the dense model 97.53% → 98.09% (v2.0.0 → v2.0.1).
 
-**Roadmap:** the exact-integer + attention verification combination is
-exactly what small-LLM distributed inference needs (LLMs ship quantized, and
-transformer blocks now verify). Next step: shard a small open LLM
-(e.g., a Liquid AI LFM-class or sub-1B model) across CAPTCHA sessions with
-per-layer handoff and server-side KV/state custody.
+## 6. Distributed LLM inference (the headline)
+
+A REAL open-source LLM — **Qwen2.5-0.5B-Instruct** — runs through the same
+pipeline as `models/llm-qwen2-sentiment/` (build it with
+`scripts/fetch_hf_llm.py` + `scripts/import_hf_llm.py`; dir is gitignored,
+~640 MB). Each of the 24 decoder blocks decomposes into two provable units:
+
+- **GQA attention** — client submits `[Q|K|V|S|O|Z]`; Q/K/V/Z verify as
+  affine maps (RoPE is a fixed per-position rotation, folded into the secret
+  projection precompute via the inverse rotation), S = Q·Kᵀ and
+  O = softmax(S)·V verify per head with Freivalds product checks, and the
+  causal+pad-masked softmax is computed BY THE SERVER at O(seq²).
+- **SwiGLU MLP** — client submits `[G|U|D]`; G/U affine in the RMSNorm'd
+  input, H = silu(G)⊙U computed server-side from the verified G/U, D affine
+  in H.
+- RMSNorm travels as a server-replayed "input op"; weights ship as
+  per-channel weight-only int8 (~lossless) in base64; the tied-embedding
+  vocabulary stays server-side (memory-mapped f16) for token embedding.
+
+The PoC task is **zero-shot text labeling** (what labeling vendors sell):
+prompt template + candidate-token logits head, one forward pass, no
+generation. 49 provable segments per sample; text samples seeded by
+`scripts/seed_text_samples.py`; request the model with
+`e2e_client.py --model llm-qwen2-sentiment` (LLMs are excluded from browser
+rotation via the manifest's `pipeline.auto_serve: false`).
+
+Measured: server-side forward through our decomposition classifies 6/6
+sentiment prompts (93–99% confidence); all 49 segments verify segment-by-
+segment with the pieced label correct; tampering any of Q/K/V/S/O/Z and
+skipping the silu gate are all caught.
+
+**Roadmap:** scale from classification to batch generation (KV-cache custody
+across token steps), GQA/MoE models as natural shard units, and browser
+(WASM/WebGPU) execution of block segments.

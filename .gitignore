@@ -86,3 +86,6 @@ server/nul
 
 # Raw Hugging Face LLM weights (large; fetched via scripts/fetch_hf_llm.py)
 models/hf/*/
+
+# Derived LLM pipeline models (regenerate with scripts/import_hf_llm.py)
+models/llm-*/

@@ -44,13 +44,22 @@ logging.getLogger("app.ml.proof_verifier").setLevel(logging.ERROR)
 
 
 def client_compute(model, x, start: int, end: int) -> list[list[float]]:
-    """Simulate browser Float32Array layer execution (any layer type)."""
+    """
+    Simulate browser layer execution: Float32Array storage for float layers,
+    exact float64-held integers for quantized layers. Covers dense, conv2d,
+    token_dense and attention layer types.
+    """
     h = np.asarray(x, dtype=np.float32)
     pre_activations: list[list[float]] = []
-    for layer in model.layers[start:end]:
-        z = layer.forward(h.astype(np.float64)).astype(np.float32)
+    for idx in range(start, end):
+        layer = model.layers[idx]
+        z = layer.forward(h.astype(np.float64))
+        if not getattr(layer, "exact", False):
+            z = z.astype(np.float32)
         pre_activations.append([float(v) for v in z])
-        h = apply_post_ops(z.astype(np.float64), layer.post_ops).astype(np.float32)
+        h = model.apply_layer_post_ops(
+            z.astype(np.float64), idx, layer_input=h
+        ).astype(np.float32)
     return pre_activations
 
 
@@ -114,6 +123,10 @@ def evaluate_model(model, inputs, ground_truth, seed: int) -> dict:
     verifier = ProofVerifier(audit_rate=0.0)
     auditing_verifier = ProofVerifier(audit_rate=1.0)
     samples = len(inputs)
+    if model.input_quantized:
+        # exact-integer pipeline takes 0..255 pixel integers
+        inputs = [[float(round(v * 255)) for v in x] for x in inputs]
+    exact_model = all(getattr(l, "exact", False) for l in model.layers)
 
     full_compute_ops, full_verify_ops = layer_ops(model, 0, model.total_layers)
     segment_ops = []
@@ -233,6 +246,7 @@ def evaluate_model(model, inputs, ground_truth, seed: int) -> dict:
             "labels": model.labels,
             "checksum": model.checksum,
             "metrics": model.metrics,
+            "exact_verification": exact_model,
         },
         "complexity": {
             "full_model_compute_ops": full_compute_ops,
@@ -396,9 +410,20 @@ def render_markdown(results: dict) -> str:
         "Small input convolutions (1→8 channels) are the worst case for the",
         "verifier — their outputs are large relative to the work performed — ",
         "while production-scale conv layers (32→64 channels and up) exceed 40x.",
-        "The same projection identity `r·z = (Lᵀr)·x + r·b` covers any affine",
-        "operator, so attention projections and other matmul-shaped layers",
-        "verify identically.",
+        "",
+        "**Exact verification (`-q8` models):** int8-quantized models run an",
+        "all-integer pipeline (every value < 2^53, bit-identical between",
+        "browsers and the server), so projection checks run over Z_p",
+        "(p = 2^31−1) with EXACT equality — no float tolerance, soundness",
+        "error ~1/p per projection, and no spot audits needed. A ±1 tamper in",
+        "one integer is caught outright.",
+        "",
+        "**Attention (`mnist-attn`):** transformer blocks verify with the same",
+        "machinery — Q/K/V/output projections as affine checks, the bilinear",
+        "products S = Q·Kᵀ and O = softmax(S)·V as Freivalds matrix-product",
+        "checks over the submitted (already-verified) intermediates, softmax",
+        "replayed server-side. This is the verification path that scales to",
+        "LLM-style distributed inference.",
         "",
     ]
     return "\n".join(lines)

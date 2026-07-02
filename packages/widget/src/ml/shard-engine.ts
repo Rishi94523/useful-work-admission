@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Federated Inference Shard Engine
  *
  * Executes model shards (partial layer-wise computation) for CAPTCHA verification.
@@ -19,7 +19,7 @@ import { hashData } from '../utils/crypto';
  */
 export interface ShardExecutionResult {
   /** Pre-activation outputs for each executed layer (proof material) */
-  layerOutputs: Float32Array[];
+  layerOutputs: (Float32Array | Float64Array)[];
   /** Final prediction; only present when the segment includes the last layer */
   prediction?: Prediction;
   /** Whether this segment completes the model */
@@ -46,6 +46,10 @@ class NeuralLayer {
   public readonly outputShape: number[];
   public readonly activation: string;
   public readonly kernel?: number[];
+  public readonly quantized: boolean;
+  public readonly seq?: number;
+  public readonly dModel?: number;
+  public readonly patchify?: { grid: number[]; patch: number[] };
   public readonly postOps: NonNullable<
     ModelShard['layers'][0]['postOps']
   >;
@@ -59,6 +63,10 @@ class NeuralLayer {
     this.outputShape = config.outputShape;
     this.activation = config.activation;
     this.kernel = config.kernel;
+    this.quantized = config.quantized ?? false;
+    this.seq = config.seq;
+    this.dModel = config.dModel;
+    this.patchify = config.patchify;
     // Legacy payloads carry only an activation name; treat it as a one-op chain
     this.postOps =
       config.postOps && config.postOps.length > 0
@@ -69,16 +77,16 @@ class NeuralLayer {
   }
 
   /**
-   * Execute the layer's affine computation (z = L·x + b), returning the RAW
-   * pre-activation output. Every provable layer type is affine — dense
-   * (matmul) or conv2d (convolution) — which is exactly what lets the server
+   * Execute the layer's affine computation (z = LÂ·x + b), returning the RAW
+   * pre-activation output. Every provable layer type is affine â€” dense
+   * (matmul) or conv2d (convolution) â€” which is exactly what lets the server
    * verify z with secret projection checks instead of recomputing it. The
    * post-ops are applied separately (and re-applied server-side) before
    * feeding the next layer.
    */
-  forward(input: Float32Array): Float32Array {
+  forward(input: ArrayLike<number>): Float32Array | Float64Array {
     const startTime = performance.now();
-    let output: Float32Array;
+    let output: Float32Array | Float64Array;
 
     switch (this.type) {
       case 'conv2d':
@@ -87,6 +95,12 @@ class NeuralLayer {
       case 'dense':
       case 'fully_connected':
         output = this.denseForward(input);
+        break;
+      case 'token_dense':
+        output = this.tokenDenseForward(input);
+        break;
+      case 'attention':
+        output = this.attentionForward(input);
         break;
       default:
         throw new Error(`Unsupported layer type: ${this.type}`);
@@ -109,13 +123,17 @@ class NeuralLayer {
    * layout, matching the server's wire format exactly:
    * weights[((oc*inCh + ic)*kh + u)*kw + v], tensors flattened (C, H, W).
    */
-  private conv2dForward(input: Float32Array): Float32Array {
+  private conv2dForward(input: ArrayLike<number>): Float32Array | Float64Array {
     const [inChannels, inHeight, inWidth] = this.inputShape;
     const [outChannels, outHeight, outWidth] = this.outputShape;
     const kh = this.kernel?.[0] ?? inHeight - outHeight + 1;
     const kw = this.kernel?.[1] ?? inWidth - outWidth + 1;
 
-    const output = new Float32Array(outChannels * outHeight * outWidth);
+    // Quantized layers produce exact integers that can exceed float32's
+    // 2^24 integer range â€” store in Float64Array so nothing rounds.
+    const output = this.quantized
+      ? new Float64Array(outChannels * outHeight * outWidth)
+      : new Float32Array(outChannels * outHeight * outWidth);
 
     for (let oc = 0; oc < outChannels; oc++) {
       for (let oy = 0; oy < outHeight; oy++) {
@@ -141,10 +159,12 @@ class NeuralLayer {
   /**
    * Dense/Fully Connected forward pass
    */
-  private denseForward(input: Float32Array): Float32Array {
+  private denseForward(input: ArrayLike<number>): Float32Array | Float64Array {
     const inputSize = this.inputShape[this.inputShape.length - 1];
     const outputSize = this.outputShape[this.outputShape.length - 1];
-    const output = new Float32Array(outputSize);
+    const output = this.quantized
+      ? new Float64Array(outputSize)
+      : new Float32Array(outputSize);
 
     for (let o = 0; o < outputSize; o++) {
       let sum = this.biases[o];
@@ -158,28 +178,230 @@ class NeuralLayer {
   }
 
   /**
-   * Apply the layer's post-op chain (activation, pooling, flatten) to its
-   * pre-activation output. Cheap O(n) ops, mirrored exactly server-side.
+   * Per-token dense layer (transformer patch/token embedding): shared
+   * weights, per-token bias. Optionally extracts patches from a flat image.
    */
-  applyPostOps(data: Float32Array): Float32Array {
-    let current = data;
+  private tokenDenseForward(input: ArrayLike<number>): Float32Array {
+    const [seq, inSize] = this.inputShape;
+    const outSize = this.outputShape[this.outputShape.length - 1];
+    const tokens = this.extractTokens(input, seq, inSize);
+    const output = new Float32Array(seq * outSize);
+
+    for (let t = 0; t < seq; t++) {
+      for (let o = 0; o < outSize; o++) {
+        let sum = this.biases[t * outSize + o];
+        for (let i = 0; i < inSize; i++) {
+          sum += tokens[t * inSize + i] * this.weights[o * inSize + i];
+        }
+        output[t * outSize + o] = sum;
+      }
+    }
+    return output;
+  }
+
+  private extractTokens(
+    input: ArrayLike<number>,
+    seq: number,
+    inSize: number
+  ): Float32Array {
+    if (!this.patchify) {
+      return input instanceof Float32Array
+        ? input
+        : Float32Array.from(input as ArrayLike<number>);
+    }
+    const [gy, gx] = this.patchify.grid;
+    const [py, px] = this.patchify.patch;
+    const width = gx * px;
+    const tokens = new Float32Array(seq * inSize);
+    for (let ty = 0; ty < gy; ty++) {
+      for (let tx = 0; tx < gx; tx++) {
+        const t = ty * gx + tx;
+        for (let yy = 0; yy < py; yy++) {
+          for (let xx = 0; xx < px; xx++) {
+            tokens[t * inSize + yy * px + xx] =
+              input[(ty * py + yy) * width + tx * px + xx];
+          }
+        }
+      }
+    }
+    return tokens;
+  }
+
+  /**
+   * Single-head self-attention. Returns the concatenation [Q|K|V|S|O|Z] the
+   * server verifies with affine projections + Freivalds product checks
+   * (softmax is replayed server-side). Wire weights are [Wq|Wk|Wv|Wo], each
+   * (out, in) row-major.
+   */
+  private attentionForward(input: ArrayLike<number>): Float32Array {
+    const seq = this.seq ?? this.inputShape[0];
+    const d = this.dModel ?? this.inputShape[1];
+    const dd = d * d;
+
+    const matmulW = (wOffset: number): Float32Array => {
+      const out = new Float32Array(seq * d);
+      for (let t = 0; t < seq; t++) {
+        for (let o = 0; o < d; o++) {
+          let sum = 0;
+          for (let i = 0; i < d; i++) {
+            sum += input[t * d + i] * this.weights[wOffset + o * d + i];
+          }
+          out[t * d + o] = sum;
+        }
+      }
+      return out;
+    };
+
+    const q = matmulW(0);
+    const k = matmulW(dd);
+    const v = matmulW(2 * dd);
+
+    const s = new Float32Array(seq * seq);
+    for (let a = 0; a < seq; a++) {
+      for (let b = 0; b < seq; b++) {
+        let sum = 0;
+        for (let i = 0; i < d; i++) {
+          sum += q[a * d + i] * k[b * d + i];
+        }
+        s[a * seq + b] = sum;
+      }
+    }
+
+    // rowwise softmax
+    const p = new Float64Array(seq * seq);
+    for (let a = 0; a < seq; a++) {
+      let max = -Infinity;
+      for (let b = 0; b < seq; b++) max = Math.max(max, s[a * seq + b]);
+      let total = 0;
+      for (let b = 0; b < seq; b++) {
+        p[a * seq + b] = Math.exp(s[a * seq + b] - max);
+        total += p[a * seq + b];
+      }
+      for (let b = 0; b < seq; b++) p[a * seq + b] /= total;
+    }
+
+    const o = new Float32Array(seq * d);
+    for (let a = 0; a < seq; a++) {
+      for (let i = 0; i < d; i++) {
+        let sum = 0;
+        for (let b = 0; b < seq; b++) {
+          sum += p[a * seq + b] * v[b * d + i];
+        }
+        o[a * d + i] = sum;
+      }
+    }
+
+    const z = new Float32Array(seq * d);
+    for (let t = 0; t < seq; t++) {
+      for (let oIdx = 0; oIdx < d; oIdx++) {
+        let sum = 0;
+        for (let i = 0; i < d; i++) {
+          sum += o[t * d + i] * this.weights[3 * dd + oIdx * d + i];
+        }
+        z[t * d + oIdx] = sum;
+      }
+    }
+
+    const concat = new Float32Array(5 * seq * d + seq * seq);
+    concat.set(q, 0);
+    concat.set(k, seq * d);
+    concat.set(v, 2 * seq * d);
+    concat.set(s, 3 * seq * d);
+    concat.set(o, 3 * seq * d + seq * seq);
+    concat.set(z, 4 * seq * d + seq * seq);
+    return concat;
+  }
+
+  /**
+   * Apply the layer's post-op chain (activation, pooling, flatten,
+   * requantize, residual, token pooling) to its pre-activation output.
+   * Cheap O(n) ops, mirrored exactly server-side. For attention layers the
+   * chain operates on the Z sub-block of the [Q|K|V|S|O|Z] concatenation.
+   */
+  applyPostOps(
+    data: Float32Array | Float64Array,
+    layerInput?: ArrayLike<number>
+  ): Float32Array | Float64Array {
+    let current: Float32Array | Float64Array = data;
+    if (this.type === 'attention') {
+      const seq = this.seq ?? this.inputShape[0];
+      const d = this.dModel ?? this.inputShape[1];
+      current = current.slice(4 * seq * d + seq * seq) as
+        | Float32Array
+        | Float64Array;
+    }
     for (const op of this.postOps) {
       switch (op.op) {
         case 'relu':
-          current = current.map((x) => Math.max(0, x));
+          current = current.map((x) => Math.max(0, x)) as
+            | Float32Array
+            | Float64Array;
           break;
         case 'softmax':
           current = this.softmax(current);
           break;
         case 'sigmoid':
-          current = current.map((x) => 1 / (1 + Math.exp(-x)));
+          current = current.map((x) => 1 / (1 + Math.exp(-x))) as
+            | Float32Array
+            | Float64Array;
           break;
         case 'tanh':
-          current = current.map((x) => Math.tanh(x));
+          current = current.map((x) => Math.tanh(x)) as
+            | Float32Array
+            | Float64Array;
           break;
         case 'maxpool2d':
           current = this.maxPool2d(current, op.shape ?? [], op.pool ?? 2);
           break;
+        case 'requantize': {
+          // Exact integer rescale, bit-identical to the server:
+          // a = min(max, floor((z*mult + 2^(shift-1)) / 2^shift))
+          const mult = op.mult ?? 1;
+          const shift = op.shift ?? 0;
+          const maxVal = op.max ?? 255;
+          const half = Math.pow(2, shift - 1);
+          const divisor = Math.pow(2, shift);
+          const out = new Float64Array(current.length);
+          for (let i = 0; i < current.length; i++) {
+            out[i] = Math.min(Math.floor((current[i] * mult + half) / divisor), maxVal);
+          }
+          current = out;
+          break;
+        }
+        case 'dequantize': {
+          const scale = op.scale ?? 1;
+          const out = new Float64Array(current.length);
+          for (let i = 0; i < current.length; i++) {
+            out[i] = current[i] * scale;
+          }
+          current = out;
+          break;
+        }
+        case 'residual_input': {
+          if (!layerInput) {
+            throw new Error('residual_input post-op requires the layer input');
+          }
+          const out = new Float32Array(current.length);
+          for (let i = 0; i < current.length; i++) {
+            out[i] = current[i] + (layerInput[i] as number);
+          }
+          current = out;
+          break;
+        }
+        case 'mean_pool_tokens': {
+          const seq = op.seq ?? 1;
+          const dim = op.dim ?? current.length;
+          const out = new Float32Array(dim);
+          for (let i = 0; i < dim; i++) {
+            let sum = 0;
+            for (let t = 0; t < seq; t++) {
+              sum += current[t * dim + i];
+            }
+            out[i] = sum / seq;
+          }
+          current = out;
+          break;
+        }
         case 'flatten':
         case 'linear':
           break;
@@ -213,14 +435,17 @@ class NeuralLayer {
    * Channel-major max pooling (floor cropping, matching the server)
    */
   private maxPool2d(
-    data: Float32Array,
+    data: Float32Array | Float64Array,
     shape: number[],
     pool: number
-  ): Float32Array {
+  ): Float32Array | Float64Array {
     const [channels, height, width] = shape;
     const outHeight = Math.floor(height / pool);
     const outWidth = Math.floor(width / pool);
-    const output = new Float32Array(channels * outHeight * outWidth);
+    const output =
+      data instanceof Float64Array
+        ? new Float64Array(channels * outHeight * outWidth)
+        : new Float32Array(channels * outHeight * outWidth);
 
     for (let c = 0; c < channels; c++) {
       for (let oy = 0; oy < outHeight; oy++) {
@@ -243,7 +468,7 @@ class NeuralLayer {
   /**
    * Softmax activation
    */
-  private softmax(data: Float32Array): Float32Array {
+  private softmax(data: Float32Array | Float64Array): Float32Array {
     let maxVal = data[0];
     for (let i = 1; i < data.length; i++) {
       if (data[i] > maxVal) maxVal = data[i];
@@ -298,11 +523,22 @@ export class ShardInferenceEngine {
       return true; // no checksum to verify against
     }
     const layer = shard.layers[0];
-    const weights = new Float32Array(layer.weights);
-    const biases = new Float32Array(layer.biases);
-    const bytes = new Uint8Array(weights.byteLength + biases.byteLength);
-    bytes.set(new Uint8Array(weights.buffer), 0);
-    bytes.set(new Uint8Array(biases.buffer), weights.byteLength);
+    let weightBytes: Uint8Array;
+    let biasBytes: Uint8Array;
+    if (layer.quantized) {
+      // int8 weights + little-endian int32 biases
+      weightBytes = new Uint8Array(new Int8Array(layer.weights).buffer);
+      biasBytes = new Uint8Array(new Int32Array(layer.biases).buffer);
+    } else {
+      weightBytes = new Uint8Array(new Float32Array(layer.weights).buffer);
+      biasBytes =
+        layer.type === 'attention'
+          ? new Uint8Array(0)
+          : new Uint8Array(new Float32Array(layer.biases).buffer);
+    }
+    const bytes = new Uint8Array(weightBytes.byteLength + biasBytes.byteLength);
+    bytes.set(weightBytes, 0);
+    bytes.set(biasBytes, weightBytes.byteLength);
     const digest = await crypto.subtle.digest('SHA-256', bytes.buffer);
     const hex = Array.from(new Uint8Array(digest))
       .map((byte) => byte.toString(16).padStart(2, '0'))
@@ -341,9 +577,9 @@ export class ShardInferenceEngine {
 
     // Execute layers, keeping pre-activations (proof material) and feeding
     // post-activations forward
-    const preActivations: Float32Array[] = [];
+    const preActivations: (Float32Array | Float64Array)[] = [];
     const layerTimes: number[] = [];
-    let current = input;
+    let current: Float32Array | Float64Array = input;
 
     for (let i = 0; i < this.layers.length; i++) {
       const layer = this.layers[i];
@@ -353,7 +589,7 @@ export class ShardInferenceEngine {
 
       const layerStartTime = performance.now();
       const pre = layer.forward(current);
-      current = layer.applyPostOps(pre);
+      current = layer.applyPostOps(pre, current);
       const layerEndTime = performance.now();
 
       preActivations.push(pre);
@@ -414,7 +650,7 @@ export class ShardInferenceEngine {
    * Generate prediction from output logits
    */
   private generatePrediction(
-    output: Float32Array,
+    output: Float32Array | Float64Array,
     labels: string[]
   ): Prediction {
     const probabilities = this.normalizeConfidences(output);
@@ -454,7 +690,7 @@ export class ShardInferenceEngine {
     };
   }
 
-  private normalizeConfidences(output: Float32Array): Float32Array {
+  private normalizeConfidences(output: Float32Array | Float64Array): Float32Array | Float64Array {
     if (output.length === 0) {
       return output;
     }
@@ -512,7 +748,7 @@ export class ShardInferenceEngine {
     taskId: string,
     sampleId: string,
     segmentStart: number,
-    preActivations: Float32Array[],
+    preActivations: (Float32Array | Float64Array)[],
     prediction?: Prediction
   ): Promise<InferenceProof> {
     const outputHashes: string[] = [];
@@ -563,7 +799,7 @@ export class ShardInferenceEngine {
   /**
    * Hash a tensor (Float32Array)
    */
-  private async hashTensor(tensor: Float32Array): Promise<string> {
+  private async hashTensor(tensor: Float32Array | Float64Array): Promise<string> {
     const canonical = Array.from(tensor, (value) => value.toFixed(4)).join(',');
     return await hashData(canonical);
   }

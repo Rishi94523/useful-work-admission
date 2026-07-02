@@ -8,18 +8,24 @@ model**, **verifiable computation**, and a **distributed labeling pipeline**.
 Models live in `models/<name>/`:
 
 ```
-models/mnist-tiny/      # dense MLP  784→128→64→10        (98.09% test acc)
+models/mnist-tiny/      # dense MLP  784→128→64→10                 (98.09%)
+models/mnist-tiny-q8/   # int8 EXACT-integer variant                (98.07%)
 models/mnist-cnn/       # conv net   conv(1→8)→conv(8→16)→400→64→10 (98.46%)
+models/mnist-cnn-q8/    # int8 EXACT-integer variant                (98.40%)
+models/mnist-attn/      # vision transformer: 16 patches → token
+                        # embed d=48 → self-attention → dense       (94.72%)
 ├── manifest.json       # layers, labels, post-ops, REAL SHA-256 checksums
-└── weights.npz         # trained float32 weights
+└── weights.npz         # trained weights (float32 or int8/int32)
 ```
 
-- Both are trained on real MNIST in pure NumPy (`scripts/train_mnist_numpy.py`
-  and `scripts/train_mnist_cnn_numpy.py` — the CNN trains with im2col
-  convolution + backprop in ~2 minutes).
-- A model is a sequence of **provable affine layers** (`dense`, `conv2d`)
-  each followed by a chain of cheap **post-ops** (`relu`, `softmax`,
-  `maxpool2d`, `flatten`) that the server replays itself during verification.
+- All trained on real MNIST in pure NumPy (`scripts/train_mnist_numpy.py`,
+  `scripts/train_mnist_cnn_numpy.py`, `scripts/train_mnist_attn_numpy.py`);
+  the `-q8` variants come from `scripts/quantize_model.py` (post-training
+  int8 quantization, ≤0.06pp accuracy loss).
+- A model is a sequence of **provable affine layers** (`dense`, `conv2d`,
+  `token_dense`, `attention`) each followed by a chain of cheap **post-ops**
+  (`relu`, `softmax`, `maxpool2d`, `flatten`, `requantize`, `residual_input`,
+  `mean_pool_tokens`) that the server replays itself during verification.
 - **Checksums are real and layered**: each layer's checksum is SHA-256 over
   the exact float32 bytes a browser receives (dense: weights flattened
   (out, in); conv: (oc, ic, kh, kw)); the model checksum is a hash of the
@@ -79,17 +85,35 @@ The server verifies three ways, cheapest first:
    verified activation afterward. Post-ops (activation, pooling, flatten)
    are recomputed server-side from submitted pre-activations (O(n), cheap).
 
-3. **Probabilistic spot audits** — ~8% of submissions get a full segment
-   recompute, bounding any adaptive attack on the projection checks.
+3. **Probabilistic spot audits** — ~8% of float-model submissions get a full
+   segment recompute, bounding any adaptive attack on the projection checks.
+
+**Exact verification for quantized models** (`-q8`): the whole pipeline is
+integer arithmetic — int8 weights, int32 biases, integer requantize
+(`a = min(255, (z·mult) >> shift)`) — and every value stays below 2^53, so
+browser float64 numbers reproduce the server's math **bit-for-bit**. The
+projection checks then run over Z_p (p = 2^31−1) with exact equality: no
+tolerance band, soundness error ~1/p per projection (~2^-124 with K=4), no
+audits needed. A ±1 tamper in one integer output is caught outright, and
+fractional perturbations are rejected structurally.
+
+**Attention blocks** (`mnist-attn`): the client submits [Q|K|V|S|O|Z]; the
+server verifies Q/K/V as affine maps of the known input, S = Q·Kᵀ and
+O = softmax(S)·V with Freivalds matrix-product checks over the submitted
+(already-verified) intermediates — computing the softmax itself at O(seq²) —
+and Z = O·Wo as an affine map of the verified O. Skipping the softmax or
+tampering any block is caught. This is the verification path that scales to
+transformer/LLM distributed inference.
 
 The asymmetry follows a scaling law: it grows with layer width for dense
 layers (~27× for 784×128) and with kernel² × channels for convolutions
 (1.97× for the 1→8-channel input layer, 10.6× for 8→16, >40× for
 production-scale 32→64 layers). Tests in `server/tests/test_proof_verifier.py`
-cover honest clients on both architectures (including multi-user piecing and
-a real MNIST digit), fabricated outputs, single-value tampering, wrong-input
-precompute attacks, replays, hash mismatches, audit catches, and the
-asymmetry scaling law.
+cover honest clients on all architectures (including multi-user piecing and
+a real MNIST digit), fabricated outputs, single-value tampering, off-by-one
+integer tampering, wrong-input precompute attacks, replays, hash mismatches,
+audit catches, per-block attention tampering, skipped-softmax cheating, and
+the asymmetry scaling law.
 
 ## 4. Human verification → golden dataset → retraining
 
@@ -115,9 +139,12 @@ asymmetry scaling law.
 ## Running it
 
 ```bash
-# 1. Train the models (downloads MNIST; MLP ~30s, CNN ~2min)
+# 1. Train the models (downloads MNIST; MLP ~30s, CNN ~2min, ViT ~5min)
 server/venv/Scripts/python scripts/train_mnist_numpy.py
 server/venv/Scripts/python scripts/train_mnist_cnn_numpy.py
+server/venv/Scripts/python scripts/train_mnist_attn_numpy.py
+server/venv/Scripts/python scripts/quantize_model.py --model mnist-tiny
+server/venv/Scripts/python scripts/quantize_model.py --model mnist-cnn
 
 # 2. Seed real samples
 cd server && venv/Scripts/python ../scripts/seed_data.py --count 200
@@ -139,9 +166,17 @@ venv/Scripts/python ../scripts/retrain_from_golden.py --min-verifications 1
 venv/Scripts/python ../scripts/evaluate_pouw.py --samples 100
 ```
 
-Measured on this machine: 30 live distributed solves across both models, all
-verified; **46/46 completed pipeline-run labels matched the true MNIST
-labels** (40 dense + 6 CNN); offline evaluation on 100 real MNIST test images
-shows 100% distributed/direct agreement for both architectures and 100%/99%
-ground-truth labeling accuracy (dense/CNN). Retraining on human-verified
+Measured on this machine: 36/36 live distributed solves in one session mixing
+all FIVE architectures (dense, exact-int8 dense, CNN, exact-int8 CNN,
+transformer), all verified; **65/65 completed pipeline-run labels matched the
+true MNIST labels** cumulatively; offline evaluation on 100 real MNIST test
+images shows 100% distributed/direct agreement for every architecture,
+97–100% ground-truth labeling accuracy, and 100% tamper rejection (exact
+off-by-one detection on quantized models). Retraining on human-verified
 labels took the dense model 97.53% → 98.09% (v2.0.0 → v2.0.1).
+
+**Roadmap:** the exact-integer + attention verification combination is
+exactly what small-LLM distributed inference needs (LLMs ship quantized, and
+transformer blocks now verify). Next step: shard a small open LLM
+(e.g., a Liquid AI LFM-class or sub-1B model) across CAPTCHA sessions with
+per-layer handoff and server-side KV/state custody.

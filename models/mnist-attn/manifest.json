@@ -1,0 +1,92 @@
+{
+  "name": "mnist-attn",
+  "version": "1.0.0",
+  "task_type": "image_classification",
+  "labels": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "input": {
+    "shape": [
+      1,
+      28,
+      28
+    ],
+    "preprocessing": "grayscale 28x28, normalize /255, split into 4x4 grid of 7x7 patches row-major (handled by token_dense layer)"
+  },
+  "weights_file": "weights.npz",
+  "checksum": "54b2dc15380ad132446f0fe048c7861e305827a5cbbf218d2b5201a589c3e5ca",
+  "layers": [
+    {
+      "index": 0,
+      "name": "patch_embed",
+      "type": "token_dense",
+      "seq": 16,
+      "input_size": 49,
+      "output_size": 48,
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        }
+      ],
+      "patchify": {
+        "grid": [
+          4,
+          4
+        ],
+        "patch": [
+          7,
+          7
+        ]
+      },
+      "checksum": "1925028d01ab3ba8020d5166f5c6cc98d2d06d08f5e0d7a812515a0766e1cd03"
+    },
+    {
+      "index": 1,
+      "name": "self_attention",
+      "type": "attention",
+      "seq": 16,
+      "d_model": 48,
+      "activation": "linear",
+      "post_ops": [
+        {
+          "op": "residual_input"
+        },
+        {
+          "op": "mean_pool_tokens",
+          "seq": 16,
+          "dim": 48
+        }
+      ],
+      "checksum": "b9e1073f743603ebbd12b4f182f08f5642453b3f6dba196cf115380f9b03a4cb"
+    },
+    {
+      "index": 2,
+      "name": "dense_output",
+      "type": "dense",
+      "input_size": 48,
+      "output_size": 10,
+      "activation": "softmax",
+      "post_ops": [
+        {
+          "op": "softmax"
+        }
+      ],
+      "checksum": "b0acdb0ba5c459cd52308d423c5ddc659c15cf310c37d9d4981db96e3570dcea"
+    }
+  ],
+  "metrics": {
+    "test_accuracy": 0.9472
+  },
+  "trained_at": "2026-07-02T05:13:18.378690+00:00",
+  "weights_file_sha256": "2f79fbd7b2dc638d9604d1e151a71753ea86f20b834b533346e3ba75b35ea00a"
+}

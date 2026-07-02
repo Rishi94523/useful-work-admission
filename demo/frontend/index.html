@@ -1799,10 +1799,11 @@
         for (let index = 0; index < layers.length; index++) {
           // Keep the raw pre-activation: that's what the server's secret
           // projection checks verify without re-running the layer. Works for
-          // any affine layer type (dense matmul or conv2d).
+          // any provable layer type (dense, conv2d, token_dense, attention),
+          // float or exact-integer quantized.
           const pre = forwardPreActivation(current, layers[index]);
           preActivations.push(pre);
-          current = applyPostOpsVec(pre, layers[index]);
+          current = applyPostOpsVec(pre, layers[index], current);
           onProgress((index + 1) / layers.length);
           await sleep(80);
         }
@@ -1852,11 +1853,20 @@
       async function verifyShardChecksum(shard) {
         const layer = shard.layers && shard.layers[0];
         if (!layer) return true;
-        const weights = new Float32Array(layer.weights);
-        const biases = new Float32Array(layer.biases);
-        const bytes = new Uint8Array(weights.byteLength + biases.byteLength);
-        bytes.set(new Uint8Array(weights.buffer), 0);
-        bytes.set(new Uint8Array(biases.buffer), weights.byteLength);
+        let weightBytes, biasBytes;
+        if (layer.quantized) {
+          weightBytes = new Uint8Array(new Int8Array(layer.weights).buffer);
+          biasBytes = new Uint8Array(new Int32Array(layer.biases).buffer);
+        } else {
+          weightBytes = new Uint8Array(new Float32Array(layer.weights).buffer);
+          biasBytes =
+            layer.type === 'attention'
+              ? new Uint8Array(0)
+              : new Uint8Array(new Float32Array(layer.biases).buffer);
+        }
+        const bytes = new Uint8Array(weightBytes.byteLength + biasBytes.byteLength);
+        bytes.set(weightBytes, 0);
+        bytes.set(biasBytes, weightBytes.byteLength);
         const digest = await hashBuffer(bytes.buffer);
         return digest === shard.checksum;
       }
@@ -1883,14 +1893,127 @@
       }
 
       function forwardPreActivation(input, layer) {
+        if (layer.type === 'token_dense') return forwardTokenDense(input, layer);
+        if (layer.type === 'attention') return forwardAttention(input, layer);
         if (layer.type === 'conv2d') return forwardConv2dPreActivation(input, layer);
         return forwardDensePreActivation(input, layer);
+      }
+
+      // Per-token dense (transformer patch embed): shared W, per-token bias,
+      // optional patch extraction from the flat image.
+      function forwardTokenDense(input, layer) {
+        const [seq, inSize] = layer.inputShape;
+        const outSize = layer.outputShape[layer.outputShape.length - 1];
+        let tokens = input;
+        if (layer.patchify) {
+          const [gy, gx] = layer.patchify.grid;
+          const [py, px] = layer.patchify.patch;
+          const width = gx * px;
+          tokens = new Float32Array(seq * inSize);
+          for (let ty = 0; ty < gy; ty++) {
+            for (let tx = 0; tx < gx; tx++) {
+              const t = ty * gx + tx;
+              for (let yy = 0; yy < py; yy++) {
+                for (let xx = 0; xx < px; xx++) {
+                  tokens[t * inSize + yy * px + xx] =
+                    input[(ty * py + yy) * width + tx * px + xx];
+                }
+              }
+            }
+          }
+        }
+        const output = new Float32Array(seq * outSize);
+        for (let t = 0; t < seq; t++) {
+          for (let o = 0; o < outSize; o++) {
+            let sum = layer.biases[t * outSize + o];
+            for (let i = 0; i < inSize; i++) {
+              sum += tokens[t * inSize + i] * layer.weights[o * inSize + i];
+            }
+            output[t * outSize + o] = sum;
+          }
+        }
+        return output;
+      }
+
+      // Single-head self-attention: submit [Q|K|V|S|O|Z]; the server verifies
+      // Q/K/V/Z as affine maps and S = Q·Kᵀ, O = softmax(S)·V with Freivalds
+      // product checks, replaying the softmax itself.
+      function forwardAttention(input, layer) {
+        const seq = layer.seq || layer.inputShape[0];
+        const d = layer.dModel || layer.inputShape[1];
+        const dd = d * d;
+        const matmulW = (offset) => {
+          const out = new Float32Array(seq * d);
+          for (let t = 0; t < seq; t++) {
+            for (let o = 0; o < d; o++) {
+              let sum = 0;
+              for (let i = 0; i < d; i++) {
+                sum += input[t * d + i] * layer.weights[offset + o * d + i];
+              }
+              out[t * d + o] = sum;
+            }
+          }
+          return out;
+        };
+        const q = matmulW(0);
+        const k = matmulW(dd);
+        const v = matmulW(2 * dd);
+        const s = new Float32Array(seq * seq);
+        for (let a = 0; a < seq; a++) {
+          for (let b = 0; b < seq; b++) {
+            let sum = 0;
+            for (let i = 0; i < d; i++) sum += q[a * d + i] * k[b * d + i];
+            s[a * seq + b] = sum;
+          }
+        }
+        const p = new Float64Array(seq * seq);
+        for (let a = 0; a < seq; a++) {
+          let max = -Infinity;
+          for (let b = 0; b < seq; b++) max = Math.max(max, s[a * seq + b]);
+          let total = 0;
+          for (let b = 0; b < seq; b++) {
+            p[a * seq + b] = Math.exp(s[a * seq + b] - max);
+            total += p[a * seq + b];
+          }
+          for (let b = 0; b < seq; b++) p[a * seq + b] /= total;
+        }
+        const o = new Float32Array(seq * d);
+        for (let a = 0; a < seq; a++) {
+          for (let i = 0; i < d; i++) {
+            let sum = 0;
+            for (let b = 0; b < seq; b++) sum += p[a * seq + b] * v[b * d + i];
+            o[a * d + i] = sum;
+          }
+        }
+        const z = new Float32Array(seq * d);
+        for (let t = 0; t < seq; t++) {
+          for (let oi = 0; oi < d; oi++) {
+            let sum = 0;
+            for (let i = 0; i < d; i++) {
+              sum += o[t * d + i] * layer.weights[3 * dd + oi * d + i];
+            }
+            z[t * d + oi] = sum;
+          }
+        }
+        const concat = new Float32Array(5 * seq * d + seq * seq);
+        concat.set(q, 0);
+        concat.set(k, seq * d);
+        concat.set(v, 2 * seq * d);
+        concat.set(s, 3 * seq * d);
+        concat.set(o, 3 * seq * d + seq * seq);
+        concat.set(z, 4 * seq * d + seq * seq);
+        return concat;
       }
 
       function forwardDensePreActivation(input, layer) {
         const inputSize = layer.inputShape[layer.inputShape.length - 1];
         const outputSize = layer.outputShape[layer.outputShape.length - 1];
-        const output = new Float32Array(outputSize);
+        // Quantized layers produce exact integers beyond float32's 2^24
+        // integer range — Float64Array keeps them exact (bit-identical to
+        // the server's integer math).
+        const output = layer.quantized
+          ? new Float64Array(outputSize)
+          : new Float32Array(outputSize);
 
         for (let out = 0; out < outputSize; out++) {
           let sum = layer.biases[out];
@@ -1910,7 +2033,9 @@
         const [outCh, outH, outW] = layer.outputShape;
         const kh = (layer.kernel && layer.kernel[0]) || inH - outH + 1;
         const kw = (layer.kernel && layer.kernel[1]) || inW - outW + 1;
-        const output = new Float32Array(outCh * outH * outW);
+        const output = layer.quantized
+          ? new Float64Array(outCh * outH * outW)
+          : new Float32Array(outCh * outH * outW);
 
         for (let oc = 0; oc < outCh; oc++) {
           for (let oy = 0; oy < outH; oy++) {
@@ -1933,9 +2058,11 @@
         return output;
       }
 
-      // Post-op chain (activation, maxpool, flatten) applied after the affine
-      // computation; the server re-applies the same chain during verification.
-      function applyPostOpsVec(values, layer) {
+      // Post-op chain (activation, maxpool, requantize, residual, pooling)
+      // applied after the affine computation; the server re-applies the same
+      // chain during verification. For attention layers the chain operates on
+      // the Z sub-block of the [Q|K|V|S|O|Z] concatenation.
+      function applyPostOpsVec(values, layer, layerInput) {
         const postOps =
           layer.postOps && layer.postOps.length
             ? layer.postOps
@@ -1943,9 +2070,50 @@
               ? [{ op: layer.activation }]
               : [];
         let current = values;
+        if (layer.type === 'attention') {
+          const seq = layer.seq || layer.inputShape[0];
+          const d = layer.dModel || layer.inputShape[1];
+          current = current.slice(4 * seq * d + seq * seq);
+        }
         for (const postOp of postOps) {
           if (postOp.op === 'maxpool2d') {
             current = maxPool2d(current, postOp.shape, postOp.pool || 2);
+          } else if (postOp.op === 'requantize') {
+            const half = Math.pow(2, postOp.shift - 1);
+            const divisor = Math.pow(2, postOp.shift);
+            const maxVal = postOp.max == null ? 255 : postOp.max;
+            const out = new Float64Array(current.length);
+            for (let i = 0; i < current.length; i++) {
+              out[i] = Math.min(
+                Math.floor((current[i] * postOp.mult + half) / divisor),
+                maxVal
+              );
+            }
+            current = out;
+          } else if (postOp.op === 'dequantize') {
+            const out = new Float64Array(current.length);
+            for (let i = 0; i < current.length; i++) {
+              out[i] = current[i] * postOp.scale;
+            }
+            current = out;
+          } else if (postOp.op === 'residual_input') {
+            const out = new Float32Array(current.length);
+            for (let i = 0; i < current.length; i++) {
+              out[i] = current[i] + layerInput[i];
+            }
+            current = out;
+          } else if (postOp.op === 'mean_pool_tokens') {
+            const out = new Float32Array(postOp.dim);
+            for (let i = 0; i < postOp.dim; i++) {
+              let sum = 0;
+              for (let t = 0; t < postOp.seq; t++) {
+                sum += current[t * postOp.dim + i];
+              }
+              out[i] = sum / postOp.seq;
+            }
+            current = out;
+          } else if (postOp.op === 'relu' && current instanceof Float64Array) {
+            current = current.map((x) => Math.max(0, x)); // exact ints stay f64
           } else if (postOp.op !== 'flatten' && postOp.op !== 'linear') {
             current = applyActivationVec(current, postOp.op);
           }
@@ -1957,7 +2125,10 @@
         const [channels, height, width] = shape;
         const outH = Math.floor(height / pool);
         const outW = Math.floor(width / pool);
-        const output = new Float32Array(channels * outH * outW);
+        const output =
+          values instanceof Float64Array
+            ? new Float64Array(channels * outH * outW)
+            : new Float32Array(channels * outH * outW);
         for (let c = 0; c < channels; c++) {
           for (let oy = 0; oy < outH; oy++) {
             for (let ox = 0; ox < outW; ox++) {

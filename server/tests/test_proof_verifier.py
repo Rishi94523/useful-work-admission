@@ -29,6 +29,22 @@ def cnn_model():
     return spec
 
 
+@pytest.fixture(scope="module")
+def quantized_model():
+    spec = get_model_store().get("mnist-tiny-q8")
+    if spec is None:
+        pytest.skip("mnist-tiny-q8 not built (run scripts/quantize_model.py)")
+    return spec
+
+
+@pytest.fixture(scope="module")
+def attention_model():
+    spec = get_model_store().get("mnist-attn")
+    if spec is None:
+        pytest.skip("mnist-attn not trained (run scripts/train_mnist_attn_numpy.py)")
+    return spec
+
+
 @pytest.fixture()
 def verifier():
     # audit_rate=0 so tests exercise the projection path deterministically
@@ -37,16 +53,22 @@ def verifier():
 
 def client_compute(model, x, start, end):
     """
-    Simulate the browser client: float32 weights, per-layer float32 storage
-    of results (Float32Array), post-ops applied between layers. Layer-type
-    agnostic — the same path covers dense and conv2d segments.
+    Simulate the browser client: float32 storage (Float32Array) for float
+    layers, exact float64-held integers for quantized layers, post-ops
+    applied between layers. Layer-type agnostic — the same path covers
+    dense, conv2d, token_dense and attention segments.
     """
     h = np.asarray(x, dtype=np.float32)
     pre_activations = []
-    for layer in model.layers[start:end]:
-        z = layer.forward(h.astype(np.float64)).astype(np.float32)
+    for idx in range(start, end):
+        layer = model.layers[idx]
+        z = layer.forward(h.astype(np.float64))
+        if not getattr(layer, "exact", False):
+            z = z.astype(np.float32)
         pre_activations.append([float(v) for v in z])
-        h = apply_post_ops(z.astype(np.float64), layer.post_ops).astype(np.float32)
+        h = model.apply_layer_post_ops(
+            z.astype(np.float64), idx, layer_input=h
+        ).astype(np.float32)
     return pre_activations
 
 
@@ -323,6 +345,182 @@ class TestConvolutionalModel:
             cnn_model, 0, x, pre, hashes, proof_hash, "task-1", "sample-1"
         )
         assert not report.valid
+
+
+def random_int_input(seed=3):
+    rng = np.random.default_rng(seed)
+    return [float(v) for v in rng.integers(0, 256, 784)]
+
+
+class TestQuantizedExactVerification:
+    """
+    Quantized layers verify with Freivalds over Z_p — EXACT equality, zero
+    float tolerance, soundness error 1/p per projection, no audits needed.
+    """
+
+    def test_honest_full_model_passes_exactly(self, quantized_model, verifier):
+        x = random_int_input()
+        n = quantized_model.total_layers
+        pre, hashes, proof_hash = build_proof(quantized_model, x, 0, n)
+        report = verifier.verify_segment(
+            quantized_model, 0, x, pre, hashes, proof_hash, "task-1", "sample-1"
+        )
+        assert report.valid, report.reason
+        assert not report.audited  # exact checks make audits unnecessary
+        assert report.predicted_label in quantized_model.labels
+
+    def test_pieced_quantized_matches_direct(self, quantized_model, verifier):
+        x = random_int_input(seed=13)
+        direct = quantized_model.predict(np.asarray(x, dtype=np.float64))
+        direct_label = quantized_model.labels[int(np.argmax(direct))]
+
+        activation = x
+        report = None
+        for start in range(quantized_model.total_layers):
+            pre, hashes, ph = build_proof(
+                quantized_model, activation, start, start + 1, task_id=f"t-{start}"
+            )
+            report = verifier.verify_segment(
+                quantized_model, start, activation, pre, hashes, ph,
+                f"t-{start}", "sample-1",
+            )
+            assert report.valid, report.reason
+            activation = [float(v) for v in report.final_activation]
+
+        assert report.predicted_label == direct_label
+
+    def test_off_by_one_integer_tamper_caught(self, quantized_model, verifier):
+        """A ±1 change in ONE integer output is caught with certainty-level
+        probability — there is no tolerance band to hide inside."""
+        x = random_int_input()
+        pre, _, _ = build_proof(quantized_model, x, 0, 1)
+        pre[0][37] += 1.0
+        hashes = [canonical_vector_hash(pre[0])]
+        proof_hash = compute_proof_hash("task-1", "sample-1", 0, 1, hashes, "")
+        report = verifier.verify_segment(
+            quantized_model, 0, x, pre, hashes, proof_hash, "task-1", "sample-1"
+        )
+        assert not report.valid
+        assert "exact projection" in report.reason
+
+    def test_fractional_tamper_rejected_structurally(self, quantized_model, verifier):
+        """Sub-integer drift (the float-model attack surface) is impossible:
+        non-integer outputs are rejected outright."""
+        x = random_int_input()
+        pre, _, _ = build_proof(quantized_model, x, 0, 1)
+        pre[0][37] += 0.001
+        hashes = [canonical_vector_hash(pre[0])]
+        proof_hash = compute_proof_hash("task-1", "sample-1", 0, 1, hashes, "")
+        report = verifier.verify_segment(
+            quantized_model, 0, x, pre, hashes, proof_hash, "task-1", "sample-1"
+        )
+        assert not report.valid
+        assert "non-integer" in report.reason
+
+    def test_quantized_accuracy_close_to_float(self, quantized_model, model):
+        q_acc = quantized_model.metrics.get("test_accuracy")
+        f_acc = model.metrics.get("test_accuracy")
+        assert q_acc is not None and f_acc is not None
+        assert abs(f_acc - q_acc) < 0.005  # <0.5pp quantization loss
+
+
+class TestAttentionVerification:
+    """
+    Attention blocks verify via affine checks (Q, K, V, Z) plus Freivalds
+    matrix-product checks (S = Q·Kᵀ, O = softmax(S)·V) with the softmax
+    replayed server-side — the path that scales to transformer/LLM blocks.
+    """
+
+    def test_honest_full_model_passes(self, attention_model, verifier):
+        x = random_input()
+        n = attention_model.total_layers
+        pre, hashes, proof_hash = build_proof(attention_model, x, 0, n)
+        report = verifier.verify_segment(
+            attention_model, 0, x, pre, hashes, proof_hash, "task-1", "sample-1"
+        )
+        assert report.valid, report.reason
+        assert report.predicted_label in attention_model.labels
+
+    def test_pieced_attention_matches_direct(self, attention_model, verifier):
+        x = random_input(seed=31)
+        direct = attention_model.predict(np.asarray(x, dtype=np.float64))
+        direct_label = attention_model.labels[int(np.argmax(direct))]
+
+        activation = x
+        report = None
+        for start in range(attention_model.total_layers):
+            pre, hashes, ph = build_proof(
+                attention_model, activation, start, start + 1, task_id=f"t-{start}"
+            )
+            report = verifier.verify_segment(
+                attention_model, start, activation, pre, hashes, ph,
+                f"t-{start}", "sample-1",
+            )
+            assert report.valid, report.reason
+            activation = [float(v) for v in report.final_activation]
+
+        assert report.predicted_label == direct_label
+
+    @pytest.mark.parametrize("block", ["Q", "K", "V", "S", "O", "Z"])
+    def test_tampered_attention_block_caught(self, attention_model, verifier, block):
+        x = random_input()
+        attn_index = next(
+            i for i, l in enumerate(attention_model.layers)
+            if l.layer_type == "attention"
+        )
+        handoff = x
+        for i in range(attn_index):
+            _, h = attention_model.forward_segment(
+                np.asarray(handoff, dtype=np.float64), i, i + 1
+            )
+            handoff = [float(v) for v in h]
+
+        layer = attention_model.layers[attn_index]
+        pre, _, _ = build_proof(attention_model, handoff, attn_index, attn_index + 1)
+        start_off, _ = layer.offsets()[block]
+        pre[0][start_off + 3] += 1.0
+        hashes = [canonical_vector_hash(pre[0])]
+        ph = compute_proof_hash("task-1", "sample-1", attn_index, 1, hashes, "")
+        report = verifier.verify_segment(
+            attention_model, attn_index, handoff, pre, hashes, ph,
+            "task-1", "sample-1",
+        )
+        assert not report.valid
+        assert "attention" in report.reason
+
+    def test_skipped_softmax_caught(self, attention_model, verifier):
+        """A client that outputs O = S·V (forgetting the softmax) fails the
+        output product check even though Q, K, V, S are all honest."""
+        x = random_input()
+        attn_index = next(
+            i for i, l in enumerate(attention_model.layers)
+            if l.layer_type == "attention"
+        )
+        handoff = x
+        for i in range(attn_index):
+            _, h = attention_model.forward_segment(
+                np.asarray(handoff, dtype=np.float64), i, i + 1
+            )
+            handoff = [float(v) for v in h]
+
+        layer = attention_model.layers[attn_index]
+        z = layer.forward(np.asarray(handoff, dtype=np.float64))
+        parts = layer.extract(z)
+        fake_o = parts["S"] @ parts["V"]
+        offs = layer.offsets()
+        z[offs["O"][0] : offs["O"][1]] = fake_o.reshape(-1)
+        z[offs["Z"][0] : offs["Z"][1]] = (
+            fake_o @ layer.wo.astype(np.float64)
+        ).reshape(-1)
+        pre = [[float(v) for v in z.astype(np.float32)]]
+        hashes = [canonical_vector_hash(pre[0])]
+        ph = compute_proof_hash("task-1", "sample-1", attn_index, 1, hashes, "")
+        report = verifier.verify_segment(
+            attention_model, attn_index, handoff, pre, hashes, ph,
+            "task-1", "sample-1",
+        )
+        assert not report.valid
+        assert "attention output product" in report.reason
 
 
 class TestVerificationCost:

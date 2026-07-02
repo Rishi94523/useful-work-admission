@@ -31,8 +31,15 @@ def hash_tensor(values) -> str:
 
 def verify_shard_checksum(shard) -> bool:
     layer = shard["layers"][0]
-    w = np.asarray(layer["weights"], dtype="<f4").tobytes()
-    b = np.asarray(layer["biases"], dtype="<f4").tobytes()
+    if layer.get("quantized"):
+        w = np.asarray(layer["weights"], dtype="<i1").tobytes()
+        b = np.asarray(layer["biases"], dtype="<i4").tobytes()
+    elif layer["type"] == "attention":
+        w = np.asarray(layer["weights"], dtype="<f4").tobytes()
+        b = b""
+    else:
+        w = np.asarray(layer["weights"], dtype="<f4").tobytes()
+        b = np.asarray(layer["biases"], dtype="<f4").tobytes()
     return hashlib.sha256(w + b).hexdigest() == shard["checksum"]
 
 
@@ -50,12 +57,18 @@ def apply_activation(values: np.ndarray, activation: str) -> np.ndarray:
     return values.astype(np.float32)
 
 
-def apply_post_ops(values: np.ndarray, layer: dict) -> np.ndarray:
+def apply_post_ops(
+    values: np.ndarray, layer: dict, layer_input: np.ndarray = None
+) -> np.ndarray:
     """Post-op chain after the affine computation, like the browser client."""
     ops = layer.get("postOps") or []
     if not ops and layer.get("activation") not in (None, "", "linear"):
         ops = [{"op": layer["activation"]}]
     current = values
+    if layer["type"] == "attention":
+        # post-ops operate on the Z sub-block of the [Q|K|V|S|O|Z] concat
+        seq, d = layer["seq"], layer["dModel"]
+        current = current[4 * seq * d + seq * seq :]
     for op in ops:
         kind = op["op"]
         if kind == "maxpool2d":
@@ -64,16 +77,112 @@ def apply_post_ops(values: np.ndarray, layer: dict) -> np.ndarray:
             oh, ow = h // pool, w // pool
             t = current.reshape(c, h, w)[:, : oh * pool, : ow * pool]
             t = t.reshape(c, oh, pool, ow, pool)
-            current = t.max(axis=(2, 4)).reshape(-1).astype(np.float32)
+            current = t.max(axis=(2, 4)).reshape(-1)
+        elif kind == "requantize":
+            mult, shift = int(op["mult"]), int(op["shift"])
+            max_val = int(op.get("max", 255))
+            z = current.astype(np.int64)
+            current = np.minimum(
+                (z * mult + 2 ** (shift - 1)) >> shift, max_val
+            ).astype(np.float64)
+        elif kind == "dequantize":
+            current = current.astype(np.float64) * float(op["scale"])
+        elif kind == "residual_input":
+            current = current + np.asarray(layer_input, dtype=current.dtype)
+        elif kind == "mean_pool_tokens":
+            seq, dim = int(op["seq"]), int(op["dim"])
+            current = current.reshape(seq, dim).mean(axis=0)
         elif kind in ("flatten", "linear"):
             pass
+        elif kind == "relu" and layer.get("quantized"):
+            current = np.maximum(current, 0)  # no float32 cast: keep ints exact
         else:
             current = apply_activation(current, kind)
     return current
 
 
+def patchify(x: np.ndarray, grid, patch) -> np.ndarray:
+    gy, gx = grid
+    py, px = patch
+    return x.reshape(gy, py, gx, px).transpose(0, 2, 1, 3).reshape(gy * gx, py * px)
+
+
+def softmax_rows(s: np.ndarray) -> np.ndarray:
+    shifted = s - s.max(axis=-1, keepdims=True)
+    e = np.exp(shifted)
+    return e / e.sum(axis=-1, keepdims=True)
+
+
 def forward_pre_activation(current: np.ndarray, layer: dict) -> np.ndarray:
-    """Affine layer compute (dense or conv2d), float32 like the browser."""
+    """Provable layer compute (dense/conv2d/token_dense/attention)."""
+    quantized = layer.get("quantized", False)
+
+    if layer["type"] == "token_dense":
+        seq, in_size = layer["inputShape"]
+        _, out_size = layer["outputShape"]
+        w = np.asarray(layer["weights"], dtype=np.float32).reshape(out_size, in_size)
+        b = np.asarray(layer["biases"], dtype=np.float32).reshape(seq, out_size)
+        pf = layer.get("patchify")
+        tokens = (
+            patchify(current.astype(np.float64), pf["grid"], pf["patch"])
+            if pf
+            else current.astype(np.float64).reshape(seq, in_size)
+        )
+        z = tokens @ w.T.astype(np.float64) + b.astype(np.float64)
+        return z.reshape(-1).astype(np.float32)
+
+    if layer["type"] == "attention":
+        seq, d = layer["seq"], layer["dModel"]
+        flat = np.asarray(layer["weights"], dtype=np.float32)
+        mats = []
+        for i in range(4):  # Wq, Wk, Wv, Wo in (out, in) row-major wire order
+            mats.append(flat[i * d * d : (i + 1) * d * d].reshape(d, d).T)
+        wq, wk, wv, wo = [m.astype(np.float64) for m in mats]
+        xt = current.astype(np.float64).reshape(seq, d)
+        q = (xt @ wq).astype(np.float32).astype(np.float64)
+        k = (xt @ wk).astype(np.float32).astype(np.float64)
+        v = (xt @ wv).astype(np.float32).astype(np.float64)
+        s = (q @ k.T).astype(np.float32).astype(np.float64)
+        p = softmax_rows(s)
+        o = (p @ v).astype(np.float32).astype(np.float64)
+        z = (o @ wo).astype(np.float32)
+        return np.concatenate(
+            [
+                q.reshape(-1),
+                k.reshape(-1),
+                v.reshape(-1),
+                s.reshape(-1),
+                o.reshape(-1),
+                z.reshape(-1).astype(np.float64),
+            ]
+        ).astype(np.float32)
+
+    if quantized:
+        # exact integer path — values below 2^53, no float rounding anywhere
+        if layer["type"] == "conv2d":
+            in_ch, in_h, in_w = layer["inputShape"]
+            out_ch, out_h, out_w = layer["outputShape"]
+            kh, kw = layer["kernel"]
+            w = np.asarray(layer["weights"], dtype=np.int64).reshape(
+                out_ch, in_ch, kh, kw
+            )
+            b = np.asarray(layer["biases"], dtype=np.int64)
+            x3 = current.astype(np.int64).reshape(in_ch, in_h, in_w)
+            z = np.zeros((out_ch, out_h, out_w), dtype=np.int64)
+            for u in range(kh):
+                for v in range(kw):
+                    z += np.tensordot(
+                        w[:, :, u, v], x3[:, u : u + out_h, v : v + out_w], axes=(1, 0)
+                    )
+            z += b[:, None, None]
+            return z.reshape(-1).astype(np.float64)
+        in_size = layer["inputShape"][-1]
+        out_size = layer["outputShape"][-1]
+        w = np.asarray(layer["weights"], dtype=np.int64).reshape(out_size, in_size)
+        b = np.asarray(layer["biases"], dtype=np.int64)
+        z = current.astype(np.int64) @ w.T + b
+        return z.astype(np.float64)
+
     if layer["type"] == "conv2d":
         in_ch, in_h, in_w = layer["inputShape"]
         out_ch, out_h, out_w = layer["outputShape"]
@@ -140,7 +249,7 @@ def solve_once(client: httpx.Client, api: str, solver_id: int) -> dict:
     for layer in layers:
         z = forward_pre_activation(current, layer)
         pre_activations.append(z)
-        current = apply_post_ops(z, layer)
+        current = apply_post_ops(z, layer, layer_input=current)
     compute_ms = max(15, int((time.time() - start) * 1000))
 
     prediction = None

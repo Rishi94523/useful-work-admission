@@ -47,18 +47,33 @@ logger = logging.getLogger(__name__)
 # models/ directory at the repository root (server/ is the CWD in dev)
 DEFAULT_MODELS_DIR = Path(__file__).resolve().parents[3] / "models"
 
+# Prime modulus for EXACT Freivalds verification of quantized layers.
+# 2^31 - 1 (Mersenne). A fabricated integer output vector passes a single
+# secret projection with probability 1/p ≈ 4.7e-10; with 4 projections the
+# soundness error is ~2^-124 — cryptographic-grade, with NO float tolerance
+# and no need for spot audits.
+MOD_P = 2**31 - 1
+
+
+def dot_mod(a, b, p: int = MOD_P) -> int:
+    """Exact dot product of two integer sequences, reduced mod p."""
+    return int(sum(int(x) * int(y) for x, y in zip(a, b)) % p)
+
 
 # ---------------------------------------------------------------------------
 # Post-ops: cheap O(n) transforms the server applies between provable layers
 # ---------------------------------------------------------------------------
 
-def apply_post_ops(z: np.ndarray, post_ops: Sequence[dict]) -> np.ndarray:
+def apply_post_ops(
+    z: np.ndarray, post_ops: Sequence[dict], layer_input: Optional[np.ndarray] = None
+) -> np.ndarray:
     """
     Apply a layer's post-op chain to its flat pre-activation vector.
 
     Every op is O(n) — orders of magnitude cheaper than the affine layer the
     client computed — so the server can run them during verification without
     giving up the compute asymmetry. Mirrored exactly by the browser client.
+    ``layer_input`` is the layer's own input, needed for residual connections.
     """
     h = np.asarray(z, dtype=np.float64)
     for op in post_ops:
@@ -82,6 +97,24 @@ def apply_post_ops(z: np.ndarray, post_ops: Sequence[dict]) -> np.ndarray:
             h = t.max(axis=(2, 4)).reshape(-1)
         elif kind == "flatten":
             h = h.reshape(-1)
+        elif kind == "requantize":
+            # Exact integer rescale: a = min(max_val, (z*mult + half) >> shift).
+            # Values stay < 2^53 so float64 arithmetic on them is exact and
+            # browser clients (JS numbers) reproduce it bit-for-bit.
+            mult = int(op["mult"])
+            shift = int(op["shift"])
+            max_val = int(op.get("max", 255))
+            half = float(2 ** (shift - 1))
+            h = np.minimum(np.floor((h * mult + half) / float(2**shift)), max_val)
+        elif kind == "dequantize":
+            h = h * float(op["scale"])
+        elif kind == "residual_input":
+            if layer_input is None:
+                raise ValueError("residual_input post-op requires the layer input")
+            h = h + np.asarray(layer_input, dtype=np.float64)
+        elif kind == "mean_pool_tokens":
+            seq, dim = int(op["seq"]), int(op["dim"])
+            h = h.reshape(seq, dim).mean(axis=0)
         elif kind == "linear":
             pass
         else:
@@ -290,6 +323,420 @@ class Conv2DLayer:
         return h.hexdigest()
 
 
+@dataclass
+class QuantizedDenseLayer:
+    """
+    Int8-quantized dense layer with EXACT integer arithmetic.
+
+    z = x_q · W_q + b_q where x_q are integer activations, W_q int8, b_q
+    int32. Every value is an exact integer < 2^53, so browsers (float64 JS
+    numbers) and the server agree bit-for-bit — verification needs no
+    tolerance, and Freivalds runs over Z_p with soundness error 1/p per
+    secret projection.
+    """
+
+    index: int
+    name: str
+    activation: str
+    input_size: int
+    output_size: int
+    weights: np.ndarray  # int8 (input_size, output_size)
+    biases: np.ndarray  # int32 (output_size,)
+    checksum: str
+    w_scale: float = 1.0  # dequant: z_true ≈ z_int * w_scale * x_scale
+    x_scale: float = 1.0
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "dense"
+    exact = True  # verified with exact mod-p equality, not tolerances
+
+    @property
+    def compute_ops(self) -> int:
+        return self.input_size * self.output_size
+
+    @property
+    def projection_ops(self) -> int:
+        return self.input_size + self.output_size
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        """Exact integer pre-activation, returned as float64 (exact ints)."""
+        xi = np.asarray(x, dtype=np.int64)
+        z = xi @ self.weights.astype(np.int64) + self.biases.astype(np.int64)
+        return z.astype(np.float64)
+
+    def project(self, r: np.ndarray) -> Tuple[np.ndarray, int]:
+        """Mod-p Freivalds precompute: s = W_q·r mod p, r·b mod p."""
+        ri = np.asarray(r, dtype=np.int64)
+        # |W|<=127, r<2^31: per-term <2^38, summed over <=2^14 terms: safe int64
+        s = (self.weights.astype(np.int64) @ ri) % MOD_P
+        rb = dot_mod(ri, self.biases)
+        return s, rb
+
+    def wire_payload(self) -> dict:
+        return {
+            "name": self.name,
+            "type": "dense",
+            "quantized": True,
+            "weights": np.ascontiguousarray(self.weights.T, dtype=np.int8)
+            .flatten()
+            .tolist(),
+            "biases": self.biases.astype(np.int64).tolist(),
+            "inputShape": [1, self.input_size],
+            "outputShape": [1, self.output_size],
+            "activation": self.activation,
+            "postOps": list(self.post_ops),
+        }
+
+    def compute_checksum(self) -> str:
+        """SHA-256 over the exact int8/int32 LE bytes a client receives."""
+        h = hashlib.sha256()
+        h.update(np.ascontiguousarray(self.weights.T, dtype="<i1").tobytes())
+        h.update(np.ascontiguousarray(self.biases, dtype="<i4").tobytes())
+        return h.hexdigest()
+
+
+@dataclass
+class QuantizedConv2DLayer:
+    """Int8-quantized valid stride-1 conv2d with exact integer arithmetic."""
+
+    index: int
+    name: str
+    activation: str
+    in_channels: int
+    out_channels: int
+    kernel: Tuple[int, int]
+    input_shape: Tuple[int, int, int]
+    weights: np.ndarray  # int8 (out_ch, in_ch, kh, kw)
+    biases: np.ndarray  # int32 (out_ch,)
+    checksum: str
+    w_scale: float = 1.0
+    x_scale: float = 1.0
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "conv2d"
+    exact = True
+
+    @property
+    def output_shape(self) -> Tuple[int, int, int]:
+        _, height, width = self.input_shape
+        kh, kw = self.kernel
+        return (self.out_channels, height - kh + 1, width - kw + 1)
+
+    @property
+    def input_size(self) -> int:
+        return int(np.prod(self.input_shape))
+
+    @property
+    def output_size(self) -> int:
+        return int(np.prod(self.output_shape))
+
+    @property
+    def compute_ops(self) -> int:
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        return oh * ow * oc * self.in_channels * kh * kw
+
+    @property
+    def projection_ops(self) -> int:
+        return self.input_size + self.output_size
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        c, height, width = self.input_shape
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        x3 = np.asarray(x, dtype=np.int64).reshape(c, height, width)
+        w = self.weights.astype(np.int64)
+        z = np.zeros((oc, oh, ow), dtype=np.int64)
+        for u in range(kh):
+            for v in range(kw):
+                z += np.tensordot(w[:, :, u, v], x3[:, u : u + oh, v : v + ow], axes=(1, 0))
+        z += self.biases.astype(np.int64)[:, None, None]
+        return z.reshape(-1).astype(np.float64)
+
+    def project(self, r: np.ndarray) -> Tuple[np.ndarray, int]:
+        c, height, width = self.input_shape
+        oc, oh, ow = self.output_shape
+        kh, kw = self.kernel
+        r3 = np.asarray(r, dtype=np.int64).reshape(oc, oh, ow)
+        w = self.weights.astype(np.int64)
+        s3 = np.zeros((c, height, width), dtype=np.int64)
+        for u in range(kh):
+            for v in range(kw):
+                # |W|<=127 * r<2^31 summed over <=oc terms stays under 2^63,
+                # but reduce mod p each tap to keep headroom
+                s3[:, u : u + oh, v : v + ow] = (
+                    s3[:, u : u + oh, v : v + ow]
+                    + np.tensordot(w[:, :, u, v], r3, axes=(0, 0))
+                ) % MOD_P
+        rb = int(
+            sum(
+                int(b) * int(rs)
+                for b, rs in zip(
+                    self.biases.astype(np.int64), r3.sum(axis=(1, 2)) % MOD_P
+                )
+            )
+            % MOD_P
+        )
+        return s3.reshape(-1), rb
+
+    def wire_payload(self) -> dict:
+        return {
+            "name": self.name,
+            "type": "conv2d",
+            "quantized": True,
+            "weights": np.ascontiguousarray(self.weights, dtype=np.int8)
+            .flatten()
+            .tolist(),
+            "biases": self.biases.astype(np.int64).tolist(),
+            "inputShape": list(self.input_shape),
+            "outputShape": list(self.output_shape),
+            "kernel": list(self.kernel),
+            "activation": self.activation,
+            "postOps": list(self.post_ops),
+        }
+
+    def compute_checksum(self) -> str:
+        h = hashlib.sha256()
+        h.update(np.ascontiguousarray(self.weights, dtype="<i1").tobytes())
+        h.update(np.ascontiguousarray(self.biases, dtype="<i4").tobytes())
+        return h.hexdigest()
+
+
+def patchify(x: np.ndarray, grid: Tuple[int, int], patch: Tuple[int, int]) -> np.ndarray:
+    """Flat image -> (seq, patch_pixels) row-major patch matrix."""
+    gy, gx = grid
+    py, px = patch
+    return (
+        np.asarray(x, dtype=np.float64)
+        .reshape(gy, py, gx, px)
+        .transpose(0, 2, 1, 3)
+        .reshape(gy * gx, py * px)
+    )
+
+
+def unpatchify(patches: np.ndarray, grid: Tuple[int, int], patch: Tuple[int, int]) -> np.ndarray:
+    """(seq, patch_pixels) -> flat image; inverse of patchify."""
+    gy, gx = grid
+    py, px = patch
+    return (
+        np.asarray(patches, dtype=np.float64)
+        .reshape(gy, gx, py, px)
+        .transpose(0, 2, 1, 3)
+        .reshape(gy * py * gx * px)
+    )
+
+
+@dataclass
+class TokenDenseLayer:
+    """
+    Per-token dense layer (transformer patch/token embedding): every token t
+    computes z_t = x_t·W + B_t with a shared W and per-token bias B (which
+    absorbs the positional embedding). The whole layer is affine in the flat
+    input, so the standard projection check applies unchanged; ``patchify``
+    is a fixed permutation folded into the projection precompute.
+    """
+
+    index: int
+    name: str
+    activation: str
+    seq: int
+    token_input_size: int
+    token_output_size: int
+    weights: np.ndarray  # (token_input_size, token_output_size), float32
+    biases: np.ndarray  # (seq, token_output_size), float32
+    checksum: str
+    post_ops: List[dict] = field(default_factory=list)
+    patchify_grid: Optional[Tuple[int, int]] = None  # e.g. (4, 4)
+    patchify_patch: Optional[Tuple[int, int]] = None  # e.g. (7, 7)
+
+    layer_type = "token_dense"
+
+    @property
+    def input_size(self) -> int:
+        return self.seq * self.token_input_size
+
+    @property
+    def output_size(self) -> int:
+        return self.seq * self.token_output_size
+
+    @property
+    def compute_ops(self) -> int:
+        return self.seq * self.token_input_size * self.token_output_size
+
+    @property
+    def projection_ops(self) -> int:
+        return self.input_size + self.output_size
+
+    def _tokens(self, x: np.ndarray) -> np.ndarray:
+        if self.patchify_grid:
+            return patchify(x, self.patchify_grid, self.patchify_patch)
+        return np.asarray(x, dtype=np.float64).reshape(self.seq, self.token_input_size)
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        tokens = self._tokens(x)
+        z = tokens @ self.weights.astype(np.float64) + self.biases.astype(np.float64)
+        return z.reshape(-1)
+
+    def project(self, r: np.ndarray) -> Tuple[np.ndarray, float]:
+        r3 = np.asarray(r, dtype=np.float64).reshape(self.seq, self.token_output_size)
+        s_tokens = r3 @ self.weights.astype(np.float64).T  # (seq, token_in)
+        if self.patchify_grid:
+            s = unpatchify(s_tokens, self.patchify_grid, self.patchify_patch)
+        else:
+            s = s_tokens.reshape(-1)
+        r_dot_b = float(np.sum(r3 * self.biases.astype(np.float64)))
+        return s, r_dot_b
+
+    def wire_payload(self) -> dict:
+        payload = {
+            "name": self.name,
+            "type": "token_dense",
+            "seq": self.seq,
+            "weights": np.ascontiguousarray(self.weights.T, dtype=np.float32)
+            .flatten()
+            .tolist(),
+            "biases": np.ascontiguousarray(self.biases, dtype=np.float32)
+            .flatten()
+            .tolist(),
+            "inputShape": [self.seq, self.token_input_size],
+            "outputShape": [self.seq, self.token_output_size],
+            "activation": self.activation,
+            "postOps": list(self.post_ops),
+        }
+        if self.patchify_grid:
+            payload["patchify"] = {
+                "grid": list(self.patchify_grid),
+                "patch": list(self.patchify_patch),
+            }
+        return payload
+
+    def compute_checksum(self) -> str:
+        h = hashlib.sha256()
+        h.update(np.ascontiguousarray(self.weights.T, dtype="<f4").tobytes())
+        h.update(np.ascontiguousarray(self.biases, dtype="<f4").tobytes())
+        return h.hexdigest()
+
+
+@dataclass
+class AttentionLayer:
+    """
+    Single-head self-attention block. The client submits the concatenation
+    [Q | K | V | S | O | Z] (all row-major, token-major):
+
+        Q = X·Wq   K = X·Wk   V = X·Wv        (affine in the input X)
+        S = Q·Kᵀ                              (bilinear — Freivalds product check)
+        P = softmax(S) rowwise                (SERVER computes from verified S)
+        O = P·V                               (Freivalds product check)
+        Z = O·Wo                              (affine in the verified O)
+
+    Every sub-check is O(seq·d + seq²) versus the client's O(seq·d²) matmuls.
+    This is the verification path that generalizes to transformer/LLM blocks.
+    The attention scale 1/√d is folded into Wq at export.
+    """
+
+    index: int
+    name: str
+    activation: str
+    seq: int
+    d_model: int
+    wq: np.ndarray  # (d, d) float32, scale folded in
+    wk: np.ndarray
+    wv: np.ndarray
+    wo: np.ndarray
+    checksum: str
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "attention"
+
+    @property
+    def input_size(self) -> int:
+        return self.seq * self.d_model
+
+    @property
+    def output_size(self) -> int:
+        # Q, K, V, O, Z blocks of seq*d plus S of seq*seq
+        return 5 * self.seq * self.d_model + self.seq * self.seq
+
+    @property
+    def compute_ops(self) -> int:
+        proj = 4 * self.seq * self.d_model * self.d_model  # Q,K,V,Z matmuls
+        products = 2 * self.seq * self.seq * self.d_model  # S = QKᵀ, O = PV
+        return proj + products
+
+    @property
+    def projection_ops(self) -> int:
+        return self.input_size + self.output_size
+
+    def offsets(self) -> dict:
+        td = self.seq * self.d_model
+        return {
+            "Q": (0, td),
+            "K": (td, 2 * td),
+            "V": (2 * td, 3 * td),
+            "S": (3 * td, 3 * td + self.seq * self.seq),
+            "O": (3 * td + self.seq * self.seq, 4 * td + self.seq * self.seq),
+            "Z": (4 * td + self.seq * self.seq, 5 * td + self.seq * self.seq),
+        }
+
+    def extract(self, z_flat: np.ndarray) -> dict:
+        """Slice the submitted concatenation into named (seq, ·) matrices."""
+        z = np.asarray(z_flat, dtype=np.float64)
+        parts = {}
+        for name, (start, end) in self.offsets().items():
+            width = self.seq if name == "S" else self.d_model
+            parts[name] = z[start:end].reshape(self.seq, width)
+        return parts
+
+    def z_output(self, z_flat: np.ndarray) -> np.ndarray:
+        start, end = self.offsets()["Z"]
+        return np.asarray(z_flat, dtype=np.float64)[start:end]
+
+    @staticmethod
+    def softmax_rows(s: np.ndarray) -> np.ndarray:
+        shifted = s - s.max(axis=-1, keepdims=True)
+        e = np.exp(shifted)
+        return e / e.sum(axis=-1, keepdims=True)
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        """Reference computation of the full submission concatenation."""
+        xt = np.asarray(x, dtype=np.float64).reshape(self.seq, self.d_model)
+        q = xt @ self.wq.astype(np.float64)
+        k = xt @ self.wk.astype(np.float64)
+        v = xt @ self.wv.astype(np.float64)
+        s = q @ k.T
+        p = self.softmax_rows(s)
+        o = p @ v
+        z = o @ self.wo.astype(np.float64)
+        return np.concatenate(
+            [q.reshape(-1), k.reshape(-1), v.reshape(-1), s.reshape(-1), o.reshape(-1), z.reshape(-1)]
+        )
+
+    def wire_payload(self) -> dict:
+        return {
+            "name": self.name,
+            "type": "attention",
+            "seq": self.seq,
+            "dModel": self.d_model,
+            "weights": np.concatenate(
+                [
+                    np.ascontiguousarray(w.T, dtype=np.float32).flatten()
+                    for w in (self.wq, self.wk, self.wv, self.wo)
+                ]
+            ).tolist(),
+            "biases": [],
+            "inputShape": [self.seq, self.d_model],
+            "outputShape": [self.output_size],
+            "activation": self.activation,
+            "postOps": list(self.post_ops),
+        }
+
+    def compute_checksum(self) -> str:
+        h = hashlib.sha256()
+        for w in (self.wq, self.wk, self.wv, self.wo):
+            h.update(np.ascontiguousarray(w.T, dtype="<f4").tobytes())
+        return h.hexdigest()
+
+
 ProvableLayer = DenseLayer  # legacy alias; layers are duck-typed
 
 
@@ -310,6 +757,8 @@ class ModelSpec:
     checksum: str
     layers: List = field(default_factory=list)
     metrics: dict = field(default_factory=dict)
+    # Quantized models take integer pixel inputs (0..255) instead of 0..1
+    input_quantized: bool = False
 
     @property
     def total_layers(self) -> int:
@@ -346,9 +795,18 @@ class ModelSpec:
         """Apply a single named activation (legacy dense path)."""
         return apply_post_ops(z, [{"op": activation}] if activation else [])
 
-    def apply_layer_post_ops(self, z: np.ndarray, layer_index: int) -> np.ndarray:
-        """Apply layer ``layer_index``'s post-op chain to its pre-activation."""
-        return apply_post_ops(z, self.layers[layer_index].post_ops)
+    def apply_layer_post_ops(
+        self, z: np.ndarray, layer_index: int, layer_input: Optional[np.ndarray] = None
+    ) -> np.ndarray:
+        """
+        Apply layer ``layer_index``'s post-op chain to its pre-activation.
+        For attention layers the post-ops operate on the Z sub-block of the
+        submitted concatenation; ``layer_input`` feeds residual connections.
+        """
+        layer = self.layers[layer_index]
+        if layer.layer_type == "attention":
+            z = layer.z_output(z)
+        return apply_post_ops(z, layer.post_ops, layer_input=layer_input)
 
     def forward_segment(
         self, x: np.ndarray, start: int, end: int
@@ -362,10 +820,10 @@ class ModelSpec:
         """
         pre_activations: List[np.ndarray] = []
         h = np.asarray(x, dtype=np.float64)
-        for layer in self.layers[start:end]:
+        for offset, layer in enumerate(self.layers[start:end]):
             z = layer.forward(h)
             pre_activations.append(z)
-            h = apply_post_ops(z, layer.post_ops)
+            h = self.apply_layer_post_ops(z, start + offset, layer_input=h)
         return pre_activations, h
 
     def predict(self, x: np.ndarray) -> np.ndarray:
@@ -388,13 +846,19 @@ class ModelSpec:
                     .convert("L")
                     .resize((width, height))
                 )
-                pixels = np.asarray(image, dtype=np.float32) / 255.0
+                if self.input_quantized:
+                    pixels = np.asarray(image, dtype=np.float64)
+                else:
+                    pixels = np.asarray(image, dtype=np.float32) / 255.0
                 return pixels.flatten().tolist()
             except Exception:
                 pass  # non-image blob: fall through to raw bytes
 
         source = sample_blob or (sample_url.encode("utf-8") if sample_url else b"")
-        values = [byte / 255.0 for byte in source[: self.input_size]]
+        if self.input_quantized:
+            values = [float(byte) for byte in source[: self.input_size]]
+        else:
+            values = [byte / 255.0 for byte in source[: self.input_size]]
         values.extend([0.0] * (self.input_size - len(values)))
         return values
 
@@ -419,7 +883,38 @@ def _load_layer(layer_manifest: dict, weights: np.lib.npyio.NpzFile):
     i = layer_manifest["index"]
     layer_type = layer_manifest.get("type", "dense")
     post_ops = list(layer_manifest.get("post_ops", []))
+    quantized = bool(layer_manifest.get("quantized", False))
 
+    if layer_type == "dense" and quantized:
+        return QuantizedDenseLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest.get("activation", "linear"),
+            input_size=layer_manifest["input_size"],
+            output_size=layer_manifest["output_size"],
+            weights=weights[f"W{i}"].astype(np.int8),
+            biases=weights[f"b{i}"].astype(np.int32),
+            checksum=layer_manifest["checksum"],
+            w_scale=layer_manifest.get("w_scale", 1.0),
+            x_scale=layer_manifest.get("x_scale", 1.0),
+            post_ops=post_ops,
+        )
+    if layer_type == "conv2d" and quantized:
+        return QuantizedConv2DLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest.get("activation", "linear"),
+            in_channels=layer_manifest["in_channels"],
+            out_channels=layer_manifest["out_channels"],
+            kernel=tuple(layer_manifest["kernel"]),
+            input_shape=tuple(layer_manifest["input_shape"]),
+            weights=weights[f"W{i}"].astype(np.int8),
+            biases=weights[f"b{i}"].astype(np.int32),
+            checksum=layer_manifest["checksum"],
+            w_scale=layer_manifest.get("w_scale", 1.0),
+            x_scale=layer_manifest.get("x_scale", 1.0),
+            post_ops=post_ops,
+        )
     if layer_type == "dense":
         return DenseLayer(
             index=i,
@@ -443,6 +938,36 @@ def _load_layer(layer_manifest: dict, weights: np.lib.npyio.NpzFile):
             input_shape=tuple(layer_manifest["input_shape"]),
             weights=weights[f"W{i}"].astype(np.float32),
             biases=weights[f"b{i}"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            post_ops=post_ops,
+        )
+    if layer_type == "token_dense":
+        patch_cfg = layer_manifest.get("patchify") or {}
+        return TokenDenseLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest.get("activation", "linear"),
+            seq=layer_manifest["seq"],
+            token_input_size=layer_manifest["input_size"],
+            token_output_size=layer_manifest["output_size"],
+            weights=weights[f"W{i}"].astype(np.float32),
+            biases=weights[f"b{i}"].astype(np.float32),
+            checksum=layer_manifest["checksum"],
+            post_ops=post_ops,
+            patchify_grid=tuple(patch_cfg["grid"]) if patch_cfg else None,
+            patchify_patch=tuple(patch_cfg["patch"]) if patch_cfg else None,
+        )
+    if layer_type == "attention":
+        return AttentionLayer(
+            index=i,
+            name=layer_manifest["name"],
+            activation=layer_manifest.get("activation", "linear"),
+            seq=layer_manifest["seq"],
+            d_model=layer_manifest["d_model"],
+            wq=weights[f"W{i}q"].astype(np.float32),
+            wk=weights[f"W{i}k"].astype(np.float32),
+            wv=weights[f"W{i}v"].astype(np.float32),
+            wo=weights[f"W{i}o"].astype(np.float32),
             checksum=layer_manifest["checksum"],
             post_ops=post_ops,
         )
@@ -523,6 +1048,7 @@ class ModelStore:
             checksum=manifest["checksum"],
             layers=layers,
             metrics=manifest.get("metrics", {}),
+            input_quantized=bool(manifest["input"].get("quantized", False)),
         )
 
     def get(self, name: str) -> Optional[ModelSpec]:

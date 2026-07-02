@@ -1,0 +1,106 @@
+{
+  "name": "mnist-tiny-q8",
+  "version": "2.0.1",
+  "task_type": "image_classification",
+  "labels": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "input": {
+    "shape": [
+      1,
+      784
+    ],
+    "quantized": true,
+    "preprocessing": "grayscale 28x28, integer pixels 0..255 (exact integer pipeline, no normalization)"
+  },
+  "weights_file": "weights.npz",
+  "checksum": "67594c284779315ad5b6ff2d9190f013cc3b19ce782a9349c0f98876949beef4",
+  "layers": [
+    {
+      "index": 0,
+      "name": "dense_hidden_1",
+      "type": "dense",
+      "quantized": true,
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        },
+        {
+          "op": "requantize",
+          "mult": 26150,
+          "shift": 25,
+          "max": 255
+        }
+      ],
+      "w_scale": 0.006667044219069594,
+      "x_scale": 0.00392156862745098,
+      "checksum": "bfd119c2658527dbec90a45696388ea9d36ec628e7d050748e84594ce099486d",
+      "input_size": 784,
+      "output_size": 128
+    },
+    {
+      "index": 1,
+      "name": "dense_hidden_2",
+      "type": "dense",
+      "quantized": true,
+      "activation": "relu",
+      "post_ops": [
+        {
+          "op": "relu"
+        },
+        {
+          "op": "requantize",
+          "mult": 24985,
+          "shift": 23,
+          "max": 255
+        }
+      ],
+      "w_scale": 0.007139965774506095,
+      "x_scale": 0.03354836454688468,
+      "checksum": "5e4869d518bd3de68feabb509e8279ec3517646e0aa97952ffa62fcc39810895",
+      "input_size": 128,
+      "output_size": 64
+    },
+    {
+      "index": 2,
+      "name": "dense_output",
+      "type": "dense",
+      "quantized": true,
+      "activation": "softmax",
+      "post_ops": [
+        {
+          "op": "dequantize",
+          "scale": 0.0005345106222339467
+        },
+        {
+          "op": "softmax"
+        }
+      ],
+      "w_scale": 0.006646275050996795,
+      "x_scale": 0.0804225853026925,
+      "checksum": "120ad8816bbb3f84d1905b100fd55406c2411aedd4c81bbca2fc4cd093be79d4",
+      "input_size": 64,
+      "output_size": 10
+    }
+  ],
+  "metrics": {
+    "test_accuracy": 0.9807,
+    "float_test_accuracy": 0.9809
+  },
+  "quantization": {
+    "scheme": "int8-symmetric-weights, uint8 activations, exact integer requantize",
+    "verification": "Freivalds over Z_p, p = 2^31 - 1, exact equality"
+  },
+  "quantized_at": "2026-07-02T05:11:36.097164+00:00",
+  "weights_file_sha256": "86230e9324961a06e9c716a70f314b4ab169d751cd09f9687d6e20f77fadf791"
+}

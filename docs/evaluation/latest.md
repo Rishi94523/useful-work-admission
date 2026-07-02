@@ -1,14 +1,42 @@
 # PoUW CAPTCHA Evaluation Report
 
-Generated: `2026-06-12T13:39:26.886936+00:00`
+Generated: `2026-07-02T05:29:04.270588+00:00`
 Samples: `100` (mnist_test_set), seed `42`
 
 ## Model Comparison
 
 | Model | Layers | Test acc | Compute ops | Verify ops | Asymmetry | Distributed = direct | Ground-truth acc | Tamper rejected |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `mnist-attn` | 3 (token_dense+attention+dense) | 0.9472 | 210,144 | 25,896 | 8.115x | 100.00% | 97.00% | 100.00% |
 | `mnist-cnn` | 4 (conv2d+dense) | 0.9846 | 214,304 | 40,072 | 5.348x | 100.00% | 99.00% | 100.00% |
+| `mnist-cnn-q8` | 4 (conv2d+dense) | 0.984 | 214,304 | 40,072 | 5.348x | 100.00% | 99.00% | 100.00% |
 | `mnist-tiny` | 3 (dense) | 0.9809 | 109,184 | 4,712 | 23.171x | 100.00% | 100.00% | 100.00% |
+| `mnist-tiny-q8` | 3 (dense) | 0.9807 | 109,184 | 4,712 | 23.171x | 100.00% | 100.00% | 100.00% |
+
+## mnist-attn v1.0.0
+
+- Checksum: `54b2dc15380ad132446f0fe048c7861e305827a5cbbf218d2b5201a589c3e5ca`
+- Layer types: token_dense, attention, dense
+
+### Per-segment asymmetry
+
+| Segment | Type | Client compute ops | Projection verify ops | Ratio |
+| --- | --- | ---: | ---: | ---: |
+| [0, 1] | token_dense | 37,632 | 6,208 | 6.062x |
+| [1, 2] | attention | 172,032 | 19,456 | 8.842x |
+| [2, 3] | dense | 480 | 232 | 2.069x |
+
+### Correctness and attacks
+
+| Metric | Value |
+| --- | ---: |
+| Distributed labels matched direct inference | 100 / 100 |
+| Honest segment accept rate | 100.00% |
+| Distributed labeling accuracy vs MNIST ground truth | 97.00% |
+| Tampered segment outputs rejected | 100 / 100 |
+| Audit drift rejected | 100 / 100 |
+| Segment projection verify mean / p95 (ms) | 0.5677 / 1.4148 |
+| Direct full inference mean (ms) | 0.1205 |
 
 ## mnist-cnn v1.0.0
 
@@ -33,8 +61,34 @@ Samples: `100` (mnist_test_set), seed `42`
 | Distributed labeling accuracy vs MNIST ground truth | 99.00% |
 | Tampered segment outputs rejected | 100 / 100 |
 | Audit drift rejected | 100 / 100 |
-| Segment projection verify mean / p95 (ms) | 0.6107 / 1.6242 |
-| Direct full inference mean (ms) | 0.4912 |
+| Segment projection verify mean / p95 (ms) | 0.614 / 1.5681 |
+| Direct full inference mean (ms) | 0.4736 |
+
+## mnist-cnn-q8 v1.0.0
+
+- Checksum: `0d568d38ff3f491263c7a95a0569bc281bef13cf56c08ed96284601ed783a098`
+- Layer types: conv2d, conv2d, dense, dense
+
+### Per-segment asymmetry
+
+| Segment | Type | Client compute ops | Projection verify ops | Ratio |
+| --- | --- | ---: | ---: | ---: |
+| [0, 1] | conv2d | 48,672 | 24,768 | 1.965x |
+| [1, 2] | conv2d | 139,392 | 13,152 | 10.599x |
+| [2, 3] | dense | 25,600 | 1,856 | 13.793x |
+| [3, 4] | dense | 640 | 296 | 2.162x |
+
+### Correctness and attacks
+
+| Metric | Value |
+| --- | ---: |
+| Distributed labels matched direct inference | 100 / 100 |
+| Honest segment accept rate | 100.00% |
+| Distributed labeling accuracy vs MNIST ground truth | 99.00% |
+| Tampered segment outputs rejected | 100 / 100 |
+| Audit drift rejected | 100 / 100 |
+| Segment projection verify mean / p95 (ms) | 4.6334 / 12.0783 |
+| Direct full inference mean (ms) | 1.432 |
 
 ## mnist-tiny v2.0.1
 
@@ -58,8 +112,33 @@ Samples: `100` (mnist_test_set), seed `42`
 | Distributed labeling accuracy vs MNIST ground truth | 100.00% |
 | Tampered segment outputs rejected | 100 / 100 |
 | Audit drift rejected | 100 / 100 |
-| Segment projection verify mean / p95 (ms) | 0.0572 / 0.1151 |
-| Direct full inference mean (ms) | 0.0985 |
+| Segment projection verify mean / p95 (ms) | 0.1242 / 0.2488 |
+| Direct full inference mean (ms) | 0.1963 |
+
+## mnist-tiny-q8 v2.0.1
+
+- Checksum: `67594c284779315ad5b6ff2d9190f013cc3b19ce782a9349c0f98876949beef4`
+- Layer types: dense, dense, dense
+
+### Per-segment asymmetry
+
+| Segment | Type | Client compute ops | Projection verify ops | Ratio |
+| --- | --- | ---: | ---: | ---: |
+| [0, 1] | dense | 100,352 | 3,648 | 27.509x |
+| [1, 2] | dense | 8,192 | 768 | 10.667x |
+| [2, 3] | dense | 640 | 296 | 2.162x |
+
+### Correctness and attacks
+
+| Metric | Value |
+| --- | ---: |
+| Distributed labels matched direct inference | 100 / 100 |
+| Honest segment accept rate | 100.00% |
+| Distributed labeling accuracy vs MNIST ground truth | 100.00% |
+| Tampered segment outputs rejected | 100 / 100 |
+| Audit drift rejected | 100 / 100 |
+| Segment projection verify mean / p95 (ms) | 0.6424 / 1.3253 |
+| Direct full inference mean (ms) | 0.5294 |
 
 ## Interpretation
 
@@ -70,6 +149,17 @@ with layer width (dense) and with kernel size × channel count (conv).
 Small input convolutions (1→8 channels) are the worst case for the
 verifier — their outputs are large relative to the work performed — 
 while production-scale conv layers (32→64 channels and up) exceed 40x.
-The same projection identity `r·z = (Lᵀr)·x + r·b` covers any affine
-operator, so attention projections and other matmul-shaped layers
-verify identically.
+
+**Exact verification (`-q8` models):** int8-quantized models run an
+all-integer pipeline (every value < 2^53, bit-identical between
+browsers and the server), so projection checks run over Z_p
+(p = 2^31−1) with EXACT equality — no float tolerance, soundness
+error ~1/p per projection, and no spot audits needed. A ±1 tamper in
+one integer is caught outright.
+
+**Attention (`mnist-attn`):** transformer blocks verify with the same
+machinery — Q/K/V/output projections as affine checks, the bilinear
+products S = Q·Kᵀ and O = softmax(S)·V as Freivalds matrix-product
+checks over the submitted (already-verified) intermediates, softmax
+replayed server-side. This is the verification path that scales to
+LLM-style distributed inference.

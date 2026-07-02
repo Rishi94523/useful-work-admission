@@ -1,9 +1,98 @@
 {
-  "generated_at": "2026-06-12T13:39:26.886936+00:00",
+  "generated_at": "2026-07-02T05:29:04.270588+00:00",
   "samples": 100,
   "seed": 42,
   "input_source": "mnist_test_set",
   "models": [
+    {
+      "model": {
+        "name": "mnist-attn",
+        "version": "1.0.0",
+        "layers": 3,
+        "layer_types": [
+          "token_dense",
+          "attention",
+          "dense"
+        ],
+        "labels": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "checksum": "54b2dc15380ad132446f0fe048c7861e305827a5cbbf218d2b5201a589c3e5ca",
+        "metrics": {
+          "test_accuracy": 0.9472
+        },
+        "exact_verification": false
+      },
+      "complexity": {
+        "full_model_compute_ops": 210144,
+        "full_model_projection_verify_ops": 25896,
+        "full_model_asymmetry_ratio": 8.115,
+        "num_secret_projections": 4,
+        "segments": [
+          {
+            "segment": [
+              0,
+              1
+            ],
+            "layer_type": "token_dense",
+            "compute_ops": 37632,
+            "projection_verify_ops": 6208,
+            "asymmetry_ratio": 6.062
+          },
+          {
+            "segment": [
+              1,
+              2
+            ],
+            "layer_type": "attention",
+            "compute_ops": 172032,
+            "projection_verify_ops": 19456,
+            "asymmetry_ratio": 8.842
+          },
+          {
+            "segment": [
+              2,
+              3
+            ],
+            "layer_type": "dense",
+            "compute_ops": 480,
+            "projection_verify_ops": 232,
+            "asymmetry_ratio": 2.069
+          }
+        ]
+      },
+      "correctness": {
+        "distributed_labels_matched_direct": 100,
+        "label_match_rate": 1.0,
+        "honest_segments_verified": 300,
+        "honest_segment_accept_rate": 1.0,
+        "distributed_labels_matched_ground_truth": 97,
+        "ground_truth_accuracy": 0.97
+      },
+      "attack_checks": {
+        "tamper_trials": 100,
+        "tamper_rejections": 100,
+        "tamper_rejection_rate": 1.0,
+        "audit_trials": 100,
+        "audit_rejections": 100,
+        "audit_rejection_rate": 1.0
+      },
+      "latency_ms": {
+        "direct_full_inference_mean": 0.1205,
+        "direct_full_inference_p95": 0.1464,
+        "segment_projection_verify_mean": 0.5677,
+        "segment_projection_verify_p95": 1.4148
+      }
+    },
     {
       "model": {
         "name": "mnist-cnn",
@@ -30,7 +119,8 @@
         "checksum": "b76341374c39145d41ba99f80836eb2fb4888414d4eac5ce40dd042651a1ba83",
         "metrics": {
           "test_accuracy": 0.9846
-        }
+        },
+        "exact_verification": false
       },
       "complexity": {
         "full_model_compute_ops": 214304,
@@ -97,10 +187,111 @@
         "audit_rejection_rate": 1.0
       },
       "latency_ms": {
-        "direct_full_inference_mean": 0.4912,
-        "direct_full_inference_p95": 0.7107,
-        "segment_projection_verify_mean": 0.6107,
-        "segment_projection_verify_p95": 1.6242
+        "direct_full_inference_mean": 0.4736,
+        "direct_full_inference_p95": 0.7783,
+        "segment_projection_verify_mean": 0.614,
+        "segment_projection_verify_p95": 1.5681
+      }
+    },
+    {
+      "model": {
+        "name": "mnist-cnn-q8",
+        "version": "1.0.0",
+        "layers": 4,
+        "layer_types": [
+          "conv2d",
+          "conv2d",
+          "dense",
+          "dense"
+        ],
+        "labels": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "checksum": "0d568d38ff3f491263c7a95a0569bc281bef13cf56c08ed96284601ed783a098",
+        "metrics": {
+          "test_accuracy": 0.984,
+          "float_test_accuracy": 0.9846
+        },
+        "exact_verification": true
+      },
+      "complexity": {
+        "full_model_compute_ops": 214304,
+        "full_model_projection_verify_ops": 40072,
+        "full_model_asymmetry_ratio": 5.348,
+        "num_secret_projections": 4,
+        "segments": [
+          {
+            "segment": [
+              0,
+              1
+            ],
+            "layer_type": "conv2d",
+            "compute_ops": 48672,
+            "projection_verify_ops": 24768,
+            "asymmetry_ratio": 1.965
+          },
+          {
+            "segment": [
+              1,
+              2
+            ],
+            "layer_type": "conv2d",
+            "compute_ops": 139392,
+            "projection_verify_ops": 13152,
+            "asymmetry_ratio": 10.599
+          },
+          {
+            "segment": [
+              2,
+              3
+            ],
+            "layer_type": "dense",
+            "compute_ops": 25600,
+            "projection_verify_ops": 1856,
+            "asymmetry_ratio": 13.793
+          },
+          {
+            "segment": [
+              3,
+              4
+            ],
+            "layer_type": "dense",
+            "compute_ops": 640,
+            "projection_verify_ops": 296,
+            "asymmetry_ratio": 2.162
+          }
+        ]
+      },
+      "correctness": {
+        "distributed_labels_matched_direct": 100,
+        "label_match_rate": 1.0,
+        "honest_segments_verified": 400,
+        "honest_segment_accept_rate": 1.0,
+        "distributed_labels_matched_ground_truth": 99,
+        "ground_truth_accuracy": 0.99
+      },
+      "attack_checks": {
+        "tamper_trials": 100,
+        "tamper_rejections": 100,
+        "tamper_rejection_rate": 1.0,
+        "audit_trials": 100,
+        "audit_rejections": 100,
+        "audit_rejection_rate": 1.0
+      },
+      "latency_ms": {
+        "direct_full_inference_mean": 1.432,
+        "direct_full_inference_p95": 2.3322,
+        "segment_projection_verify_mean": 4.6334,
+        "segment_projection_verify_p95": 12.0783
       }
     },
     {
@@ -128,7 +319,8 @@
         "checksum": "c64988cfa8a084345c2fac4d7be804655287759aaa98c2c5db62bbc239532edc",
         "metrics": {
           "test_accuracy": 0.9809
-        }
+        },
+        "exact_verification": false
       },
       "complexity": {
         "full_model_compute_ops": 109184,
@@ -185,10 +377,100 @@
         "audit_rejection_rate": 1.0
       },
       "latency_ms": {
-        "direct_full_inference_mean": 0.0985,
-        "direct_full_inference_p95": 0.1516,
-        "segment_projection_verify_mean": 0.0572,
-        "segment_projection_verify_p95": 0.1151
+        "direct_full_inference_mean": 0.1963,
+        "direct_full_inference_p95": 0.3031,
+        "segment_projection_verify_mean": 0.1242,
+        "segment_projection_verify_p95": 0.2488
+      }
+    },
+    {
+      "model": {
+        "name": "mnist-tiny-q8",
+        "version": "2.0.1",
+        "layers": 3,
+        "layer_types": [
+          "dense",
+          "dense",
+          "dense"
+        ],
+        "labels": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "checksum": "67594c284779315ad5b6ff2d9190f013cc3b19ce782a9349c0f98876949beef4",
+        "metrics": {
+          "test_accuracy": 0.9807,
+          "float_test_accuracy": 0.9809
+        },
+        "exact_verification": true
+      },
+      "complexity": {
+        "full_model_compute_ops": 109184,
+        "full_model_projection_verify_ops": 4712,
+        "full_model_asymmetry_ratio": 23.171,
+        "num_secret_projections": 4,
+        "segments": [
+          {
+            "segment": [
+              0,
+              1
+            ],
+            "layer_type": "dense",
+            "compute_ops": 100352,
+            "projection_verify_ops": 3648,
+            "asymmetry_ratio": 27.509
+          },
+          {
+            "segment": [
+              1,
+              2
+            ],
+            "layer_type": "dense",
+            "compute_ops": 8192,
+            "projection_verify_ops": 768,
+            "asymmetry_ratio": 10.667
+          },
+          {
+            "segment": [
+              2,
+              3
+            ],
+            "layer_type": "dense",
+            "compute_ops": 640,
+            "projection_verify_ops": 296,
+            "asymmetry_ratio": 2.162
+          }
+        ]
+      },
+      "correctness": {
+        "distributed_labels_matched_direct": 100,
+        "label_match_rate": 1.0,
+        "honest_segments_verified": 300,
+        "honest_segment_accept_rate": 1.0,
+        "distributed_labels_matched_ground_truth": 100,
+        "ground_truth_accuracy": 1.0
+      },
+      "attack_checks": {
+        "tamper_trials": 100,
+        "tamper_rejections": 100,
+        "tamper_rejection_rate": 1.0,
+        "audit_trials": 100,
+        "audit_rejections": 100,
+        "audit_rejection_rate": 1.0
+      },
+      "latency_ms": {
+        "direct_full_inference_mean": 0.5294,
+        "direct_full_inference_p95": 0.6702,
+        "segment_projection_verify_mean": 0.6424,
+        "segment_projection_verify_p95": 1.3253
       }
     }
   ]

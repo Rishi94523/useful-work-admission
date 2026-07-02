@@ -121,6 +121,10 @@ class InMemoryPipeline:
         self._commands.append(("set", key, (value, ex)))
         return self
 
+    def setex(self, key: str, seconds: int, value: Any) -> "InMemoryPipeline":
+        self._commands.append(("set", key, (value, seconds)))
+        return self
+
     def delete(self, key: str) -> "InMemoryPipeline":
         self._commands.append(("delete", key, None))
         return self

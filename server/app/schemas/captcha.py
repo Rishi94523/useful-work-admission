@@ -44,7 +44,8 @@ class ModelMeta(APIModel):
 
 
 class PostOpConfig(APIModel):
-    """A cheap transform applied after a provable layer (relu, maxpool2d, …)."""
+    """A cheap transform applied after a provable layer (relu, maxpool2d,
+    requantize, residual_input, mean_pool_tokens, …)."""
 
     op: str
     pool: Optional[int] = None
@@ -52,6 +53,31 @@ class PostOpConfig(APIModel):
         default=None,
         description="(C, H, W) shape of the tensor entering a maxpool2d op",
     )
+    mult: Optional[int] = Field(
+        default=None, description="Integer requantize multiplier"
+    )
+    shift: Optional[int] = Field(
+        default=None, description="Integer requantize right-shift"
+    )
+    max: Optional[int] = Field(
+        default=None, description="Clamp ceiling after requantize"
+    )
+    scale: Optional[float] = Field(
+        default=None, description="Dequantize scale for quantized logits"
+    )
+    seq: Optional[int] = Field(
+        default=None, description="Token count for mean_pool_tokens"
+    )
+    dim: Optional[int] = Field(
+        default=None, description="Token dimension for mean_pool_tokens"
+    )
+
+
+class PatchifyConfig(APIModel):
+    """Patch extraction for token_dense layers (grid of patches)."""
+
+    grid: List[int]
+    patch: List[int]
 
 
 class NeuralLayerConfig(APIModel):
@@ -68,6 +94,19 @@ class NeuralLayerConfig(APIModel):
     post_ops: List[PostOpConfig] = Field(
         default_factory=list,
         description="Post-op chain the client applies before the next layer",
+    )
+    quantized: bool = Field(
+        default=False,
+        description="Exact-integer int8 layer verified with mod-p equality",
+    )
+    seq: Optional[int] = Field(
+        default=None, description="Token count for token_dense/attention layers"
+    )
+    d_model: Optional[int] = Field(
+        default=None, description="Model dimension for attention layers"
+    )
+    patchify: Optional[PatchifyConfig] = Field(
+        default=None, description="Patch extraction for token_dense layers"
     )
 
 

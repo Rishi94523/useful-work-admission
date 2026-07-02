@@ -31,12 +31,25 @@ export interface ModelShard {
  * (mirrored server-side during verification)
  */
 export interface PostOpConfig {
-  /** Operation: relu, softmax, sigmoid, tanh, maxpool2d, flatten */
+  /** Operation: relu, softmax, sigmoid, tanh, maxpool2d, flatten,
+   * requantize, dequantize, residual_input, mean_pool_tokens */
   op: string;
   /** Pool size for maxpool2d (default 2) */
   pool?: number;
   /** (C, H, W) shape of the tensor entering a maxpool2d op */
   shape?: number[];
+  /** Integer requantize multiplier (quantized models) */
+  mult?: number;
+  /** Integer requantize right-shift (quantized models) */
+  shift?: number;
+  /** Clamp ceiling after requantize (default 255) */
+  max?: number;
+  /** Dequantize scale (quantized model logits) */
+  scale?: number;
+  /** Token count for mean_pool_tokens */
+  seq?: number;
+  /** Token dimension for mean_pool_tokens */
+  dim?: number;
 }
 
 /**
@@ -61,6 +74,14 @@ export interface NeuralLayerConfig {
   kernel?: number[];
   /** Post-op chain applied after the affine computation */
   postOps?: PostOpConfig[];
+  /** Exact-integer int8 layer: verify with mod-p equality, no tolerance */
+  quantized?: boolean;
+  /** Token count for token_dense/attention layers */
+  seq?: number;
+  /** Model dimension for attention layers */
+  dModel?: number;
+  /** Patch extraction for token_dense layers (grid × patch) */
+  patchify?: { grid: number[]; patch: number[] };
 }
 
 /**

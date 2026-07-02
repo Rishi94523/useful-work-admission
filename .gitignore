@@ -83,3 +83,6 @@ credentials.json
 secrets.json
 nul
 server/nul
+
+# Raw Hugging Face LLM weights (large; fetched via scripts/fetch_hf_llm.py)
+models/hf/*/

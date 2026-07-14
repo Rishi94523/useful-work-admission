@@ -23,7 +23,8 @@ export const DEFAULT_CONFIG: Required<
     | 'onProgress'
     | 'onVerificationRequired'
   >
-> & Pick<CaptchaConfig, 'container' | 'siteKey'> = {
+> &
+  Pick<CaptchaConfig, 'container' | 'siteKey'> = {
   apiUrl: 'https://api.pouw.dev/v1',
   siteKey: '',
   container: '',
@@ -31,6 +32,7 @@ export const DEFAULT_CONFIG: Required<
   language: 'en',
   debug: false,
   modelUrl: '',
+  preferredModel: '',
   timeout: 30000,
   invisible: false,
 };
@@ -71,7 +73,7 @@ export class Config {
 
   constructor(userConfig: CaptchaConfig) {
     this.validateConfig(userConfig);
-    
+
     this.callbacks = {
       onSuccess: userConfig.onSuccess,
       onError: userConfig.onError,
@@ -94,7 +96,9 @@ export class Config {
     if (typeof this.config.container === 'string') {
       const element = document.querySelector(this.config.container);
       if (!element) {
-        throw new Error(`Container element not found: ${this.config.container}`);
+        throw new Error(
+          `Container element not found: ${this.config.container}`
+        );
       }
       this.config.container = element as HTMLElement;
     }
@@ -127,7 +131,9 @@ export class Config {
     }
 
     if (config.theme && !THEMES.includes(config.theme)) {
-      throw new Error(`Invalid theme: ${config.theme}. Must be one of: ${THEMES.join(', ')}`);
+      throw new Error(
+        `Invalid theme: ${config.theme}. Must be one of: ${THEMES.join(', ')}`
+      );
     }
 
     if (config.timeout && (config.timeout < 5000 || config.timeout > 120000)) {

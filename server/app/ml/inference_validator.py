@@ -128,6 +128,7 @@ class InferenceValidator:
             sample_id=proof.sample_id,
             prediction_hash=prediction_hash,
             context=shard_meta.get("context") or {},
+            verification_nonce=shard_meta.get("verification_nonce", ""),
         )
 
         if not report.valid:

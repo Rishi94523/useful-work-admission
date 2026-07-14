@@ -72,11 +72,17 @@ DEFAULT_AUDIT_RATE = 0.08
 
 def canonical_vector_hash(values: Sequence[float]) -> str:
     """
-    Hash of a vector in canonical form: values formatted to 4 decimal places,
-    comma-joined. Mirrored exactly by the browser client (toFixed(4)).
+    Hash exact submitted values as canonical little-endian float64 bytes.
+
+    Decimal formatting is not cross-runtime deterministic at rounding ties.
+    Normalizing signed zero and hashing IEEE-754 bytes makes Python and the
+    browser agree while binding every submitted value exactly.
     """
-    canonical = ",".join(f"{float(v):.4f}" for v in values)
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    canonical = np.asarray(
+        [0.0 if float(value) == 0.0 else float(value) for value in values],
+        dtype="<f8",
+    )
+    return hashlib.sha256(canonical.tobytes()).hexdigest()
 
 
 def compute_proof_hash(
@@ -86,18 +92,20 @@ def compute_proof_hash(
     layer_count: int,
     output_hashes: Sequence[str],
     prediction_hash: str,
+    verification_nonce: str = "",
 ) -> str:
     """Combined proof hash binding outputs to this specific task and segment."""
-    proof_data = ":".join(
-        [
-            task_id,
-            sample_id,
-            str(segment_start),
-            str(layer_count),
-            *output_hashes,
-            prediction_hash or "",
-        ]
-    )
+    parts = [
+        task_id,
+        sample_id,
+        str(segment_start),
+        str(layer_count),
+        *output_hashes,
+        prediction_hash or "",
+    ]
+    if verification_nonce:
+        parts.append(verification_nonce)
+    proof_data = ":".join(parts)
     return hashlib.sha256(proof_data.encode("utf-8")).hexdigest()
 
 
@@ -425,6 +433,7 @@ class ProofVerifier:
         prediction_hash: str = "",
         force_audit: bool = False,
         context: Optional[dict] = None,
+        verification_nonce: str = "",
     ) -> VerificationReport:
         """Verify one submitted segment of layers [start, start+len)."""
         pad_len = int((context or {}).get("pad_len", 0))
@@ -455,7 +464,13 @@ class ProofVerifier:
                 report.reason = f"commitment hash mismatch at layer {segment_start + offset}"
                 return report
         expected_proof = compute_proof_hash(
-            task_id, sample_id, segment_start, layer_count, output_hashes, prediction_hash
+            task_id,
+            sample_id,
+            segment_start,
+            layer_count,
+            output_hashes,
+            prediction_hash,
+            verification_nonce,
         )
         if proof_hash != expected_proof:
             report.reason = "proof hash mismatch"

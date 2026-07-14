@@ -154,6 +154,7 @@ async def init_captcha(
             labels=shard_task.labels,
             model_checksum=shard_task.model_checksum,
             pad_len=shard_task.pad_len,
+            verification_nonce=shard_task.verification_nonce,
         )
 
         await db.commit()
@@ -223,7 +224,11 @@ async def submit_captcha(
         run_id = shard_meta.get("run_id")
         segment_start = shard_meta.get("segment_start", 0)
         expected_layers = shard_meta.get("expected_layers", 0)
-        run = await pipeline.get_run(uuid.UUID(run_id)) if run_id else None
+        run = (
+            await pipeline.get_run(uuid.UUID(run_id), for_update=True)
+            if run_id
+            else None
+        )
 
         if not report.valid:
             risk_scorer = RiskScorer(redis)
@@ -253,6 +258,7 @@ async def submit_captcha(
             try:
                 run_completed, predicted_label, confidence = await pipeline.advance(
                     run=run,
+                    task_id=task.id,
                     session_id=session.id,
                     segment_start=segment_start,
                     layer_count=expected_layers,

@@ -12,7 +12,12 @@ import type {
   VerifyResponse,
   InferenceProof,
 } from '../types';
+
 import { Config } from './config';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 /**
  * API Client for PoUW CAPTCHA server communication
@@ -30,19 +35,23 @@ export class ApiClient {
    * Initialize a new CAPTCHA session
    */
   async initSession(metadata: ClientMetadata): Promise<InitResponse> {
-    const response = await this.request<Record<string, unknown>>('/captcha/init', {
-      method: 'POST',
-      body: JSON.stringify({
-        site_key: this.config.get('siteKey'),
-        client_metadata: {
-          user_agent: metadata.userAgent,
-          language: metadata.language,
-          timezone: metadata.timezone,
-          screen_width: metadata.screenWidth,
-          screen_height: metadata.screenHeight,
-        },
-      }),
-    });
+    const response = await this.request<Record<string, unknown>>(
+      '/captcha/init',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          site_key: this.config.get('siteKey'),
+          client_metadata: {
+            user_agent: metadata.userAgent,
+            language: metadata.language,
+            timezone: metadata.timezone,
+            screen_width: metadata.screenWidth,
+            screen_height: metadata.screenHeight,
+          },
+          preferred_model: this.config.get('preferredModel') || undefined,
+        }),
+      }
+    );
 
     return this.normalizeInitResponse(response);
   }
@@ -57,32 +66,35 @@ export class ApiClient {
     proofOfWork: ProofOfWork,
     timing: TimingData
   ): Promise<SubmitResponse> {
-    const response = await this.request<Record<string, unknown>>('/captcha/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        session_id: sessionId,
-        task_id: taskId,
-        prediction: {
-          label: prediction.label,
-          confidence: prediction.confidence,
-          top_k: prediction.topK,
-        },
-        proof_of_work: {
-          hash: proofOfWork.hash,
-          nonce: proofOfWork.nonce,
-          model_checksum: proofOfWork.modelChecksum,
-          input_hash: proofOfWork.inputHash,
-          output_hash: proofOfWork.outputHash,
-        },
-        timing: {
-          model_load_ms: timing.modelLoadMs,
-          inference_ms: timing.inferenceMs,
-          total_ms: timing.totalMs,
-          started_at: timing.startedAt,
-          completed_at: timing.completedAt,
-        },
-      }),
-    });
+    const response = await this.request<Record<string, unknown>>(
+      '/captcha/submit',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: sessionId,
+          task_id: taskId,
+          prediction: {
+            label: prediction.label,
+            confidence: prediction.confidence,
+            top_k: prediction.topK,
+          },
+          proof_of_work: {
+            hash: proofOfWork.hash,
+            nonce: proofOfWork.nonce,
+            model_checksum: proofOfWork.modelChecksum,
+            input_hash: proofOfWork.inputHash,
+            output_hash: proofOfWork.outputHash,
+          },
+          timing: {
+            model_load_ms: timing.modelLoadMs,
+            inference_ms: timing.inferenceMs,
+            total_ms: timing.totalMs,
+            started_at: timing.startedAt,
+            completed_at: timing.completedAt,
+          },
+        }),
+      }
+    );
 
     return this.normalizeSubmitResponse(response);
   }
@@ -95,16 +107,19 @@ export class ApiClient {
     verificationId: string,
     response: VerificationResponse
   ): Promise<VerifyResponse> {
-    const result = await this.request<Record<string, unknown>>('/captcha/verify', {
-      method: 'POST',
-      body: JSON.stringify({
-        session_id: sessionId,
-        verification_id: verificationId,
-        response: response.responseType,
-        corrected_label: response.correctedLabel,
-        response_time_ms: response.responseTimeMs,
-      }),
-    });
+    const result = await this.request<Record<string, unknown>>(
+      '/captcha/verify',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: sessionId,
+          verification_id: verificationId,
+          response: response.responseType,
+          corrected_label: response.correctedLabel,
+          response_time_ms: response.responseTimeMs,
+        }),
+      }
+    );
 
     return this.normalizeVerifyResponse(result);
   }
@@ -119,38 +134,41 @@ export class ApiClient {
     proof: InferenceProof,
     timing: TimingData
   ): Promise<SubmitResponse> {
-    const response = await this.request<Record<string, unknown>>('/captcha/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        session_id: sessionId,
-        task_id: taskId,
-        prediction: prediction
-          ? {
-              label: prediction.label,
-              confidence: prediction.confidence,
-              top_k: prediction.topK,
-            }
-          : null,
-        proof: {
-          task_id: proof.taskId,
-          sample_id: proof.sampleId,
-          segment_start: proof.segmentStart,
-          layer_count: proof.layerCount,
-          pre_activations: proof.preActivations,
-          output_hashes: proof.outputHashes,
-          prediction_hash: proof.predictionHash,
-          proof_hash: proof.proofHash,
-          timestamp: proof.timestamp,
-        },
-        timing: {
-          model_load_ms: timing.modelLoadMs,
-          inference_ms: timing.inferenceMs,
-          total_ms: timing.totalMs,
-          started_at: timing.startedAt,
-          completed_at: timing.completedAt,
-        },
-      }),
-    });
+    const response = await this.request<Record<string, unknown>>(
+      '/captcha/submit',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: sessionId,
+          task_id: taskId,
+          prediction: prediction
+            ? {
+                label: prediction.label,
+                confidence: prediction.confidence,
+                top_k: prediction.topK,
+              }
+            : null,
+          proof: {
+            task_id: proof.taskId,
+            sample_id: proof.sampleId,
+            segment_start: proof.segmentStart,
+            layer_count: proof.layerCount,
+            pre_activations: proof.preActivations,
+            output_hashes: proof.outputHashes,
+            prediction_hash: proof.predictionHash,
+            proof_hash: proof.proofHash,
+            timestamp: proof.timestamp,
+          },
+          timing: {
+            model_load_ms: timing.modelLoadMs,
+            inference_ms: timing.inferenceMs,
+            total_ms: timing.totalMs,
+            started_at: timing.startedAt,
+            completed_at: timing.completedAt,
+          },
+        }),
+      }
+    );
 
     return this.normalizeSubmitResponse(response);
   }
@@ -213,15 +231,16 @@ export class ApiClient {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new ApiError(
-          response.status,
-          errorData.message || `HTTP ${response.status}`,
-          errorData
-        );
+        const rawError: unknown = await response.json().catch(() => ({}));
+        const errorData = isRecord(rawError) ? rawError : {};
+        const message =
+          typeof errorData.message === 'string'
+            ? errorData.message
+            : `HTTP ${response.status}`;
+        throw new ApiError(response.status, message, errorData);
       }
 
-      const data = await response.json();
+      const data: unknown = await response.json();
       this.config.debug(`API Response: ${endpoint}`, data);
 
       return data as T;
@@ -243,7 +262,9 @@ export class ApiClient {
     }
   }
 
-  private normalizeInitResponse(response: Record<string, unknown>): InitResponse {
+  private normalizeInitResponse(
+    response: Record<string, unknown>
+  ): InitResponse {
     return this.normalizeKeys(response) as InitResponse;
   }
 
@@ -268,7 +289,9 @@ export class ApiClient {
         ...(verification as object),
         displayType: verification.displayData.type || 'image',
         displayContent:
-          verification.displayData.url || verification.displayData.content || '',
+          verification.displayData.url ||
+          verification.displayData.content ||
+          '',
       } as SubmitResponse['verification'];
     }
 

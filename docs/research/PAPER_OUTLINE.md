@@ -1,5 +1,9 @@
 # Paper Outline
 
+Patent scope, implementation status, prior-art pressure, and filing priorities
+are maintained in [Patent and Invention Strategy](PATENT_DISCLOSURE_DRAFT.md).
+This paper outline is not a novelty or freedom-to-operate conclusion.
+
 ## Working Title
 
 Verifiable Useful-Work Rate Limiting for the Open Web
@@ -43,9 +47,10 @@ sourced from CAPTCHA traffic.
    with RoPE folded into the projection precompute + SwiGLU MLP with a
    server-replayed silu gate + candidate-logits head) and performs zero-shot
    text labeling through the live pipeline, every segment verified without
-   recomputation. To our knowledge the first LLM forward pass distributed
+   recomputation. The prototype demonstrates an LLM forward pass distributed
    across mutually-untrusted anonymous sessions with per-segment algebraic
-   verification.
+   verification; any claim that it is the first such system requires a formal
+   prior-art review and should not be made before that review.
 6. A useful-value pipeline that turns completed runs and selective human
    checks into golden labels and periodic retraining (the model improves from
    the human feedback it harvests: 97.53% → 98.09% measured on mnist-tiny).

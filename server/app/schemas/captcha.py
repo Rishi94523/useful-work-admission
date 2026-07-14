@@ -190,6 +190,10 @@ class ShardTaskInfo(APIModel):
         default=0,
         description="Left-pad length for LLM attention masks (text models)",
     )
+    verification_nonce: str = Field(
+        default="",
+        description="Server-issued nonce binding a proof to this assignment",
+    )
 
 
 class CaptchaInitResponse(APIModel):

@@ -201,11 +201,17 @@ generation. 49 provable segments per sample; text samples seeded by
 `e2e_client.py --model llm-qwen2-sentiment` (LLMs are excluded from browser
 rotation via the manifest's `pipeline.auto_serve: false`).
 
+The production widget shard engine also executes these three wire layer types.
+An integration can opt in with `preferredModel: "llm-qwen2-sentiment"`; the
+model remains outside automatic rotation because its per-segment payloads are
+large. `npm run e2e:widget -- --model llm-qwen2-sentiment --solves 49` exercises
+the exact widget engine against a live API and follows one run to completion.
+
 Measured: server-side forward through our decomposition classifies 6/6
 sentiment prompts (93–99% confidence); all 49 segments verify segment-by-
 segment with the pieced label correct; tampering any of Q/K/V/S/O/Z and
 skipping the silu gate are all caught.
 
 **Roadmap:** scale from classification to batch generation (KV-cache custody
-across token steps), GQA/MoE models as natural shard units, and browser
-(WASM/WebGPU) execution of block segments.
+across token steps), add cached binary weight delivery, and accelerate the
+working browser CPU path with WASM/WebGPU kernels.

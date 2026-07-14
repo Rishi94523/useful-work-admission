@@ -169,6 +169,7 @@ class PipelineCoordinator:
                 ),
             )
             .order_by(PipelineRun.updated_at.asc())
+            .with_for_update(skip_locked=True)
         )
         if model is not None:
             query = query.where(
@@ -261,15 +262,19 @@ class PipelineCoordinator:
         logger.warning("Sample pool empty — created fallback sample %s", sample.id)
         return sample
 
-    async def get_run(self, run_id: uuid.UUID) -> Optional[PipelineRun]:
-        result = await self.db.execute(
-            select(PipelineRun).where(PipelineRun.id == run_id)
-        )
+    async def get_run(
+        self, run_id: uuid.UUID, *, for_update: bool = False
+    ) -> Optional[PipelineRun]:
+        query = select(PipelineRun).where(PipelineRun.id == run_id)
+        if for_update:
+            query = query.with_for_update()
+        result = await self.db.execute(query)
         return result.scalar_one_or_none()
 
     async def advance(
         self,
         run: PipelineRun,
+        task_id: uuid.UUID,
         session_id: uuid.UUID,
         segment_start: int,
         layer_count: int,
@@ -280,6 +285,10 @@ class PipelineCoordinator:
 
         Returns (run_completed, predicted_label, confidence).
         """
+        if run.claimed_by_task != task_id:
+            raise ValueError(
+                f"Run {run.id} is not claimed by task {task_id}"
+            )
         if run.next_layer != segment_start:
             # Stale submission for a segment that was reassigned and finished.
             raise ValueError(

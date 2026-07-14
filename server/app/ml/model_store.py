@@ -771,8 +771,8 @@ class ModelSpec:
     input_quantized: bool = False
     # "image" or "text" — used to pick matching samples from the pool
     input_kind: str = "image"
-    # LLM text models: browser clients can't run these yet, so they are
-    # excluded from automatic pipeline rotation (explicit request only)
+    # Large text models stay opt-in so ordinary CAPTCHA traffic does not
+    # unexpectedly download transformer blocks (explicit browser request only).
     auto_serve: bool = True
     # LLM text models: tokenizer + prompt template + mmap'd embedding matrix
     tokenizer_file: Optional[str] = None

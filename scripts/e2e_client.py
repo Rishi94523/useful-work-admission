@@ -26,7 +26,11 @@ def hash_text(value: str) -> str:
 
 
 def hash_tensor(values) -> str:
-    return hash_text(",".join(f"{float(v):.4f}" for v in values))
+    canonical = np.asarray(
+        [0.0 if float(value) == 0.0 else float(value) for value in values],
+        dtype="<f8",
+    )
+    return hashlib.sha256(canonical.tobytes()).hexdigest()
 
 
 def verify_shard_checksum(shard) -> bool:
@@ -415,17 +419,18 @@ def solve_once(
         )
 
     output_hashes = [hash_tensor(z) for z in pre_activations]
+    proof_parts = [
+        task["taskId"],
+        task["sampleId"],
+        str(segment_start),
+        str(len(pre_activations)),
+        *output_hashes,
+        prediction_hash,
+    ]
+    if task.get("verificationNonce"):
+        proof_parts.append(task["verificationNonce"])
     proof_hash = hash_text(
-        ":".join(
-            [
-                task["taskId"],
-                task["sampleId"],
-                str(segment_start),
-                str(len(pre_activations)),
-                *output_hashes,
-                prediction_hash,
-            ]
-        )
+        ":".join(proof_parts)
     )
 
     now = int(time.time() * 1000)

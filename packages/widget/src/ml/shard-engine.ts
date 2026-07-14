@@ -5,14 +5,23 @@
  * Replaces simulated proof-of-work with actual ML inference computation.
  */
 
+import { Config } from '../core/config';
 import type {
   ModelShard,
   ShardTask,
   InferenceProof,
   Prediction,
 } from '../types';
-import { Config } from '../core/config';
 import { hashData } from '../utils/crypto';
+
+function decodeBase64Bytes(value: string): Uint8Array {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
 
 /**
  * Result from executing a model shard
@@ -50,9 +59,15 @@ class NeuralLayer {
   public readonly seq?: number;
   public readonly dModel?: number;
   public readonly patchify?: { grid: number[]; patch: number[] };
-  public readonly postOps: NonNullable<
-    ModelShard['layers'][0]['postOps']
-  >;
+  public readonly scales: Float32Array;
+  public readonly inputOps: NonNullable<ModelShard['layers'][0]['inputOps']>;
+  public readonly nHeads?: number;
+  public readonly nKvHeads?: number;
+  public readonly headDim?: number;
+  public readonly ropeTheta?: number;
+  public readonly ffnDim?: number;
+  private readonly int8Weights?: Int8Array;
+  public readonly postOps: NonNullable<ModelShard['layers'][0]['postOps']>;
 
   constructor(config: ModelShard['layers'][0]) {
     this.name = config.name;
@@ -67,6 +82,21 @@ class NeuralLayer {
     this.seq = config.seq;
     this.dModel = config.dModel;
     this.patchify = config.patchify;
+    this.scales = new Float32Array(config.scales ?? []);
+    this.inputOps = config.inputOps ?? [];
+    this.nHeads = config.nHeads;
+    this.nKvHeads = config.nKvHeads;
+    this.headDim = config.headDim;
+    this.ropeTheta = config.ropeTheta;
+    this.ffnDim = config.ffnDim;
+    if (config.weightsB64) {
+      const bytes = decodeBase64Bytes(config.weightsB64);
+      this.int8Weights = new Int8Array(
+        bytes.buffer,
+        bytes.byteOffset,
+        bytes.byteLength
+      );
+    }
     // Legacy payloads carry only an activation name; treat it as a one-op chain
     this.postOps =
       config.postOps && config.postOps.length > 0
@@ -84,7 +114,7 @@ class NeuralLayer {
    * post-ops are applied separately (and re-applied server-side) before
    * feeding the next layer.
    */
-  forward(input: ArrayLike<number>): Float32Array | Float64Array {
+  forward(input: ArrayLike<number>, padLen = 0): Float32Array | Float64Array {
     const startTime = performance.now();
     let output: Float32Array | Float64Array;
 
@@ -101,6 +131,15 @@ class NeuralLayer {
         break;
       case 'attention':
         output = this.attentionForward(input);
+        break;
+      case 'gqa_attention':
+        output = this.gqaAttentionForward(input, padLen);
+        break;
+      case 'swiglu_mlp':
+        output = this.swigluForward(input);
+        break;
+      case 'candidate_logits':
+        output = this.candidateLogitsForward(input);
         break;
       default:
         throw new Error(`Unsupported layer type: ${this.type}`);
@@ -205,9 +244,7 @@ class NeuralLayer {
     inSize: number
   ): Float32Array {
     if (!this.patchify) {
-      return input instanceof Float32Array
-        ? input
-        : Float32Array.from(input as ArrayLike<number>);
+      return input instanceof Float32Array ? input : Float32Array.from(input);
     }
     const [gy, gx] = this.patchify.grid;
     const [py, px] = this.patchify.patch;
@@ -312,6 +349,309 @@ class NeuralLayer {
     return concat;
   }
 
+  private requireTransformerConfig(): Int8Array {
+    if (!this.int8Weights || this.scales.length === 0) {
+      throw new Error(`${this.type} requires weightsB64 and scales`);
+    }
+    return this.int8Weights;
+  }
+
+  private dequantizeRows(
+    weights: Int8Array,
+    weightOffset: number,
+    scaleOffset: number,
+    rows: number,
+    columns: number
+  ): Float32Array {
+    const matrix = new Float32Array(rows * columns);
+    for (let row = 0; row < rows; row++) {
+      const scale = this.scales[scaleOffset + row];
+      const source = weightOffset + row * columns;
+      const target = row * columns;
+      for (let column = 0; column < columns; column++) {
+        matrix[target + column] = weights[source + column] * scale;
+      }
+    }
+    return matrix;
+  }
+
+  private matmulRows(
+    input: ArrayLike<number>,
+    matrix: Float32Array,
+    inputRows: number,
+    inputColumns: number,
+    outputColumns: number,
+    biases?: ArrayLike<number>
+  ): Float32Array {
+    const output = new Float32Array(inputRows * outputColumns);
+    for (let row = 0; row < inputRows; row++) {
+      const inputOffset = row * inputColumns;
+      for (let out = 0; out < outputColumns; out++) {
+        let sum = biases?.[out] ?? 0;
+        const matrixOffset = out * inputColumns;
+        for (let column = 0; column < inputColumns; column++) {
+          sum += input[inputOffset + column] * matrix[matrixOffset + column];
+        }
+        output[row * outputColumns + out] = sum;
+      }
+    }
+    return output;
+  }
+
+  private applyInputOps(input: ArrayLike<number>): Float64Array {
+    let current = Float64Array.from(input);
+    for (const op of this.inputOps) {
+      switch (op.op) {
+        case 'last_token': {
+          const seq = op.seq ?? 1;
+          const dim = op.dim ?? Math.floor(current.length / seq);
+          current = current.slice((seq - 1) * dim, seq * dim);
+          break;
+        }
+        case 'rmsnorm': {
+          const seq = op.seq ?? 1;
+          const dim = Math.floor(current.length / seq);
+          const weight = op.weight;
+          if (!weight || weight.length !== dim) {
+            throw new Error('rmsnorm input-op has an invalid weight vector');
+          }
+          const eps = op.eps ?? 1e-6;
+          const normalized = new Float64Array(current.length);
+          for (let row = 0; row < seq; row++) {
+            const offset = row * dim;
+            let squareSum = 0;
+            for (let column = 0; column < dim; column++) {
+              const value = current[offset + column];
+              squareSum += value * value;
+            }
+            const inverseRms = 1 / Math.sqrt(squareSum / dim + eps);
+            for (let column = 0; column < dim; column++) {
+              normalized[offset + column] =
+                current[offset + column] * inverseRms * weight[column];
+            }
+          }
+          current = normalized;
+          break;
+        }
+        default:
+          throw new Error(`Unsupported input-op: ${op.op}`);
+      }
+    }
+    return current;
+  }
+
+  /** Qwen-style grouped-query attention; mirrors scripts/e2e_client.py. */
+  private gqaAttentionForward(
+    input: ArrayLike<number>,
+    padLen: number
+  ): Float32Array {
+    const weights = this.requireTransformerConfig();
+    const seq = this.seq ?? this.inputShape[0];
+    const d = this.dModel ?? this.inputShape[1];
+    const nHeads = this.nHeads ?? 0;
+    const nKvHeads = this.nKvHeads ?? 0;
+    const headDim = this.headDim ?? 0;
+    if (!nHeads || !nKvHeads || !headDim || nHeads % nKvHeads !== 0) {
+      throw new Error('Invalid grouped-query attention dimensions');
+    }
+    const qDim = nHeads * headDim;
+    const kvDim = nKvHeads * headDim;
+    let weightOffset = 0;
+    let scaleOffset = 0;
+    const wq = this.dequantizeRows(weights, weightOffset, scaleOffset, qDim, d);
+    weightOffset += qDim * d;
+    scaleOffset += qDim;
+    const wk = this.dequantizeRows(
+      weights,
+      weightOffset,
+      scaleOffset,
+      kvDim,
+      d
+    );
+    weightOffset += kvDim * d;
+    scaleOffset += kvDim;
+    const wv = this.dequantizeRows(
+      weights,
+      weightOffset,
+      scaleOffset,
+      kvDim,
+      d
+    );
+    weightOffset += kvDim * d;
+    scaleOffset += kvDim;
+    const wo = this.dequantizeRows(weights, weightOffset, scaleOffset, d, qDim);
+
+    const normalized = this.applyInputOps(input);
+    const qBase = this.matmulRows(
+      normalized,
+      wq,
+      seq,
+      d,
+      qDim,
+      this.biases.subarray(0, qDim)
+    );
+    const kBase = this.matmulRows(
+      normalized,
+      wk,
+      seq,
+      d,
+      kvDim,
+      this.biases.subarray(qDim, qDim + kvDim)
+    );
+    const v = this.matmulRows(
+      normalized,
+      wv,
+      seq,
+      d,
+      kvDim,
+      this.biases.subarray(qDim + kvDim, qDim + 2 * kvDim)
+    );
+
+    const q = new Float64Array(qBase.length);
+    const k = new Float64Array(kBase.length);
+    const half = headDim / 2;
+    const theta = this.ropeTheta ?? 10000;
+    for (let token = 0; token < seq; token++) {
+      for (let head = 0; head < nHeads; head++) {
+        const offset = (token * nHeads + head) * headDim;
+        for (let column = 0; column < headDim; column++) {
+          const frequencyIndex = column < half ? column : column - half;
+          const angle =
+            token * Math.pow(theta, -(2 * frequencyIndex) / headDim);
+          const rotated =
+            column < half
+              ? -qBase[offset + column + half]
+              : qBase[offset + column - half];
+          q[offset + column] =
+            qBase[offset + column] * Math.cos(angle) +
+            rotated * Math.sin(angle);
+        }
+      }
+      for (let head = 0; head < nKvHeads; head++) {
+        const offset = (token * nKvHeads + head) * headDim;
+        for (let column = 0; column < headDim; column++) {
+          const frequencyIndex = column < half ? column : column - half;
+          const angle =
+            token * Math.pow(theta, -(2 * frequencyIndex) / headDim);
+          const rotated =
+            column < half
+              ? -kBase[offset + column + half]
+              : kBase[offset + column - half];
+          k[offset + column] =
+            kBase[offset + column] * Math.cos(angle) +
+            rotated * Math.sin(angle);
+        }
+      }
+    }
+
+    const scores = new Float32Array(nHeads * seq * seq);
+    const probabilities = new Float64Array(scores.length);
+    const headsPerKv = nHeads / nKvHeads;
+    const scale = Math.sqrt(headDim);
+    for (let head = 0; head < nHeads; head++) {
+      const kvHead = Math.floor(head / headsPerKv);
+      for (let row = 0; row < seq; row++) {
+        let rowMax = -Infinity;
+        for (let column = 0; column < seq; column++) {
+          let score = 0;
+          for (let dim = 0; dim < headDim; dim++) {
+            score +=
+              q[(row * nHeads + head) * headDim + dim] *
+              k[(column * nKvHeads + kvHead) * headDim + dim];
+          }
+          const index = (head * seq + row) * seq + column;
+          scores[index] = score;
+          const allowed = column <= row && (column >= padLen || row < padLen);
+          const scaled = allowed ? scores[index] / scale : -1e30;
+          probabilities[index] = scaled;
+          rowMax = Math.max(rowMax, scaled);
+        }
+        let total = 0;
+        const rowOffset = (head * seq + row) * seq;
+        for (let column = 0; column < seq; column++) {
+          const value = Math.exp(probabilities[rowOffset + column] - rowMax);
+          probabilities[rowOffset + column] = value;
+          total += value;
+        }
+        for (let column = 0; column < seq; column++) {
+          probabilities[rowOffset + column] /= total;
+        }
+      }
+    }
+
+    const attention = new Float32Array(seq * qDim);
+    for (let row = 0; row < seq; row++) {
+      for (let head = 0; head < nHeads; head++) {
+        const kvHead = Math.floor(head / headsPerKv);
+        const probabilityOffset = (head * seq + row) * seq;
+        for (let dim = 0; dim < headDim; dim++) {
+          let sum = 0;
+          for (let column = 0; column < seq; column++) {
+            sum +=
+              probabilities[probabilityOffset + column] *
+              v[(column * nKvHeads + kvHead) * headDim + dim];
+          }
+          attention[row * qDim + head * headDim + dim] = sum;
+        }
+      }
+    }
+    const z = this.matmulRows(attention, wo, seq, qDim, d);
+    const output = new Float32Array(
+      q.length +
+        k.length +
+        v.length +
+        scores.length +
+        attention.length +
+        z.length
+    );
+    let offset = 0;
+    output.set(q, offset);
+    offset += q.length;
+    output.set(k, offset);
+    offset += k.length;
+    output.set(v, offset);
+    offset += v.length;
+    output.set(scores, offset);
+    offset += scores.length;
+    output.set(attention, offset);
+    offset += attention.length;
+    output.set(z, offset);
+    return output;
+  }
+
+  /** Qwen-style SwiGLU MLP; mirrors scripts/e2e_client.py. */
+  private swigluForward(input: ArrayLike<number>): Float32Array {
+    const weights = this.requireTransformerConfig();
+    const seq = this.seq ?? this.inputShape[0];
+    const d = this.dModel ?? this.inputShape[1];
+    const ffn = this.ffnDim ?? 0;
+    if (!ffn) throw new Error('Invalid SwiGLU dimensions');
+    const slab = ffn * d;
+    const wg = this.dequantizeRows(weights, 0, 0, ffn, d);
+    const wu = this.dequantizeRows(weights, slab, ffn, ffn, d);
+    const wd = this.dequantizeRows(weights, 2 * slab, 2 * ffn, d, ffn);
+    const normalized = this.applyInputOps(input);
+    const gate = this.matmulRows(normalized, wg, seq, d, ffn);
+    const up = this.matmulRows(normalized, wu, seq, d, ffn);
+    const hidden = new Float64Array(seq * ffn);
+    for (let i = 0; i < hidden.length; i++) {
+      hidden[i] = (gate[i] / (1 + Math.exp(-gate[i]))) * up[i];
+    }
+    const down = this.matmulRows(hidden, wd, seq, ffn, d);
+    const output = new Float32Array(gate.length + up.length + down.length);
+    output.set(gate, 0);
+    output.set(up, gate.length);
+    output.set(down, gate.length + up.length);
+    return output;
+  }
+
+  private candidateLogitsForward(input: ArrayLike<number>): Float32Array {
+    const transformed = this.applyInputOps(input);
+    const d = this.dModel ?? transformed.length;
+    const labels = this.outputShape[this.outputShape.length - 1];
+    return this.matmulRows(transformed, this.weights, 1, d, labels);
+  }
+
   /**
    * Apply the layer's post-op chain (activation, pooling, flatten,
    * requantize, residual, token pooling) to its pre-activation output.
@@ -329,6 +669,14 @@ class NeuralLayer {
       current = current.slice(4 * seq * d + seq * seq) as
         | Float32Array
         | Float64Array;
+    } else if (this.type === 'gqa_attention') {
+      const seq = this.seq ?? this.inputShape[0];
+      const d = this.dModel ?? this.inputShape[1];
+      current = current.slice(current.length - seq * d) as Float32Array;
+    } else if (this.type === 'swiglu_mlp') {
+      const seq = this.seq ?? this.inputShape[0];
+      const d = this.dModel ?? this.inputShape[1];
+      current = current.slice(current.length - seq * d) as Float32Array;
     }
     for (const op of this.postOps) {
       switch (op.op) {
@@ -363,7 +711,10 @@ class NeuralLayer {
           const divisor = Math.pow(2, shift);
           const out = new Float64Array(current.length);
           for (let i = 0; i < current.length; i++) {
-            out[i] = Math.min(Math.floor((current[i] * mult + half) / divisor), maxVal);
+            out[i] = Math.min(
+              Math.floor((current[i] * mult + half) / divisor),
+              maxVal
+            );
           }
           current = out;
           break;
@@ -383,7 +734,7 @@ class NeuralLayer {
           }
           const out = new Float32Array(current.length);
           for (let i = 0; i < current.length; i++) {
-            out[i] = current[i] + (layerInput[i] as number);
+            out[i] = current[i] + layerInput[i];
           }
           current = out;
           break;
@@ -453,7 +804,8 @@ class NeuralLayer {
           let maxVal = -Infinity;
           for (let py = 0; py < pool; py++) {
             for (let px = 0; px < pool; px++) {
-              const idx = (c * height + oy * pool + py) * width + ox * pool + px;
+              const idx =
+                (c * height + oy * pool + py) * width + ox * pool + px;
               maxVal = Math.max(maxVal, data[idx]);
             }
           }
@@ -523,22 +875,36 @@ export class ShardInferenceEngine {
       return true; // no checksum to verify against
     }
     const layer = shard.layers[0];
-    let weightBytes: Uint8Array;
-    let biasBytes: Uint8Array;
-    if (layer.quantized) {
+    let parts: Uint8Array[];
+    if (layer.type === 'gqa_attention' || layer.type === 'swiglu_mlp') {
+      if (!layer.weightsB64 || !layer.scales) return false;
+      parts = [
+        decodeBase64Bytes(layer.weightsB64),
+        new Uint8Array(new Float32Array(layer.scales).buffer),
+      ];
+      if (layer.type === 'gqa_attention') {
+        parts.push(new Uint8Array(new Float32Array(layer.biases).buffer));
+      }
+    } else if (layer.quantized) {
       // int8 weights + little-endian int32 biases
-      weightBytes = new Uint8Array(new Int8Array(layer.weights).buffer);
-      biasBytes = new Uint8Array(new Int32Array(layer.biases).buffer);
+      parts = [
+        new Uint8Array(new Int8Array(layer.weights).buffer),
+        new Uint8Array(new Int32Array(layer.biases).buffer),
+      ];
     } else {
-      weightBytes = new Uint8Array(new Float32Array(layer.weights).buffer);
-      biasBytes =
-        layer.type === 'attention'
-          ? new Uint8Array(0)
-          : new Uint8Array(new Float32Array(layer.biases).buffer);
+      parts = [new Uint8Array(new Float32Array(layer.weights).buffer)];
+      if (layer.type !== 'attention' && layer.type !== 'candidate_logits') {
+        parts.push(new Uint8Array(new Float32Array(layer.biases).buffer));
+      }
     }
-    const bytes = new Uint8Array(weightBytes.byteLength + biasBytes.byteLength);
-    bytes.set(weightBytes, 0);
-    bytes.set(biasBytes, weightBytes.byteLength);
+    const bytes = new Uint8Array(
+      parts.reduce((length, part) => length + part.byteLength, 0)
+    );
+    let byteOffset = 0;
+    for (const part of parts) {
+      bytes.set(part, byteOffset);
+      byteOffset += part.byteLength;
+    }
     const digest = await crypto.subtle.digest('SHA-256', bytes.buffer);
     const hex = Array.from(new Uint8Array(digest))
       .map((byte) => byte.toString(16).padStart(2, '0'))
@@ -588,7 +954,7 @@ export class ShardInferenceEngine {
       );
 
       const layerStartTime = performance.now();
-      const pre = layer.forward(current);
+      const pre = layer.forward(current, task.padLen ?? 0);
       current = layer.applyPostOps(pre, current);
       const layerEndTime = performance.now();
 
@@ -611,7 +977,8 @@ export class ShardInferenceEngine {
       task.sampleId,
       segmentStart,
       preActivations,
-      prediction
+      prediction,
+      task.verificationNonce
     );
 
     const totalEndTime = performance.now();
@@ -690,7 +1057,9 @@ export class ShardInferenceEngine {
     };
   }
 
-  private normalizeConfidences(output: Float32Array | Float64Array): Float32Array | Float64Array {
+  private normalizeConfidences(
+    output: Float32Array | Float64Array
+  ): Float32Array | Float64Array {
     if (output.length === 0) {
       return output;
     }
@@ -707,9 +1076,7 @@ export class ShardInferenceEngine {
     }
 
     const alreadyProbabilities =
-      minVal >= 0 &&
-      maxVal <= 1 &&
-      Math.abs(sum - 1) < 1e-3;
+      minVal >= 0 && maxVal <= 1 && Math.abs(sum - 1) < 1e-3;
 
     if (alreadyProbabilities) {
       return output;
@@ -749,7 +1116,8 @@ export class ShardInferenceEngine {
     sampleId: string,
     segmentStart: number,
     preActivations: (Float32Array | Float64Array)[],
-    prediction?: Prediction
+    prediction?: Prediction,
+    verificationNonce?: string
   ): Promise<InferenceProof> {
     const outputHashes: string[] = [];
     for (const output of preActivations) {
@@ -772,14 +1140,16 @@ export class ShardInferenceEngine {
       predictionHash = await hashData(payload);
     }
 
-    const proofData = [
+    const proofParts = [
       taskId,
       sampleId,
       segmentStart.toString(),
       preActivations.length.toString(),
       ...outputHashes,
       predictionHash,
-    ].join(':');
+    ];
+    if (verificationNonce) proofParts.push(verificationNonce);
+    const proofData = proofParts.join(':');
 
     const proofHash = await hashData(proofData);
 
@@ -799,9 +1169,19 @@ export class ShardInferenceEngine {
   /**
    * Hash a tensor (Float32Array)
    */
-  private async hashTensor(tensor: Float32Array | Float64Array): Promise<string> {
-    const canonical = Array.from(tensor, (value) => value.toFixed(4)).join(',');
-    return await hashData(canonical);
+  private async hashTensor(
+    tensor: Float32Array | Float64Array
+  ): Promise<string> {
+    const bytes = new ArrayBuffer(tensor.length * 8);
+    const view = new DataView(bytes);
+    for (let i = 0; i < tensor.length; i++) {
+      const value = tensor[i] === 0 ? 0 : tensor[i];
+      view.setFloat64(i * 8, value, true);
+    }
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   /**

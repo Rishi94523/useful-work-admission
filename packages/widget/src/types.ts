@@ -50,6 +50,10 @@ export interface PostOpConfig {
   seq?: number;
   /** Token dimension for mean_pool_tokens */
   dim?: number;
+  /** RMSNorm scale vector */
+  weight?: number[];
+  /** RMSNorm epsilon */
+  eps?: number;
 }
 
 /**
@@ -82,6 +86,22 @@ export interface NeuralLayerConfig {
   dModel?: number;
   /** Patch extraction for token_dense layers (grid × patch) */
   patchify?: { grid: number[]; patch: number[] };
+  /** Base64-encoded row-major int8 weights for transformer layers */
+  weightsB64?: string;
+  /** Per-output-channel dequantization scales for int8 transformer weights */
+  scales?: number[];
+  /** Operations applied to the layer input and replayed by the server */
+  inputOps?: PostOpConfig[];
+  /** Grouped-query attention query-head count */
+  nHeads?: number;
+  /** Grouped-query attention key/value-head count */
+  nKvHeads?: number;
+  /** Attention head dimension */
+  headDim?: number;
+  /** Rotary-position embedding base */
+  ropeTheta?: number;
+  /** SwiGLU hidden dimension */
+  ffnDim?: number;
 }
 
 /**
@@ -118,6 +138,10 @@ export interface ShardTask {
   labels: string[];
   /** Model checksum (hash of layer checksums) */
   modelChecksum?: string;
+  /** Left-padding length used by causal transformer attention */
+  padLen?: number;
+  /** Server-issued nonce binding this proof to one assignment */
+  verificationNonce?: string;
   /** Optional test/known-label key for seeded evaluation samples */
   groundTruthKey?: string;
   /** Progress callback */
@@ -179,6 +203,8 @@ export interface CaptchaConfig {
   debug?: boolean;
   /** Custom model URL override */
   modelUrl?: string;
+  /** Explicit server model request (including non-rotating transformer models) */
+  preferredModel?: string;
   /** Timeout in milliseconds */
   timeout?: number;
   /** Invisible mode (no UI) */
@@ -205,7 +231,13 @@ export interface CaptchaResult {
  * Progress callback payload for integration observability
  */
 export interface CaptchaProgress {
-  stage: 'initializing' | 'assigned' | 'computing' | 'submitted' | 'verifying' | 'complete';
+  stage:
+    | 'initializing'
+    | 'assigned'
+    | 'computing'
+    | 'submitted'
+    | 'verifying'
+    | 'complete';
   progress: number;
   difficulty?: 'normal' | 'suspicious' | 'bot_like';
   segment?: [number, number];
@@ -445,4 +477,3 @@ export interface VerifyResponse {
   captchaToken: string;
   expiresAt: string;
 }
-

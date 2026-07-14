@@ -23,13 +23,19 @@ Object.defineProperty(window, 'matchMedia', {
 Object.defineProperty(global, 'crypto', {
   value: {
     subtle: {
-      digest: vi.fn().mockImplementation(async (_algorithm, _data) => {
-        // Simple mock hash
+      digest: vi.fn().mockImplementation((_algorithm, data: BufferSource) => {
+        // Deterministic, input-sensitive mock hash. Byte zero stays zero so
+        // proof-of-work tests complete immediately at difficulty one.
+        const input =
+          data instanceof ArrayBuffer
+            ? new Uint8Array(data)
+            : new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
         const mockHash = new Uint8Array(32);
-        for (let i = 0; i < 32; i++) {
-          mockHash[i] = i;
+        for (let i = 0; i < input.length; i++) {
+          const index = 1 + (i % 31);
+          mockHash[index] = (mockHash[index] * 33 + input[i] + i) & 0xff;
         }
-        return mockHash.buffer;
+        return Promise.resolve(mockHash.buffer);
       }),
     },
     getRandomValues: vi.fn().mockImplementation((array) => {

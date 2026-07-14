@@ -1,6 +1,7 @@
 """Task Coordinator for assigning distributed shard-inference CAPTCHA tasks."""
 
 import logging
+import secrets
 import uuid
 from typing import Tuple
 from dataclasses import dataclass, field
@@ -39,6 +40,8 @@ class ShardTask:
     model_checksum: str = ""
     # left-pad length for LLM attention masks (0 for image models)
     pad_len: int = 0
+    # random assignment challenge included in the proof commitment
+    verification_nonce: str = ""
 
 
 class TaskCoordinator:
@@ -107,6 +110,7 @@ class TaskCoordinator:
             model=pinned,
         )
         model = assignment.model
+        verification_nonce = secrets.token_hex(16)
 
         shard_task = ShardTask(
             task_id=task_id,
@@ -127,6 +131,7 @@ class TaskCoordinator:
             labels=model.labels,
             model_checksum=model.checksum,
             pad_len=int((assignment.context or {}).get("pad_len", 0)),
+            verification_nonce=verification_nonce,
         )
 
         known_label = (assignment.sample.metadata_ or {}).get("known_label")
@@ -155,6 +160,7 @@ class TaskCoordinator:
                     "input_vector": [float(v) for v in assignment.input_vector],
                     # verification context (LLM pad mask etc.)
                     "context": assignment.context or {},
+                    "verification_nonce": verification_nonce,
                 }
             },
         )

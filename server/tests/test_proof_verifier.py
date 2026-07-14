@@ -73,11 +73,17 @@ def client_compute(model, x, start, end):
 
 
 def build_proof(model, x, start, end, task_id="task-1", sample_id="sample-1",
-                prediction_hash=""):
+                prediction_hash="", verification_nonce=""):
     pre_activations = client_compute(model, x, start, end)
     output_hashes = [canonical_vector_hash(z) for z in pre_activations]
     proof_hash = compute_proof_hash(
-        task_id, sample_id, start, len(pre_activations), output_hashes, prediction_hash
+        task_id,
+        sample_id,
+        start,
+        len(pre_activations),
+        output_hashes,
+        prediction_hash,
+        verification_nonce,
     )
     return pre_activations, output_hashes, proof_hash
 
@@ -109,6 +115,38 @@ class TestHonestClient:
         assert report.predicted_label is None  # not final layer
         assert report.final_activation is not None
         assert len(report.final_activation) == 128
+
+    def test_assignment_nonce_is_required(self, model, verifier):
+        x = random_input()
+        nonce = "assignment-challenge-a"
+        pre, hashes, proof_hash = build_proof(
+            model, x, 0, 1, verification_nonce=nonce
+        )
+        accepted = verifier.verify_segment(
+            model,
+            0,
+            x,
+            pre,
+            hashes,
+            proof_hash,
+            "task-1",
+            "sample-1",
+            verification_nonce=nonce,
+        )
+        rejected = verifier.verify_segment(
+            model,
+            0,
+            x,
+            pre,
+            hashes,
+            proof_hash,
+            "task-1",
+            "sample-1",
+            verification_nonce="assignment-challenge-b",
+        )
+        assert accepted.valid, accepted.reason
+        assert not rejected.valid
+        assert rejected.reason == "proof hash mismatch"
 
     def test_mid_pipeline_segment_passes(self, model, verifier):
         """Segment starting from a handed-over activation (distributed case)."""

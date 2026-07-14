@@ -2,9 +2,23 @@
  * Tests for Shard Inference Engine
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ShardInferenceEngine, isShardEngineSupported } from '../src/ml/shard-engine';
+
 import { Config } from '../src/core/config';
+import {
+  ShardInferenceEngine,
+  isShardEngineSupported,
+} from '../src/ml/shard-engine';
 import type { ShardTask, ModelShard, NeuralLayerConfig } from '../src/types';
+
+function encodeFloat32(values: number[]): string {
+  const bytes = new Uint8Array(new Float32Array(values).buffer);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function encodeInt8(values: number[]): string {
+  const bytes = new Uint8Array(new Int8Array(values).buffer);
+  return btoa(String.fromCharCode(...bytes));
+}
 
 describe('ShardInferenceEngine', () => {
   let engine: ShardInferenceEngine;
@@ -53,7 +67,11 @@ describe('ShardInferenceEngine', () => {
         modelName: 'test-model',
         modelVersion: '1.0',
         shards: [shard],
-        inputData: btoa(String.fromCharCode(...new Uint8Array(new Float32Array([1, 2, 3, 4]).buffer))),
+        inputData: btoa(
+          String.fromCharCode(
+            ...new Uint8Array(new Float32Array([1, 2, 3, 4]).buffer)
+          )
+        ),
         inputShape: [1, 4],
         expectedLayers: 1,
         difficulty: 'easy',
@@ -110,7 +128,11 @@ describe('ShardInferenceEngine', () => {
         modelName: 'mnist-tiny',
         modelVersion: '1.0',
         shards: [shard],
-        inputData: btoa(String.fromCharCode(...new Uint8Array(new Float32Array(784).fill(0.5).buffer))),
+        inputData: btoa(
+          String.fromCharCode(
+            ...new Uint8Array(new Float32Array(784).fill(0.5).buffer)
+          )
+        ),
         inputShape: [1, 784],
         expectedLayers: 2,
         difficulty: 'medium',
@@ -153,7 +175,11 @@ describe('ShardInferenceEngine', () => {
         modelName: 'test',
         modelVersion: '1.0',
         shards: [shard],
-        inputData: btoa(String.fromCharCode(...new Uint8Array(new Float32Array([1, 2]).buffer))),
+        inputData: btoa(
+          String.fromCharCode(
+            ...new Uint8Array(new Float32Array([1, 2]).buffer)
+          )
+        ),
         inputShape: [1, 2],
         expectedLayers: 1,
         difficulty: 'easy',
@@ -166,6 +192,166 @@ describe('ShardInferenceEngine', () => {
       await engine.executeShards(task);
 
       expect(progressCallback).toHaveBeenCalledWith(1);
+    });
+
+    it('executes grouped-query attention payloads from the server', async () => {
+      const identity = [1, 0, 0, 1];
+      const layer: NeuralLayerConfig = {
+        name: 'tiny_gqa',
+        type: 'gqa_attention',
+        weights: [],
+        weightsB64: encodeInt8([
+          ...identity,
+          ...identity,
+          ...identity,
+          ...identity,
+        ]),
+        scales: Array<number>(8).fill(1),
+        biases: Array<number>(6).fill(0),
+        inputShape: [2, 2],
+        outputShape: [24],
+        activation: 'linear',
+        seq: 2,
+        dModel: 2,
+        nHeads: 1,
+        nKvHeads: 1,
+        headDim: 2,
+        ropeTheta: 10000,
+        inputOps: [],
+        postOps: [{ op: 'residual_input' }],
+      };
+      const task: ShardTask = {
+        taskId: 'gqa-task',
+        sampleId: 'gqa-sample',
+        modelName: 'tiny-transformer',
+        modelVersion: '1',
+        shards: [
+          {
+            index: 0,
+            name: 'tiny_gqa',
+            layerType: 'gqa_attention',
+            inputShape: [2, 2],
+            outputShape: [24],
+            layers: [layer],
+          },
+        ],
+        inputData: encodeFloat32([1, 0, 0, 1]),
+        inputShape: [2, 2],
+        expectedLayers: 1,
+        totalLayers: 2,
+        difficulty: 'normal',
+        expectedTimeMs: 100,
+        labels: ['negative', 'positive'],
+        padLen: 0,
+      };
+
+      const result = await engine.executeShards(task);
+      const proofValues = result.layerOutputs[0];
+      expect(proofValues).toHaveLength(24);
+      expect(Array.from(proofValues).every(Number.isFinite)).toBe(true);
+      // Z is the final seq*d block and identity Wo preserves token 0.
+      expect(proofValues[20]).toBeCloseTo(1, 5);
+      expect(proofValues[21]).toBeCloseTo(0, 5);
+      expect(result.isFinalSegment).toBe(false);
+    });
+
+    it('executes SwiGLU payloads and returns G, U, and D proof blocks', async () => {
+      const identity = [1, 0, 0, 1];
+      const layer: NeuralLayerConfig = {
+        name: 'tiny_mlp',
+        type: 'swiglu_mlp',
+        weights: [],
+        weightsB64: encodeInt8([...identity, ...identity, ...identity]),
+        scales: Array<number>(6).fill(1),
+        biases: [],
+        inputShape: [1, 2],
+        outputShape: [6],
+        activation: 'linear',
+        seq: 1,
+        dModel: 2,
+        ffnDim: 2,
+        inputOps: [],
+        postOps: [{ op: 'residual_input' }],
+      };
+      const task: ShardTask = {
+        taskId: 'mlp-task',
+        sampleId: 'mlp-sample',
+        modelName: 'tiny-transformer',
+        modelVersion: '1',
+        shards: [
+          {
+            index: 1,
+            name: 'tiny_mlp',
+            layerType: 'swiglu_mlp',
+            inputShape: [1, 2],
+            outputShape: [6],
+            layers: [layer],
+          },
+        ],
+        inputData: encodeFloat32([1, 2]),
+        inputShape: [1, 2],
+        segmentStart: 1,
+        expectedLayers: 1,
+        totalLayers: 3,
+        difficulty: 'normal',
+        expectedTimeMs: 100,
+        labels: ['negative', 'positive'],
+      };
+
+      const result = await engine.executeShards(task);
+      const proofValues = result.layerOutputs[0];
+      expect(proofValues).toHaveLength(6);
+      expect(proofValues[0]).toBeCloseTo(1, 5);
+      expect(proofValues[1]).toBeCloseTo(2, 5);
+      expect(proofValues[4]).toBeCloseTo(0.7310586, 5);
+      expect(proofValues[5]).toBeCloseTo(3.523188, 5);
+    });
+
+    it('executes the last-token RMSNorm candidate logits head', async () => {
+      const layer: NeuralLayerConfig = {
+        name: 'tiny_head',
+        type: 'candidate_logits',
+        weights: [1, 0, 0, 1],
+        biases: [],
+        inputShape: [2, 2],
+        outputShape: [1, 2],
+        activation: 'softmax',
+        dModel: 2,
+        inputOps: [
+          { op: 'last_token', seq: 2, dim: 2 },
+          { op: 'rmsnorm', seq: 1, weight: [1, 1], eps: 0 },
+        ],
+        postOps: [{ op: 'softmax' }],
+      };
+      const task: ShardTask = {
+        taskId: 'head-task',
+        sampleId: 'head-sample',
+        modelName: 'tiny-transformer',
+        modelVersion: '1',
+        shards: [
+          {
+            index: 2,
+            name: 'tiny_head',
+            layerType: 'candidate_logits',
+            inputShape: [2, 2],
+            outputShape: [1, 2],
+            layers: [layer],
+          },
+        ],
+        inputData: encodeFloat32([9, 9, 3, 4]),
+        inputShape: [2, 2],
+        segmentStart: 2,
+        expectedLayers: 1,
+        totalLayers: 3,
+        difficulty: 'normal',
+        expectedTimeMs: 100,
+        labels: ['negative', 'positive'],
+      };
+
+      const result = await engine.executeShards(task);
+      expect(result.layerOutputs[0][0]).toBeCloseTo(3 / Math.sqrt(12.5), 5);
+      expect(result.layerOutputs[0][1]).toBeCloseTo(4 / Math.sqrt(12.5), 5);
+      expect(result.prediction?.label).toBe('positive');
     });
   });
 
@@ -212,7 +398,11 @@ describe('ShardInferenceEngine', () => {
         modelName: 'test',
         modelVersion: '1.0',
         shards: [shard],
-        inputData: btoa(String.fromCharCode(...new Uint8Array(new Float32Array([1, 2]).buffer))),
+        inputData: btoa(
+          String.fromCharCode(
+            ...new Uint8Array(new Float32Array([1, 2]).buffer)
+          )
+        ),
         inputShape: [1, 2],
         expectedLayers: 1,
         difficulty: 'easy',
@@ -222,13 +412,58 @@ describe('ShardInferenceEngine', () => {
       };
 
       const result1 = await engine.executeShards(task);
-      
+
       // Create new engine instance for second run
       const engine2 = new ShardInferenceEngine(mockConfig);
       const result2 = await engine2.executeShards(task);
 
       // Same inputs should produce same proof hash
       expect(result1.proof.proofHash).toBe(result2.proof.proofHash);
+    });
+
+    it('binds an otherwise identical proof to the server nonce', async () => {
+      const layer: NeuralLayerConfig = {
+        name: 'dense_nonce',
+        type: 'dense',
+        weights: [1, 0],
+        biases: [0],
+        inputShape: [1, 2],
+        outputShape: [1, 1],
+        activation: 'linear',
+      };
+      const baseTask: ShardTask = {
+        taskId: 'nonce-task',
+        sampleId: 'nonce-sample',
+        modelName: 'test',
+        modelVersion: '1',
+        shards: [
+          {
+            index: 0,
+            name: 'dense_nonce',
+            layerType: 'dense',
+            inputShape: [1, 2],
+            outputShape: [1, 1],
+            layers: [layer],
+          },
+        ],
+        inputData: encodeFloat32([1, 2]),
+        inputShape: [1, 2],
+        expectedLayers: 1,
+        difficulty: 'normal',
+        expectedTimeMs: 50,
+        labels: ['x'],
+      };
+
+      const first = await engine.executeShards({
+        ...baseTask,
+        verificationNonce: 'challenge-a',
+      });
+      const second = await engine.executeShards({
+        ...baseTask,
+        verificationNonce: 'challenge-b',
+      });
+      expect(first.proof.outputHashes).toEqual(second.proof.outputHashes);
+      expect(first.proof.proofHash).not.toBe(second.proof.proofHash);
     });
   });
 });

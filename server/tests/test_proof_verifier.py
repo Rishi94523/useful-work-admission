@@ -148,6 +148,71 @@ class TestHonestClient:
         assert not rejected.valid
         assert rejected.reason == "proof hash mismatch"
 
+    def test_algebraic_challenge_rotates_between_assignments(self, model, verifier):
+        """
+        Even if an attacker somehow found an error in one task's hidden
+        projection nullspace, recomputing the public commitment for a second
+        nonce must not make that error reusable.
+        """
+        x = random_input(seed=41)
+        nonce_a = "assignment-algebra-a"
+        nonce_b = "assignment-algebra-b"
+        pre, _, _ = build_proof(
+            model, x, 0, 1, verification_nonce=nonce_a
+        )
+
+        projections_a = verifier._layer_projections(
+            model, 0, f"task-1:{nonce_a}"
+        )
+        check_matrix = np.stack([r for r, _, _ in projections_a])
+        candidate = np.random.default_rng(42).standard_normal(check_matrix.shape[1])
+        correction = check_matrix.T @ np.linalg.solve(
+            check_matrix @ check_matrix.T,
+            check_matrix @ candidate,
+        )
+        nullspace_error = candidate - correction
+        nullspace_error *= 100.0 / np.linalg.norm(nullspace_error)
+        assert np.max(np.abs(check_matrix @ nullspace_error)) < 1e-8
+
+        tampered = [
+            [float(value) for value in np.asarray(pre[0]) + nullspace_error]
+        ]
+        hashes = [canonical_vector_hash(tampered[0])]
+        proof_a = compute_proof_hash(
+            "task-1", "sample-1", 0, 1, hashes, "", nonce_a
+        )
+        accepted_for_a = verifier.verify_segment(
+            model,
+            0,
+            x,
+            tampered,
+            hashes,
+            proof_a,
+            "task-1",
+            "sample-1",
+            verification_nonce=nonce_a,
+        )
+        assert accepted_for_a.valid, accepted_for_a.reason
+
+        # The nonce is public, so model the attacker recomputing the commitment
+        # correctly. The hidden equations, not merely the hash, must change.
+        proof_b = compute_proof_hash(
+            "task-1", "sample-1", 0, 1, hashes, "", nonce_b
+        )
+        rejected_for_b = verifier.verify_segment(
+            model,
+            0,
+            x,
+            tampered,
+            hashes,
+            proof_b,
+            "task-1",
+            "sample-1",
+            verification_nonce=nonce_b,
+        )
+        assert not rejected_for_b.valid
+        assert "projection" in rejected_for_b.reason
+
     def test_mid_pipeline_segment_passes(self, model, verifier):
         """Segment starting from a handed-over activation (distributed case)."""
         x = random_input()

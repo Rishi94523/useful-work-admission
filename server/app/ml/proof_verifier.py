@@ -12,17 +12,18 @@ server re-running the computation. Three mechanisms, cheapest first:
 2. Freivalds-style projection checks — the core mechanism. Every provable
    layer is an affine operator (z = L·x + b): dense layers (L = matmul),
    conv2d layers (L = convolution), and by extension any matmul-shaped op
-   (attention Q/K/V projections, embeddings-as-matmul). The server holds K
-   SECRET random projection vectors r and the precomputed s = Lᵀ·r (computed
-   once per model load via layer.project(), never per request). A submitted
-   pre-activation z is checked via
+   (attention Q/K/V projections, embeddings-as-matmul). The server holds a
+   wider SECRET basis of random projection pairs `(r_j, s_j=Lᵀ·r_j)`, computed
+   once per model version via layer.project(). Each assignment HMAC-derives K
+   hidden linear combinations from that basis. A submitted pre-activation z
+   is checked via
 
        r · z  ≈  s · x  +  r · b
 
    which costs O(in + out) multiplications instead of the O(in × out) (dense)
-   or O(out × k² × in_ch) (conv) the client had to spend. Because r is secret
-   and random, a fabricated z that was not actually computed passes K
-   independent checks with negligible probability. The layer input x is
+   or O(out × k² × in_ch) (conv) the client had to spend. Because each task's
+   equations are secret-derived, a task-tailored fabricated z cannot simply be
+   replayed under the next assignment. The layer input x is
    always known to the server: it is either the sample input (segment start
    0) or the activation handed over from the previously verified segment, so
    every layer in a distributed pipeline is verifiable.
@@ -39,6 +40,7 @@ stays flat as models grow.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import logging
 import random
 from dataclasses import dataclass, field
@@ -57,10 +59,23 @@ settings = get_settings()
 # unlikely while keeping verification ~25-100x cheaper than recomputation.
 NUM_PROJECTIONS = 4
 
+# Each assignment receives NUM_PROJECTIONS fresh secret linear combinations
+# from a wider, model-version-pinned basis. Keeping the expensive transpose
+# projection products in this basis preserves cheap O(in+out) verification
+# while preventing one task from reusing another task's exact equations.
+PROJECTION_BASIS_SIZE = 8
+
 # Relative tolerance for projection checks. Client computes with float32
 # weights/activations in float64 JS arithmetic; the server matches that with
 # float64 over the same float32 weights, so honest drift is ~1e-5 relative.
 PROJECTION_RTOL = 1e-3
+
+# Bilinear product checks use only client-submitted intermediates on both
+# sides. Their honest drift is float32 storage/summation noise, far smaller
+# than affine projection drift, so a separate elementwise tolerance prevents
+# one altered component from hiding behind an unrelated large vector entry.
+PRODUCT_RTOL = 1e-7
+PRODUCT_ATOL = 2e-2
 
 # Absolute per-element tolerance for full spot audits (float32 storage noise).
 AUDIT_ATOL = 1e-3
@@ -130,42 +145,198 @@ class ProofVerifier:
     """
     Verifies segment computations for all loaded models.
 
-    Secret projections are derived deterministically from the server secret
-    key + model checksum, so multiple workers agree without sharing state,
-    while clients (who never see the secret key) cannot reconstruct them.
+    A wider projection basis is derived deterministically from the server
+    secret key + model checksum, so multiple workers agree without sharing
+    state. Each assignment then receives fresh, secret HMAC-derived linear
+    combinations of that basis. Clients see the public assignment nonce but
+    cannot reconstruct the algebraic challenge without the server secret.
     """
 
     def __init__(self, audit_rate: float = DEFAULT_AUDIT_RATE):
         self.audit_rate = audit_rate
-        # (model_checksum, layer_index) -> list of (r, s=W·r, r·b) tuples
-        self._projections: Dict[Tuple[str, int], List[Tuple[np.ndarray, np.ndarray, float]]] = {}
+        # Expensive transpose-projection values are cached for the wider basis.
+        # Per-task challenge vectors are cheap combinations and are not cached.
+        self._projection_bases: Dict[Tuple[object, ...], list] = {}
+
+    @staticmethod
+    def _secret_seed(*parts: object) -> int:
+        """Deterministic server-secret PRF seed shared by verifier workers."""
+        message = ":".join(str(part) for part in parts).encode("utf-8")
+        digest = hmac.new(
+            settings.secret_key.encode("utf-8"),
+            message,
+            hashlib.sha256,
+        ).digest()
+        return int.from_bytes(digest[:8], "big")
+
+    def _basis_rng(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        kind: str,
+        basis_index: int,
+    ) -> np.random.Generator:
+        seed = self._secret_seed(
+            "projection-basis-v1",
+            model.checksum,
+            layer_index,
+            kind,
+            basis_index,
+        )
+        return np.random.default_rng(seed)
+
+    def _challenge_coefficients(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        kind: str,
+        assignment_challenge: str,
+        *,
+        exact: bool = False,
+    ) -> np.ndarray:
+        """Derive a fresh hidden coefficient matrix for one assignment."""
+        seed = self._secret_seed(
+            "projection-challenge-v1",
+            model.checksum,
+            layer_index,
+            kind,
+            assignment_challenge,
+        )
+        rng = np.random.default_rng(seed)
+
+        if exact:
+            # Distinct non-zero field elements form a full-row-rank
+            # Vandermonde challenge matrix.
+            alphas: list[int] = []
+            while len(alphas) < NUM_PROJECTIONS:
+                alpha = int(rng.integers(1, MOD_P))
+                if alpha not in alphas:
+                    alphas.append(alpha)
+            return np.asarray(
+                [
+                    [
+                        pow(alpha, exponent, MOD_P)
+                        for exponent in range(PROJECTION_BASIS_SIZE)
+                    ]
+                    for alpha in alphas
+                ],
+                dtype=np.int64,
+            )
+
+        # Deterministic Gram-Schmidt gives independent, unit-length rows
+        # without relying on a platform-specific QR sign convention.
+        raw = rng.standard_normal((NUM_PROJECTIONS, PROJECTION_BASIS_SIZE))
+        rows: list[np.ndarray] = []
+        for candidate in raw:
+            row = candidate.astype(np.float64, copy=True)
+            for previous in rows:
+                row -= float(row @ previous) * previous
+            norm = float(np.linalg.norm(row))
+            if norm < 1e-12:
+                raise RuntimeError("degenerate projection challenge")
+            rows.append(row / norm)
+        return np.stack(rows)
+
+    @staticmethod
+    def _combine_float_dict_basis(
+        basis: Sequence[dict], coefficients: np.ndarray
+    ) -> List[dict]:
+        """Linearly combine dict-shaped float projection basis records."""
+        combined_rounds: List[dict] = []
+        for row in coefficients:
+            combined: dict = {}
+            for name in basis[0]:
+                first = basis[0][name]
+                if np.isscalar(first):
+                    combined[name] = float(
+                        sum(
+                            float(coefficient) * float(item[name])
+                            for coefficient, item in zip(row, basis)
+                        )
+                    )
+                else:
+                    acc = np.zeros_like(np.asarray(first), dtype=np.float64)
+                    for coefficient, item in zip(row, basis):
+                        acc += float(coefficient) * np.asarray(
+                            item[name], dtype=np.float64
+                        )
+                    combined[name] = acc
+            combined_rounds.append(combined)
+        return combined_rounds
 
     def _layer_projections(
-        self, model: ModelSpec, layer_index: int
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        assignment_challenge: str,
     ) -> List[Tuple[np.ndarray, np.ndarray, float]]:
-        key = (model.checksum, layer_index)
-        if key not in self._projections:
+        key = (model.checksum, layer_index, "affine-basis")
+        if key not in self._projection_bases:
             layer = model.layers[layer_index]
             exact = getattr(layer, "exact", False)
             projections = []
-            for k in range(NUM_PROJECTIONS):
-                seed_material = (
-                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}"
-                ).encode("utf-8")
-                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
-                rng = np.random.default_rng(seed)
+            for basis_index in range(PROJECTION_BASIS_SIZE):
+                rng = self._basis_rng(model, layer_index, "affine", basis_index)
                 if exact:
-                    # Quantized layer: secret vector over Z_p for EXACT checks
-                    r = rng.integers(1, MOD_P, size=layer.output_size)
+                    r = rng.integers(
+                        1,
+                        MOD_P,
+                        size=layer.output_size,
+                        dtype=np.int64,
+                    )
                 else:
-                    r = rng.standard_normal(layer.output_size)
-                # s = Lᵀr and r·b, layer-type-specific but verified identically
+                    # Basis records are stored as float32 to offset the wider
+                    # pool's memory cost; combinations/checks use float64.
+                    r = rng.standard_normal(layer.output_size).astype(np.float32)
                 s, r_dot_b = layer.project(r)
+                if not exact:
+                    s = np.asarray(s, dtype=np.float32)
                 projections.append((r, s, r_dot_b))
-            self._projections[key] = projections
-        return self._projections[key]
+            self._projection_bases[key] = projections
 
-    def _attention_projections(self, model: ModelSpec, layer_index: int, layer) -> List[dict]:
+        basis = self._projection_bases[key]
+        exact = getattr(model.layers[layer_index], "exact", False)
+        coefficients = self._challenge_coefficients(
+            model,
+            layer_index,
+            "affine",
+            assignment_challenge,
+            exact=exact,
+        )
+        rounds: List[Tuple[np.ndarray, np.ndarray, float]] = []
+
+        if exact:
+            for row in coefficients:
+                r = np.zeros_like(basis[0][0], dtype=np.int64)
+                s = np.zeros_like(basis[0][1], dtype=np.int64)
+                rb = 0
+                for coefficient, (base_r, base_s, base_rb) in zip(row, basis):
+                    c = int(coefficient)
+                    r = (r + c * np.asarray(base_r, dtype=np.int64)) % MOD_P
+                    s = (s + c * np.asarray(base_s, dtype=np.int64)) % MOD_P
+                    rb = (rb + c * int(base_rb)) % MOD_P
+                rounds.append((r, s, rb))
+            return rounds
+
+        for row in coefficients:
+            r = np.zeros_like(np.asarray(basis[0][0]), dtype=np.float64)
+            s = np.zeros_like(np.asarray(basis[0][1]), dtype=np.float64)
+            rb = 0.0
+            for coefficient, (base_r, base_s, base_rb) in zip(row, basis):
+                c = float(coefficient)
+                r += c * np.asarray(base_r, dtype=np.float64)
+                s += c * np.asarray(base_s, dtype=np.float64)
+                rb += c * float(base_rb)
+            rounds.append((r, s, rb))
+        return rounds
+
+    def _attention_projections(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        assignment_challenge: str,
+    ) -> List[dict]:
         """
         Secret vectors for one attention layer. Per projection round:
           r (seq·d)  — affine checks on Q, K, V (vs input X) and Z (vs O)
@@ -173,32 +344,47 @@ class ProofVerifier:
           w (d)      — Freivalds product check O = P·V
         The sᵢ = Wᵢᵀ-projections are precomputed once per model version.
         """
-        key = (model.checksum, layer_index, "attention")
-        if key not in self._projections:
+        key = (model.checksum, layer_index, "attention-basis")
+        if key not in self._projection_bases:
             rounds = []
-            for k in range(NUM_PROJECTIONS):
-                seed_material = (
-                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}:attention"
-                ).encode("utf-8")
-                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
-                rng = np.random.default_rng(seed)
-                r = rng.standard_normal(layer.seq * layer.d_model)
-                u = rng.standard_normal(layer.seq)
-                w = rng.standard_normal(layer.d_model)
-                r3 = r.reshape(layer.seq, layer.d_model)
+            for basis_index in range(PROJECTION_BASIS_SIZE):
+                rng = self._basis_rng(
+                    model, layer_index, "attention", basis_index
+                )
+                r = rng.standard_normal(layer.seq * layer.d_model).astype(np.float32)
+                r3 = r.astype(np.float64).reshape(layer.seq, layer.d_model)
                 rounds.append(
                     {
                         "r": r,
-                        "u": u,
-                        "w": w,
-                        "sq": r3 @ layer.wq.astype(np.float64).T,
-                        "sk": r3 @ layer.wk.astype(np.float64).T,
-                        "sv": r3 @ layer.wv.astype(np.float64).T,
-                        "sz": r3 @ layer.wo.astype(np.float64).T,
+                        "sq": (r3 @ layer.wq.astype(np.float64).T).astype(np.float32),
+                        "sk": (r3 @ layer.wk.astype(np.float64).T).astype(np.float32),
+                        "sv": (r3 @ layer.wv.astype(np.float64).T).astype(np.float32),
+                        "sz": (r3 @ layer.wo.astype(np.float64).T).astype(np.float32),
                     }
                 )
-            self._projections[key] = rounds
-        return self._projections[key]
+            self._projection_bases[key] = rounds
+        coefficients = self._challenge_coefficients(
+            model, layer_index, "attention", assignment_challenge
+        )
+        challenged = self._combine_float_dict_basis(
+            self._projection_bases[key], coefficients
+        )
+        for round_index, round_data in enumerate(challenged):
+            product_rng = np.random.default_rng(
+                self._secret_seed(
+                    "product-challenge-v1",
+                    model.checksum,
+                    layer_index,
+                    "attention",
+                    assignment_challenge,
+                    round_index,
+                )
+            )
+            # These product vectors need no weight projection and can therefore
+            # be genuinely fresh rather than combined from the cached basis.
+            round_data["u"] = product_rng.standard_normal(layer.seq)
+            round_data["w"] = product_rng.standard_normal(layer.d_model)
+        return challenged
 
     @staticmethod
     def _close(lhs: float, rhs: float) -> bool:
@@ -207,10 +393,19 @@ class ProofVerifier:
 
     @staticmethod
     def _vectors_close(lhs: np.ndarray, rhs: np.ndarray) -> bool:
-        scale = max(1.0, float(np.max(np.abs(lhs))), float(np.max(np.abs(rhs))))
-        return float(np.max(np.abs(lhs - rhs))) <= PROJECTION_RTOL * scale
+        lhs_values = np.asarray(lhs, dtype=np.float64)
+        rhs_values = np.asarray(rhs, dtype=np.float64)
+        scale = np.maximum(np.abs(lhs_values), np.abs(rhs_values))
+        tolerance = PRODUCT_ATOL + PRODUCT_RTOL * scale
+        return bool(np.all(np.abs(lhs_values - rhs_values) <= tolerance))
 
-    def _gqa_projections(self, model: ModelSpec, layer_index: int, layer) -> List[dict]:
+    def _gqa_projections(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        assignment_challenge: str,
+    ) -> List[dict]:
         """
         Secret vectors for one GQA attention unit. RoPE is a fixed orthogonal
         per-position rotation, so it folds into the precompute: the affine
@@ -219,48 +414,69 @@ class ProofVerifier:
         """
         from app.ml.llm_layers import apply_rope, rope_cos_sin
 
-        key = (model.checksum, layer_index, "gqa")
-        if key not in self._projections:
+        key = (model.checksum, layer_index, "gqa-basis")
+        if key not in self._projection_bases:
             cos, sin = rope_cos_sin(layer.seq, layer.head_dim, layer.rope_theta)
             wq = layer.dequant("q").astype(np.float64)  # (out, in)
             wk = layer.dequant("k").astype(np.float64)
             wv = layer.dequant("v").astype(np.float64)
             wo = layer.dequant("o").astype(np.float64)
             rounds = []
-            for k in range(NUM_PROJECTIONS):
-                seed_material = (
-                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}:gqa"
-                ).encode("utf-8")
-                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
-                rng = np.random.default_rng(seed)
-                rq = rng.standard_normal((layer.seq, layer.n_heads, layer.head_dim))
-                rk = rng.standard_normal((layer.seq, layer.n_kv_heads, layer.head_dim))
-                rv = rng.standard_normal((layer.seq, layer.n_kv_heads, layer.head_dim))
-                rz = rng.standard_normal((layer.seq, layer.d_model))
-                u = rng.standard_normal(layer.seq)
-                w = rng.standard_normal(layer.head_dim)
-                rq_eff = apply_rope(rq, cos, -sin).reshape(layer.seq, -1)
-                rk_eff = apply_rope(rk, cos, -sin).reshape(layer.seq, -1)
-                rv_flat = rv.reshape(layer.seq, -1)
+            for basis_index in range(PROJECTION_BASIS_SIZE):
+                rng = self._basis_rng(model, layer_index, "gqa", basis_index)
+                rq = rng.standard_normal(
+                    (layer.seq, layer.n_heads, layer.head_dim)
+                ).astype(np.float32)
+                rk = rng.standard_normal(
+                    (layer.seq, layer.n_kv_heads, layer.head_dim)
+                ).astype(np.float32)
+                rv = rng.standard_normal(
+                    (layer.seq, layer.n_kv_heads, layer.head_dim)
+                ).astype(np.float32)
+                rz = rng.standard_normal((layer.seq, layer.d_model)).astype(np.float32)
+                rq_eff = apply_rope(
+                    rq.astype(np.float64), cos, -sin
+                ).reshape(layer.seq, -1)
+                rk_eff = apply_rope(
+                    rk.astype(np.float64), cos, -sin
+                ).reshape(layer.seq, -1)
+                rv_flat = rv.astype(np.float64).reshape(layer.seq, -1)
                 rounds.append(
                     {
                         "rq": rq.reshape(layer.seq, -1),
                         "rk": rk.reshape(layer.seq, -1),
                         "rv": rv_flat,
                         "rz": rz,
-                        "u": u,
-                        "w": w,
-                        "sq": rq_eff @ wq,  # (seq, d_model)
-                        "sk": rk_eff @ wk,
-                        "sv": rv_flat @ wv,
-                        "sz": rz @ wo,  # (seq, q_dim)
+                        "sq": (rq_eff @ wq).astype(np.float32),  # (seq, d_model)
+                        "sk": (rk_eff @ wk).astype(np.float32),
+                        "sv": (rv_flat @ wv).astype(np.float32),
+                        "sz": (rz.astype(np.float64) @ wo).astype(np.float32),
                         "rbq": float(np.sum(rq_eff @ layer.bq.astype(np.float64))),
                         "rbk": float(np.sum(rk_eff @ layer.bk.astype(np.float64))),
                         "rbv": float(np.sum(rv_flat @ layer.bv.astype(np.float64))),
                     }
                 )
-            self._projections[key] = rounds
-        return self._projections[key]
+            self._projection_bases[key] = rounds
+        coefficients = self._challenge_coefficients(
+            model, layer_index, "gqa", assignment_challenge
+        )
+        challenged = self._combine_float_dict_basis(
+            self._projection_bases[key], coefficients
+        )
+        for round_index, round_data in enumerate(challenged):
+            product_rng = np.random.default_rng(
+                self._secret_seed(
+                    "product-challenge-v1",
+                    model.checksum,
+                    layer_index,
+                    "gqa",
+                    assignment_challenge,
+                    round_index,
+                )
+            )
+            round_data["u"] = product_rng.standard_normal(layer.seq)
+            round_data["w"] = product_rng.standard_normal(layer.head_dim)
+        return challenged
 
     def _verify_gqa_attention(
         self,
@@ -270,6 +486,7 @@ class ProofVerifier:
         x: np.ndarray,
         z: np.ndarray,
         pad_len: int,
+        assignment_challenge: str,
     ) -> Optional[str]:
         """
         Verify a GQA attention submission [Q|K|V|S|O|Z]: affine checks for the
@@ -284,7 +501,9 @@ class ProofVerifier:
         p_matrix = attention_probs(parts["S"], layer.head_dim, pad_len)
         hd = layer.head_dim
 
-        for rd in self._gqa_projections(model, layer_index, layer):
+        for rd in self._gqa_projections(
+            model, layer_index, layer, assignment_challenge
+        ):
             checks = (
                 ("Q", parts["Q"].reshape(layer.seq, -1), rd["rq"], rd["sq"], rd["rbq"]),
                 ("K", parts["K"].reshape(layer.seq, -1), rd["rk"], rd["sk"], rd["rbk"]),
@@ -315,37 +534,50 @@ class ProofVerifier:
 
         return None
 
-    def _swiglu_projections(self, model: ModelSpec, layer_index: int, layer) -> List[dict]:
-        key = (model.checksum, layer_index, "swiglu")
-        if key not in self._projections:
+    def _swiglu_projections(
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        assignment_challenge: str,
+    ) -> List[dict]:
+        key = (model.checksum, layer_index, "swiglu-basis")
+        if key not in self._projection_bases:
             wg = layer.dequant("g").astype(np.float64)  # (ffn, d)
             wu = layer.dequant("u").astype(np.float64)
             wd = layer.dequant("d").astype(np.float64)  # (d, ffn)
             rounds = []
-            for k in range(NUM_PROJECTIONS):
-                seed_material = (
-                    f"{settings.secret_key}:{model.checksum}:{layer_index}:{k}:swiglu"
-                ).encode("utf-8")
-                seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
-                rng = np.random.default_rng(seed)
-                rg = rng.standard_normal((layer.seq, layer.ffn_dim))
-                ru = rng.standard_normal((layer.seq, layer.ffn_dim))
-                rdv = rng.standard_normal((layer.seq, layer.d_model))
+            for basis_index in range(PROJECTION_BASIS_SIZE):
+                rng = self._basis_rng(model, layer_index, "swiglu", basis_index)
+                rg = rng.standard_normal((layer.seq, layer.ffn_dim)).astype(np.float32)
+                ru = rng.standard_normal((layer.seq, layer.ffn_dim)).astype(np.float32)
+                rdv = rng.standard_normal((layer.seq, layer.d_model)).astype(np.float32)
                 rounds.append(
                     {
                         "rg": rg,
                         "ru": ru,
                         "rd": rdv,
-                        "sg": rg @ wg,  # (seq, d)
-                        "su": ru @ wu,
-                        "sd": rdv @ wd,  # (seq, ffn)
+                        "sg": (rg.astype(np.float64) @ wg).astype(np.float32),
+                        "su": (ru.astype(np.float64) @ wu).astype(np.float32),
+                        "sd": (rdv.astype(np.float64) @ wd).astype(np.float32),
                     }
                 )
-            self._projections[key] = rounds
-        return self._projections[key]
+            self._projection_bases[key] = rounds
+        coefficients = self._challenge_coefficients(
+            model, layer_index, "swiglu", assignment_challenge
+        )
+        return self._combine_float_dict_basis(
+            self._projection_bases[key], coefficients
+        )
 
     def _verify_swiglu(
-        self, model: ModelSpec, layer_index: int, layer, x: np.ndarray, z: np.ndarray
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        x: np.ndarray,
+        z: np.ndarray,
+        assignment_challenge: str,
     ) -> Optional[str]:
         """
         Verify a SwiGLU MLP submission [G|U|D]: G and U affine in the normed
@@ -359,7 +591,9 @@ class ProofVerifier:
         xn = apply_post_ops(x, layer.input_ops).reshape(layer.seq, layer.d_model)
         h_matrix = silu(parts["G"]) * parts["U"]
 
-        for rd in self._swiglu_projections(model, layer_index, layer):
+        for rd in self._swiglu_projections(
+            model, layer_index, layer, assignment_challenge
+        ):
             for name, sub, r, s in (
                 ("G", parts["G"], rd["rg"], rd["sg"]),
                 ("U", parts["U"], rd["ru"], rd["su"]),
@@ -377,7 +611,13 @@ class ProofVerifier:
         return None
 
     def _verify_attention(
-        self, model: ModelSpec, layer_index: int, layer, x: np.ndarray, z: np.ndarray
+        self,
+        model: ModelSpec,
+        layer_index: int,
+        layer,
+        x: np.ndarray,
+        z: np.ndarray,
+        assignment_challenge: str,
     ) -> Optional[str]:
         """
         Verify a submitted attention concatenation [Q|K|V|S|O|Z] without
@@ -393,7 +633,9 @@ class ProofVerifier:
         xt = np.asarray(x, dtype=np.float64).reshape(layer.seq, layer.d_model)
         p_matrix = layer.softmax_rows(parts["S"])
 
-        for round_data in self._attention_projections(model, layer_index, layer):
+        for round_data in self._attention_projections(
+            model, layer_index, layer, assignment_challenge
+        ):
             r = round_data["r"]
             # 1. Affine checks: r·vec(M) == Σ_t s[t]·X[t]
             for name, s in (("Q", "sq"), ("K", "sk"), ("V", "sv")):
@@ -440,6 +682,11 @@ class ProofVerifier:
         layer_count = len(pre_activations)
         segment_end = segment_start + layer_count
         report = VerificationReport(valid=False)
+        # Production tasks provide a random nonce. The task id fallback keeps
+        # internal/offline callers assignment-specific as well.
+        assignment_challenge = (
+            f"{task_id}:{verification_nonce}" if verification_nonce else task_id
+        )
 
         # --- Structural checks -------------------------------------------
         if segment_end > model.total_layers:
@@ -488,7 +735,14 @@ class ProofVerifier:
 
             z = np.asarray(z_submitted, dtype=np.float64)
             if layer.layer_type == "attention":
-                failure = self._verify_attention(model, layer_index, layer, x, z)
+                failure = self._verify_attention(
+                    model,
+                    layer_index,
+                    layer,
+                    x,
+                    z,
+                    assignment_challenge,
+                )
                 if failure:
                     report.reason = failure
                     logger.warning(
@@ -500,7 +754,13 @@ class ProofVerifier:
                     return report
             elif layer.layer_type == "gqa_attention":
                 failure = self._verify_gqa_attention(
-                    model, layer_index, layer, x, z, pad_len
+                    model,
+                    layer_index,
+                    layer,
+                    x,
+                    z,
+                    pad_len,
+                    assignment_challenge,
                 )
                 if failure:
                     report.reason = failure
@@ -510,7 +770,14 @@ class ProofVerifier:
                     )
                     return report
             elif layer.layer_type == "swiglu_mlp":
-                failure = self._verify_swiglu(model, layer_index, layer, x, z)
+                failure = self._verify_swiglu(
+                    model,
+                    layer_index,
+                    layer,
+                    x,
+                    z,
+                    assignment_challenge,
+                )
                 if failure:
                     report.reason = failure
                     logger.warning(
@@ -529,7 +796,9 @@ class ProofVerifier:
                     return report
                 z_int = [int(v) for v in z]
                 x_int = [int(v) for v in x]
-                for r, s, rb in self._layer_projections(model, layer_index):
+                for r, s, rb in self._layer_projections(
+                    model, layer_index, assignment_challenge
+                ):
                     lhs = dot_mod(r, z_int)
                     rhs = (dot_mod(s, x_int) + rb) % MOD_P
                     if lhs != rhs:
@@ -551,7 +820,9 @@ class ProofVerifier:
                     if hasattr(layer, "transformed_input")
                     else x
                 )
-                for r, s, rb in self._layer_projections(model, layer_index):
+                for r, s, rb in self._layer_projections(
+                    model, layer_index, assignment_challenge
+                ):
                     lhs = float(r @ z)
                     rhs = float(s @ x_eff) + rb
                     scale = max(1.0, abs(lhs), abs(rhs))

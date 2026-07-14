@@ -40,7 +40,8 @@ class ShardTask:
     model_checksum: str = ""
     # left-pad length for LLM attention masks (0 for image models)
     pad_len: int = 0
-    # random assignment challenge included in the proof commitment
+    # Public assignment nonce: binds the commitment and feeds a server-secret
+    # HMAC that selects fresh hidden algebraic projection checks.
     verification_nonce: str = ""
 
 

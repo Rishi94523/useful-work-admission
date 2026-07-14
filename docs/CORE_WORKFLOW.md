@@ -62,25 +62,29 @@ The crucial mechanism (`app/ml/proof_verifier.py`). The client submits the
 **pre-activation vector** of every computed layer plus commitment hashes.
 The server verifies three ways, cheapest first:
 
-1. **Commitment hashes** — each vector is hashed (canonical 4-decimal form)
-   and bound with the task id, sample id, and segment position into a single
-   proof hash. Proofs can't be replayed across tasks or detached from data.
+1. **Commitment hashes** — each vector is hashed as canonical little-endian
+   float64 bytes (with signed zero normalized) and bound with the task id,
+   sample id, segment position, and assignment nonce into a single proof hash.
+   Proofs can't be replayed across tasks or detached from data.
 
-2. **Freivalds-style secret projections** — every provable layer is an
-   affine operator `z = L·x + b` (dense matmul OR convolution). The server
-   holds K=4 secret random vectors `r` per layer and the precomputed
-   `s = Lᵀ·r` (once per model load, never per request — for conv layers `s`
-   is the transposed convolution of `r` with the kernels). It checks
+2. **Task-specific Freivalds-style secret projections** — every provable
+   layer is an affine operator `z = L·x + b` (dense matmul OR convolution).
+   The server precomputes an eight-vector secret basis `(r_j, s_j=Lᵀr_j)`
+   per model version. For each assignment, an HMAC of the server secret, task
+   id, and public nonce derives K=4 fresh, hidden linear combinations of that
+   basis. Attention matrix-product vectors need no weight projection and are
+   generated fully fresh for every task. For each challenged `(r,s)` it checks
 
    ```
    r · z  ≈  s · x  +  r · b
    ```
 
    which costs **O(in + out)** multiplications versus the **O(in × out)**
-   (dense) or **O(out × k² × in_ch)** (conv) the client had to spend. `r` is
-   derived from the server secret key (so workers agree and clients can't
-   reconstruct it). A fabricated `z` passes 4 independent secret projections
-   with negligible probability. The layer input `x` is always known
+   (dense) or **O(out × k² × in_ch)** (conv) the client had to spend. Building
+   the task challenge and checking it remain linear in the input/output vector
+   sizes; no per-request `Lᵀr` matrix operation is needed. The public nonce is
+   insufficient to reconstruct the challenge without the server secret. The
+   layer input `x` is always known
    server-side: the sample input at segment 0, or the previous solver's
    verified activation afterward. Post-ops (activation, pooling, flatten)
    are recomputed server-side from submitted pre-activations (O(n), cheap).
@@ -93,9 +97,11 @@ integer arithmetic — int8 weights, int32 biases, integer requantize
 (`a = min(255, (z·mult) >> shift)`) — and every value stays below 2^53, so
 browser float64 numbers reproduce the server's math **bit-for-bit**. The
 projection checks then run over Z_p (p = 2^31−1) with exact equality: no
-tolerance band, soundness error ~1/p per projection (~2^-124 with K=4), no
-audits needed. A ±1 tamper in one integer output is caught outright, and
-fractional perturbations are rejected structurally.
+tolerance band and no audits needed. Four full-row-rank task-derived checks are
+formed from the hidden eight-vector field basis. A ±1 tamper in one integer
+output is caught with overwhelming probability, and fractional perturbations
+are rejected structurally. A formal adaptive soundness bound remains part of
+the security-analysis work.
 
 **Attention blocks** (`mnist-attn`): the client submits [Q|K|V|S|O|Z]; the
 server verifies Q/K/V as affine maps of the known input, S = Q·Kᵀ and
@@ -211,6 +217,12 @@ Measured: server-side forward through our decomposition classifies 6/6
 sentiment prompts (93–99% confidence); all 49 segments verify segment-by-
 segment with the pieced label correct; tampering any of Q/K/V/S/O/Z and
 skipping the silu gate are all caught.
+
+After enabling per-assignment hidden algebraic challenges, the production
+widget runner again completed 49/49 stages (run
+`d9ed4167-2468-4f20-9fa9-038fb835946f`): 48.1 seconds of widget compute and
+122.8 seconds cold end-to-end wall time including first-use server basis
+construction and verification.
 
 **Roadmap:** scale from classification to batch generation (KV-cache custody
 across token steps), add cached binary weight delivery, and accelerate the

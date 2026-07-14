@@ -68,10 +68,12 @@ sourced from CAPTCHA traffic.
 
 ## Verification Primitive (core claim)
 
-Every provable layer is an affine operator `z = L·x + b`. The server holds K
-secret random vectors `r` per layer with `s = Lᵀr` precomputed once per model
-version (for conv layers, `s` is the transposed convolution of `r` with the
-kernels). A submitted pre-activation `z` is accepted iff
+Every provable layer is an affine operator `z = L·x + b`. The server holds an
+eight-vector secret basis with `s_j = Lᵀr_j` precomputed once per model
+version (for conv layers, `s_j` is the transposed convolution of `r_j` with
+the kernels). Each assignment's task id, nonce, and the server secret
+HMAC-derive K=4 hidden linear combinations `(r,s)` from that basis. A submitted
+pre-activation `z` is accepted iff
 
     r · z  ≈  s · x  +  r · b      (for all K projections)
 

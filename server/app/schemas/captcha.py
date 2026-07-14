@@ -192,7 +192,8 @@ class ShardTaskInfo(APIModel):
     )
     verification_nonce: str = Field(
         default="",
-        description="Server-issued nonce binding a proof to this assignment",
+        description="Server-issued nonce binding the proof and its hidden "
+        "algebraic verification challenge to this assignment",
     )
 
 

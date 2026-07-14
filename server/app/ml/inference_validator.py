@@ -72,9 +72,13 @@ class InferenceValidator:
         segment_start = shard_meta.get("segment_start", 0)
         expected_layers = shard_meta.get("expected_layers", 0)
         input_vector = shard_meta.get("input_vector")
+        verification_nonce = shard_meta.get("verification_nonce")
 
         if not model_name or input_vector is None:
             report.reason = "task missing shard metadata"
+            return report
+        if not verification_nonce:
+            report.reason = "task missing verification challenge"
             return report
 
         model = get_model_store().get(model_name)
@@ -128,7 +132,7 @@ class InferenceValidator:
             sample_id=proof.sample_id,
             prediction_hash=prediction_hash,
             context=shard_meta.get("context") or {},
-            verification_nonce=shard_meta.get("verification_nonce", ""),
+            verification_nonce=verification_nonce,
         )
 
         if not report.valid:

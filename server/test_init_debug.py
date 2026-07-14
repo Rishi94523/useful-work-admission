@@ -2,7 +2,7 @@
 import asyncio
 import sys
 
-async def test():
+async def main():
     from app.config import get_settings
     from app.models import init_db, get_db
     from app.core.task_coordinator import TaskCoordinator
@@ -46,11 +46,12 @@ async def test():
             session_id = uuid.uuid4()
             print(f"Testing task assignment for session: {session_id}")
             
-            task, sample = await task_coordinator.assign_task(
+            task, sample, shard_task = await task_coordinator.assign_task(
                 session_id=session_id,
                 difficulty=difficulty
             )
             print(f"Task assigned: {task.id}")
+            print(f"Run assigned: {shard_task.run_id}")
             print(f"Sample: {sample.id}")
             print(f"Sample data_url: {sample.data_url}")
             print(f"Sample data_type: {sample.data_type}")
@@ -65,4 +66,4 @@ async def test():
         break
 
 if __name__ == "__main__":
-    asyncio.run(test())
+    asyncio.run(main())

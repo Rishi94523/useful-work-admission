@@ -35,11 +35,16 @@ def hash_tensor(values) -> str:
 
 def verify_shard_checksum(shard) -> bool:
     layer = shard["layers"][0]
-    if layer["type"] in ("gqa_attention", "swiglu_mlp"):
+    if layer["type"] in (
+        "gqa_attention",
+        "gqa_attention_chunk",
+        "swiglu_mlp",
+        "swiglu_mlp_chunk",
+    ):
         # int8 weight bytes + f32 scales (+ f32 biases for attention)
         parts = [base64.b64decode(layer["weightsB64"])]
         parts.append(np.asarray(layer["scales"], dtype="<f4").tobytes())
-        if layer["type"] == "gqa_attention":
+        if layer["type"] in ("gqa_attention", "gqa_attention_chunk"):
             parts.append(np.asarray(layer["biases"], dtype="<f4").tobytes())
         return hashlib.sha256(b"".join(parts)).hexdigest() == shard["checksum"]
     if layer["type"] == "candidate_logits":
@@ -86,6 +91,20 @@ def apply_post_ops(
     elif layer["type"] in ("gqa_attention", "swiglu_mlp"):
         # final sub-block (Z or D) is always the trailing seq*d values
         current = current[-(layer["seq"] * layer["dModel"]) :]
+    elif layer["type"] in ("gqa_attention_chunk", "swiglu_mlp_chunk"):
+        hidden_size = layer["seq"] * layer["dModel"]
+        source = np.asarray(layer_input[:hidden_size], dtype=np.float32)
+        prior = (
+            np.zeros(hidden_size, dtype=np.float32)
+            if int(layer["chunkIndex"]) == 0
+            else np.asarray(layer_input[hidden_size:], dtype=np.float32)
+        )
+        partial = np.asarray(values[-hidden_size:], dtype=np.float32)
+        accumulated = (prior + partial).astype(np.float32)
+        if int(layer["chunkIndex"]) < int(layer["chunkCount"]) - 1:
+            return np.concatenate([source, accumulated]).astype(np.float32)
+        current = accumulated
+        layer_input = source
     for op in ops:
         kind = op["op"]
         if kind == "maxpool2d":
@@ -227,7 +246,8 @@ def forward_swiglu_mlp(current: np.ndarray, layer: dict) -> np.ndarray:
     wu = dequant_slab(i8[ffn * d :], scales[ffn:], ffn, d)
     wd = dequant_slab(i8[2 * ffn * d :], scales[2 * ffn :], d, ffn)
 
-    xn = apply_input_ops(current, layer.get("inputOps")).reshape(seq, d)
+    source = current[: seq * d]
+    xn = apply_input_ops(source, layer.get("inputOps")).reshape(seq, d)
     g = (xn @ wg.astype(np.float64).T).astype(np.float32).astype(np.float64)
     u = (xn @ wu.astype(np.float64).T).astype(np.float32).astype(np.float64)
     h = (g / (1.0 + np.exp(-g))) * u
@@ -249,9 +269,9 @@ def forward_pre_activation(current: np.ndarray, layer: dict) -> np.ndarray:
     """Provable layer compute (dense/conv2d/token_dense/attention/LLM)."""
     quantized = layer.get("quantized", False)
 
-    if layer["type"] == "gqa_attention":
+    if layer["type"] in ("gqa_attention", "gqa_attention_chunk"):
         return forward_gqa_attention(current, layer, int(layer.get("_padLen", 0)))
-    if layer["type"] == "swiglu_mlp":
+    if layer["type"] in ("swiglu_mlp", "swiglu_mlp_chunk"):
         return forward_swiglu_mlp(current, layer)
     if layer["type"] == "candidate_logits":
         return forward_candidate_logits(current, layer)
@@ -362,6 +382,9 @@ def solve_once(
             "timezone": "UTC",
             "screenWidth": 1920,
             "screenHeight": 1080,
+            "hardwareConcurrency": 8,
+            "deviceMemoryGb": 8,
+            "benchmarkOpsPerMs": 250000,
         },
     }
     if preferred_model:

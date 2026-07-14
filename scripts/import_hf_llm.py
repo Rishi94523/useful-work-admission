@@ -65,6 +65,18 @@ def main() -> None:
     parser.add_argument("--labels", default=",".join(DEFAULT_LABELS))
     parser.add_argument("--candidates", default=",".join(DEFAULT_CANDIDATES))
     parser.add_argument("--template", default=DEFAULT_TEMPLATE)
+    parser.add_argument(
+        "--swiglu-microshards",
+        type=int,
+        default=16,
+        help="Vertical partial-sum shards per decoder MLP (default: 16)",
+    )
+    parser.add_argument(
+        "--gqa-microshards",
+        type=int,
+        default=2,
+        help="KV/query-head groups per decoder attention block (default: 2)",
+    )
     args = parser.parse_args()
 
     src = ROOT / "models" / "hf" / args.model
@@ -77,6 +89,10 @@ def main() -> None:
     n_kv = config["num_key_value_heads"]
     head_dim = d // n_heads
     eps = config["rms_norm_eps"]
+    if args.gqa_microshards < 1 or n_kv % args.gqa_microshards != 0:
+        parser.error("--gqa-microshards must evenly divide num_key_value_heads")
+    if not 1 <= args.swiglu_microshards <= ffn:
+        parser.error("--swiglu-microshards must be between 1 and intermediate_size")
     theta = float(config["rope_theta"])
 
     short = args.model.split("-")[0].split(".")[0]  # qwen2 / smollm2
@@ -234,7 +250,11 @@ def main() -> None:
             "prompt_template": args.template,
             "embedding_file": "embed.npy",
         },
-        "pipeline": {"auto_serve": False},
+        "pipeline": {
+            "auto_serve": False,
+            "gqa_microshards": args.gqa_microshards,
+            "swiglu_microshards": args.swiglu_microshards,
+        },
         "weights_file": "weights.npz",
         "checksum": model_checksum,
         "layers": layer_entries,

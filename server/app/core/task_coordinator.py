@@ -36,6 +36,7 @@ class ShardTask:
     expected_layers: int = 0
     difficulty: str = "normal"
     expected_time_ms: int = 0
+    latency_budget_ms: int = 300
     labels: list = field(default_factory=list)
     model_checksum: str = ""
     # left-pad length for LLM attention masks (0 for image models)
@@ -49,26 +50,28 @@ class TaskCoordinator:
     """
     Coordinates ML task assignment based on risk and difficulty.
 
-    Each task is one *segment* of a distributed pipeline run: low-risk users
-    compute a single layer, bot-like traffic computes the whole model. The
-    server never executes the assigned layers itself — submissions are
-    verified with the projection checks in proof_verifier.
+    Each task is one latency-budgeted *segment* of a distributed pipeline run.
+    Small useful models can be packed to completion; large transformer
+    operators are vertically microsharded so no risk tier receives a
+    multi-second whole-model assignment. The server never executes the
+    assigned layers itself — submissions are verified with the projection
+    checks in proof_verifier.
     """
 
     DIFFICULTY_TIERS = {
         "normal": {
             "risk_score_max": 0.3,
-            "inference_time_ms": 90,
+            "inference_time_ms": 200,
             "verification_probability": 0.2,
         },
         "suspicious": {
             "risk_score_max": 0.7,
-            "inference_time_ms": 120,
+            "inference_time_ms": 250,
             "verification_probability": 0.5,
         },
         "bot_like": {
             "risk_score_max": 1.0,
-            "inference_time_ms": 180,
+            "inference_time_ms": 280,
             "verification_probability": 1.0,
         },
     }
@@ -91,6 +94,7 @@ class TaskCoordinator:
         session_id: uuid.UUID,
         difficulty: str,
         preferred_model: str | None = None,
+        benchmark_ops_per_ms: float | None = None,
     ) -> Tuple[Task, Sample, ShardTask]:
         """
         Assign the next pipeline segment to a session.
@@ -99,16 +103,24 @@ class TaskCoordinator:
         automatic rotation); unknown names fall back to normal rotation.
         Returns (Task row, Sample, wire-ready ShardTask).
         """
-        tier_config = self.DIFFICULTY_TIERS.get(
-            difficulty, self.DIFFICULTY_TIERS["normal"]
-        )
         task_id = uuid.uuid4()
 
         pinned = get_model_store().get(preferred_model) if preferred_model else None
+        if pinned is not None and not self.pipeline.model_fits_latency_target(
+            pinned, benchmark_ops_per_ms
+        ):
+            logger.info(
+                "Client benchmark %.0f ops/ms cannot safely run %s; "
+                "falling back to an auto-served small model",
+                benchmark_ops_per_ms or 0.0,
+                pinned.name,
+            )
+            pinned = None
         assignment: SegmentAssignment = await self.pipeline.claim_segment(
             task_id=task_id,
             difficulty=difficulty,
             model=pinned,
+            benchmark_ops_per_ms=benchmark_ops_per_ms,
         )
         model = assignment.model
         verification_nonce = secrets.token_hex(16)
@@ -128,7 +140,8 @@ class TaskCoordinator:
             total_layers=model.total_layers,
             expected_layers=assignment.layer_count,
             difficulty=difficulty,
-            expected_time_ms=tier_config["inference_time_ms"],
+            expected_time_ms=max(10, assignment.estimated_compute_ms),
+            latency_budget_ms=assignment.latency_budget_ms,
             labels=model.labels,
             model_checksum=model.checksum,
             pad_len=int((assignment.context or {}).get("pad_len", 0)),
@@ -142,7 +155,7 @@ class TaskCoordinator:
             session_id=session_id,
             sample_id=assignment.sample.id,
             task_type="shard_inference",
-            expected_time_ms=tier_config["inference_time_ms"],
+            expected_time_ms=max(10, assignment.estimated_compute_ms),
             is_known_sample=known_label is not None,
             known_label=known_label,
             status="assigned",
@@ -162,6 +175,9 @@ class TaskCoordinator:
                     # verification context (LLM pad mask etc.)
                     "context": assignment.context or {},
                     "verification_nonce": verification_nonce,
+                    "estimated_compute_ms": assignment.estimated_compute_ms,
+                    "latency_budget_ms": assignment.latency_budget_ms,
+                    "benchmark_ops_per_ms": benchmark_ops_per_ms,
                 }
             },
         )

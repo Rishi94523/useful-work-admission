@@ -255,6 +255,73 @@ describe('ShardInferenceEngine', () => {
       expect(result.isFinalSegment).toBe(false);
     });
 
+    it('keeps GQA output partials in custody until all head groups finish', async () => {
+      const identity = [1, 0, 0, 1];
+      const makeChunk = (chunkIndex: number): NeuralLayerConfig => ({
+        name: `tiny_gqa_part_${chunkIndex}`,
+        type: 'gqa_attention_chunk',
+        weights: [],
+        weightsB64: encodeInt8([
+          ...identity,
+          ...identity,
+          ...identity,
+          ...identity,
+        ]),
+        scales: Array<number>(8).fill(1),
+        biases: Array<number>(6).fill(0),
+        inputShape: [1, chunkIndex === 0 ? 2 : 4],
+        outputShape: [11],
+        activation: 'linear',
+        seq: 1,
+        dModel: 2,
+        nHeads: 1,
+        nKvHeads: 1,
+        headDim: 2,
+        ropeTheta: 10000,
+        chunkIndex,
+        chunkCount: 2,
+        inputOps: [],
+        postOps: chunkIndex === 1 ? [{ op: 'residual_input' }] : [],
+      });
+      const head: NeuralLayerConfig = {
+        name: 'identity_after_gqa',
+        type: 'dense',
+        weights: [1, 0, 0, 1],
+        biases: [0, 0],
+        inputShape: [1, 2],
+        outputShape: [1, 2],
+        activation: 'softmax',
+      };
+      const layers = [makeChunk(0), makeChunk(1), head];
+      const task: ShardTask = {
+        taskId: 'gqa-custody-task',
+        sampleId: 'gqa-custody-sample',
+        modelName: 'tiny-transformer',
+        modelVersion: '1+gqa2',
+        shards: layers.map((layer, index) => ({
+          index,
+          name: layer.name,
+          layerType: layer.type,
+          inputShape: layer.inputShape,
+          outputShape: layer.outputShape,
+          layers: [layer],
+        })),
+        inputData: encodeFloat32([1, 2]),
+        inputShape: [1, 2],
+        expectedLayers: 3,
+        totalLayers: 3,
+        difficulty: 'normal',
+        expectedTimeMs: 100,
+        labels: ['negative', 'positive'],
+      };
+
+      const result = await engine.executeShards(task);
+      expect(result.layerOutputs[0]).toHaveLength(11);
+      expect(result.layerOutputs[1]).toHaveLength(11);
+      expect(result.layerOutputs[2][0]).toBeCloseTo(3, 5);
+      expect(result.layerOutputs[2][1]).toBeCloseTo(6, 5);
+    });
+
     it('executes SwiGLU payloads and returns G, U, and D proof blocks', async () => {
       const identity = [1, 0, 0, 1];
       const layer: NeuralLayerConfig = {
@@ -305,6 +372,75 @@ describe('ShardInferenceEngine', () => {
       expect(proofValues[1]).toBeCloseTo(2, 5);
       expect(proofValues[4]).toBeCloseTo(0.7310586, 5);
       expect(proofValues[5]).toBeCloseTo(3.523188, 5);
+    });
+
+    it('keeps partial SwiGLU sums in custody until the final microshard', async () => {
+      const makeChunk = (
+        chunkIndex: number,
+        weights: number[],
+        postOps: NeuralLayerConfig['postOps']
+      ): NeuralLayerConfig => ({
+        name: `tiny_mlp_part_${chunkIndex}`,
+        type: 'swiglu_mlp_chunk',
+        weights: [],
+        weightsB64: encodeInt8(weights),
+        scales: [1, 1, 1, 1],
+        biases: [],
+        inputShape: [1, chunkIndex === 0 ? 2 : 4],
+        outputShape: [4],
+        activation: 'linear',
+        seq: 1,
+        dModel: 2,
+        ffnDim: 1,
+        chunkIndex,
+        chunkCount: 2,
+        inputOps: [],
+        postOps,
+      });
+      const chunk0 = makeChunk(0, [1, 0, 1, 0, 1, 0], []);
+      const chunk1 = makeChunk(
+        1,
+        [0, 1, 0, 1, 0, 1],
+        [{ op: 'residual_input' }]
+      );
+      const head: NeuralLayerConfig = {
+        name: 'identity_head',
+        type: 'dense',
+        weights: [1, 0, 0, 1],
+        biases: [0, 0],
+        inputShape: [1, 2],
+        outputShape: [1, 2],
+        activation: 'softmax',
+      };
+      const layers = [chunk0, chunk1, head];
+      const task: ShardTask = {
+        taskId: 'microshard-task',
+        sampleId: 'microshard-sample',
+        modelName: 'tiny-transformer',
+        modelVersion: '1+ms2',
+        shards: layers.map((layer, index) => ({
+          index,
+          name: layer.name,
+          layerType: layer.type,
+          inputShape: layer.inputShape,
+          outputShape: layer.outputShape,
+          layers: [layer],
+        })),
+        inputData: encodeFloat32([1, 2]),
+        inputShape: [1, 2],
+        expectedLayers: 3,
+        totalLayers: 3,
+        difficulty: 'normal',
+        expectedTimeMs: 100,
+        labels: ['negative', 'positive'],
+      };
+
+      const result = await engine.executeShards(task);
+      expect(result.layerOutputs[0]).toHaveLength(4);
+      expect(result.layerOutputs[1]).toHaveLength(4);
+      expect(result.layerOutputs[2][0]).toBeCloseTo(1.7310586, 5);
+      expect(result.layerOutputs[2][1]).toBeCloseTo(5.523188, 5);
+      expect(result.prediction?.label).toBe('positive');
     });
 
     it('executes the last-token RMSNorm candidate logits head', async () => {

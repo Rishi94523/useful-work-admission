@@ -89,16 +89,18 @@ sequenceDiagram
 
 ## Risk Tiers
 
-Risk controls how much of the model a single CAPTCHA session computes:
+Risk selects a bounded compute target rather than a fixed layer count:
 
-| Tier | Layers per CAPTCHA | Verification probability |
+| Tier | Compute target | Verification probability |
 | --- | ---: | ---: |
-| `normal` | 1 | default configured rate |
-| `suspicious` | 2 | higher |
-| `bot_like` | all remaining layers | always |
+| `normal` | 200 ms | default configured rate |
+| `suspicious` | 250 ms | higher |
+| `bot_like` | 280 ms | always |
 
-The segment size is implemented in the pipeline coordinator and clamped to the
-remaining model depth.
+The pipeline coordinator combines the client's conservatively clamped dense-
+loop calibration with per-layer operation counts. It packs consecutive useful
+stages only while they fit the target; transformer attention and MLP operators
+are vertically microsharded so an indivisible assignment stays bounded.
 
 ## Distributed Pipeline
 
@@ -106,7 +108,9 @@ Each pipeline run represents one sample moving through the model.
 
 1. The first contributor receives the raw preprocessed sample vector.
 2. The server verifies that contributor's layer output.
-3. The post-activation vector is stored as the run activation.
+3. The post-activation vector is stored as the run activation. During vertical
+   transformer microshards this is a custody tuple containing the original
+   hidden state and the verified partial output-projection sum.
 4. The next contributor receives that activation as input.
 5. When the final layer completes, the server derives the authoritative label
    from the verified final activation.

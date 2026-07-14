@@ -41,13 +41,23 @@ models/mnist-attn/      # vision transformer: 16 patches → token
 ## 2. Distributed inference pipeline (the "piecing together")
 
 Each unlabeled sample flows through a **pipeline run** (`pipeline_runs`
-table). Solvers compute *segments* of layers, sized by risk tier:
+table). Solvers compute consecutive useful stages selected by a measured
+compute budget rather than a static layer count:
 
-| Risk tier  | Layers per CAPTCHA | Rationale                       |
-|------------|--------------------|---------------------------------|
-| normal     | 1                  | fastest UX, few hundred ms      |
-| suspicious | 2                  | more work for risky traffic     |
-| bot_like   | all remaining      | maximum cost for bots           |
+| Risk tier  | Target compute budget | Assignment rule |
+|------------|----------------------:|-----------------|
+| normal     | 200 ms | Pack consecutive stages while predicted work fits |
+| suspicious | 250 ms | Same planner with a larger bounded budget |
+| bot_like   | 280 ms | Same planner; never assign the whole LLM to one visitor |
+
+The widget runs a short pure-JavaScript dense-loop calibration during session
+initialization. The server clamps that untrusted value to a conservative range
+before using layer operation counts to choose a segment. Small models can
+therefore finish in one useful assignment; transformer operators are
+microsharded so one indivisible layer does not force multi-second work.
+If an explicitly requested large model still has an indivisible stage
+predicted above 300 ms on that client, assignment falls back to an auto-served
+small useful model.
 
 The server stores the verified **post-activation** of each completed segment
 and hands it to the next solver as their input. When the final layer
@@ -196,21 +206,29 @@ pipeline as `models/llm-qwen2-sentiment/` (build it with
 - **SwiGLU MLP** — client submits `[G|U|D]`; G/U affine in the RMSNorm'd
   input, H = silu(G)⊙U computed server-side from the verified G/U, D affine
   in H.
+- **Latency-bounded vertical microshards** — each GQA block is divided into
+  two disjoint query/KV-head groups and each SwiGLU block into sixteen
+  disjoint FFN-neuron ranges. A verified part advances server-held
+  `[source_hidden | partial_output_sum]` custody state. Only the final part
+  applies the original residual, so anonymous clients never control the
+  aggregate.
 - RMSNorm travels as a server-replayed "input op"; weights ship as
   per-channel weight-only int8 (~lossless) in base64; the tied-embedding
   vocabulary stays server-side (memory-mapped f16) for token embedding.
 
 The PoC task is **zero-shot text labeling** (what labeling vendors sell):
 prompt template + candidate-token logits head, one forward pass, no
-generation. 49 provable segments per sample; text samples seeded by
+generation. The 49 source operators expand at load time to 433 provable
+runtime stages; text samples seeded by
 `scripts/seed_text_samples.py`; request the model with
 `e2e_client.py --model llm-qwen2-sentiment` (LLMs are excluded from browser
 rotation via the manifest's `pipeline.auto_serve: false`).
 
-The production widget shard engine also executes these three wire layer types.
+The production widget shard engine also executes these transformer wire layer
+types, including their latency-bounded chunk variants.
 An integration can opt in with `preferredModel: "llm-qwen2-sentiment"`; the
 model remains outside automatic rotation because its per-segment payloads are
-large. `npm run e2e:widget -- --model llm-qwen2-sentiment --solves 49` exercises
+large. `npm run e2e:widget -- --model llm-qwen2-sentiment --solves 500` exercises
 the exact widget engine against a live API and follows one run to completion.
 
 Measured: server-side forward through our decomposition classifies 6/6
@@ -223,6 +241,13 @@ widget runner again completed 49/49 stages (run
 `d9ed4167-2468-4f20-9fa9-038fb835946f`): 48.1 seconds of widget compute and
 122.8 seconds cold end-to-end wall time including first-use server basis
 construction and verification.
+
+After latency microsharding, run
+`64bb9b6a-1505-4436-a74e-4af29cd3b8a0` completed all 433 runtime stages in
+431 accepted assignments: p50 134 ms, p95 165 ms, p99 181 ms, maximum 223 ms,
+final label `positive` at confidence `0.9746583143462941`. Aggregate sequential
+widget work was about 58.3 seconds; an individual visitor performs only their
+assigned bounded segment.
 
 **Roadmap:** scale from classification to batch generation (KV-cache custody
 across token steps), add cached binary weight delivery, and accelerate the

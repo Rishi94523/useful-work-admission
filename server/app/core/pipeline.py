@@ -33,13 +33,20 @@ from app.models import PipelineRun, Sample
 logger = logging.getLogger(__name__)
 settings = get_settings()
 
-# How many layers each risk tier computes per CAPTCHA. Low-risk users get a
-# single layer (fastest); bot-like traffic must compute the whole model.
-SEGMENT_LAYERS_BY_DIFFICULTY = {
-    "normal": 1,
-    "suspicious": 2,
-    "bot_like": 99,  # clamped to remaining layers = full model
+# Compute budgets replace the old static layer counts. A layer can vary from
+# microseconds (tiny dense head) to seconds (an unsplit transformer MLP), so a
+# count is not a meaningful latency control. Client throughput is measured by
+# the widget with the same kind of dense loops used by the shard engine and is
+# conservatively clamped before it affects assignment size.
+LATENCY_BUDGET_MS_BY_DIFFICULTY = {
+    "normal": 200,
+    "suspicious": 250,
+    "bot_like": 280,
 }
+DEFAULT_BROWSER_OPS_PER_MS = 250_000.0
+MIN_BROWSER_OPS_PER_MS = 25_000.0
+MAX_BROWSER_OPS_PER_MS = 250_000.0
+MAX_ASSIGNMENT_TARGET_MS = 300
 
 # A claimed segment is reassignable after this long without a submission.
 CLAIM_TTL_SECONDS = 90
@@ -57,6 +64,8 @@ class SegmentAssignment:
     input_vector: List[float]
     # extra verification context (e.g. pad_len for LLM attention masks)
     context: dict = None
+    estimated_compute_ms: int = 0
+    latency_budget_ms: int = 300
 
     @property
     def layer_count(self) -> int:
@@ -69,11 +78,70 @@ class PipelineCoordinator:
     def __init__(self, db: AsyncSession):
         self.db = db
 
+    @staticmethod
+    def normalized_ops_per_ms(
+        benchmark_ops_per_ms: Optional[float] = None,
+    ) -> float:
+        reported = benchmark_ops_per_ms or DEFAULT_BROWSER_OPS_PER_MS
+        return min(
+            MAX_BROWSER_OPS_PER_MS,
+            max(MIN_BROWSER_OPS_PER_MS, float(reported)),
+        )
+
+    @classmethod
+    def model_fits_latency_target(
+        cls,
+        model: ModelSpec,
+        benchmark_ops_per_ms: Optional[float] = None,
+        target_ms: int = MAX_ASSIGNMENT_TARGET_MS,
+    ) -> bool:
+        """Whether every indivisible runtime stage fits the device target."""
+        ops_per_ms = cls.normalized_ops_per_ms(benchmark_ops_per_ms)
+        return all(
+            (float(layer.compute_ops) / ops_per_ms) <= target_ms
+            for layer in model.layers
+        )
+
+    @staticmethod
+    def plan_segment(
+        model: ModelSpec,
+        segment_start: int,
+        difficulty: str,
+        benchmark_ops_per_ms: Optional[float] = None,
+    ) -> Tuple[int, int, int]:
+        """Return ``(end, estimated_ms, budget_ms)`` for one browser task."""
+        budget_ms = LATENCY_BUDGET_MS_BY_DIFFICULTY.get(difficulty, 200)
+        ops_per_ms = PipelineCoordinator.normalized_ops_per_ms(
+            benchmark_ops_per_ms
+        )
+
+        end = segment_start
+        total_ops = 0
+        while end < model.total_layers:
+            layer_ops = int(model.layers[end].compute_ops)
+            candidate_ms = (total_ops + layer_ops) / ops_per_ms
+            if end > segment_start and candidate_ms > budget_ms:
+                break
+            total_ops += layer_ops
+            end += 1
+
+        # A single indivisible layer is always assigned even when its estimate
+        # is above budget. Production transformer attention and MLP operators
+        # are split below that limit at model-load time, which makes this
+        # exceptional path visible instead of silently constructing an
+        # unfinishable empty task.
+        if end == segment_start:
+            total_ops = int(model.layers[end].compute_ops)
+            end += 1
+        estimated_ms = max(1, int(np.ceil(total_ops / ops_per_ms)))
+        return end, estimated_ms, budget_ms
+
     async def claim_segment(
         self,
         task_id: uuid.UUID,
         difficulty: str,
         model: Optional[ModelSpec] = None,
+        benchmark_ops_per_ms: Optional[float] = None,
     ) -> SegmentAssignment:
         """
         Claim the next unit of work for a new CAPTCHA task.
@@ -85,7 +153,6 @@ class PipelineCoordinator:
         every architecture (dense MLP, CNN, …) keeps labeling its dataset.
         """
         store = get_model_store()
-        segment_layers = SEGMENT_LAYERS_BY_DIFFICULTY.get(difficulty, 1)
         now = datetime.utcnow()
 
         run = await self._find_claimable_run(model, now)
@@ -112,7 +179,12 @@ class PipelineCoordinator:
             sample = await self._get_sample(run.sample_id)
 
         segment_start = run.next_layer
-        segment_end = min(segment_start + segment_layers, model.total_layers)
+        segment_end, estimated_compute_ms, latency_budget_ms = self.plan_segment(
+            model,
+            segment_start,
+            difficulty,
+            benchmark_ops_per_ms,
+        )
 
         run.claimed_by_task = task_id
         run.claimed_until = now + timedelta(seconds=CLAIM_TTL_SECONDS)
@@ -134,6 +206,13 @@ class PipelineCoordinator:
             )
             context.update(prep_context)
 
+        # The wire format is float32. Canonicalizing here ensures the verifier
+        # checks the exact activation the browser decodes, including partial
+        # accumulator handoffs between independent sessions.
+        input_vector = [
+            float(v) for v in np.asarray(input_vector, dtype=np.float32)
+        ]
+
         logger.debug(
             "Claimed segment [%d,%d) of run %s for task %s",
             segment_start,
@@ -149,6 +228,8 @@ class PipelineCoordinator:
             segment_end=segment_end,
             input_vector=input_vector,
             context=context,
+            estimated_compute_ms=estimated_compute_ms,
+            latency_budget_ms=latency_budget_ms,
         )
 
     async def _find_claimable_run(

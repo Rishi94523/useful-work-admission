@@ -36,6 +36,9 @@ describe('ApiClient model selection', () => {
       timezone: 'UTC',
       screenWidth: 1280,
       screenHeight: 720,
+      hardwareConcurrency: 8,
+      deviceMemoryGb: 16,
+      benchmarkOpsPerMs: 123456,
     });
 
     const calls = fetchMock.mock.calls as unknown as Array<
@@ -44,5 +47,10 @@ describe('ApiClient model selection', () => {
     const request = calls[0][1];
     const body = JSON.parse(String(request?.body)) as Record<string, unknown>;
     expect(body.preferred_model).toBe('llm-qwen2-sentiment');
+    expect(body.client_metadata).toMatchObject({
+      hardware_concurrency: 8,
+      device_memory_gb: 16,
+      benchmark_ops_per_ms: 123456,
+    });
   });
 });

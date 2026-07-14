@@ -47,6 +47,9 @@ export class ApiClient {
             timezone: metadata.timezone,
             screen_width: metadata.screenWidth,
             screen_height: metadata.screenHeight,
+            hardware_concurrency: metadata.hardwareConcurrency,
+            device_memory_gb: metadata.deviceMemoryGb,
+            benchmark_ops_per_ms: metadata.benchmarkOpsPerMs,
           },
           preferred_model: this.config.get('preferredModel') || undefined,
         }),
@@ -332,6 +335,45 @@ export interface ClientMetadata {
   timezone: string;
   screenWidth: number;
   screenHeight: number;
+  hardwareConcurrency?: number;
+  deviceMemoryGb?: number;
+  benchmarkOpsPerMs?: number;
+}
+
+/**
+ * Short pure-JavaScript dense-loop calibration. The server uses this only to
+ * size useful work below its latency budget; proof soundness never depends on
+ * a client-reported performance value.
+ */
+export function benchmarkClientOpsPerMs(durationMs = 10): number {
+  if (typeof performance === 'undefined') return 250_000;
+  const inputSize = 64;
+  const outputSize = 64;
+  const rows = 4;
+  const input = new Float32Array(rows * inputSize).fill(0.25);
+  const weights = new Float32Array(outputSize * inputSize).fill(0.125);
+  const output = new Float32Array(rows * outputSize);
+  const opsPerRound = rows * inputSize * outputSize;
+  const startedAt = performance.now();
+  let rounds = 0;
+  do {
+    for (let row = 0; row < rows; row++) {
+      const inputOffset = row * inputSize;
+      for (let out = 0; out < outputSize; out++) {
+        let sum = 0;
+        const weightOffset = out * inputSize;
+        for (let i = 0; i < inputSize; i++) {
+          sum += input[inputOffset + i] * weights[weightOffset + i];
+        }
+        output[row * outputSize + out] = sum;
+      }
+    }
+    rounds += 1;
+  } while (performance.now() - startedAt < durationMs && rounds < 10_000);
+  // Read a result so optimizing runtimes cannot discard the loop.
+  if (!Number.isFinite(output[output.length - 1])) return 250_000;
+  const elapsed = Math.max(0.1, performance.now() - startedAt);
+  return Math.max(1_000, Math.round((rounds * opsPerRound) / elapsed));
 }
 
 /**
@@ -357,11 +399,15 @@ export class ApiError extends Error {
  * Get client metadata
  */
 export function getClientMetadata(): ClientMetadata {
+  const nav = navigator as Navigator & { deviceMemory?: number };
   return {
     userAgent: navigator.userAgent,
     language: navigator.language,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     screenWidth: window.screen.width,
     screenHeight: window.screen.height,
+    hardwareConcurrency: navigator.hardwareConcurrency || 1,
+    deviceMemoryGb: nav.deviceMemory,
+    benchmarkOpsPerMs: benchmarkClientOpsPerMs(),
   };
 }

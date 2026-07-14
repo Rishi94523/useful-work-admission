@@ -826,6 +826,10 @@ class ModelSpec:
         submitted concatenation; ``layer_input`` feeds residual connections.
         """
         layer = self.layers[layer_index]
+        if hasattr(layer, "custody_output"):
+            if layer_input is None:
+                raise ValueError("custody output requires the layer input")
+            return layer.custody_output(z, layer_input)
         if hasattr(layer, "z_output"):
             # multi-part submissions ([Q|K|V|S|O|Z], [G|U|D], …): post-ops
             # operate on the final sub-block
@@ -843,12 +847,25 @@ class ModelSpec:
         checks in proof_verifier, which never run this. ``pad_len`` is the
         left-padding length for LLM attention masks.
         """
-        from app.ml.llm_layers import GQAAttentionLayer, SwigluMlpLayer
+        from app.ml.llm_layers import (
+            GQAAttentionLayer,
+            GQAAttentionChunkLayer,
+            SwigluMlpChunkLayer,
+            SwigluMlpLayer,
+        )
 
         pre_activations: List[np.ndarray] = []
         h = np.asarray(x, dtype=np.float64)
         for offset, layer in enumerate(self.layers[start:end]):
-            if isinstance(layer, (GQAAttentionLayer, SwigluMlpLayer)):
+            if isinstance(
+                layer,
+                (
+                    GQAAttentionLayer,
+                    GQAAttentionChunkLayer,
+                    SwigluMlpLayer,
+                    SwigluMlpChunkLayer,
+                ),
+            ):
                 z = layer.forward(h, pad_len=pad_len)
             else:
                 z = layer.forward(h)
@@ -1159,7 +1176,7 @@ class ModelStore:
             raise ValueError(f"weights file hash mismatch for {manifest['name']}")
 
         weights = np.load(weights_path)
-        layers = []
+        source_layers = []
         for layer_manifest in manifest["layers"]:
             layer = _load_layer(layer_manifest, weights)
             # Verify each layer's declared checksum against the actual weights
@@ -1169,23 +1186,91 @@ class ModelStore:
                     f"layer checksum mismatch for {manifest['name']} "
                     f"layer {layer.index}"
                 )
-            layers.append(layer)
+            source_layers.append(layer)
 
         # Model checksum = hash of layer checksums (verify it too)
         expected_model_checksum = hashlib.sha256(
-            "".join(l.checksum for l in layers).encode("ascii")
+            "".join(l.checksum for l in source_layers).encode("ascii")
         ).hexdigest()
         if expected_model_checksum != manifest["checksum"]:
             raise ValueError(f"model checksum mismatch for {manifest['name']}")
 
+        # Transformer attention and MLP units are expanded only after the
+        # source checkpoint and every original layer pass their manifest
+        # checks. The head-group/FFN-axis partitions retain the exact model
+        # algebra while bounding each browser assignment.
+        from app.ml.llm_layers import GQAAttentionLayer, SwigluMlpLayer
+
+        pipeline_config = manifest.get("pipeline", {})
+        default_chunks = 16 if manifest["input"].get("kind") == "text" else 1
+        swiglu_chunks = int(
+            pipeline_config.get("swiglu_microshards", default_chunks)
+        )
+        source_gqa_layers = [
+            layer
+            for layer in source_layers
+            if isinstance(layer, GQAAttentionLayer)
+        ]
+        default_gqa_chunks = (
+            2
+            if manifest["input"].get("kind") == "text"
+            and source_gqa_layers
+            and all(layer.n_kv_heads % 2 == 0 for layer in source_gqa_layers)
+            else 1
+        )
+        gqa_chunks = int(
+            pipeline_config.get("gqa_microshards", default_gqa_chunks)
+        )
+        layers = []
+        for source_layer in source_layers:
+            if isinstance(source_layer, GQAAttentionLayer) and gqa_chunks > 1:
+                layers.extend(source_layer.split(gqa_chunks))
+            elif isinstance(source_layer, SwigluMlpLayer) and swiglu_chunks > 1:
+                layers.extend(source_layer.split(swiglu_chunks))
+            else:
+                layers.append(source_layer)
+        for runtime_index, layer in enumerate(layers):
+            layer.index = runtime_index
+
+        runtime_version = manifest["version"]
+        runtime_checksum = manifest["checksum"]
+        if len(layers) != len(source_layers):
+            runtime_version = (
+                f"{runtime_version}+gqa{gqa_chunks}-ms{swiglu_chunks}"
+            )
+            execution_layout = [
+                {
+                    "index": layer.index,
+                    "type": layer.layer_type,
+                    "checksum": layer.checksum,
+                    "input_size": layer.input_size,
+                    "output_size": layer.output_size,
+                    "chunk_index": getattr(layer, "chunk_index", None),
+                    "chunk_count": getattr(layer, "chunk_count", None),
+                    "input_ops": getattr(layer, "input_ops", []),
+                    "post_ops": getattr(layer, "post_ops", []),
+                }
+                for layer in layers
+            ]
+            runtime_checksum = hashlib.sha256(
+                (
+                    f"microshard-v2:{manifest['checksum']}:"
+                    + json.dumps(
+                        execution_layout,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    )
+                ).encode("ascii")
+            ).hexdigest()
+
         return ModelSpec(
             name=manifest["name"],
-            version=manifest["version"],
+            version=runtime_version,
             task_type=manifest["task_type"],
             labels=manifest["labels"],
             input_shape=manifest["input"]["shape"],
             preprocessing=manifest["input"].get("preprocessing", ""),
-            checksum=manifest["checksum"],
+            checksum=runtime_checksum,
             layers=layers,
             metrics=manifest.get("metrics", {}),
             input_quantized=bool(manifest["input"].get("quantized", False)),

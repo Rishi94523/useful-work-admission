@@ -120,6 +120,7 @@ async def init_captcha(
             session_id=session.id,
             difficulty=difficulty,
             preferred_model=request.preferred_model,
+            benchmark_ops_per_ms=request.client_metadata.benchmark_ops_per_ms,
         )
         task.metadata_ = {
             **(task.metadata_ or {}),
@@ -151,6 +152,7 @@ async def init_captcha(
             expected_layers=shard_task.expected_layers,
             difficulty=shard_task.difficulty,
             expected_time_ms=shard_task.expected_time_ms,
+            latency_budget_ms=shard_task.latency_budget_ms,
             labels=shard_task.labels,
             model_checksum=shard_task.model_checksum,
             pad_len=shard_task.pad_len,

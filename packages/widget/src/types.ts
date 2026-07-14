@@ -102,6 +102,10 @@ export interface NeuralLayerConfig {
   ropeTheta?: number;
   /** SwiGLU hidden dimension */
   ffnDim?: number;
+  /** Zero-based vertical SwiGLU microshard index */
+  chunkIndex?: number;
+  /** Number of vertical SwiGLU microshards in the original MLP */
+  chunkCount?: number;
 }
 
 /**
@@ -134,6 +138,8 @@ export interface ShardTask {
   difficulty: string;
   /** Expected computation time in ms */
   expectedTimeMs: number;
+  /** Server-side hard target used to size this assignment */
+  latencyBudgetMs?: number;
   /** Class labels for prediction */
   labels: string[];
   /** Model checksum (hash of layer checksums) */

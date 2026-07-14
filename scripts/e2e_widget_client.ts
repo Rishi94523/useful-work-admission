@@ -4,6 +4,7 @@
  */
 
 import type { Config } from '../packages/widget/src/core/config';
+import { benchmarkClientOpsPerMs } from '../packages/widget/src/core/api-client';
 import { ShardInferenceEngine } from '../packages/widget/src/ml/shard-engine';
 import type { ShardTask } from '../packages/widget/src/types';
 
@@ -54,6 +55,7 @@ async function main(): Promise<void> {
   const segments: Array<Record<string, unknown>> = [];
   let finalPipeline: SubmitResponse['pipeline'];
   let totalComputeMs = 0;
+  const benchmarkOpsPerMs = benchmarkClientOpsPerMs();
 
   for (let solve = 0; solve < solves; solve++) {
     const init = await requestJson<InitResponse>(`${api}/captcha/init`, {
@@ -65,6 +67,9 @@ async function main(): Promise<void> {
         timezone: 'UTC',
         screenWidth: 1920,
         screenHeight: 1080,
+        hardwareConcurrency: 8,
+        deviceMemoryGb: 8,
+        benchmarkOpsPerMs,
       },
     });
 
@@ -104,6 +109,8 @@ async function main(): Promise<void> {
         0
       ),
       computeMs: Math.round(result.timing.totalMs),
+      expectedComputeMs: init.task.expectedTimeMs,
+      latencyBudgetMs: init.task.latencyBudgetMs,
     });
     if (submit.pipeline?.completed) break;
   }
@@ -114,6 +121,7 @@ async function main(): Promise<void> {
         model,
         solves: segments.length,
         totalComputeMs: Math.round(totalComputeMs),
+        benchmarkOpsPerMs,
         segments,
         pipeline: finalPipeline,
       },

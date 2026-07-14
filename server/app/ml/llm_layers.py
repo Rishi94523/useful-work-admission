@@ -204,12 +204,20 @@ class GQAAttentionLayer:
         }[which]
         return dequantize_rows(w, s)  # (out, in) f32
 
-    def forward(self, x: np.ndarray, pad_len: int = 0) -> np.ndarray:
-        """Reference computation of the full submission (float64)."""
+    def source_input(self, x: np.ndarray) -> np.ndarray:
+        return np.asarray(x, dtype=np.float64).reshape(-1)
+
+    def transformed_input(self, x: np.ndarray) -> np.ndarray:
         from app.ml.model_store import apply_post_ops
 
+        return apply_post_ops(
+            self.source_input(x), self.input_ops
+        ).reshape(self.seq, self.d_model)
+
+    def forward(self, x: np.ndarray, pad_len: int = 0) -> np.ndarray:
+        """Reference computation of the full submission (float64)."""
         t, hd = self.seq, self.head_dim
-        xn = apply_post_ops(x, self.input_ops).reshape(t, self.d_model)
+        xn = self.transformed_input(x)
 
         q = (xn @ self.dequant("q").astype(np.float64).T + self.bq).reshape(
             t, self.n_heads, hd
@@ -276,6 +284,107 @@ class GQAAttentionLayer:
         for b in (self.bq, self.bk, self.bv):
             h.update(np.ascontiguousarray(b, dtype="<f4").tobytes())
         return h.hexdigest()
+
+    def split(self, chunk_count: int) -> List["GQAAttentionChunkLayer"]:
+        """Split query/KV head groups and their output-projection columns."""
+        if chunk_count < 1 or chunk_count > self.n_kv_heads:
+            raise ValueError("invalid GQA chunk count")
+        if self.n_kv_heads % chunk_count != 0:
+            raise ValueError("GQA chunks must evenly divide KV heads")
+
+        heads_per_kv = self.n_heads // self.n_kv_heads
+        kv_per_chunk = self.n_kv_heads // chunk_count
+        chunks: List[GQAAttentionChunkLayer] = []
+        for chunk_index in range(chunk_count):
+            kv_start = chunk_index * kv_per_chunk
+            kv_end = kv_start + kv_per_chunk
+            head_start = kv_start * heads_per_kv
+            head_end = kv_end * heads_per_kv
+            q_start, q_end = (
+                head_start * self.head_dim,
+                head_end * self.head_dim,
+            )
+            kv_dim_start, kv_dim_end = (
+                kv_start * self.head_dim,
+                kv_end * self.head_dim,
+            )
+            chunk = GQAAttentionChunkLayer(
+                index=-1,
+                name=f"{self.name}_part{chunk_index + 1}of{chunk_count}",
+                seq=self.seq,
+                d_model=self.d_model,
+                n_heads=head_end - head_start,
+                n_kv_heads=kv_end - kv_start,
+                head_dim=self.head_dim,
+                rope_theta=self.rope_theta,
+                wq=np.ascontiguousarray(self.wq[q_start:q_end]),
+                sq=np.ascontiguousarray(self.sq[q_start:q_end]),
+                wk=np.ascontiguousarray(self.wk[kv_dim_start:kv_dim_end]),
+                sk=np.ascontiguousarray(self.sk[kv_dim_start:kv_dim_end]),
+                wv=np.ascontiguousarray(self.wv[kv_dim_start:kv_dim_end]),
+                sv=np.ascontiguousarray(self.sv[kv_dim_start:kv_dim_end]),
+                wo=np.ascontiguousarray(self.wo[:, q_start:q_end]),
+                so=np.ascontiguousarray(self.so),
+                bq=np.ascontiguousarray(self.bq[q_start:q_end]),
+                bk=np.ascontiguousarray(self.bk[kv_dim_start:kv_dim_end]),
+                bv=np.ascontiguousarray(self.bv[kv_dim_start:kv_dim_end]),
+                checksum="",
+                input_ops=list(self.input_ops),
+                post_ops=list(self.post_ops) if chunk_index == chunk_count - 1 else [],
+                chunk_index=chunk_index,
+                chunk_count=chunk_count,
+            )
+            chunk.checksum = chunk.compute_checksum()
+            chunks.append(chunk)
+        return chunks
+
+
+@dataclass
+class GQAAttentionChunkLayer(GQAAttentionLayer):
+    """A head-group GQA microshard with verified output-sum custody."""
+
+    chunk_index: int = 0
+    chunk_count: int = 1
+
+    layer_type = "gqa_attention_chunk"
+
+    @property
+    def hidden_size(self) -> int:
+        return self.seq * self.d_model
+
+    @property
+    def input_size(self) -> int:
+        return self.hidden_size if self.chunk_index == 0 else 2 * self.hidden_size
+
+    def source_input(self, x: np.ndarray) -> np.ndarray:
+        return np.asarray(x, dtype=np.float64).reshape(-1)[: self.hidden_size]
+
+    def custody_output(self, z_flat: np.ndarray, layer_input: np.ndarray) -> np.ndarray:
+        from app.ml.model_store import apply_post_ops
+
+        state = np.asarray(layer_input, dtype=np.float64).reshape(-1)
+        source = state[: self.hidden_size]
+        prior = (
+            np.zeros(self.hidden_size, dtype=np.float64)
+            if self.chunk_index == 0
+            else state[self.hidden_size :]
+        )
+        accumulated = prior + self.z_output(z_flat)
+        if self.chunk_index == self.chunk_count - 1:
+            return apply_post_ops(accumulated, self.post_ops, layer_input=source)
+        return np.concatenate([source, accumulated])
+
+    def wire_payload(self) -> dict:
+        payload = super().wire_payload()
+        payload.update(
+            {
+                "type": "gqa_attention_chunk",
+                "chunkIndex": self.chunk_index,
+                "chunkCount": self.chunk_count,
+                "inputShape": [1, self.input_size],
+            }
+        )
+        return payload
 
 
 @dataclass
@@ -366,6 +475,194 @@ class SwigluMlpLayer:
             "weightsB64": b64(np.concatenate([w.reshape(-1) for w in (self.wg, self.wu, self.wd)])),
             "scales": np.concatenate([self.sg, self.su, self.sd]).astype(np.float32).tolist(),
             "inputShape": [self.seq, self.d_model],
+            "outputShape": [self.output_size],
+            "activation": "linear",
+            "inputOps": list(self.input_ops),
+            "postOps": list(self.post_ops),
+        }
+
+    def compute_checksum(self) -> str:
+        h = hashlib.sha256()
+        for w in (self.wg, self.wu, self.wd):
+            h.update(np.ascontiguousarray(w, dtype="<i1").tobytes())
+        for s in (self.sg, self.su, self.sd):
+            h.update(np.ascontiguousarray(s, dtype="<f4").tobytes())
+        return h.hexdigest()
+
+    def split(self, chunk_count: int) -> List["SwigluMlpChunkLayer"]:
+        """Split the FFN axis into independently provable partial sums."""
+        if chunk_count < 1 or chunk_count > self.ffn_dim:
+            raise ValueError("invalid SwiGLU chunk count")
+
+        chunks: List[SwigluMlpChunkLayer] = []
+        boundaries = np.linspace(0, self.ffn_dim, chunk_count + 1, dtype=int)
+        for chunk_index, (start, end) in enumerate(
+            zip(boundaries[:-1], boundaries[1:])
+        ):
+            chunk = SwigluMlpChunkLayer(
+                index=-1,
+                name=f"{self.name}_part{chunk_index + 1}of{chunk_count}",
+                seq=self.seq,
+                d_model=self.d_model,
+                ffn_dim=int(end - start),
+                wg=np.ascontiguousarray(self.wg[start:end]),
+                sg=np.ascontiguousarray(self.sg[start:end]),
+                wu=np.ascontiguousarray(self.wu[start:end]),
+                su=np.ascontiguousarray(self.su[start:end]),
+                wd=np.ascontiguousarray(self.wd[:, start:end]),
+                sd=np.ascontiguousarray(self.sd),
+                checksum="",
+                chunk_index=chunk_index,
+                chunk_count=chunk_count,
+                input_ops=list(self.input_ops),
+                post_ops=list(self.post_ops) if chunk_index == chunk_count - 1 else [],
+            )
+            chunk.checksum = chunk.compute_checksum()
+            chunks.append(chunk)
+        return chunks
+
+
+@dataclass
+class SwigluMlpChunkLayer:
+    """
+    A vertical SwiGLU microshard with server-custodied partial aggregation.
+
+    Each chunk proves G/U for a disjoint FFN-neuron slice and a partial
+    down-projection D. Between browser sessions the pipeline activation is
+    ``[original_hidden | accumulated_D]``. Only the final chunk applies the
+    original residual/post-op chain, so no client can substitute or omit a
+    partial sum.
+    """
+
+    index: int
+    name: str
+    seq: int
+    d_model: int
+    ffn_dim: int
+    wg: np.ndarray
+    sg: np.ndarray
+    wu: np.ndarray
+    su: np.ndarray
+    wd: np.ndarray
+    sd: np.ndarray
+    checksum: str
+    chunk_index: int
+    chunk_count: int
+    input_ops: List[dict] = field(default_factory=list)
+    post_ops: List[dict] = field(default_factory=list)
+
+    layer_type = "swiglu_mlp_chunk"
+    activation = "linear"
+
+    @property
+    def hidden_size(self) -> int:
+        return self.seq * self.d_model
+
+    @property
+    def input_size(self) -> int:
+        return self.hidden_size if self.chunk_index == 0 else 2 * self.hidden_size
+
+    def offsets(self) -> dict:
+        t, f, d = self.seq, self.ffn_dim, self.d_model
+        return {
+            "G": (0, t * f),
+            "U": (t * f, 2 * t * f),
+            "D": (2 * t * f, 2 * t * f + t * d),
+        }
+
+    @property
+    def output_size(self) -> int:
+        return self.offsets()["D"][1]
+
+    @property
+    def compute_ops(self) -> int:
+        return self.seq * self.d_model * self.ffn_dim * 3
+
+    @property
+    def projection_ops(self) -> int:
+        return self.hidden_size + self.output_size
+
+    def source_input(self, x: np.ndarray) -> np.ndarray:
+        state = np.asarray(x, dtype=np.float64).reshape(-1)
+        return state[: self.hidden_size]
+
+    def transformed_input(self, x: np.ndarray) -> np.ndarray:
+        from app.ml.model_store import apply_post_ops
+
+        return apply_post_ops(
+            self.source_input(x), self.input_ops
+        ).reshape(self.seq, self.d_model)
+
+    def extract(self, z_flat: np.ndarray) -> dict:
+        z = np.asarray(z_flat, dtype=np.float64)
+        offs = self.offsets()
+        return {
+            "G": z[offs["G"][0] : offs["G"][1]].reshape(
+                self.seq, self.ffn_dim
+            ),
+            "U": z[offs["U"][0] : offs["U"][1]].reshape(
+                self.seq, self.ffn_dim
+            ),
+            "D": z[offs["D"][0] : offs["D"][1]].reshape(
+                self.seq, self.d_model
+            ),
+        }
+
+    def dequant(self, which: str) -> np.ndarray:
+        w, s = {
+            "g": (self.wg, self.sg),
+            "u": (self.wu, self.su),
+            "d": (self.wd, self.sd),
+        }[which]
+        return dequantize_rows(w, s)
+
+    def forward(self, x: np.ndarray, pad_len: int = 0) -> np.ndarray:
+        xn = self.transformed_input(x)
+        g = xn @ self.dequant("g").astype(np.float64).T
+        u = xn @ self.dequant("u").astype(np.float64).T
+        h = silu(g) * u
+        d = h @ self.dequant("d").astype(np.float64).T
+        return np.concatenate([g.reshape(-1), u.reshape(-1), d.reshape(-1)])
+
+    def custody_output(self, z_flat: np.ndarray, layer_input: np.ndarray) -> np.ndarray:
+        """Advance the server-owned partial sum after this proof is valid."""
+        from app.ml.model_store import apply_post_ops
+
+        state = np.asarray(layer_input, dtype=np.float64).reshape(-1)
+        source = state[: self.hidden_size]
+        prior = (
+            np.zeros(self.hidden_size, dtype=np.float64)
+            if self.chunk_index == 0
+            else state[self.hidden_size :]
+        )
+        partial = self.extract(z_flat)["D"].reshape(-1)
+        accumulated = prior + partial
+        if self.chunk_index == self.chunk_count - 1:
+            return apply_post_ops(accumulated, self.post_ops, layer_input=source)
+        return np.concatenate([source, accumulated])
+
+    def wire_payload(self) -> dict:
+        import base64
+
+        weights = np.concatenate(
+            [self.wg.reshape(-1), self.wu.reshape(-1), self.wd.reshape(-1)]
+        )
+        scales = np.concatenate([self.sg, self.su, self.sd])
+        return {
+            "name": self.name,
+            "type": "swiglu_mlp_chunk",
+            "seq": self.seq,
+            "dModel": self.d_model,
+            "ffnDim": self.ffn_dim,
+            "chunkIndex": self.chunk_index,
+            "chunkCount": self.chunk_count,
+            "weights": [],
+            "biases": [],
+            "weightsB64": base64.b64encode(
+                np.ascontiguousarray(weights, dtype="<i1").tobytes()
+            ).decode("ascii"),
+            "scales": scales.astype(np.float32).tolist(),
+            "inputShape": [1, self.input_size],
             "outputShape": [self.output_size],
             "activation": "linear",
             "inputOps": list(self.input_ops),

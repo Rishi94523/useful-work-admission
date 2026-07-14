@@ -28,6 +28,18 @@ class ClientMetadata(APIModel):
     timezone: str = Field(..., description="Client timezone")
     screen_width: Optional[int] = Field(default=None, description="Screen width")
     screen_height: Optional[int] = Field(default=None, description="Screen height")
+    hardware_concurrency: Optional[int] = Field(
+        default=None, ge=1, le=256, description="Logical browser processor count"
+    )
+    device_memory_gb: Optional[float] = Field(
+        default=None, ge=0.25, le=1024, description="Approximate browser device memory"
+    )
+    benchmark_ops_per_ms: Optional[float] = Field(
+        default=None,
+        ge=1_000,
+        le=5_000_000,
+        description="Short pure-JavaScript dense-loop benchmark throughput",
+    )
 
 
 class CaptchaInitRequest(APIModel):
@@ -135,6 +147,12 @@ class NeuralLayerConfig(APIModel):
     head_dim: Optional[int] = Field(default=None, description="GQA head dim")
     rope_theta: Optional[float] = Field(default=None, description="RoPE theta")
     ffn_dim: Optional[int] = Field(default=None, description="SwiGLU FFN dim")
+    chunk_index: Optional[int] = Field(
+        default=None, ge=0, description="Vertical SwiGLU microshard index"
+    )
+    chunk_count: Optional[int] = Field(
+        default=None, ge=1, description="Vertical SwiGLU microshard count"
+    )
 
 
 class ModelShardInfo(APIModel):
@@ -184,6 +202,9 @@ class ShardTaskInfo(APIModel):
     expected_layers: int
     difficulty: str
     expected_time_ms: int
+    latency_budget_ms: int = Field(
+        default=300, description="Maximum target compute time for this assignment"
+    )
     labels: List[str]
     model_checksum: str
     pad_len: int = Field(

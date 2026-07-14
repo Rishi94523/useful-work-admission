@@ -641,6 +641,17 @@ class TestLLMVerification:
     masked softmax) and SwiGLU MLP (server-replayed silu gate).
     """
 
+    def test_runtime_graph_uses_latency_microshards(self, llm_model):
+        assert llm_model.total_layers == 433
+        assert sum(
+            layer.layer_type == "gqa_attention_chunk"
+            for layer in llm_model.layers
+        ) == 48
+        assert sum(
+            layer.layer_type == "swiglu_mlp_chunk"
+            for layer in llm_model.layers
+        ) == 384
+
     @pytest.fixture(scope="class")
     def llm_input(self, llm_model):
         text = "Fantastic quality and arrived earlier than expected."
@@ -664,13 +675,26 @@ class TestLLMVerification:
 
     def test_honest_mlp_unit_passes(self, llm_model, verifier, llm_input):
         vec, ctx = llm_input
-        _, act1 = llm_model.forward_segment(
-            np.asarray(vec, dtype=np.float64), 0, 1, pad_len=ctx["pad_len"]
+        mlp_index = next(
+            i
+            for i, layer in enumerate(llm_model.layers)
+            if layer.layer_type == "swiglu_mlp_chunk"
         )
-        layer = llm_model.layers[1]
+        _, act1 = llm_model.forward_segment(
+            np.asarray(vec, dtype=np.float64),
+            0,
+            mlp_index,
+            pad_len=ctx["pad_len"],
+        )
+        layer = llm_model.layers[mlp_index]
         z = layer.forward(act1, pad_len=ctx["pad_len"])
         report = self._submit(
-            llm_model, verifier, 1, [float(v) for v in act1], z, ctx
+            llm_model,
+            verifier,
+            mlp_index,
+            [float(v) for v in act1],
+            z,
+            ctx,
         )
         assert report.valid, report.reason
 
@@ -691,17 +715,31 @@ class TestLLMVerification:
         from app.ml.llm_layers import SwigluMlpLayer
 
         vec, ctx = llm_input
-        _, act1 = llm_model.forward_segment(
-            np.asarray(vec, dtype=np.float64), 0, 1, pad_len=ctx["pad_len"]
+        mlp_index = next(
+            i
+            for i, candidate in enumerate(llm_model.layers)
+            if candidate.layer_type == "swiglu_mlp_chunk"
         )
-        layer: SwigluMlpLayer = llm_model.layers[1]
+        _, act1 = llm_model.forward_segment(
+            np.asarray(vec, dtype=np.float64),
+            0,
+            mlp_index,
+            pad_len=ctx["pad_len"],
+        )
+        layer: SwigluMlpLayer = llm_model.layers[mlp_index]
         z = layer.forward(act1, pad_len=ctx["pad_len"]).copy()
         parts = layer.extract(z)
         fake_d = (parts["G"] * parts["U"]) @ layer.dequant("d").astype(np.float64).T
         offs = layer.offsets()
         z[offs["D"][0] : offs["D"][1]] = fake_d.reshape(-1)
         report = self._submit(
-            llm_model, verifier, 1, [float(v) for v in act1], z, ctx, task="cheat"
+            llm_model,
+            verifier,
+            mlp_index,
+            [float(v) for v in act1],
+            z,
+            ctx,
+            task="cheat",
         )
         assert not report.valid
         assert "swiglu D" in report.reason

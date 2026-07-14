@@ -494,10 +494,15 @@ class ProofVerifier:
         O = P·V with the masked softmax P computed by the SERVER.
         """
         from app.ml.llm_layers import attention_probs
-        from app.ml.model_store import apply_post_ops
-
         parts = layer.extract(z)
-        xn = apply_post_ops(x, layer.input_ops).reshape(layer.seq, layer.d_model)
+        if hasattr(layer, "transformed_input"):
+            xn = layer.transformed_input(x)
+        else:
+            from app.ml.model_store import apply_post_ops
+
+            xn = apply_post_ops(x, layer.input_ops).reshape(
+                layer.seq, layer.d_model
+            )
         p_matrix = attention_probs(parts["S"], layer.head_dim, pad_len)
         hd = layer.head_dim
 
@@ -585,10 +590,15 @@ class ProofVerifier:
         (O(ffn) elementwise); D affine in that server-computed H.
         """
         from app.ml.llm_layers import silu
-        from app.ml.model_store import apply_post_ops
-
         parts = layer.extract(z)
-        xn = apply_post_ops(x, layer.input_ops).reshape(layer.seq, layer.d_model)
+        if hasattr(layer, "transformed_input"):
+            xn = layer.transformed_input(x)
+        else:
+            from app.ml.model_store import apply_post_ops
+
+            xn = apply_post_ops(x, layer.input_ops).reshape(
+                layer.seq, layer.d_model
+            )
         h_matrix = silu(parts["G"]) * parts["U"]
 
         for rd in self._swiglu_projections(
@@ -752,7 +762,7 @@ class ProofVerifier:
                         failure,
                     )
                     return report
-            elif layer.layer_type == "gqa_attention":
+            elif layer.layer_type in ("gqa_attention", "gqa_attention_chunk"):
                 failure = self._verify_gqa_attention(
                     model,
                     layer_index,
@@ -769,7 +779,7 @@ class ProofVerifier:
                         task_id, layer_index, failure,
                     )
                     return report
-            elif layer.layer_type == "swiglu_mlp":
+            elif layer.layer_type in ("swiglu_mlp", "swiglu_mlp_chunk"):
                 failure = self._verify_swiglu(
                     model,
                     layer_index,

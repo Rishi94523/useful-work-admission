@@ -66,6 +66,8 @@ class NeuralLayer {
   public readonly headDim?: number;
   public readonly ropeTheta?: number;
   public readonly ffnDim?: number;
+  public readonly chunkIndex?: number;
+  public readonly chunkCount?: number;
   private readonly int8Weights?: Int8Array;
   public readonly postOps: NonNullable<ModelShard['layers'][0]['postOps']>;
 
@@ -89,6 +91,8 @@ class NeuralLayer {
     this.headDim = config.headDim;
     this.ropeTheta = config.ropeTheta;
     this.ffnDim = config.ffnDim;
+    this.chunkIndex = config.chunkIndex;
+    this.chunkCount = config.chunkCount;
     if (config.weightsB64) {
       const bytes = decodeBase64Bytes(config.weightsB64);
       this.int8Weights = new Int8Array(
@@ -133,9 +137,11 @@ class NeuralLayer {
         output = this.attentionForward(input);
         break;
       case 'gqa_attention':
+      case 'gqa_attention_chunk':
         output = this.gqaAttentionForward(input, padLen);
         break;
       case 'swiglu_mlp':
+      case 'swiglu_mlp_chunk':
         output = this.swigluForward(input);
         break;
       case 'candidate_logits':
@@ -481,7 +487,10 @@ class NeuralLayer {
     scaleOffset += kvDim;
     const wo = this.dequantizeRows(weights, weightOffset, scaleOffset, d, qDim);
 
-    const normalized = this.applyInputOps(input);
+    const hiddenSize = seq * d;
+    const source = new Float32Array(hiddenSize);
+    for (let i = 0; i < hiddenSize; i++) source[i] = input[i];
+    const normalized = this.applyInputOps(source);
     const qBase = this.matmulRows(
       normalized,
       wq,
@@ -630,7 +639,12 @@ class NeuralLayer {
     const wg = this.dequantizeRows(weights, 0, 0, ffn, d);
     const wu = this.dequantizeRows(weights, slab, ffn, ffn, d);
     const wd = this.dequantizeRows(weights, 2 * slab, 2 * ffn, d, ffn);
-    const normalized = this.applyInputOps(input);
+    // Later microshards receive [original_hidden | accumulated_down]. Only
+    // the original hidden state is normalized and projected through G/U.
+    const hiddenSize = seq * d;
+    const source = new Float32Array(hiddenSize);
+    for (let i = 0; i < hiddenSize; i++) source[i] = input[i];
+    const normalized = this.applyInputOps(source);
     const gate = this.matmulRows(normalized, wg, seq, d, ffn);
     const up = this.matmulRows(normalized, wu, seq, d, ffn);
     const hidden = new Float64Array(seq * ffn);
@@ -663,6 +677,7 @@ class NeuralLayer {
     layerInput?: ArrayLike<number>
   ): Float32Array | Float64Array {
     let current: Float32Array | Float64Array = data;
+    let postOpInput = layerInput;
     if (this.type === 'attention') {
       const seq = this.seq ?? this.inputShape[0];
       const d = this.dModel ?? this.inputShape[1];
@@ -677,6 +692,35 @@ class NeuralLayer {
       const seq = this.seq ?? this.inputShape[0];
       const d = this.dModel ?? this.inputShape[1];
       current = current.slice(current.length - seq * d) as Float32Array;
+    } else if (
+      this.type === 'gqa_attention_chunk' ||
+      this.type === 'swiglu_mlp_chunk'
+    ) {
+      if (!layerInput) {
+        throw new Error('Transformer microshard requires its custody state');
+      }
+      const seq = this.seq ?? 1;
+      const d = this.dModel ?? 0;
+      const hiddenSize = seq * d;
+      const source = new Float32Array(hiddenSize);
+      const accumulated = new Float32Array(hiddenSize);
+      const isFirst = (this.chunkIndex ?? 0) === 0;
+      const isFinal =
+        (this.chunkIndex ?? 0) === (this.chunkCount ?? 1) - 1;
+      const partialOffset = data.length - hiddenSize;
+      for (let i = 0; i < hiddenSize; i++) {
+        source[i] = layerInput[i];
+        const prior = isFirst ? 0 : layerInput[hiddenSize + i];
+        accumulated[i] = prior + data[partialOffset + i];
+      }
+      if (!isFinal) {
+        const custodyState = new Float32Array(2 * hiddenSize);
+        custodyState.set(source, 0);
+        custodyState.set(accumulated, hiddenSize);
+        return custodyState;
+      }
+      current = accumulated;
+      postOpInput = source;
     }
     for (const op of this.postOps) {
       switch (op.op) {
@@ -729,12 +773,12 @@ class NeuralLayer {
           break;
         }
         case 'residual_input': {
-          if (!layerInput) {
+          if (!postOpInput) {
             throw new Error('residual_input post-op requires the layer input');
           }
           const out = new Float32Array(current.length);
           for (let i = 0; i < current.length; i++) {
-            out[i] = current[i] + layerInput[i];
+            out[i] = current[i] + postOpInput[i];
           }
           current = out;
           break;
@@ -876,13 +920,21 @@ export class ShardInferenceEngine {
     }
     const layer = shard.layers[0];
     let parts: Uint8Array[];
-    if (layer.type === 'gqa_attention' || layer.type === 'swiglu_mlp') {
+    if (
+      layer.type === 'gqa_attention' ||
+      layer.type === 'gqa_attention_chunk' ||
+      layer.type === 'swiglu_mlp' ||
+      layer.type === 'swiglu_mlp_chunk'
+    ) {
       if (!layer.weightsB64 || !layer.scales) return false;
       parts = [
         decodeBase64Bytes(layer.weightsB64),
         new Uint8Array(new Float32Array(layer.scales).buffer),
       ];
-      if (layer.type === 'gqa_attention') {
+      if (
+        layer.type === 'gqa_attention' ||
+        layer.type === 'gqa_attention_chunk'
+      ) {
         parts.push(new Uint8Array(new Float32Array(layer.biases).buffer));
       }
     } else if (layer.quantized) {

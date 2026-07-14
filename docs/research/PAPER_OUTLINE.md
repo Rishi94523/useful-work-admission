@@ -43,14 +43,16 @@ sourced from CAPTCHA traffic.
    matrix-product checks over submitted-and-verified intermediates, with
    softmax/normalization replayed server-side at O(seq²) cost.
 5b. **Distributed verified LLM inference (demonstrated)**: a real
-   Qwen2.5-0.5B-Instruct decomposes into 49 provable segments (GQA attention
-   with RoPE folded into the projection precompute + SwiGLU MLP with a
-   server-replayed silu gate + candidate-logits head) and performs zero-shot
-   text labeling through the live pipeline, every segment verified without
-   recomputation. The prototype demonstrates an LLM forward pass distributed
-   across mutually-untrusted anonymous sessions with per-segment algebraic
-   verification; any claim that it is the first such system requires a formal
-   prior-art review and should not be made before that review.
+   Qwen2.5-0.5B-Instruct source graph of 49 operators expands into 433 runtime
+   microstages (two GQA head-group parts, sixteen SwiGLU FFN-axis parts per
+   block, and a candidate head). The server retains the source activation and
+   verified output-projection accumulator until each residual is complete.
+   The live zero-shot labeling run accepted 431/431 assignments with p50 134
+   ms, p95 165 ms, and maximum 223 ms on the tested machine. The prototype
+   demonstrates an LLM forward pass distributed across mutually-untrusted
+   anonymous sessions with per-assignment algebraic verification; any claim
+   that it is the first such system requires a formal prior-art review and
+   should not be made before that review.
 6. A useful-value pipeline that turns completed runs and selective human
    checks into golden labels and periodic retraining (the model improves from
    the human feedback it harvests: 97.53% → 98.09% measured on mnist-tiny).

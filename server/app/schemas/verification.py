@@ -3,7 +3,7 @@ Verification API schemas.
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import Field
 
@@ -15,8 +15,8 @@ class VerificationSubmitRequest(APIModel):
 
     session_id: str = Field(..., description="Session ID")
     verification_id: str = Field(..., description="Verification ID")
-    response: str = Field(
-        ..., description="Response type: confirm, reject, correct"
+    response: Literal["confirm", "correct"] = Field(
+        ..., description="Response type: confirm or correct"
     )
     corrected_label: Optional[str] = Field(
         default=None, description="Corrected label if response is 'correct'"

@@ -133,10 +133,20 @@ the asymmetry scaling law.
 
 ## 4. Human verification → golden dataset → retraining
 
-- When a pipeline run completes, the solver is sometimes asked to verify the
-  pieced-together label (always for bot_like, 50% suspicious, ~20% normal).
-- Verified labels accumulate; 3-way consensus (reputation-weighted) promotes
-  a label into the **golden dataset** (`app/services/golden_dataset.py`).
+- When a pipeline run completes, the solver is sometimes asked for an
+  independent label. The audit probability combines the registered site's
+  baseline rate, prediction confidence, risk tier, and hidden known-label
+  status. Known-label runs and bot-like sessions are always audited.
+- The widget uses the exact label set pinned into the assigned model rather
+  than a generic hard-coded taxonomy. Blind-mode presentation does not show an
+  honest reviewer the model prediction, and the server rejects labels outside
+  the pinned model's taxonomy.
+- Known-label human answers update anonymous reputation and feed subsequent
+  risk scoring. At most one latest vote per fingerprint is counted for a
+  sample; this blocks repeat voting but is only best-effort Sybil resistance.
+- Verified labels accumulate; 3-way, reputation-weighted consensus with an
+  unweighted agreement floor promotes a label into the **golden dataset**
+  (`app/services/golden_dataset.py`).
 - `scripts/retrain_from_golden.py` fine-tunes the model on verified labels
   (mixed with replay data to prevent forgetting), bumps the version, and
   regenerates all checksums. In-flight tasks pin the model checksum at

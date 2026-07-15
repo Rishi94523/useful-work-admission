@@ -165,6 +165,7 @@ class TaskCoordinator:
                     "sample_id": str(assignment.sample.id),
                     "model_name": model.name,
                     "model_version": model.version,
+                    "labels": list(model.labels),
                     "segment_start": assignment.segment_start,
                     "expected_layers": assignment.layer_count,
                     "difficulty": difficulty,

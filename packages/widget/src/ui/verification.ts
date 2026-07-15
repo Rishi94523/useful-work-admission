@@ -54,22 +54,21 @@ export class VerificationUI {
     // Content (image or text)
     const content = this.createContent();
 
-    // Label display
-    const label = document.createElement('div');
-    label.className = 'pouw-verification-label';
-    label.textContent = `"${this.data.predictedLabel}"`;
-
-    // Action buttons
-    const actions = this.createActions();
-
-    // Correction UI (hidden initially)
-    const correction = this.createCorrectionUI();
-
     this.element.appendChild(prompt);
     this.element.appendChild(content);
-    this.element.appendChild(label);
-    this.element.appendChild(actions);
-    this.element.appendChild(correction);
+
+    if (this.data.mode === 'blind') {
+      this.element.appendChild(this.createBlindLabelingUI());
+    } else {
+      // Confirmation mode is retained for integrations that explicitly want
+      // it. The server defaults to blind labeling to reduce anchoring bias.
+      const label = document.createElement('div');
+      label.className = 'pouw-verification-label';
+      label.textContent = `"${this.data.predictedLabel ?? ''}"`;
+      this.element.appendChild(label);
+      this.element.appendChild(this.createActions());
+      this.element.appendChild(this.createCorrectionUI());
+    }
 
     // Clear container and add verification UI
     this.container.innerHTML = '';
@@ -79,10 +78,37 @@ export class VerificationUI {
     this.releaseFocusTrap = trapFocus(this.element);
 
     // Announce to screen readers
-    announceToScreenReader(
-      `Verification required: ${this.data.prompt} The predicted answer is ${this.data.predictedLabel}`,
-      'polite'
-    );
+    const announcement =
+      this.data.mode === 'blind'
+        ? `Verification required: ${this.data.prompt}`
+        : `Verification required: ${this.data.prompt} The predicted answer is ${this.data.predictedLabel ?? ''}`;
+    announceToScreenReader(announcement, 'polite');
+  }
+
+  /**
+   * Create an unanchored label selector. The model's predicted label is not
+   * shown, so an honest reviewer supplies an independent judgment.
+   */
+  private createBlindLabelingUI(): HTMLElement {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'pouw-correction visible';
+
+    const label = document.createElement('label');
+    label.className = 'pouw-correction-label';
+    label.htmlFor = 'pouw-blind-label-select';
+    label.textContent = 'Choose the correct label';
+
+    const select = this.createLabelSelect('pouw-blind-label-select');
+    const submitBtn = createAccessibleButton({
+      text: 'Submit label',
+      onClick: () => this.handleCorrection(select.value),
+      className: 'pouw-button pouw-button--primary',
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(select);
+    wrapper.appendChild(submitBtn);
+    return wrapper;
   }
 
   /**
@@ -151,27 +177,7 @@ export class VerificationUI {
     label.htmlFor = 'pouw-correction-select';
     label.textContent = 'What is the correct answer?';
 
-    const select = document.createElement('select');
-    select.className = 'pouw-correction-select';
-    select.id = 'pouw-correction-select';
-
-    // Add placeholder option
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = 'Select the correct label...';
-    placeholder.disabled = true;
-    placeholder.selected = true;
-    select.appendChild(placeholder);
-
-    // Add label options (would come from model metadata)
-    // For now, using generic options
-    const labels = this.getCorrectionLabels();
-    for (const labelText of labels) {
-      const option = document.createElement('option');
-      option.value = labelText;
-      option.textContent = labelText;
-      select.appendChild(option);
-    }
+    const select = this.createLabelSelect('pouw-correction-select');
 
     const submitBtn = createAccessibleButton({
       text: 'Submit correction',
@@ -190,20 +196,30 @@ export class VerificationUI {
    * Get available correction labels
    */
   private getCorrectionLabels(): string[] {
-    // This would typically come from the verification data
-    // Using CIFAR-10 labels as example
-    return [
-      'airplane',
-      'automobile',
-      'bird',
-      'cat',
-      'deer',
-      'dog',
-      'frog',
-      'horse',
-      'ship',
-      'truck',
-    ].filter((l) => l !== this.data.predictedLabel);
+    const labels = this.data.labels ?? [];
+    if (this.data.mode === 'blind') return labels;
+    return labels.filter((label) => label !== this.data.predictedLabel);
+  }
+
+  private createLabelSelect(id: string): HTMLSelectElement {
+    const select = document.createElement('select');
+    select.className = 'pouw-correction-select';
+    select.id = id;
+
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Select the correct label...';
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.appendChild(placeholder);
+
+    for (const labelText of this.getCorrectionLabels()) {
+      const option = document.createElement('option');
+      option.value = labelText;
+      option.textContent = labelText;
+      select.appendChild(option);
+    }
+    return select;
   }
 
   /**

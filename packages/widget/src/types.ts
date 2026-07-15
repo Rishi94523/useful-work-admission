@@ -311,14 +311,18 @@ export interface Prediction {
 export interface VerificationData {
   /** Verification ID */
   verificationId: string;
+  /** Audit presentation mode */
+  mode?: 'blind' | 'confirm';
   /** Type of display */
   displayType: 'image' | 'text';
   /** URL or content to display */
   displayContent: string;
-  /** Predicted label to verify */
-  predictedLabel: string;
+  /** Predicted label to verify; omitted for blind audits */
+  predictedLabel?: string;
   /** Human-readable prompt */
   prompt: string;
+  /** Model-specific labels accepted by the server */
+  labels: string[];
   /** Available options */
   options: VerificationOption[];
 }
@@ -340,7 +344,7 @@ export interface VerificationOption {
  */
 export interface VerificationResponse {
   /** Response type */
-  responseType: 'confirm' | 'reject' | 'correct';
+  responseType: 'confirm' | 'correct';
   /** Corrected label if type is 'correct' */
   correctedLabel?: string;
   /** Time taken to respond in ms */

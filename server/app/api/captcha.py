@@ -9,6 +9,7 @@ Flow:
             when a run completes, return the CAPTCHA token
 """
 
+import json
 import logging
 import uuid
 from datetime import datetime, timedelta
@@ -39,6 +40,7 @@ from app.ml.inference_validator import InferenceValidator
 from app.utils.security import create_jwt_token, verify_jwt_token, generate_captcha_token
 from app.utils.redis_client import get_redis
 from app.services.site_registry import SiteRegistry, SiteRegistryError
+from app.services.reputation import ReputationService
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -86,14 +88,24 @@ async def init_captcha(
         risk_scorer = RiskScorer(redis)
         task_coordinator = TaskCoordinator(db, redis)
 
+        client_fingerprint = risk_scorer.generate_client_id(
+            client_ip,
+            request.client_metadata.user_agent,
+        )
+        reputation = await ReputationService(db).increment_session_count(
+            client_fingerprint
+        )
+        await db.flush()
+        await redis.setex(
+            f"reputation:{client_fingerprint}",
+            30 * 24 * 60 * 60,
+            str(reputation.score),
+        )
         risk_score = await risk_scorer.compute_risk_score(
             client_ip=client_ip,
             user_agent=request.client_metadata.user_agent,
             site_key=request.site_key,
-        )
-        client_fingerprint = risk_scorer.generate_client_id(
-            client_ip,
-            request.client_metadata.user_agent,
+            fingerprint=client_fingerprint,
         )
         adjusted_risk_score = min(
             1.0,
@@ -125,6 +137,7 @@ async def init_captcha(
         task.metadata_ = {
             **(task.metadata_ or {}),
             "site_key_prefix": registered_site.site_key_prefix,
+            "verification_rate": registered_site.config.verification_rate,
         }
 
         challenge_token = create_jwt_token(
@@ -340,6 +353,8 @@ async def submit_captcha(
             requires_verification = await validator.should_require_verification(
                 session=session,
                 prediction=prediction_row,
+                is_known_sample=task.is_known_sample,
+                base_rate=(task.metadata_ or {}).get("verification_rate"),
             )
 
         if requires_verification:
@@ -348,11 +363,24 @@ async def submit_captcha(
                 select(Sample).where(Sample.id == task.sample_id)
             )
             sample = sample_result.scalar_one_or_none()
+            audit_labels = [
+                str(label) for label in shard_meta.get("labels", [])
+            ]
+            if not audit_labels and model:
+                # Compatibility fallback for assignments created before label
+                # taxonomies were pinned into task metadata.
+                audit_labels = list(model.labels)
 
             await redis.setex(
                 f"verification:{verification_id}",
                 settings.captcha_token_expiry_seconds,
-                f"{session.id}:{prediction_row.id}",
+                json.dumps(
+                    {
+                        "session_id": str(session.id),
+                        "prediction_id": str(prediction_row.id),
+                        "mode": "blind",
+                    }
+                ),
             )
 
             session.status = "verifying"
@@ -364,16 +392,18 @@ async def submit_captcha(
                 pipeline=pipeline_info,
                 verification=VerificationInfo(
                     verification_id=verification_id,
+                    mode="blind",
                     display_data=VerificationDisplayData(
                         type=sample.data_type,
                         url=sample.data_url,
                         content=_encode_sample_data(sample) if not sample.data_url else None,
                     ),
-                    predicted_label=predicted_label,
-                    prompt=f"Is this a {predicted_label}?",
+                    predicted_label=None,
+                    prompt="Choose the correct label for this sample.",
+                    labels=audit_labels,
                     options=[
-                        VerificationOption(id="confirm", label="Yes, correct", type="confirm"),
-                        VerificationOption(id="correct", label="Choose correct label", type="correct"),
+                        VerificationOption(id=label, label=label, type="correct")
+                        for label in audit_labels
                     ],
                 ),
             )

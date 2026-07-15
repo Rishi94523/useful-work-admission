@@ -11,7 +11,7 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
-from app.models import Verification, GoldenDataset, Sample
+from app.models import Verification, GoldenDataset, Sample, Session
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -63,7 +63,10 @@ class GoldenDatasetService:
         # Calculate consensus
         consensus = self._calculate_consensus(verifications)
 
-        if consensus["agreement"] >= settings.consensus_threshold:
+        if (
+            consensus["weighted_agreement"] >= settings.consensus_threshold
+            and consensus["agreement"] >= settings.discard_threshold
+        ):
             # Promote to golden dataset
             return await self._promote_to_golden(
                 sample_id=sample_id,
@@ -91,9 +94,24 @@ class GoldenDatasetService:
     ) -> List[Verification]:
         """Get all verifications for a sample."""
         result = await self.db.execute(
-            select(Verification).where(Verification.sample_id == sample_id)
+            select(Verification, Session.client_fingerprint)
+            .join(Session, Verification.session_id == Session.id)
+            .where(Verification.sample_id == sample_id)
+            .order_by(Verification.created_at.desc())
         )
-        return list(result.scalars().all())
+
+        # Count at most one (latest) vote per anonymous browser identity.
+        # This blocks accidental/repeated voting but is not a substitute for
+        # production-grade Sybil resistance.
+        seen = set()
+        distinct = []
+        for verification, fingerprint in result.all():
+            identity = fingerprint or str(verification.session_id)
+            if identity in seen:
+                continue
+            seen.add(identity)
+            distinct.append(verification)
+        return distinct
 
     def _calculate_consensus(
         self, verifications: List[Verification]
@@ -109,7 +127,11 @@ class GoldenDatasetService:
 
         for v in verifications:
             label = v.verified_label or v.original_label
-            weight = v.reputation_score or 1.0
+            weight = (
+                v.reputation_score
+                if v.reputation_score is not None
+                else settings.initial_reputation
+            )
 
             weighted_votes[label] = weighted_votes.get(label, 0) + weight
             total_weight += weight

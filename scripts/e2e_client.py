@@ -486,17 +486,27 @@ def solve_once(
     submit.raise_for_status()
     result = submit.json()
 
-    # Answer human verification if asked (confirm the model's label)
+    # Answer human verification if asked. Blind audits require an explicit
+    # independently selected label rather than a confirmation shortcut. The
+    # deterministic E2E client uses the verified server-derived prediction.
     if result.get("requiresVerification") and result.get("verification"):
         verification = result["verification"]
+        predicted_label = (result.get("pipeline") or {}).get("predictedLabel")
+        response_payload = {
+            "sessionId": data["sessionId"],
+            "verificationId": verification["verificationId"],
+            "responseTimeMs": 900,
+        }
+        if verification.get("mode") == "blind":
+            response_payload.update(
+                response="correct",
+                correctedLabel=predicted_label,
+            )
+        else:
+            response_payload["response"] = "confirm"
         verify = client.post(
             f"{api}/captcha/verify",
-            json={
-                "sessionId": data["sessionId"],
-                "verificationId": verification["verificationId"],
-                "response": "confirm",
-                "responseTimeMs": 900,
-            },
+            json=response_payload,
         )
         verify.raise_for_status()
         result["captchaToken"] = verify.json().get("captchaToken")

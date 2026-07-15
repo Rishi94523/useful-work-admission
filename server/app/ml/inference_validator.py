@@ -5,11 +5,12 @@ import logging
 import random
 from typing import Optional
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from redis.asyncio import Redis
 
 from app.config import get_settings
-from app.models import Task, Session, Prediction
+from app.models import Task, Session, Prediction, Verification
 from app.schemas import PredictionData, TimingData, InferenceProofData
 from app.ml.model_store import get_model_store
 from app.ml.proof_verifier import VerificationReport, get_proof_verifier
@@ -181,6 +182,9 @@ class InferenceValidator:
         self,
         session: Session,
         prediction: Prediction,
+        *,
+        is_known_sample: bool = False,
+        base_rate: Optional[float] = None,
     ) -> bool:
         """
         Decide whether to ask this human to verify the completed run's label.
@@ -188,8 +192,52 @@ class InferenceValidator:
         Only called when a pipeline run completes. Verified labels accumulate
         toward golden-dataset consensus and eventually retraining.
         """
-        if session.difficulty_tier == "bot_like":
-            return True
-        if session.difficulty_tier == "suspicious":
-            return random.random() < 0.5
-        return random.random() < settings.verification_rate
+        # Do not let one anonymous browser identity accumulate multiple votes
+        # for the same sample. This is best-effort Sybil resistance; a
+        # production deployment still needs stronger abuse controls.
+        if session.client_fingerprint:
+            existing = await self.db.execute(
+                select(Verification.id)
+                .join(Session, Verification.session_id == Session.id)
+                .where(
+                    Verification.sample_id == prediction.sample_id,
+                    Session.client_fingerprint == session.client_fingerprint,
+                )
+                .limit(1)
+            )
+            if existing.scalar_one_or_none() is not None:
+                return False
+
+        probability = self.verification_probability(
+            session=session,
+            prediction=prediction,
+            is_known_sample=is_known_sample,
+            base_rate=base_rate,
+        )
+        return random.random() < probability
+
+    @staticmethod
+    def verification_probability(
+        *,
+        session: Session,
+        prediction: Prediction,
+        is_known_sample: bool = False,
+        base_rate: Optional[float] = None,
+    ) -> float:
+        """Return the human-audit probability for a completed label."""
+        if is_known_sample or session.difficulty_tier == "bot_like":
+            return 1.0
+
+        configured_rate = (
+            settings.verification_rate if base_rate is None else float(base_rate)
+        )
+        configured_rate = max(0.0, min(1.0, configured_rate))
+        tier_rate = 0.5 if session.difficulty_tier == "suspicious" else configured_rate
+
+        threshold = settings.verification_confidence_threshold
+        confidence = max(0.0, min(1.0, float(prediction.confidence)))
+        if threshold > 0 and confidence < threshold:
+            uncertainty = (threshold - confidence) / threshold
+            uncertainty_rate = 0.5 + 0.5 * uncertainty
+            return min(1.0, max(tier_rate, uncertainty_rate))
+        return tier_rate

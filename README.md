@@ -7,6 +7,14 @@ computation. A user contributes a verified segment of inference work, the
 server checks that work cheaply, and the completed distributed inference can
 feed a human-verified golden dataset.
 
+The product remains centered on compact label-producing models and selective
+human auditing. Transformer/LLM execution is an optional stress-test
+embodiment, not the default CAPTCHA workload. See
+[Product, Paper, and Patent Scope](docs/research/PRODUCT_PAPER_PATENT_SCOPE.md)
+for the authoritative distinction. The working Indian filing packet is in
+[the provisional self-filing guide](docs/research/INDIA_PROVISIONAL_SELF_FILING.md);
+it is an engineering draft, not a filed application or legal opinion.
+
 ## Current Implementation
 
 - Browser widget computes assigned shards of a real trained model.

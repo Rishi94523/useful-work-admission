@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -308,8 +308,19 @@ class VerificationOption(APIModel):
 class VerificationInfo(APIModel):
     verification_id: str
     display_data: VerificationDisplayData
-    predicted_label: str
+    mode: Literal["blind", "confirm"] = Field(
+        default="blind",
+        description="Human-audit presentation mode: blind or confirm",
+    )
+    predicted_label: Optional[str] = Field(
+        default=None,
+        description="Only disclosed for confirm-mode audits",
+    )
     prompt: str
+    labels: List[str] = Field(
+        default_factory=list,
+        description="Model-specific labels accepted for a correction",
+    )
     options: List[VerificationOption]
 
 

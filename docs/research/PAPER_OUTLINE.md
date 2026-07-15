@@ -6,26 +6,26 @@ This paper outline is not a novelty or freedom-to-operate conclusion.
 
 ## Working Title
 
-Verifiable Useful-Work Rate Limiting for the Open Web
+Verifiable Machine-First CAPTCHA Labeling with Sparse Human Auditing
 
 ## Thesis
 
-Traditional CAPTCHAs attempt to distinguish humans from bots with puzzle
-solving, but modern AI agents increasingly bypass those puzzles. PoUW CAPTCHA
-instead meters automated access by requiring browser-executed useful ML work,
-then converts successful work into distributed inference and human-verified
-label signals — mirroring the human-in-the-loop labeling pipelines that
-commercial data-labeling vendors (ScaleAI-style) run at large scale, but
-sourced from CAPTCHA traffic.
+Traditional CAPTCHAs spend human attention on puzzles or primary annotations,
+while hash-based client puzzles spend computation without producing a reusable
+result. PoUW CAPTCHA instead meters access with verified browser-executed ML
+inference. Successful work produces machine pseudo-labels, and a sparse,
+quality-aware subset receives independent human auditing before consensus,
+golden promotion, and retraining. The system is computational admission
+control: bots may pass if they perform the assigned useful work.
 
 ## Claimed Contributions
 
-1. A proof-of-useful-work CAPTCHA/rate-limit architecture for browser clients.
-2. Distributed model inference where multiple sessions contribute consecutive
-   verified layer segments — architecture-generic, demonstrated on dense
-   MLPs, convolutional networks, AND a single-block vision transformer from
-   the same plug-and-play model store.
-3. A low-cost probabilistic verifier for ANY affine layer operator
+1. An access-control architecture in which untrusted browser computation
+   produces provenance-bearing machine pseudo-labels rather than disposable
+   hashes.
+2. Latency-aware execution that assigns a complete compact model or consecutive
+   verified segments under a bounded visitor-compute budget.
+3. A low-cost probabilistic verifier for affine layer operators
    (dense matmul, conv2d, per-token projections) using task-bound
    commitments, secret projections precomputed as `s = Lᵀr`, and spot
    audits. Routine verification is `O(k·(in+out))` per layer independent of
@@ -37,12 +37,23 @@ sourced from CAPTCHA traffic.
    ~1/p per secret projection (~2^-124 with K=4), no spot audits needed, and
    the entire adaptive-drift attack class (hiding inside the tolerance band)
    is structurally eliminated. Quantization costs ≤0.06pp accuracy.
-5. **Attention verification**: transformer blocks verify with the same
+5. **Selective human auditing and feedback**: completed pseudo-labels are
+   sampled using confidence, risk, honeypot, and baseline audit signals;
+   model-specific, non-anchoring responses feed duplicate-filtered,
+   reputation-weighted consensus and version-safe retraining.
+6. An end-to-end evaluation of actual server verification cost, browser UX,
+   labeling accuracy, human-work reduction, poisoning resistance, golden-label
+   quality, and retraining lift.
+
+### Secondary generality result
+
+**Attention verification**: transformer blocks verify with the same
    primitive composed — Q/K/V/output projections as affine checks, the
    bilinear products S = Q·Kᵀ and O = softmax(S)·V as Freivalds
    matrix-product checks over submitted-and-verified intermediates, with
    softmax/normalization replayed server-side at O(seq²) cost.
-5b. **Distributed verified LLM inference (demonstrated)**: a real
+
+**Distributed verified LLM classification (demonstrated)**: a real
    Qwen2.5-0.5B-Instruct source graph of 49 operators expands into 433 runtime
    microstages (two GQA head-group parts, sixteen SwiGLU FFN-axis parts per
    block, and a candidate head). The server retains the source activation and
@@ -53,12 +64,10 @@ sourced from CAPTCHA traffic.
    anonymous sessions with per-assignment algebraic verification; any claim
    that it is the first such system requires a formal prior-art review and
    should not be made before that review.
-6. A useful-value pipeline that turns completed runs and selective human
-   checks into golden labels and periodic retraining (the model improves from
-   the human feedback it harvests: 97.53% → 98.09% measured on mnist-tiny).
-7. An evaluation of compute asymmetry across layer types, end-to-end
-   distributed labeling accuracy against ground truth, tamper rejection
-   (including exact off-by-one detection), and operational economics.
+
+This result supports generality but is not the paper's central thesis. It may
+be shortened to a case study or appendix if its evaluation remains shallower
+than the small-model labeling pipeline.
 
 ## Threat Model
 
@@ -93,11 +102,14 @@ chain of custody between provable layers never leaves the server.
   AND vs ground truth (true labeling accuracy of the pipeline).
 - Attack checks: fabricated outputs, tampering at random layers, wrong input,
   replay, audit drift.
-- Human-in-the-loop: golden-label consensus, retraining lift across versions.
-- UX: browser latency across desktop/mobile devices.
-- Economics: estimated compute imposed, labels produced, completion/failure rate.
+- Human-in-the-loop: audit-rate versus label quality, independent-voter
+  consensus, honeypot-calibrated reputation, and retraining lift.
+- UX: warm/cold browser latency across desktop/mobile devices, accessibility,
+  and the additional burden of sampled human audits.
+- Economics: actual verifier versus direct-inference wall time, useful labels
+  per challenge, human work avoided, and completion/failure rate.
 - Ablations: projections only, projections plus audits, varied audit rate,
-  varied projection count K.
+  uncertainty versus random audit selection, and varied projection count K.
 
 ## Current Evidence
 

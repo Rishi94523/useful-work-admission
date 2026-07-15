@@ -102,6 +102,12 @@ class Settings(BaseSettings):
     verification_rate: float = Field(
         default=0.2, description="Rate of sessions requiring verification"
     )
+    verification_confidence_threshold: float = Field(
+        default=0.85,
+        ge=0.0,
+        le=1.0,
+        description="Predictions below this confidence receive increased human auditing",
+    )
     known_sample_rate: float = Field(
         default=0.1, description="Rate of known sample injection"
     )

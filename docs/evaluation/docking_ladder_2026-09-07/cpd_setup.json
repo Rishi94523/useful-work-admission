@@ -1,0 +1,119 @@
+{
+  "scope": "Exact published-model restricted CPD objective; campaign-specific hardcoded coefficients and development-only keys. Not an effort lower bound.",
+  "circuits": {
+    "16": {
+      "version": 1,
+      "wires": 8086,
+      "public_outputs": 2,
+      "public_inputs": 1,
+      "private_inputs": 0,
+      "labels": 8334,
+      "constraints": 8149,
+      "r1cs_bytes": 5441844,
+      "circuit_sha256": "521e04175b58bb36c6f23d5eac3203779e23975376205979c4b74f382784a6dc",
+      "proving_key_bytes": 9383540
+    },
+    "64": {
+      "version": 1,
+      "wires": 32278,
+      "public_outputs": 2,
+      "public_inputs": 1,
+      "private_inputs": 0,
+      "labels": 33246,
+      "constraints": 32533,
+      "r1cs_bytes": 5967696,
+      "circuit_sha256": "53cd5d9ac062d18417f315deead5718894056e5ae183503682abef2d25f1b861",
+      "proving_key_bytes": 17422152
+    }
+  },
+  "steps": [
+    {
+      "step": "compile_16",
+      "wall_seconds": 0.6630538000026718,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 27840512,
+      "sampled_peak_private_bytes": 22523904,
+      "parent_os_peak_working_set_bytes": 28094464,
+      "memory_samples": 13,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "setup_16",
+      "wall_seconds": 25.594184000001405,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 549851136,
+      "sampled_peak_private_bytes": 718462976,
+      "parent_os_peak_working_set_bytes": 560705536,
+      "memory_samples": 507,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "contribute_16",
+      "wall_seconds": 3.9699548999997205,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 282910720,
+      "sampled_peak_private_bytes": 446304256,
+      "parent_os_peak_working_set_bytes": 285949952,
+      "memory_samples": 77,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "vk_16",
+      "wall_seconds": 1.3193223000016587,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 269873152,
+      "sampled_peak_private_bytes": 434319360,
+      "parent_os_peak_working_set_bytes": 272957440,
+      "memory_samples": 26,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "compile_64",
+      "wall_seconds": 1.3184474000008777,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 59191296,
+      "sampled_peak_private_bytes": 57348096,
+      "parent_os_peak_working_set_bytes": 63889408,
+      "memory_samples": 26,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "setup_64",
+      "wall_seconds": 25.07310739999957,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 642211840,
+      "sampled_peak_private_bytes": 857767936,
+      "parent_os_peak_working_set_bytes": 643477504,
+      "memory_samples": 497,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "contribute_64",
+      "wall_seconds": 2.369834199998877,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 304246784,
+      "sampled_peak_private_bytes": 462356480,
+      "parent_os_peak_working_set_bytes": 311017472,
+      "memory_samples": 39,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    },
+    {
+      "step": "vk_64",
+      "wall_seconds": 0.5156096000027901,
+      "exit_code": 0,
+      "termination_reason": null,
+      "sampled_peak_rss_bytes": 271007744,
+      "sampled_peak_private_bytes": 435093504,
+      "parent_os_peak_working_set_bytes": 272637952,
+      "memory_samples": 10,
+      "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+    }
+  ]
+}

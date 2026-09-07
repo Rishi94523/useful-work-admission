@@ -1,0 +1,86 @@
+{
+  "scope": "Measured exact bounded search over a restricted published CPD model. Fixed campaign-specific coefficients. No fresh-effort lower bound, real-device study, or prospective protein design. RSS includes process lifetime; browser RSS sums server and Chrome and can count shared pages twice.",
+  "cpd": [
+    {
+      "n": 16,
+      "constraints": 8149,
+      "node_prove_ms_median": 667.619,
+      "browser_prove_ms_median": 624.9550000000745,
+      "browser_prove_ms_range": [
+        604.609999999404,
+        645.3000000007451
+      ],
+      "plain_bigint_search_ms_median": 0.1717000000000084,
+      "warm_verify_ms_median": 7.707850000000008,
+      "node_sampled_rss_mib_max": 323.47265625,
+      "browser_tree_sampled_rss_mib_max": 745.296875,
+      "key_mib": 8.948841094970703,
+      "public_fields": 3
+    },
+    {
+      "n": 64,
+      "constraints": 32533,
+      "node_prove_ms_median": 1448.8324,
+      "browser_prove_ms_median": 1422.184999998659,
+      "browser_prove_ms_range": [
+        1411.059999998659,
+        1433.309999998659
+      ],
+      "plain_bigint_search_ms_median": 0.4592999999999918,
+      "warm_verify_ms_median": 7.39465000000007,
+      "node_sampled_rss_mib_max": 343.9453125,
+      "browser_tree_sampled_rss_mib_max": 794.1953125,
+      "key_mib": 16.61505889892578,
+      "public_fields": 3
+    }
+  ],
+  "validation": {
+    "published_proofs_accepted": 10,
+    "changed_statements_rejected": 30,
+    "wrong_tier_rejected": true,
+    "random_and_boundary_polynomial_vs_wcsp_cases": 1002,
+    "wraparound_search_cases": 2,
+    "scientific_and_merkle_unit_tests_passed": 9
+  },
+  "rigid_grid": [
+    {
+      "case": "2P16",
+      "poses": 12288,
+      "oracle_pose_checks": 25,
+      "max_float_vs_native_error": 2.8421709430404007e-13,
+      "max_quantization_error": 0.014012241445982454,
+      "top1_agrees": true,
+      "top10_overlap": 10,
+      "full_bank_search_ms": 185.71884999983013,
+      "one_pose_check_ms": 0.7885499999247259,
+      "best_energy": 13.719,
+      "map_mib": 7.099760055541992
+    },
+    {
+      "case": "4LL3",
+      "poses": 12288,
+      "oracle_pose_checks": 25,
+      "max_float_vs_native_error": 1.7053025658242404e-13,
+      "max_quantization_error": 0.012869737459766384,
+      "top1_agrees": true,
+      "top10_overlap": 10,
+      "full_bank_search_ms": 412.373099998149,
+      "one_pose_check_ms": 1.5510000012000091,
+      "best_energy": 65.3419,
+      "map_mib": 6.898983955383301
+    },
+    {
+      "case": "4TZ4",
+      "poses": 12288,
+      "oracle_pose_checks": 25,
+      "max_float_vs_native_error": 1.5631940186722204e-13,
+      "max_quantization_error": 0.008655752998336652,
+      "top1_agrees": true,
+      "top10_overlap": 10,
+      "full_bank_search_ms": 150.69229999971867,
+      "one_pose_check_ms": 0.517000000400003,
+      "best_energy": 4.903,
+      "map_mib": 4.8575544357299805
+    }
+  ]
+}

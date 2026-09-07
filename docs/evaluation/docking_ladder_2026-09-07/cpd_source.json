@@ -1,0 +1,9 @@
+{
+  "url": "https://web-genobioinfo.toulouse.inrae.fr/~tschiex/CPD/CPD-instances/1BK2.matrix.24p.17aa.usingEref_self_digit8.wcsp.xz",
+  "compressed_bytes": 3950940,
+  "compressed_sha256": "d68132d4e2fdea09b7151323677792ce16ba95b746c2f37d306e69452b99632e",
+  "wcsp_bytes": 15004938,
+  "wcsp_sha256": "f74ac9ca6c5a8dcf162339972659f83da630d965ecea1e9be2c03a1685eaba27",
+  "source": "https://web-genobioinfo.toulouse.inrae.fr/~tschiex/CPD/",
+  "scope": "Published computational-protein-design energy model, not a newly prepared target or prospective design result."
+}

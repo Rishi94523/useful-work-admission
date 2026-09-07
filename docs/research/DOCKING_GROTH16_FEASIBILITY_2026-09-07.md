@@ -1,5 +1,7 @@
 # Docking, cheap rescoring and Groth16: measured feasibility
 
+**Follow-up completed:** the [bounded-search investigation](BOUNDED_SEARCH_DIFFICULTY_LADDER_2026-09-07.md) measures proofs through 64 candidates, compiles through 256, tests raw audits, validates real Vina-grid arithmetic, and implements a much smaller proof over a published protein-design model. It supersedes the next-step recommendation below while preserving these original measurements. Certified coverage still does not establish fresh attacker effort.
+
 ## Decision
 
 **Docking is a plausible useful-output workload, but score-only verification cannot enforce risk-scaled search effort. Groth16 can prove a specified bounded search; our first browser proof works, but only for a reduced contact model, and does not yet justify a docking-based access gate.** Continue with a bounded proof-of-search experiment as research. Keep native Vina rescoring as the scientific-output baseline. Neither component is ready to replace the current admission mechanism.

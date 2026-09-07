@@ -1,0 +1,36 @@
+{
+  "scope": "Actual compiled constraint count for one 20-level Poseidon authentication path. Full molecular circuits below are unimplemented projections with independent paths; multiproofs/lookups can change cost. No proving time inferred from this gadget.",
+  "gadget": {
+    "version": 1,
+    "wires": 5153,
+    "public_outputs": 0,
+    "public_inputs": 1,
+    "private_inputs": 22,
+    "labels": 16246,
+    "constraints": 5132
+  },
+  "measurement": {
+    "wall_seconds": 0.7147772000025725,
+    "exit_code": 0,
+    "termination_reason": null,
+    "sampled_peak_rss_bytes": 96149504,
+    "sampled_peak_private_bytes": 98361344,
+    "parent_os_peak_working_set_bytes": 99139584,
+    "memory_samples": 14,
+    "memory_scope": "one process, 50 ms sampling; parent OS peak working set also sampled"
+  },
+  "naive_path_constraints_per_pose": [
+    {
+      "heavy_atoms": 19,
+      "constraints_paths_only": 780064
+    },
+    {
+      "heavy_atoms": 34,
+      "constraints_paths_only": 1395904
+    },
+    {
+      "heavy_atoms": 38,
+      "constraints_paths_only": 1560128
+    }
+  ]
+}

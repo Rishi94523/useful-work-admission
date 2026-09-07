@@ -17,5 +17,19 @@ for(const row of [...node,...browser]){
 }
 const wrongTier=node.find(r=>r.n===8).verification_key;
 if(await groth16.verify(wrongTier,node[0].publicSignals,node[0].proof))throw Error('Wrong tier accepted');
-console.log(JSON.stringify({accepted,rejected,wrong_tier_rejected:true}));
+let cpdAccepted=0,cpdRejected=0;
+if(fs.existsSync(new URL('cpd_proofs.json',base))){
+  const cpd=JSON.parse(fs.readFileSync(new URL('cpd_proofs.json',base))).rows;
+  const cpdBrowser=JSON.parse(fs.readFileSync(new URL('cpd_browser.json',base))).rows;
+  for(const row of [...cpd,...cpdBrowser]){
+    const vk=cpd.find(r=>r.n===row.n).verification_key;
+    if(!await groth16.verify(vk,row.publicSignals,row.proof))throw Error('Published CPD proof rejected');cpdAccepted++;
+    for(let i=0;i<3;i++){
+      const changed=[...row.publicSignals];changed[i]=(BigInt(changed[i])+1n).toString();
+      if(await groth16.verify(vk,changed,row.proof))throw Error('Changed CPD statement accepted');cpdRejected++;
+    }
+  }
+  if(await groth16.verify(cpd.find(r=>r.n===64).verification_key,cpd[0].publicSignals,cpd[0].proof))throw Error('Wrong CPD tier accepted');
+}
+console.log(JSON.stringify({accepted,rejected,wrong_tier_rejected:true,cpd_accepted:cpdAccepted,cpd_rejected:cpdRejected,cpd_wrong_tier_rejected:cpdAccepted>0}));
 process.exit(0);

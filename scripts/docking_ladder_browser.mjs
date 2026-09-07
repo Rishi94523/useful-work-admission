@@ -4,13 +4,14 @@ import {readFile,writeFile,stat} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {makeContactReference} from '../research/docking-zk/contact_reference.mjs';
+import {makeCPDReference} from '../research/docking-zk/cpd_reference.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const [count,seed,target]=process.argv.slice(2);const n=Number(count);
-const root=path.resolve(n<=8?'tmp/docking-pilot/zk':'tmp/docking-ladder');const base=path.join(root,String(n));
-const input={...JSON.parse(await readFile(path.join(root,'input.json'),'utf8')),seed};
-const reference=(await makeContactReference())(input,n);
-const assets=new Map([['/snarkjs.min.js',path.resolve('research/docking-zk/node_modules/snarkjs/build/snarkjs.min.js')],['/witness.wasm',path.join(base,`contact_${n}_js/contact_${n}.wasm`)],['/key.zkey',path.join(base,'DEVELOPMENT_ONLY.zkey')],['/vk.json',path.join(base,'verification_key.json')]]);
+const [count,seed,target,mode]=process.argv.slice(2);const n=Number(count);const cpd=mode==='--cpd';
+const root=path.resolve(cpd?'tmp/docking-ladder/cpd':n<=8?'tmp/docking-pilot/zk':'tmp/docking-ladder');const base=path.join(root,String(n));
+const input=cpd?{start:seed}:{...JSON.parse(await readFile(path.join(root,'input.json'),'utf8')),seed};
+const reference=cpd?makeCPDReference(JSON.parse(await readFile(path.join(root,'model_exact.json'),'utf8')))(n,Number(seed)):(await makeContactReference())(input,n);
+const assets=new Map([['/snarkjs.min.js',path.resolve('research/docking-zk/node_modules/snarkjs/build/snarkjs.min.js')],['/witness.wasm',path.join(base,cpd?'main_js/main.wasm':`contact_${n}_js/contact_${n}.wasm`)],['/key.zkey',path.join(base,'DEVELOPMENT_ONLY.zkey')],['/vk.json',path.join(base,'verification_key.json')]]);
 const server=createServer(async(req,res)=>{
  res.setHeader('Cross-Origin-Opener-Policy','same-origin');res.setHeader('Cross-Origin-Embedder-Policy','require-corp');
  if(req.url==='/'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>Proof scaling benchmark</title><script src="/snarkjs.min.js"></script>');return;}
@@ -26,7 +27,7 @@ try{
   const key=await fetch('/vk.json').then(r=>r.json());const started=performance.now();const valid=await snarkjs.groth16.verify(key,publicSignals,proof);
   return {prove_ms:prove,cold_browser_verify_ms:performance.now()-started,valid,proof,publicSignals,js_heap_snapshot_bytes:performance.memory?.usedJSHeapSize||null};
  },input);
- assert(row.valid);assert.deepEqual(row.publicSignals,[reference.bestScore,reference.bestIndex,seed,...input.ligand.flat(),...input.receptor.flat()].map(String));
+ assert(row.valid);assert.deepEqual(row.publicSignals,cpd?[reference.score,reference.index,seed]:[reference.bestScore,reference.bestIndex,seed,...input.ligand.flat(),...input.receptor.flat()].map(String));
  const output={n,seed,browser:browser.version(),library_load_ms:libraryLoad,proving_key_bytes:(await stat(assets.get('/key.zkey'))).size,...row};
  await writeFile(target,JSON.stringify(output,null,2)+'\n');console.log(JSON.stringify({n,seed,prove_ms:row.prove_ms}));
 }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

@@ -1,0 +1,9 @@
+{
+  "url": "https://pse-trusted-setup-ppot.s3.eu-central-1.amazonaws.com/pot28_0080/ppot_0080_19.ptau",
+  "bytes": 604073106,
+  "blake2b": "72840fbae3c073a63b4914fade8b71ccfdadd5c7c708d6adabdb312b6c744cfeb04a1c233f9d5645d4d7557fa8a3d2569c26c9af12d9c4c7dbef3f9305180176",
+  "source": "https://github.com/privacy-ethereum/perpetualpowersoftau#prepared-and-truncated-files",
+  "power": 19,
+  "wall_seconds": 315.75318460000017,
+  "scope": "Canonical maintainer download over HTTPS; local fingerprint recorded, not independently authenticated against a published digest or ceremony audit. Each final circuit key receives a local development phase-two contribution. Not production keys. Older Hermez Google/S3 URLs returned HTTP 403."
+}

@@ -1,0 +1,11 @@
+{
+  "name": "docking-proof-feasibility",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Local Groth16 calibration for a reduced integer contact-search circuit; not AutoDock Vina or a deployed admission protocol.",
+  "dependencies": {
+    "circomlib": "2.0.5",
+    "circomlibjs": "0.1.7",
+    "snarkjs": "0.7.6"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "cpu": "AMD Ryzen 7 7435HS",
+  "logical_cpus": 16,
+  "total_memory_bytes": 25439199232,
+  "os": "Windows_NT",
+  "release": "10.0.26200",
+  "arch": "x64",
+  "node": "v24.4.0",
+  "native_search_threads": 1,
+  "proof_prover_threads": 1,
+  "scope": "Single desktop; host metadata collected at reporting time. No phone, energy or production-network measurements."
+}

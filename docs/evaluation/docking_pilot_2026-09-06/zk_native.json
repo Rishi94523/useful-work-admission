@@ -1,0 +1,431 @@
+{
+  "scope": "Groth16 calibration using single-party DEVELOPMENT_ONLY setup with random phase-one and phase-two contributions. Integer contact potential, 8 ligand and 8 receptor atoms, translations only. This is not Vina, scientific docking validation, proof of physical CPU time or production cryptographic security.",
+  "node": "v24.4.0",
+  "prover_options": {
+    "singleThread": true
+  },
+  "rows": [
+    {
+      "n": 2,
+      "seed": "20260906",
+      "prove_ms": 1027.2046,
+      "verify_ms": [
+        5.897000000000844,
+        6.217799999999443,
+        6.3388999999997395,
+        6.64220000000023,
+        6.216800000000148,
+        5.565599999999904,
+        6.026599999999235,
+        5.037100000000464,
+        4.846499999999651,
+        6.09440000000086
+      ],
+      "plain_reference_ms": [
+        0.2470999999995911,
+        0.25420000000030996,
+        0.2518000000000029,
+        0.19529999999940628,
+        0.19059999999990396,
+        0.19110000000000582,
+        0.20340000000032887,
+        0.20250000000032742,
+        0.19329999999990832,
+        0.18940000000020518
+      ],
+      "public_field_elements": 51,
+      "proof_json_bytes": 724,
+      "key_bytes": 8157120,
+      "witness_wasm_bytes": 1832383,
+      "result": {
+        "bestScore": 149804,
+        "bestIndex": 0,
+        "candidates": [
+          {
+            "shift": [
+              41,
+              -43,
+              50
+            ],
+            "score": 149804
+          },
+          {
+            "shift": [
+              -91,
+              14,
+              14
+            ],
+            "score": 160000
+          }
+        ]
+      },
+      "node_rss_snapshot_bytes": 361398272
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "prove_ms": 973.3156999999992,
+      "verify_ms": [
+        5.225900000001275,
+        6.034699999998338,
+        6.124499999999898,
+        5.695000000001528,
+        4.9452000000001135,
+        5.957200000000739,
+        5.816899999999805,
+        8.437099999999191,
+        8.848799999999756,
+        5.981499999999869
+      ],
+      "plain_reference_ms": [
+        0.2897000000002663,
+        0.27919999999994616,
+        0.13079999999990832,
+        0.12349999999969441,
+        0.1724000000003798,
+        0.18260000000009313,
+        0.13250000000061846,
+        0.13400000000001455,
+        0.11660000000028958,
+        0.11410000000068976
+      ],
+      "public_field_elements": 51,
+      "proof_json_bytes": 724,
+      "key_bytes": 8157120,
+      "witness_wasm_bytes": 1832383,
+      "result": {
+        "bestScore": 160000,
+        "bestIndex": 0,
+        "candidates": [
+          {
+            "shift": [
+              -61,
+              74,
+              -46
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -7,
+              -4,
+              29
+            ],
+            "score": 163675
+          }
+        ]
+      },
+      "node_rss_snapshot_bytes": 325877760
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "prove_ms": 3145.815700000001,
+      "verify_ms": [
+        5.549199999999473,
+        5.728499999999258,
+        4.920000000000073,
+        6.08889999999883,
+        5.127200000000812,
+        5.567800000000716,
+        4.625299999999697,
+        5.072700000000623,
+        4.698099999999613,
+        6.0997000000006665
+      ],
+      "plain_reference_ms": [
+        0.4953000000004977,
+        0.4441999999999098,
+        0.4636999999984255,
+        0.4559000000008382,
+        0.5172000000002299,
+        0.4885999999987689,
+        0.48099999999976717,
+        0.4654000000009546,
+        0.4544000000005326,
+        0.47149999999965075
+      ],
+      "public_field_elements": 51,
+      "proof_json_bytes": 722,
+      "key_bytes": 31698216,
+      "witness_wasm_bytes": 2003841,
+      "result": {
+        "bestScore": 149082,
+        "bestIndex": 3,
+        "candidates": [
+          {
+            "shift": [
+              41,
+              -43,
+              50
+            ],
+            "score": 149804
+          },
+          {
+            "shift": [
+              -91,
+              14,
+              14
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -46,
+              23,
+              95
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -7,
+              -16,
+              50
+            ],
+            "score": 149082
+          },
+          {
+            "shift": [
+              -25,
+              -70,
+              92
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -13,
+              35,
+              -25
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              38,
+              -40,
+              71
+            ],
+            "score": 159997
+          },
+          {
+            "shift": [
+              92,
+              8,
+              -46
+            ],
+            "score": 154244
+          }
+        ]
+      },
+      "node_rss_snapshot_bytes": 458874880
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "prove_ms": 3096.791300000001,
+      "verify_ms": [
+        5.313200000000506,
+        5.846999999999753,
+        5.5020000000004075,
+        5.879899999999907,
+        5.287299999999959,
+        4.970999999999549,
+        5.69590000000062,
+        5.811299999999392,
+        5.690999999998894,
+        5.406699999999546
+      ],
+      "plain_reference_ms": [
+        0.5028000000002066,
+        0.5023999999993976,
+        0.4753000000000611,
+        0.4511000000002241,
+        0.46379999999953725,
+        0.6735000000007858,
+        0.43109999999978754,
+        0.4275999999990745,
+        0.42300000000068394,
+        0.40760000000045693
+      ],
+      "public_field_elements": 51,
+      "proof_json_bytes": 724,
+      "key_bytes": 31698216,
+      "witness_wasm_bytes": 2003841,
+      "result": {
+        "bestScore": 155447,
+        "bestIndex": 3,
+        "candidates": [
+          {
+            "shift": [
+              -61,
+              74,
+              -46
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -7,
+              -4,
+              29
+            ],
+            "score": 163675
+          },
+          {
+            "shift": [
+              -37,
+              -31,
+              65
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              23,
+              -67,
+              26
+            ],
+            "score": 155447
+          },
+          {
+            "shift": [
+              -61,
+              -55,
+              35
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              -28,
+              -52,
+              -34
+            ],
+            "score": 160000
+          },
+          {
+            "shift": [
+              32,
+              -7,
+              8
+            ],
+            "score": 231702
+          },
+          {
+            "shift": [
+              -73,
+              47,
+              -73
+            ],
+            "score": 160000
+          }
+        ]
+      },
+      "node_rss_snapshot_bytes": 488546304
+    }
+  ],
+  "attacks": [
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "test": "two_candidate_proof_against_eight_candidate_key",
+      "rejected": true
+    }
+  ]
+}

@@ -39,7 +39,29 @@ The native scorer is a local trusted-process benchmark: shared temporary paths, 
 
 ## Groth16 comparison
 
-The second checkpoint adds an actual proof experiment for a **reduced integer contact-search model**. It does not prove execution of Vina. Proof timing, scientific usefulness, candidate integrity and resistance to effort cheating are separate claims. See the feasibility report and reproduction notes added with that checkpoint.
+The [feasibility report](../../research/DOCKING_GROTH16_FEASIBILITY_2026-09-07.md) compares real docking with an actual proof experiment for a **reduced integer contact-search model**. It does not prove execution of Vina. Proof timing, scientific usefulness, candidate integrity and resistance to effort cheating are separate claims.
+
+`zk_native.json` and `zk_browser.json` record final contributed-setup timings. `zk_public_proofs.json` includes the public verification keys and six proofs for independent checking. `zk_setup.json` records circuit/setup steps. `zk_degenerate_setup_diagnostic.json` is a deliberately retained failed earlier experiment: the original uncontributed setup accepted statement changes. Do not use its timings or apparent validity as final evidence. All keys are development-only.
+
+To verify the published public proofs without performing setup:
+
+```powershell
+npm.cmd ci --prefix research/docking-zk
+node scripts/verify_docking_zk_evidence.mjs
+```
+
+To regenerate proofs, after fetching the docking inputs:
+
+```powershell
+python scripts/fetch_docking_circom.py
+python scripts/prepare_docking_zk.py
+node scripts/benchmark_docking_zk.mjs
+# Uses the same PLAYWRIGHT_MODULE and CHROME_PATH settings as above.
+node scripts/benchmark_docking_zk_browser.mjs
+python scripts/summarize_docking_pilot.py
+```
+
+Setup took several minutes on this machine, including about 402 seconds for phase-two preparation. New setup randomness produces different keys/proofs; the checked-in public corpus remains the original run. `source_manifest.json`, `environment.json`, `summary.json` and `cost_comparison.png`/`.pdf` support the final comparison. Downloaded dependencies, setup files and proving keys stay under ignored directories. No human or production website is deployed by these scripts.
 
 ## Attribution
 

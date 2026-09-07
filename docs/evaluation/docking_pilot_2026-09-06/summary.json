@@ -1,0 +1,725 @@
+{
+  "scope": "Descriptive single-machine pilot, not production or newly useful scientific work. Timing paths and arithmetic workloads are explicitly different; no confidence claims from small browser samples.",
+  "cases": [
+    {
+      "case": "2P16",
+      "setup_ms": 959.3176,
+      "complete_check_ms": {
+        "n": 32,
+        "mean": 5.696909374997006,
+        "median": 4.544000000066717,
+        "min": 3.738300000009076,
+        "max": 27.716199999986202
+      },
+      "score_kernel_ms": {
+        "n": 32,
+        "mean": 0.084778125,
+        "median": 0.08625,
+        "min": 0.0475,
+        "max": 0.1162
+      },
+      "preflight_ms": {
+        "n": 32,
+        "mean": 1.3968843750049587,
+        "median": 1.3186500000301749,
+        "min": 1.1415999999826454,
+        "max": 1.9551999999976033
+      },
+      "stock_cli_agreement_max_abs": 0.0004800529609383375,
+      "browser_claim_agreement_max_abs": 0.00371566890257391,
+      "native_rejected_count": 0,
+      "warm_native_by_exhaustiveness": {
+        "1": {
+          "n": 3,
+          "mean": 8.913366666666667,
+          "median": 8.8427,
+          "min": 8.4307,
+          "max": 9.4667
+        },
+        "2": {
+          "n": 3,
+          "mean": 13.822966666666666,
+          "median": 13.548,
+          "min": 13.4216,
+          "max": 14.4993
+        },
+        "4": {
+          "n": 3,
+          "mean": 23.8406,
+          "median": 23.5232,
+          "min": 23.373,
+          "max": 24.6256
+        },
+        "8": {
+          "n": 3,
+          "mean": 44.09673333333333,
+          "median": 44.3447,
+          "min": 43.5224,
+          "max": 44.4231
+        }
+      },
+      "browser_short_by_exhaustiveness": {
+        "1": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 1836.589999999851,
+            "median": 1836.589999999851,
+            "min": 1835.4199999980628,
+            "max": 1837.7600000016391
+          },
+          "wasm_memory_bytes": 641859584
+        },
+        "4": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 1806.992499999702,
+            "median": 1806.992499999702,
+            "min": 1794.7749999985099,
+            "max": 1819.210000000894
+          },
+          "wasm_memory_bytes": 641859584
+        }
+      }
+    },
+    {
+      "case": "4LL3",
+      "setup_ms": 1141.0819,
+      "complete_check_ms": {
+        "n": 22,
+        "mean": 4.609827272728043,
+        "median": 4.546750000031352,
+        "min": 3.940199999988181,
+        "max": 5.643299999974261
+      },
+      "score_kernel_ms": {
+        "n": 22,
+        "mean": 0.11117272727272727,
+        "median": 0.1084,
+        "min": 0.0936,
+        "max": 0.1337
+      },
+      "preflight_ms": {
+        "n": 22,
+        "mean": 1.5079636363669702,
+        "median": 1.4590999999768428,
+        "min": 1.232100000038372,
+        "max": 1.952999999957683
+      },
+      "stock_cli_agreement_max_abs": 0.00047761654316325064,
+      "browser_claim_agreement_max_abs": 0.02006310622833496,
+      "native_rejected_count": 0,
+      "warm_native_by_exhaustiveness": {
+        "1": {
+          "n": 3,
+          "mean": 17.264133333333334,
+          "median": 17.3478,
+          "min": 16.6843,
+          "max": 17.7603
+        },
+        "2": {
+          "n": 3,
+          "mean": 30.45253333333333,
+          "median": 30.2185,
+          "min": 30.0867,
+          "max": 31.0524
+        },
+        "4": {
+          "n": 3,
+          "mean": 62.00176666666667,
+          "median": 61.7567,
+          "min": 60.4761,
+          "max": 63.7725
+        },
+        "8": {
+          "n": 3,
+          "mean": 128.9469,
+          "median": 127.4114,
+          "min": 122.7063,
+          "max": 136.723
+        }
+      },
+      "browser_short_by_exhaustiveness": {
+        "1": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 2114.8650000002235,
+            "median": 2114.8650000002235,
+            "min": 2094.030000001192,
+            "max": 2135.699999999255
+          },
+          "wasm_memory_bytes": 640679936
+        },
+        "4": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 2157.114999998361,
+            "median": 2157.114999998361,
+            "min": 2139.439999997616,
+            "max": 2174.789999999106
+          },
+          "wasm_memory_bytes": 640679936
+        }
+      }
+    },
+    {
+      "case": "4TZ4",
+      "setup_ms": 792.5902,
+      "complete_check_ms": {
+        "n": 22,
+        "mean": 6.045495454548638,
+        "median": 5.6230000000141445,
+        "min": 4.871099999945727,
+        "max": 10.749700000019402
+      },
+      "score_kernel_ms": {
+        "n": 21,
+        "mean": 0.052295238095238096,
+        "median": 0.0508,
+        "min": 0.0325,
+        "max": 0.0751
+      },
+      "preflight_ms": {
+        "n": 21,
+        "mean": 0.9035190476240695,
+        "median": 0.8276999999452528,
+        "min": 0.7685000000492437,
+        "max": 1.3297000000420667
+      },
+      "stock_cli_agreement_max_abs": 0.0004918582827224682,
+      "browser_claim_agreement_max_abs": 0.004395660550557068,
+      "native_rejected_count": 1,
+      "warm_native_by_exhaustiveness": {
+        "1": {
+          "n": 3,
+          "mean": 10.759233333333333,
+          "median": 10.8384,
+          "min": 9.5788,
+          "max": 11.8605
+        },
+        "2": {
+          "n": 3,
+          "mean": 14.317033333333333,
+          "median": 14.2236,
+          "min": 14.1367,
+          "max": 14.5908
+        },
+        "4": {
+          "n": 3,
+          "mean": 20.156,
+          "median": 20.1743,
+          "min": 19.6324,
+          "max": 20.6613
+        },
+        "8": {
+          "n": 3,
+          "mean": 34.92176666666667,
+          "median": 34.0224,
+          "min": 33.7914,
+          "max": 36.9515
+        }
+      },
+      "browser_short_by_exhaustiveness": {
+        "1": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 1409.0475000012666,
+            "median": 1409.0475000012666,
+            "min": 1395.0100000016391,
+            "max": 1423.085000000894
+          },
+          "wasm_memory_bytes": 449839104
+        },
+        "4": {
+          "page_total_ms": {
+            "n": 2,
+            "mean": 1423.7599999997765,
+            "median": 1423.7599999997765,
+            "min": 1391.2249999977648,
+            "max": 1456.2950000017881
+          },
+          "wasm_memory_bytes": 449839104
+        }
+      }
+    }
+  ],
+  "groth16": [
+    {
+      "candidate_count": 2,
+      "constraints": 13302,
+      "native_prove_ms": {
+        "n": 2,
+        "mean": 1000.2601499999996,
+        "median": 1000.2601499999996,
+        "min": 973.3156999999992,
+        "max": 1027.2046
+      },
+      "native_verify_ms": {
+        "n": 20,
+        "mean": 6.097485000000051,
+        "median": 6.004049999999552,
+        "min": 4.846499999999651,
+        "max": 8.848799999999756
+      },
+      "plain_js_search_ms": {
+        "n": 20,
+        "mean": 0.18970500000009452,
+        "median": 0.1908499999999549,
+        "min": 0.11410000000068976,
+        "max": 0.2897000000002663
+      },
+      "browser_prove_ms": 911.6450000000186,
+      "public_field_elements": 51,
+      "proving_key_bytes": 8157120,
+      "witness_wasm_bytes": 1832383,
+      "proof_json_bytes": 724
+    },
+    {
+      "candidate_count": 8,
+      "constraints": 51486,
+      "native_prove_ms": {
+        "n": 2,
+        "mean": 3121.303500000001,
+        "median": 3121.303500000001,
+        "min": 3096.791300000001,
+        "max": 3145.815700000001
+      },
+      "native_verify_ms": {
+        "n": 20,
+        "mean": 5.444134999999915,
+        "median": 5.52559999999994,
+        "min": 4.625299999999697,
+        "max": 6.0997000000006665
+      },
+      "plain_js_search_ms": {
+        "n": 20,
+        "mean": 0.47476999999998953,
+        "median": 0.4646000000002459,
+        "min": 0.40760000000045693,
+        "max": 0.6735000000007858
+      },
+      "browser_prove_ms": 2969.7000000000116,
+      "public_field_elements": 51,
+      "proving_key_bytes": 31698216,
+      "witness_wasm_bytes": 2003841,
+      "proof_json_bytes": 722
+    }
+  ],
+  "native_full_search": {
+    "1": {
+      "wall_ms": {
+        "n": 3,
+        "mean": 8936.606566666645,
+        "median": 9138.079500000458,
+        "min": 8063.525800000207,
+        "max": 9608.21439999927
+      },
+      "scores": [
+        -8.344,
+        -10.07,
+        -10.09
+      ]
+    },
+    "2": {
+      "wall_ms": {
+        "n": 3,
+        "mean": 19158.6438000013,
+        "median": 19500.462299998617,
+        "min": 17022.14930000264,
+        "max": 20953.319800002646
+      },
+      "scores": [
+        -10.07,
+        -10.07,
+        -10.07
+      ]
+    },
+    "4": {
+      "wall_ms": {
+        "n": 3,
+        "mean": 41084.45763333415,
+        "median": 41091.34249999988,
+        "min": 38550.663000001805,
+        "max": 43611.367400000745
+      },
+      "scores": [
+        -10.06,
+        -10.1,
+        -10.1
+      ]
+    }
+  },
+  "browser_full_search": [
+    {
+      "case": "2P16",
+      "page_total_ms": 6599.349999999977,
+      "wasm_memory_bytes": 641859584,
+      "pose_bytes": 3674
+    }
+  ],
+  "candidate_checks": {
+    "total": 76,
+    "native_grid_rejections": 1,
+    "attack_diagnostics": [
+      {
+        "case": "2P16",
+        "test": "low_effort_pose_claimed_as_high_effort",
+        "performed_exhaustiveness": 1,
+        "performed_max_evals": 1000,
+        "claimed_exhaustiveness": 8,
+        "claimed_max_evals": 0,
+        "fresh_task_seed": 999983,
+        "accepted_by_pose_score_predicate": true,
+        "score": -7.127373894174267,
+        "meaning": "Correct pose scoring does not bind the requested search budget or random seed."
+      },
+      {
+        "case": "2P16",
+        "test": "invented_score",
+        "claimed": -107.12737389417427,
+        "actual": -7.127373894174267,
+        "rejected": true,
+        "predicate_result": {
+          "accepted": false,
+          "reason": "score_mismatch",
+          "scorer_called": true,
+          "actual_score": -7.127373894174267,
+          "score_error": 100.0,
+          "pose_hash": "14732b827c423b2b7a027efe807907a22b1ef60a86917966f4c6327adfa55f74"
+        }
+      },
+      {
+        "case": "2P16",
+        "test": "nan_coordinate",
+        "rejected_before_scoring": true,
+        "reason": "nonfinite coordinate",
+        "ms": 0.15159999998104468
+      },
+      {
+        "case": "2P16",
+        "test": "outside_box",
+        "rejected_before_scoring": true,
+        "reason": "outside docking box",
+        "ms": 0.1453000000992688
+      },
+      {
+        "case": "2P16",
+        "test": "distorted_geometry",
+        "rejected_before_scoring": true,
+        "reason": "rigid fragment distortion",
+        "ms": 0.27889999989838543
+      },
+      {
+        "case": "2P16",
+        "test": "missing_atom",
+        "rejected_before_scoring": true,
+        "reason": "atom identity/count mismatch",
+        "ms": 0.05679999992480589
+      },
+      {
+        "case": "2P16",
+        "test": "oversized",
+        "rejected_before_scoring": true,
+        "reason": "byte budget",
+        "ms": 0.002300000005561742
+      },
+      {
+        "case": "2P16",
+        "test": "altered_torsion_count",
+        "rejected_before_scoring": true,
+        "reason": "torsion tree mismatch",
+        "ms": 0.08960000002389279
+      },
+      {
+        "case": "2P16",
+        "test": "cached_pose_tiny_translation",
+        "passes_geometry": true,
+        "different_exact_hash": true,
+        "passes_score_check": true,
+        "predicate_result": {
+          "accepted": true,
+          "reason": "score_match",
+          "scorer_called": true,
+          "actual_score": -7.132387431914157,
+          "score_error": 0.005013537739890772,
+          "pose_hash": "1a212fdf68e954257909f1078941474d094506f470b833664a468999c70a4588"
+        },
+        "pose_rmsd_angstrom": 0.0019999999999999888,
+        "meaning": "Exact hashes alone do not establish a novel useful pose; clustering is required."
+      },
+      {
+        "case": "4LL3",
+        "test": "low_effort_pose_claimed_as_high_effort",
+        "performed_exhaustiveness": 1,
+        "performed_max_evals": 1000,
+        "claimed_exhaustiveness": 8,
+        "claimed_max_evals": 0,
+        "fresh_task_seed": 999983,
+        "accepted_by_pose_score_predicate": true,
+        "score": -6.923728192727382,
+        "meaning": "Correct pose scoring does not bind the requested search budget or random seed."
+      },
+      {
+        "case": "4LL3",
+        "test": "invented_score",
+        "claimed": -106.92372819272738,
+        "actual": -6.923728192727382,
+        "rejected": true,
+        "predicate_result": {
+          "accepted": false,
+          "reason": "score_mismatch",
+          "scorer_called": true,
+          "actual_score": -6.923728192727382,
+          "score_error": 100.0,
+          "pose_hash": "cf4fde0083e4e2bcd4aaa72519405d6c3f995f3f90448c554c2afd87b5d03726"
+        }
+      },
+      {
+        "case": "4LL3",
+        "test": "nan_coordinate",
+        "rejected_before_scoring": true,
+        "reason": "nonfinite coordinate",
+        "ms": 0.19780000002356246
+      },
+      {
+        "case": "4LL3",
+        "test": "outside_box",
+        "rejected_before_scoring": true,
+        "reason": "outside docking box",
+        "ms": 0.17930000001342705
+      },
+      {
+        "case": "4LL3",
+        "test": "distorted_geometry",
+        "rejected_before_scoring": true,
+        "reason": "bond/angle distortion",
+        "ms": 0.6355000000439759
+      },
+      {
+        "case": "4LL3",
+        "test": "missing_atom",
+        "rejected_before_scoring": true,
+        "reason": "atom identity/count mismatch",
+        "ms": 0.07709999999860884
+      },
+      {
+        "case": "4LL3",
+        "test": "oversized",
+        "rejected_before_scoring": true,
+        "reason": "byte budget",
+        "ms": 0.0034999999343199306
+      },
+      {
+        "case": "4LL3",
+        "test": "altered_torsion_count",
+        "rejected_before_scoring": true,
+        "reason": "torsion tree mismatch",
+        "ms": 0.12060000005931215
+      },
+      {
+        "case": "4LL3",
+        "test": "cached_pose_tiny_translation",
+        "passes_geometry": true,
+        "different_exact_hash": true,
+        "passes_score_check": true,
+        "predicate_result": {
+          "accepted": true,
+          "reason": "score_match",
+          "scorer_called": true,
+          "actual_score": -6.92034562289125,
+          "score_error": 0.0033825698361322765,
+          "pose_hash": "bbbcf5de9fb42bed0d58fc2f51273b01504afe4b7e010989c8cb4dd193ee3734"
+        },
+        "pose_rmsd_angstrom": 0.0019999999999999784,
+        "meaning": "Exact hashes alone do not establish a novel useful pose; clustering is required."
+      },
+      {
+        "case": "4TZ4",
+        "test": "low_effort_pose_claimed_as_high_effort",
+        "performed_exhaustiveness": 1,
+        "performed_max_evals": 1000,
+        "claimed_exhaustiveness": 8,
+        "claimed_max_evals": 0,
+        "fresh_task_seed": 999983,
+        "accepted_by_pose_score_predicate": true,
+        "score": -5.1637450607075595,
+        "meaning": "Correct pose scoring does not bind the requested search budget or random seed."
+      },
+      {
+        "case": "4TZ4",
+        "test": "invented_score",
+        "claimed": -105.16374506070756,
+        "actual": -5.1637450607075595,
+        "rejected": true,
+        "predicate_result": {
+          "accepted": false,
+          "reason": "score_mismatch",
+          "scorer_called": true,
+          "actual_score": -5.1637450607075595,
+          "score_error": 100.0,
+          "pose_hash": "28e97d0679e82e743dc2ead7c4acd9ed8a13c155aa18da8b4ccd333a2840a933"
+        }
+      },
+      {
+        "case": "4TZ4",
+        "test": "nan_coordinate",
+        "rejected_before_scoring": true,
+        "reason": "nonfinite coordinate",
+        "ms": 0.12409999999363208
+      },
+      {
+        "case": "4TZ4",
+        "test": "outside_box",
+        "rejected_before_scoring": true,
+        "reason": "outside docking box",
+        "ms": 0.11189999997895939
+      },
+      {
+        "case": "4TZ4",
+        "test": "distorted_geometry",
+        "rejected_before_scoring": true,
+        "reason": "rigid fragment distortion",
+        "ms": 0.26109999998880085
+      },
+      {
+        "case": "4TZ4",
+        "test": "missing_atom",
+        "rejected_before_scoring": true,
+        "reason": "atom identity/count mismatch",
+        "ms": 0.03920000006019109
+      },
+      {
+        "case": "4TZ4",
+        "test": "oversized",
+        "rejected_before_scoring": true,
+        "reason": "byte budget",
+        "ms": 0.003999999989900971
+      },
+      {
+        "case": "4TZ4",
+        "test": "altered_torsion_count",
+        "rejected_before_scoring": true,
+        "reason": "torsion tree mismatch",
+        "ms": 0.058799999919756374
+      },
+      {
+        "case": "4TZ4",
+        "test": "cached_pose_tiny_translation",
+        "passes_geometry": true,
+        "different_exact_hash": true,
+        "passes_score_check": true,
+        "predicate_result": {
+          "accepted": true,
+          "reason": "score_match",
+          "scorer_called": true,
+          "actual_score": -5.161689361433519,
+          "score_error": 0.002055699274040812,
+          "pose_hash": "532b4d69941e4d2cca81e8c3f7d96b813bc3908a8c07d5b6464d7e4c6162fa4c"
+        },
+        "pose_rmsd_angstrom": 0.00200000000000207,
+        "meaning": "Exact hashes alone do not establish a novel useful pose; clustering is required."
+      }
+    ]
+  },
+  "groth16_negative_checks": [
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260906",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 2,
+      "seed": "20260907",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260906",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_best_score",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_seed",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "changed_receptor_coordinate",
+      "rejected": true
+    },
+    {
+      "n": 8,
+      "seed": "20260907",
+      "test": "corrupted_proof",
+      "rejected": true
+    },
+    {
+      "test": "two_candidate_proof_against_eight_candidate_key",
+      "rejected": true
+    }
+  ]
+}

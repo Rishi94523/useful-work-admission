@@ -1,0 +1,104 @@
+{
+  "webina_commit": "4230729e7dad197b4c77912dffe30c8bcdd492ba",
+  "vina_source_commit": "3c65c0b3e6c2c1d183f6a175ecb65e3c5ba91645",
+  "vina_release": "v1.2.7",
+  "scope": "Public benchmark inputs, not newly discovered or experimentally validated binding pairs.",
+  "files": [
+    {
+      "path": "webina/Webina.ts",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/src/Webina/Webina.ts",
+      "bytes": 6378,
+      "sha256": "f5c6b238feea9070eea05d27225fa2e888f3eb19b6731e42db1599c0e998d079"
+    },
+    {
+      "path": "webina/vina.js",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/src/Webina/vina.js",
+      "bytes": 93094,
+      "sha256": "944b160a4978326cbc237390f0e7e727adbcb63521a713ec16f6e6b0446d7934"
+    },
+    {
+      "path": "webina/vina.wasm",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/src/Webina/vina.wasm",
+      "bytes": 639890,
+      "sha256": "e17a8807aee230e629cdafa6f31897d2bbd993f5c3a3374b84d0638aaa2927f4"
+    },
+    {
+      "path": "webina/vina.worker.js",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/src/Webina/vina.worker.js",
+      "bytes": 2122,
+      "sha256": "280f56fb60bf72545a6e68b55f11174ef5b90e8ff23fa9d9a7c4431d4f43aba8"
+    },
+    {
+      "path": "webina/LICENSE.md",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/LICENSE.md",
+      "bytes": 9333,
+      "sha256": "09e76a04b0e9f93cccb13a415c5e0609524c21e678b1ce8f29f098ed7e5e3822"
+    },
+    {
+      "path": "inputs/2P16_docking_params.txt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/2P16_docking_params.txt",
+      "bytes": 132,
+      "sha256": "1dedb9cfedb33f45bd782c2bc9db427fd973d9d7bf0de5aaac6dca9ad55c00cd"
+    },
+    {
+      "path": "inputs/2P16_ligand_apixaban.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/2P16_ligand_apixaban.pdbqt",
+      "bytes": 3455,
+      "sha256": "4db2f8d56560369507bb01e526a244107760c1852d1a681c25eefe758866f862"
+    },
+    {
+      "path": "inputs/2P16_receptor_factor-Xa.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/2P16_receptor_factor-Xa.pdbqt",
+      "bytes": 221468,
+      "sha256": "468d654f0b0c0cda3f0cdbbb707579bdc21a527a6bd1c4bb7e26fc72f8782287"
+    },
+    {
+      "path": "inputs/4LL3_docking_params.txt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4LL3_docking_params.txt",
+      "bytes": 133,
+      "sha256": "5bde239345d0924913b75b3a6bfd51d265f95655996fb44d6eabc037ccd94320"
+    },
+    {
+      "path": "inputs/4LL3_ligand_darunavir.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4LL3_ligand_darunavir.pdbqt",
+      "bytes": 4775,
+      "sha256": "47e9bfb9c41f489d0449b20ef6fca19f4b98b3ab612b5025ecb97dd5b766a022"
+    },
+    {
+      "path": "inputs/4LL3_receptor_HIV-protease.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4LL3_receptor_HIV-protease.pdbqt",
+      "bytes": 148428,
+      "sha256": "dfc9bb506433103bf3e70158b8eebf741b0a161d4a08056b86cf70aba666df68"
+    },
+    {
+      "path": "inputs/4TZ4_docking_params.txt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4TZ4_docking_params.txt",
+      "bytes": 124,
+      "sha256": "f896679202c48e4668693ba990b222eee4a0c237b4a1e0ba216680a7ac7d7aa6"
+    },
+    {
+      "path": "inputs/4TZ4_ligand_S-Lenalidomide.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4TZ4_ligand_S-Lenalidomide.pdbqt",
+      "bytes": 2108,
+      "sha256": "27085866d3fb976a8773889ffec129d250d190722d086cf0c44dd29ee21001f6"
+    },
+    {
+      "path": "inputs/4TZ4_receptor_cereblon.pdbqt",
+      "url": "https://raw.githubusercontent.com/durrantlab/webina/4230729e7dad197b4c77912dffe30c8bcdd492ba/docking_files/benchmarks/4TZ4_receptor_cereblon.pdbqt",
+      "bytes": 1104428,
+      "sha256": "824b32a7d172deacc54fdcb78edf44e20d6bfafee2715553dd35b6d36db12e14"
+    },
+    {
+      "path": "native/vina_1.2.7_win.exe",
+      "url": "https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_win.exe",
+      "bytes": 1233920,
+      "sha256": "e0c4b2715e0c1a74f6e92d0f3be0328ac97542eafbc111e6b1efad897a73cce5"
+    },
+    {
+      "path": "native/LICENSE",
+      "url": "https://raw.githubusercontent.com/ccsb-scripps/AutoDock-Vina/3c65c0b3e6c2c1d183f6a175ecb65e3c5ba91645/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    }
+  ]
+}

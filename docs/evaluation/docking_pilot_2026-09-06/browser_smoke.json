@@ -1,0 +1,24 @@
+{
+  "scope": "Actual local Chromium Webina 1.0.5 / Vina 1.2.3; fresh worker per call, local loopback assets, one requested CPU. No public deployment, phone, fresh science or access-security claim.",
+  "browser": "152.0.7977.76",
+  "rows": [
+    {
+      "case": "2P16",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 104729,
+      "ok": true,
+      "rc": 0,
+      "stderr": "",
+      "module_init_ms": 30.884999997913837,
+      "call_main_ms": 1787.6000000014901,
+      "worker_total_ms": 1821.554999999702,
+      "wasm_memory_bytes": 641859584,
+      "fetch_ms": 6.089999999850988,
+      "page_total_ms": 1841.484999999404,
+      "pose_path": "tmp/docking-pilot/runs/browser_2P16_e1_seed104729.pdbqt",
+      "pose_bytes": 3674,
+      "stdout_excerpt": "AutoDock Vina v1.2.3\n#################################################################\n# If you used AutoDock Vina in your work, please cite:          #\n#                                                               #\n# J. Eberhardt, D. Santos-Martins, A. F. Tillack, and S. Forli  #\n# AutoDock Vina 1.2.0: New Docking Methods, Expanded Force      #\n# Field, and Python Bindings, J. Chem. Inf. Model. (2021)       #\n# DOI 10.1021/acs.jcim.1c00203                                  #\n#                                                               #\n# O. Trott, A. J. Olson,                                        #\n# AutoDock Vina: improving the speed and accuracy of docking    #\n# with a new scoring function, efficient optimization and       #\n# multithreading, J. Comp. Chem. (2010)                         #\n# DOI 10.1002/jcc.21334                                         #\n#                                                               #\n# Please see https://github.com/ccsb-scripps/AutoDock-Vina for  #\n# more information.                                             #\n#################################################################\n\nScoring function : vina\nRigid receptor: /receptor.pdbqt\nLigand: /ligand.pdbqt\nGrid center: X 7.48497 Y 43.9749 Z 62.1771\nGrid size  : X 20 Y 20 Z 20\nGrid space : 0.375\nExhaustiveness: 1\nCPU: 1\nVerbosity: 1\n\nComputing Vina grid ... done.\nPerforming docking (random seed: 104729) ... \n0%   10   20   30   40   50   60   70   80   90   100%\n|----|----|----|----|----|----|----|----|----|----|\n*\nmode |   affinity | dist from best mode\n     | (kcal/mol) | rmsd l.b.| rmsd u.b.\n-----+------------+----------+----------\n   1        -1.65          0          0\n"
+    }
+  ]
+}

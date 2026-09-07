@@ -1,0 +1,117 @@
+{
+  "cases": [
+    {
+      "id": "2P16",
+      "ligand": "2P16_ligand_apixaban.pdbqt",
+      "receptor": "2P16_receptor_factor-Xa.pdbqt",
+      "params": {
+        "center_x": 7.48497143,
+        "center_y": 43.97488571,
+        "center_z": 62.17711429,
+        "size_x": 20.0,
+        "size_y": 20.0,
+        "size_z": 20.0
+      }
+    },
+    {
+      "id": "4LL3",
+      "ligand": "4LL3_ligand_darunavir.pdbqt",
+      "receptor": "4LL3_receptor_HIV-protease.pdbqt",
+      "params": {
+        "center_x": -9.81455263,
+        "center_y": 15.20044737,
+        "center_z": 26.96442105,
+        "size_x": 20.0,
+        "size_y": 20.0,
+        "size_z": 20.0
+      }
+    },
+    {
+      "id": "4TZ4",
+      "ligand": "4TZ4_ligand_S-Lenalidomide.pdbqt",
+      "receptor": "4TZ4_receptor_cereblon.pdbqt",
+      "params": {
+        "center_x": -45.4991,
+        "center_y": 55.52895,
+        "center_z": -94.9417,
+        "size_x": 20.0,
+        "size_y": 20.0,
+        "size_z": 20.0
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "case": "2P16",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "2P16",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 130363
+    },
+    {
+      "case": "2P16",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "2P16",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 130363
+    },
+    {
+      "case": "4LL3",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "4LL3",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 130363
+    },
+    {
+      "case": "4LL3",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "4LL3",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 130363
+    },
+    {
+      "case": "4TZ4",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "4TZ4",
+      "exhaustiveness": 1,
+      "max_evals": 1000,
+      "seed": 130363
+    },
+    {
+      "case": "4TZ4",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 104729
+    },
+    {
+      "case": "4TZ4",
+      "exhaustiveness": 4,
+      "max_evals": 1000,
+      "seed": 130363
+    }
+  ]
+}

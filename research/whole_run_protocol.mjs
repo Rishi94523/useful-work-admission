@@ -19,7 +19,7 @@ export async function validateCommit(binding,units,c){
 }
 export async function audit(binding,units,c,draws,openings,replay){
  await validateCommit(binding,units,c);
- if(new Set(draws).size!==draws.length||draws.some(i=>!Number.isInteger(i)||i<0||i>=units.length)||openings.length!==draws.length)throw Error('Bad challenge');
+ if(draws.length<1||new Set(draws).size!==draws.length||draws.some(i=>!Number.isInteger(i)||i<0||i>=units.length)||openings.length!==draws.length)throw Error('Bad challenge');
  let replayMs=0;
  for(let j=0;j<draws.length;j++){
   const i=draws[j],o=openings[j];

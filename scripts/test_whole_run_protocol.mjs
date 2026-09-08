@@ -8,6 +8,7 @@ const short=records.map(r=>({...r,trace:r.trace.slice(0,2)})),forged=await commi
 assert(!(await audit('lease',units,forged,[0],[short[0]],u=>runs[u.seed-1])).accepted);
 await assert.rejects(audit('other',units,c,[0],[records[0]],u=>runs[u.seed-1]));
 await assert.rejects(audit('lease',units,c,[0,0],records,u=>runs[u.seed-1]));
+await assert.rejects(audit('lease',units,c,[],[],u=>runs[u.seed-1]));
 assert(!(await audit('lease',units,c,[1],[records[0]],u=>runs[u.seed-1])).accepted);
 assert.equal(passProbability(2,4,2),1/6);assert.equal(passProbability(1,4,2),0);
 for(let i=0;i<100;i++)assert.equal(new Set(sample(16,8)).size,8);

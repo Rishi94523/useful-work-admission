@@ -1,0 +1,39 @@
+{
+  "dataset": "DUD-E FA10; published benchmark, not prospective discovery",
+  "citation": "Mysinger et al., J. Med. Chem. 2012, doi:10.1021/jm300687e",
+  "files": [
+    {
+      "url": "https://dude.docking.org/targets/fa10/actives_final.sdf.gz",
+      "name": "actives_final.sdf.gz",
+      "bytes": 662846,
+      "sha256": "1311c2b89ff47c99a4b1326baeca49607efc61fcb9dfc6af0badd9a51858dc24",
+      "download_or_cached_read_s": 3.9187492999990354
+    },
+    {
+      "url": "https://dude.docking.org/targets/fa10/decoys_final.sdf.gz",
+      "name": "decoys_final.sdf.gz",
+      "bytes": 17419595,
+      "sha256": "5e21991f9c279ea6056766da0a66b7f99b18a97e4ccdbe3d54b2ee2ec8dc38f8",
+      "download_or_cached_read_s": 10.184664699998393
+    },
+    {
+      "url": "https://dude.docking.org/targets/fa10/crystal_ligand.mol2",
+      "name": "crystal_ligand.mol2",
+      "bytes": 5804,
+      "sha256": "51240e12a81912995303d83da6e2514d9dca4803e8d39d4bbb285173b0728133",
+      "download_or_cached_read_s": 0.8906910000005155
+    },
+    {
+      "url": "https://dude.docking.org/targets/fa10/receptor.pdb",
+      "name": "receptor.pdb",
+      "bytes": 124809,
+      "sha256": "3d69c9386e6f57dc72a2a7d3d4db1eeaa5bb63d80c22798c70d0cd827eab8ea8",
+      "download_or_cached_read_s": 1.5309143999984371
+    }
+  ],
+  "dependencies": {
+    "rdkit": "2025.9.6",
+    "meeko": "0.7.1",
+    "gemmi": "0.7.5"
+  }
+}

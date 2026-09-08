@@ -9,6 +9,8 @@ import json
 import secrets
 import sqlite3
 import time
+import bisect
+import math
 
 
 def canonical(value):
@@ -51,7 +53,7 @@ class Campaign:
     def add(self,campaign,spec,start,count,cost):
         required={'model_version','receptor','ligand','conformer_bank','region','search_parameters'}
         if set(spec)!=required:raise ValueError('Incomplete scientific identity')
-        if type(start)!=int or type(count)!=int or start<0 or count<1 or cost<=0:raise ValueError('Invalid work range')
+        if type(start)!=int or type(count)!=int or start<0 or not 1<=count<=16384 or not math.isfinite(cost) or cost<=0:raise ValueError('Invalid work range')
         family=hashlib.sha256(canonical(spec)).hexdigest()
         task=hashlib.sha256(canonical([family,start,count])).hexdigest()
         with self.transaction() as db:
@@ -96,14 +98,20 @@ class Campaign:
         if not 1<=samples<=128:raise ValueError('Invalid sample budget')
         with self.transaction() as db:
             row=self._live(db,lease,owner,binding,'OPEN');tasks=json.loads(row['tasks'])
-            population=[(job,index) for job,t in enumerate(tasks) for index in range(t['count'])]
             rng=secrets.SystemRandom()
             if weighted:
                 # Independent with-replacement cost-weighted samples. Cost is
                 # server calibration per pose, not a client-reported value.
-                weights=[t['estimated_cost']/t['count'] for t in tasks]
-                chosen=rng.choices(population,weights=[weights[j] for j,i in population],k=samples)
-            else:chosen=rng.sample(population,min(samples,len(population)))
+                # Sample job by total calibrated cost, then pose uniformly.
+                # O(jobs + samples), without materializing every pose.
+                jobs=rng.choices(range(len(tasks)),weights=[t['estimated_cost'] for t in tasks],k=samples)
+                chosen=[(j,rng.randrange(tasks[j]['count'])) for j in jobs]
+            else:
+                cumulative=[];total=0
+                for t in tasks:total+=t['count'];cumulative.append(total)
+                chosen=[]
+                for flat in rng.sample(range(total),min(samples,total)):
+                    j=bisect.bisect_right(cumulative,flat);chosen.append((j,flat-(cumulative[j-1] if j else 0)))
             challenge={'id':secrets.token_hex(16),'draws':chosen,'weighted_with_replacement':weighted}
             db.execute("UPDATE leases SET status='COMMITTED',commitment=?,challenge=? WHERE id=?",(commitment,canonical(challenge).decode(),lease))
         return challenge

@@ -1,0 +1,3200 @@
+{
+  "scope": "32 preselected molecules, one target, presumed decoys, capped Vina baselines. No clinical or binding claim. Vina full score and coarse intermolecular-only scores are different objectives. No crystal recovery measurement in this ranking pilot.",
+  "results": [
+    {
+      "id": "active_00025",
+      "label": "active",
+      "heavy_atoms": 28,
+      "rotatable_bonds": 5,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 3.2304,
+          "best_index": 3924,
+          "search_ms": 100.81519999948796
+        },
+        {
+          "poses": 16384,
+          "energy": -1.3513,
+          "best_index": 10447,
+          "search_ms": 395.4435999985435
+        },
+        {
+          "poses": 65536,
+          "energy": -1.7782,
+          "best_index": 43878,
+          "search_ms": 1583.5293999989517
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.530977736210938,
+          "compute_and_pose_prepare_ms": 37.7154,
+          "check_ms": 1.9524,
+          "checked_score": -4.531109621870743,
+          "pose_sha256": "c8c64b593c604030c1c270b0a0c2529ffd9cab909abdded186f9f2a978d14c59"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.783341967276067,
+          "compute_and_pose_prepare_ms": 126.2115,
+          "check_ms": 1.3372,
+          "checked_score": -5.7835210075521015,
+          "pose_sha256": "56d5eb7040c316bb1a514ccbd572bc9e5b21a43903f8bf7e17dfa8eb803fc873"
+        }
+      ]
+    },
+    {
+      "id": "active_00021",
+      "label": "active",
+      "heavy_atoms": 32,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 11.7064,
+          "best_index": 1854,
+          "search_ms": 139.77419999719132
+        },
+        {
+          "poses": 16384,
+          "energy": 6.958,
+          "best_index": 5351,
+          "search_ms": 573.6973000020953
+        },
+        {
+          "poses": 65536,
+          "energy": 3.2835,
+          "best_index": 29141,
+          "search_ms": 2150.3695999999763
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.227557797441727,
+          "compute_and_pose_prepare_ms": 41.8929,
+          "check_ms": 2.6856,
+          "checked_score": -6.227747677863685,
+          "pose_sha256": "6058299e67eb56f597c20835c1ec45b3880900c9f7931f8995be828e81529e6f"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.997971060438803,
+          "compute_and_pose_prepare_ms": 151.5556,
+          "check_ms": 1.9172,
+          "checked_score": -7.998490567684476,
+          "pose_sha256": "a3e7213d996103481c66d9efedd3775fe0b4c282c7b08ec378cce59aee2dc0ef"
+        }
+      ]
+    },
+    {
+      "id": "active_00068",
+      "label": "active",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 9,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 18.9499,
+          "best_index": 2991,
+          "search_ms": 118.033300001116
+        },
+        {
+          "poses": 16384,
+          "energy": 9.6992,
+          "best_index": 8615,
+          "search_ms": 534.4250999987707
+        },
+        {
+          "poses": 65536,
+          "energy": 7.7895,
+          "best_index": 42046,
+          "search_ms": 1974.9165000030189
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.379435270739425,
+          "compute_and_pose_prepare_ms": 60.4443,
+          "check_ms": 1.6876,
+          "checked_score": -5.3789367973328615,
+          "pose_sha256": "c2bc52c5dafb09d571063104858ce7cc919ccecf3bfe234ae859ba501bdd87fc"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.379435270739425,
+          "compute_and_pose_prepare_ms": 238.4634,
+          "check_ms": 0.9894,
+          "checked_score": -5.3789367973328615,
+          "pose_sha256": "c2bc52c5dafb09d571063104858ce7cc919ccecf3bfe234ae859ba501bdd87fc"
+        }
+      ]
+    },
+    {
+      "id": "active_00031",
+      "label": "active",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 9,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 12.8723,
+          "best_index": 58,
+          "search_ms": 127.43140000384301
+        },
+        {
+          "poses": 16384,
+          "energy": 10.9665,
+          "best_index": 5357,
+          "search_ms": 638.6887000044226
+        },
+        {
+          "poses": 65536,
+          "energy": 5.6388,
+          "best_index": 32265,
+          "search_ms": 2108.383799997682
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.3083750767951265,
+          "compute_and_pose_prepare_ms": 55.5824,
+          "check_ms": 1.7983,
+          "checked_score": -5.308411862138081,
+          "pose_sha256": "0d047a97668b119ac094f3e9bf3dc4e10054220308a3bf59f548c789176e96aa"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.3083750767951265,
+          "compute_and_pose_prepare_ms": 202.8234,
+          "check_ms": 1.6542,
+          "checked_score": -5.308411862138081,
+          "pose_sha256": "0d047a97668b119ac094f3e9bf3dc4e10054220308a3bf59f548c789176e96aa"
+        }
+      ]
+    },
+    {
+      "id": "active_00086",
+      "label": "active",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 27.4287,
+          "best_index": 38,
+          "search_ms": 127.7369000017643
+        },
+        {
+          "poses": 16384,
+          "energy": 20.2965,
+          "best_index": 13900,
+          "search_ms": 600.894099996367
+        },
+        {
+          "poses": 65536,
+          "energy": 20.2965,
+          "best_index": 13900,
+          "search_ms": 2127.371200003836
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.608840997052126,
+          "compute_and_pose_prepare_ms": 27.479,
+          "check_ms": 1.0105,
+          "checked_score": -7.608060914402254,
+          "pose_sha256": "3e01237c5f542759a56ee366c88a1679585385d4216d52be5e0f155ca297fd48"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.608840997052126,
+          "compute_and_pose_prepare_ms": 134.7856,
+          "check_ms": 1.1345,
+          "checked_score": -7.608060914402254,
+          "pose_sha256": "3e01237c5f542759a56ee366c88a1679585385d4216d52be5e0f155ca297fd48"
+        }
+      ]
+    },
+    {
+      "id": "active_00077",
+      "label": "active",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 15.1584,
+          "best_index": 4055,
+          "search_ms": 101.61670000525191
+        },
+        {
+          "poses": 16384,
+          "energy": 11.3718,
+          "best_index": 14333,
+          "search_ms": 352.57959999580635
+        },
+        {
+          "poses": 65536,
+          "energy": -1.7077,
+          "best_index": 17917,
+          "search_ms": 1366.442200000165
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.4761539339163505,
+          "compute_and_pose_prepare_ms": 38.7507,
+          "check_ms": 1.0849,
+          "checked_score": -4.475496954602343,
+          "pose_sha256": "7659e1aa90c1c9613a75fcefada3283a9b8873170ca81656bcfb19818b42f839"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.324239833747904,
+          "compute_and_pose_prepare_ms": 143.0332,
+          "check_ms": 1.0208,
+          "checked_score": -6.324464271446221,
+          "pose_sha256": "705b97902da1b7c29a701564a68b60d63235a54dbe4c3fef90c1a00483eae1f9"
+        }
+      ]
+    },
+    {
+      "id": "active_00035",
+      "label": "active",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 13.6726,
+          "best_index": 1467,
+          "search_ms": 152.73910000541946
+        },
+        {
+          "poses": 16384,
+          "energy": 13.2088,
+          "best_index": 5950,
+          "search_ms": 644.1032000002451
+        },
+        {
+          "poses": 65536,
+          "energy": 9.2605,
+          "best_index": 59766,
+          "search_ms": 2326.891099997738
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -3.41738634242036,
+          "compute_and_pose_prepare_ms": 56.7133,
+          "check_ms": 1.4286,
+          "checked_score": -3.416803514897887,
+          "pose_sha256": "18ade41bf191bf5f054d1e67041279470bd84197c38cf07dcfba6a5ea317d47d"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.823800972326996,
+          "compute_and_pose_prepare_ms": 207.9615,
+          "check_ms": 2.5275,
+          "checked_score": -4.823633885277196,
+          "pose_sha256": "02d83ceaff206579777d1c5664514a86c0cb1f9d947892b28227c0ac33405dbb"
+        }
+      ]
+    },
+    {
+      "id": "active_00005",
+      "label": "active",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 5,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 15.8395,
+          "best_index": 2386,
+          "search_ms": 177.32230000547133
+        },
+        {
+          "poses": 16384,
+          "energy": 7.5547,
+          "best_index": 15432,
+          "search_ms": 714.98160000192
+        },
+        {
+          "poses": 65536,
+          "energy": 3.1614,
+          "best_index": 48863,
+          "search_ms": 2336.7373000000953
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.846227950462348,
+          "compute_and_pose_prepare_ms": 48.1622,
+          "check_ms": 1.7325,
+          "checked_score": -8.845614199132651,
+          "pose_sha256": "12d651ec42a83a0ebd8d2283266963134fd362739f1c1264b126a0dc761369d4"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.846227950462348,
+          "compute_and_pose_prepare_ms": 221.2517,
+          "check_ms": 2.6295,
+          "checked_score": -8.845614199132651,
+          "pose_sha256": "12d651ec42a83a0ebd8d2283266963134fd362739f1c1264b126a0dc761369d4"
+        }
+      ]
+    },
+    {
+      "id": "active_00015",
+      "label": "active",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 8,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 20.1775,
+          "best_index": 3654,
+          "search_ms": 158.55729999748291
+        },
+        {
+          "poses": 16384,
+          "energy": 20.1775,
+          "best_index": 3654,
+          "search_ms": 632.3878000039258
+        },
+        {
+          "poses": 65536,
+          "energy": 18.4862,
+          "best_index": 40303,
+          "search_ms": 2275.7687000048463
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -3.7879260289889123,
+          "compute_and_pose_prepare_ms": 49.9891,
+          "check_ms": 1.6932,
+          "checked_score": -3.7878133314380933,
+          "pose_sha256": "b8012b9899260fc59c34dbf952bfefb2e4fe55d4feda09e34c1dc855ca95440f"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.080896410599453,
+          "compute_and_pose_prepare_ms": 195.9022,
+          "check_ms": 1.6134,
+          "checked_score": -5.0805799823583415,
+          "pose_sha256": "fefee68a34de0c2c13a0e227f915d52136d39a3048434445ee781fca149e21c1"
+        }
+      ]
+    },
+    {
+      "id": "active_00080",
+      "label": "active",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 8,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 19.377,
+          "best_index": 3050,
+          "search_ms": 159.99520000332268
+        },
+        {
+          "poses": 16384,
+          "energy": -2.8345,
+          "best_index": 10389,
+          "search_ms": 662.5218999979552
+        },
+        {
+          "poses": 65536,
+          "energy": -5.9917,
+          "best_index": 28734,
+          "search_ms": 2273.791899999196
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.40536882316009,
+          "compute_and_pose_prepare_ms": 61.7684,
+          "check_ms": 1.5979,
+          "checked_score": -7.405894107648183,
+          "pose_sha256": "e83330a8c790e6a2ca96f6fdfe2338c0adde317ea11e8360c6b0246024ac9045"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.647214082336356,
+          "compute_and_pose_prepare_ms": 233.8552,
+          "check_ms": 1.3144,
+          "checked_score": -8.648047214012289,
+          "pose_sha256": "f299fee0df431ef9bb19db2134429fd2cb5b6391e4f01332a0b8196b8dd00ac3"
+        }
+      ]
+    },
+    {
+      "id": "active_00039",
+      "label": "active",
+      "heavy_atoms": 38,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 6.6364,
+          "best_index": 634,
+          "search_ms": 194.97470000351314
+        },
+        {
+          "poses": 16384,
+          "energy": 6.6364,
+          "best_index": 634,
+          "search_ms": 770.680599998741
+        },
+        {
+          "poses": 65536,
+          "energy": 1.6007,
+          "best_index": 32841,
+          "search_ms": 2304.847100000188
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.459854333109633,
+          "compute_and_pose_prepare_ms": 43.1764,
+          "check_ms": 0.9756,
+          "checked_score": -5.45981004848721,
+          "pose_sha256": "b02a9fbe577eda0f8442165c2dae29048ec8759933cb9ff1444e252616310390"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.459854333109633,
+          "compute_and_pose_prepare_ms": 203.6443,
+          "check_ms": 2.6161,
+          "checked_score": -5.45981004848721,
+          "pose_sha256": "b02a9fbe577eda0f8442165c2dae29048ec8759933cb9ff1444e252616310390"
+        }
+      ]
+    },
+    {
+      "id": "active_00001",
+      "label": "active",
+      "heavy_atoms": 39,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 16.1463,
+          "best_index": 2682,
+          "search_ms": 167.84760000155075
+        },
+        {
+          "poses": 16384,
+          "energy": 10.0839,
+          "best_index": 6760,
+          "search_ms": 809.4228000045405
+        },
+        {
+          "poses": 65536,
+          "energy": 5.343,
+          "best_index": 58536,
+          "search_ms": 3129.217800000333
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.650818746340552,
+          "compute_and_pose_prepare_ms": 53.9514,
+          "check_ms": 1.0847,
+          "checked_score": -7.650217147189823,
+          "pose_sha256": "e29e0d92219032a50e3ae64f607457e048ac3df6195a7bfb5314f6130a11f5ed"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.650818746340552,
+          "compute_and_pose_prepare_ms": 171.266,
+          "check_ms": 2.5752,
+          "checked_score": -7.650217147189823,
+          "pose_sha256": "e29e0d92219032a50e3ae64f607457e048ac3df6195a7bfb5314f6130a11f5ed"
+        }
+      ]
+    },
+    {
+      "id": "active_00063",
+      "label": "active",
+      "heavy_atoms": 39,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 26.0732,
+          "best_index": 3562,
+          "search_ms": 168.32499999873107
+        },
+        {
+          "poses": 16384,
+          "energy": 13.9386,
+          "best_index": 10996,
+          "search_ms": 593.6061999964295
+        },
+        {
+          "poses": 65536,
+          "energy": 13.9386,
+          "best_index": 10996,
+          "search_ms": 2226.1760999972466
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.896437225068819,
+          "compute_and_pose_prepare_ms": 55.4952,
+          "check_ms": 2.0259,
+          "checked_score": -4.896422934277751,
+          "pose_sha256": "10c7b88618de7603a40ff55b63387efe16e448a4e32339a3ff7de0598d6b2a4f"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.704970376763295,
+          "compute_and_pose_prepare_ms": 256.0065,
+          "check_ms": 3.0446,
+          "checked_score": -6.705078376159279,
+          "pose_sha256": "f7e1ca1cc8232d4f430ecd3e45944c3a633c59f223df3478dbe525d0ba2470de"
+        }
+      ]
+    },
+    {
+      "id": "active_00060",
+      "label": "active",
+      "heavy_atoms": 40,
+      "rotatable_bonds": 8,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 12.482,
+          "best_index": 639,
+          "search_ms": 176.64850000437582
+        },
+        {
+          "poses": 16384,
+          "energy": 12.482,
+          "best_index": 639,
+          "search_ms": 650.6344000008539
+        },
+        {
+          "poses": 65536,
+          "energy": 10.3829,
+          "best_index": 34070,
+          "search_ms": 2459.6577000047546
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.266771340335421,
+          "compute_and_pose_prepare_ms": 95.9656,
+          "check_ms": 3.4291,
+          "checked_score": -4.266767343361882,
+          "pose_sha256": "7b77ec3bc1aeb811d0e38411aad7aa5376dfc870db200aeba940d82d5d148e8c"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.131317582741174,
+          "compute_and_pose_prepare_ms": 279.7301,
+          "check_ms": 1.9672,
+          "checked_score": -6.1312192541161465,
+          "pose_sha256": "0f77c80afed187d409af7e791d060b299c2ec188b4697f2735d489551e72fc23"
+        }
+      ]
+    },
+    {
+      "id": "active_00048",
+      "label": "active",
+      "heavy_atoms": 41,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 37.8754,
+          "best_index": 161,
+          "search_ms": 179.2977000004612
+        },
+        {
+          "poses": 16384,
+          "energy": 4.5269,
+          "best_index": 10401,
+          "search_ms": 679.7816999969655
+        },
+        {
+          "poses": 65536,
+          "energy": 4.5269,
+          "best_index": 10401,
+          "search_ms": 2420.883300001151
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.37537460941181,
+          "compute_and_pose_prepare_ms": 61.8666,
+          "check_ms": 1.9725,
+          "checked_score": -6.375203770024995,
+          "pose_sha256": "19a3648a69ae25d252f72522b689de998949e8507dadda401eaa0d2888106389"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -9.669984998929115,
+          "compute_and_pose_prepare_ms": 222.667,
+          "check_ms": 2.061,
+          "checked_score": -9.670619074873835,
+          "pose_sha256": "a74973efca15b83b6a76ac457e09faf4fbc369597f1bbe392797e1a50035d5c9"
+        }
+      ]
+    },
+    {
+      "id": "active_00043",
+      "label": "active",
+      "heavy_atoms": 43,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 45.6215,
+          "best_index": 88,
+          "search_ms": 186.32390000129817
+        },
+        {
+          "poses": 16384,
+          "energy": 34.5476,
+          "best_index": 6611,
+          "search_ms": 654.2561999958707
+        },
+        {
+          "poses": 65536,
+          "energy": 23.9473,
+          "best_index": 19119,
+          "search_ms": 2631.487400001788
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.829366890173459,
+          "compute_and_pose_prepare_ms": 70.9734,
+          "check_ms": 2.2667,
+          "checked_score": -6.8295264685893455,
+          "pose_sha256": "1b49b64346fd52ade75e6cf99f9647c1077be7fab20197f86cdada584da7e27e"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -9.26650893607439,
+          "compute_and_pose_prepare_ms": 244.5249,
+          "check_ms": 2.0025,
+          "checked_score": -9.266925528383787,
+          "pose_sha256": "d0130c5629c4e5136e5078e84c0887b01205958fa46eb8b704c1ba5beaa3eeed"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00084",
+      "label": "decoy",
+      "heavy_atoms": 23,
+      "rotatable_bonds": 4,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": -3.6195,
+          "best_index": 3443,
+          "search_ms": 87.59550000104355
+        },
+        {
+          "poses": 16384,
+          "energy": -4.9745,
+          "best_index": 9966,
+          "search_ms": 375.61080000159563
+        },
+        {
+          "poses": 65536,
+          "energy": -6.0355,
+          "best_index": 61742,
+          "search_ms": 1394.7063000014168
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": 8.92355961443473,
+          "compute_and_pose_prepare_ms": 23.1948,
+          "check_ok": false,
+          "check_ms": null,
+          "checked_score": null,
+          "check_error": "{'ok': False, 'error': '\\n\\nVina runtime error: The ligand is outside the grid box. Increase the size of the grid box or center it accordingly around the ligand.\\n'}",
+          "pose_sha256": "d7f9c7b0aa1ed6487afeb51b2e8b886ad44fc76972afa0c777f39a5a597ad3e2"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.522990028320412,
+          "compute_and_pose_prepare_ms": 82.0382,
+          "check_ok": true,
+          "check_ms": 0.878,
+          "checked_score": -7.522520204094616,
+          "pose_sha256": "8d52dfdd7e3c06b5aad4764967f34c55e46196ce1e24a1d199da7b3d2c8b2ebf"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00085",
+      "label": "decoy",
+      "heavy_atoms": 27,
+      "rotatable_bonds": 4,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 6.7275,
+          "best_index": 957,
+          "search_ms": 106.88379999919562
+        },
+        {
+          "poses": 16384,
+          "energy": -1.3888,
+          "best_index": 5652,
+          "search_ms": 403.06100000452716
+        },
+        {
+          "poses": 65536,
+          "energy": -2.1625,
+          "best_index": 19775,
+          "search_ms": 1720.6661999953212
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.5961629552453065,
+          "compute_and_pose_prepare_ms": 27.2298,
+          "check_ok": true,
+          "check_ms": 2.191,
+          "checked_score": -6.595822169335459,
+          "pose_sha256": "2081925ae110b161081b947237110139a14f1d74525cba601e25d1b55e2ddfdf"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.5961629552453065,
+          "compute_and_pose_prepare_ms": 138.1185,
+          "check_ok": true,
+          "check_ms": 1.6718,
+          "checked_score": -6.595822169335459,
+          "pose_sha256": "2081925ae110b161081b947237110139a14f1d74525cba601e25d1b55e2ddfdf"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00055",
+      "label": "decoy",
+      "heavy_atoms": 29,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 0.7077,
+          "best_index": 2362,
+          "search_ms": 116.42480000591604
+        },
+        {
+          "poses": 16384,
+          "energy": -1.9245,
+          "best_index": 5915,
+          "search_ms": 491.29630000243196
+        },
+        {
+          "poses": 65536,
+          "energy": -2.2891,
+          "best_index": 57691,
+          "search_ms": 1970.9979000035673
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.466621607177292,
+          "compute_and_pose_prepare_ms": 33.9489,
+          "check_ok": true,
+          "check_ms": 1.4271,
+          "checked_score": -4.466178542530326,
+          "pose_sha256": "aa513245db5d85dbd1349898406bbb5719f78fef45652c4f23776a79dfa099d1"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.540033094457256,
+          "compute_and_pose_prepare_ms": 117.2241,
+          "check_ok": true,
+          "check_ms": 1.4755,
+          "checked_score": -5.538203681048825,
+          "pose_sha256": "f4398834e5921e990a47843341318c8411ff97197c0854d847e142478b6fd271"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00059",
+      "label": "decoy",
+      "heavy_atoms": 30,
+      "rotatable_bonds": 3,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": -5.5503,
+          "best_index": 2121,
+          "search_ms": 107.40520000399556
+        },
+        {
+          "poses": 16384,
+          "energy": -5.5503,
+          "best_index": 2121,
+          "search_ms": 461.6766000035568
+        },
+        {
+          "poses": 65536,
+          "energy": -5.5503,
+          "best_index": 2121,
+          "search_ms": 1792.973700001312
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -1.2363172978238939,
+          "compute_and_pose_prepare_ms": 50.6463,
+          "check_ok": true,
+          "check_ms": 1.7248,
+          "checked_score": -1.236166001948041,
+          "pose_sha256": "954bf55c34b67e94b8a9b85b61cae4c58e8353e972a2cea4150a7a2ccca720a0"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -3.026200576693863,
+          "compute_and_pose_prepare_ms": 173.4423,
+          "check_ok": true,
+          "check_ms": 1.4464,
+          "checked_score": -3.026149832302752,
+          "pose_sha256": "047c5c5cf25fe447e9b070ee282c2eae7c732246d491ccd7e7c2903bfd20b91e"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00081",
+      "label": "decoy",
+      "heavy_atoms": 30,
+      "rotatable_bonds": 2,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 0.788,
+          "best_index": 3888,
+          "search_ms": 132.63559999904828
+        },
+        {
+          "poses": 16384,
+          "energy": -5.2903,
+          "best_index": 4806,
+          "search_ms": 472.61430000071414
+        },
+        {
+          "poses": 65536,
+          "energy": -5.2903,
+          "best_index": 4806,
+          "search_ms": 2117.694799999299
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.249787100583016,
+          "compute_and_pose_prepare_ms": 26.528,
+          "check_ok": true,
+          "check_ms": 2.1092,
+          "checked_score": -6.249348153992781,
+          "pose_sha256": "f937e8468a9ced21c4bf90aac430f1d594fc50748e68ce477a1581a7e61b234b"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.139808745746997,
+          "compute_and_pose_prepare_ms": 94.3968,
+          "check_ok": true,
+          "check_ms": 1.5645,
+          "checked_score": -8.140372488697928,
+          "pose_sha256": "df45c0162abfcbf72d4681f0d09c96245b1c6ca99d21539bd335263e6833aff1"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00019",
+      "label": "decoy",
+      "heavy_atoms": 31,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 14.6138,
+          "best_index": 3315,
+          "search_ms": 116.03210000612307
+        },
+        {
+          "poses": 16384,
+          "energy": 6.8164,
+          "best_index": 11999,
+          "search_ms": 487.8575999973691
+        },
+        {
+          "poses": 65536,
+          "energy": 5.7583,
+          "best_index": 20705,
+          "search_ms": 2085.1923000009265
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.18061065950931,
+          "compute_and_pose_prepare_ms": 44.3344,
+          "check_ok": true,
+          "check_ms": 1.5179,
+          "checked_score": -5.180335635637228,
+          "pose_sha256": "4fdcf742338e03b8b291e2da1004ddaf44c657faa14e870c23dd11cca0f5799d"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.442942048818733,
+          "compute_and_pose_prepare_ms": 211.4596,
+          "check_ok": true,
+          "check_ms": 1.4695,
+          "checked_score": -6.443475526114602,
+          "pose_sha256": "30f1744f0184f1ad4d15615b32b1f1b97fef72ab0d61eea1e78f1f6f1c095c05"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00063",
+      "label": "decoy",
+      "heavy_atoms": 31,
+      "rotatable_bonds": 4,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 6.3415,
+          "best_index": 1039,
+          "search_ms": 173.45560000103433
+        },
+        {
+          "poses": 16384,
+          "energy": 3.4584,
+          "best_index": 4505,
+          "search_ms": 589.0420000068843
+        },
+        {
+          "poses": 65536,
+          "energy": 3.0124,
+          "best_index": 43271,
+          "search_ms": 1845.607099996414
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.297060994208436,
+          "compute_and_pose_prepare_ms": 30.3824,
+          "check_ok": true,
+          "check_ms": 0.9398,
+          "checked_score": -6.2971149328713985,
+          "pose_sha256": "fc28aa163cfa9873a424f9c0d5395501a6a1de58c2e40698ed1870408a32c4be"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.33065829716387,
+          "compute_and_pose_prepare_ms": 111.1951,
+          "check_ok": true,
+          "check_ms": 1.4053,
+          "checked_score": -6.330512645849635,
+          "pose_sha256": "0e6da2f3f601020cac199f1636751c606e0f325ab123cf78fb0e78ac4016f519"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00065",
+      "label": "decoy",
+      "heavy_atoms": 32,
+      "rotatable_bonds": 3,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 3.7573,
+          "best_index": 3548,
+          "search_ms": 112.09260000032373
+        },
+        {
+          "poses": 16384,
+          "energy": -1.3667,
+          "best_index": 5105,
+          "search_ms": 528.1060999986948
+        },
+        {
+          "poses": 65536,
+          "energy": -3.5228,
+          "best_index": 25592,
+          "search_ms": 2020.2547000008053
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.728779351711089,
+          "compute_and_pose_prepare_ms": 36.3053,
+          "check_ok": true,
+          "check_ms": 1.2016,
+          "checked_score": -6.729389424760652,
+          "pose_sha256": "d8f617bffd3b0e54cc5ae9ec5088ee3eda056733ec9a5b924d53f5f05eee5795"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.50329488937943,
+          "compute_and_pose_prepare_ms": 169.4272,
+          "check_ok": true,
+          "check_ms": 2.1289,
+          "checked_score": -8.503811357476293,
+          "pose_sha256": "21ff534d535aa45aca30f90aaf1f4fb3c060329a1df89dedbbdfa53f48958c18"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00000",
+      "label": "decoy",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 20.511,
+          "best_index": 725,
+          "search_ms": 149.42539999901783
+        },
+        {
+          "poses": 16384,
+          "energy": 10.1618,
+          "best_index": 16231,
+          "search_ms": 587.1658000032767
+        },
+        {
+          "poses": 65536,
+          "energy": 8.071,
+          "best_index": 51111,
+          "search_ms": 2296.920399996452
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -3.91747095773514,
+          "compute_and_pose_prepare_ms": 52.8661,
+          "check_ok": true,
+          "check_ms": 1.5478,
+          "checked_score": -3.9171316005515857,
+          "pose_sha256": "a51375a183388d6a4b9a08823a60cf1067364f8385f73661697589f7e4f5aa33"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.932231499135983,
+          "compute_and_pose_prepare_ms": 238.0836,
+          "check_ok": true,
+          "check_ms": 1.4743,
+          "checked_score": -6.931438282225181,
+          "pose_sha256": "5e64aed2028d6e692a905cdfe5ba674d744500065155838b6e5a98b88a13f265"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00068",
+      "label": "decoy",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 4,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 0.5799,
+          "best_index": 1224,
+          "search_ms": 186.51240000326652
+        },
+        {
+          "poses": 16384,
+          "energy": -1.674,
+          "best_index": 7849,
+          "search_ms": 585.5327999961446
+        },
+        {
+          "poses": 65536,
+          "energy": -2.9093,
+          "best_index": 41280,
+          "search_ms": 2183.6771000016597
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -4.396345718994187,
+          "compute_and_pose_prepare_ms": 53.9511,
+          "check_ok": true,
+          "check_ms": 2.4373,
+          "checked_score": -4.396054677216985,
+          "pose_sha256": "57f2762c1be93d16cdcefec3358bd0ff6358360bbd58a2ad67d429e2dcc504c6"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.796036330003598,
+          "compute_and_pose_prepare_ms": 140.8502,
+          "check_ok": true,
+          "check_ms": 1.6487,
+          "checked_score": -6.797043413453645,
+          "pose_sha256": "132c0bb04cfee36b756f47a934c0f89396cd9135f3651fe10d8e8c5ff5cf8a44"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00024",
+      "label": "decoy",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 17.8838,
+          "best_index": 610,
+          "search_ms": 173.83310000150232
+        },
+        {
+          "poses": 16384,
+          "energy": 10.1336,
+          "best_index": 9035,
+          "search_ms": 639.2710000000079
+        },
+        {
+          "poses": 65536,
+          "energy": 10.1336,
+          "best_index": 9035,
+          "search_ms": 2499.9057999957586
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.041299451285236,
+          "compute_and_pose_prepare_ms": 51.2873,
+          "check_ok": true,
+          "check_ms": 1.8713,
+          "checked_score": -6.041711109384862,
+          "pose_sha256": "58e60f3184b035261ba931465cbd06855df6a869505ef585d96bf792767b5dc4"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.041299451285236,
+          "compute_and_pose_prepare_ms": 195.619,
+          "check_ok": true,
+          "check_ms": 0.9299,
+          "checked_score": -6.041711109384862,
+          "pose_sha256": "58e60f3184b035261ba931465cbd06855df6a869505ef585d96bf792767b5dc4"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00044",
+      "label": "decoy",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 7,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 41.2949,
+          "best_index": 665,
+          "search_ms": 163.02859999996144
+        },
+        {
+          "poses": 16384,
+          "energy": 21.3465,
+          "best_index": 11627,
+          "search_ms": 694.2961999957333
+        },
+        {
+          "poses": 65536,
+          "energy": 18.9221,
+          "best_index": 43842,
+          "search_ms": 2183.9908999972977
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": 44.77825343717637,
+          "compute_and_pose_prepare_ms": 54.7391,
+          "check_ok": true,
+          "check_ms": 1.645,
+          "checked_score": 44.77754989069295,
+          "pose_sha256": "525508555e09268ac724fd71b46e10f3fd5d8febce95b8aefa754420e69dcb02"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.369642923450212,
+          "compute_and_pose_prepare_ms": 196.1065,
+          "check_ok": true,
+          "check_ms": 2.6488,
+          "checked_score": -6.369653456223308,
+          "pose_sha256": "975eff815e86fc17384d378a9474a0e111a14a12d31c9725829cffd3a64a3d81"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00012",
+      "label": "decoy",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 14.42,
+          "best_index": 3495,
+          "search_ms": 139.20489999873098
+        },
+        {
+          "poses": 16384,
+          "energy": 5.8365,
+          "best_index": 13044,
+          "search_ms": 598.3110999950441
+        },
+        {
+          "poses": 65536,
+          "energy": 1.704,
+          "best_index": 45251,
+          "search_ms": 2032.2500000038417
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -6.442893899723745,
+          "compute_and_pose_prepare_ms": 47.4974,
+          "check_ok": true,
+          "check_ms": 1.7365,
+          "checked_score": -6.442732735549168,
+          "pose_sha256": "743683fa52f59926808dca2144563b1fe030a6605b68e1997403053b7e9a9950"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.032108355347628,
+          "compute_and_pose_prepare_ms": 173.4444,
+          "check_ok": true,
+          "check_ms": 1.689,
+          "checked_score": -8.032001949057081,
+          "pose_sha256": "28535618a6f18ab0f887cab56eca12f1a936fefda783344921e7195e551475ed"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00038",
+      "label": "decoy",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 8,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 28.8691,
+          "best_index": 2469,
+          "search_ms": 157.3394000006374
+        },
+        {
+          "poses": 16384,
+          "energy": 16.9178,
+          "best_index": 11155,
+          "search_ms": 614.3721000044025
+        },
+        {
+          "poses": 65536,
+          "energy": 9.4415,
+          "best_index": 44586,
+          "search_ms": 2168.4046000009403
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -5.731244728918794,
+          "compute_and_pose_prepare_ms": 53.2374,
+          "check_ok": true,
+          "check_ms": 1.6964,
+          "checked_score": -5.730907783175976,
+          "pose_sha256": "e25994703a58a1fefda42809d42efe8d94a681594957da9a52c35385992eef40"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.1465318031846,
+          "compute_and_pose_prepare_ms": 200.7481,
+          "check_ok": true,
+          "check_ms": 1.6691,
+          "checked_score": -7.146646484067058,
+          "pose_sha256": "a77f4727d2d879e2c6a7be7e019422c77d296396a557535d62eff582f6c064c1"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00023",
+      "label": "decoy",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 20.8509,
+          "best_index": 1628,
+          "search_ms": 141.75880000402685
+        },
+        {
+          "poses": 16384,
+          "energy": 11.9354,
+          "best_index": 6870,
+          "search_ms": 604.7457000022405
+        },
+        {
+          "poses": 65536,
+          "energy": 11.9354,
+          "best_index": 6870,
+          "search_ms": 2054.4636999984505
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.768444388865209,
+          "compute_and_pose_prepare_ms": 51.1684,
+          "check_ok": true,
+          "check_ms": 1.7906,
+          "checked_score": -8.767706904806781,
+          "pose_sha256": "32aa30bb7d646afadc0ee997a2449a1ed0ec4ca7847657687bcdc528f8f77c79"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -8.768444388865209,
+          "compute_and_pose_prepare_ms": 209.0669,
+          "check_ok": true,
+          "check_ms": 2.5923,
+          "checked_score": -8.767706904806781,
+          "pose_sha256": "32aa30bb7d646afadc0ee997a2449a1ed0ec4ca7847657687bcdc528f8f77c79"
+        }
+      ]
+    },
+    {
+      "id": "decoy_00048",
+      "label": "decoy",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 6,
+      "discrete": [
+        {
+          "poses": 4096,
+          "energy": 8.147,
+          "best_index": 482,
+          "search_ms": 156.8020000049728
+        },
+        {
+          "poses": 16384,
+          "energy": 8.147,
+          "best_index": 482,
+          "search_ms": 599.2235000012442
+        },
+        {
+          "poses": 65536,
+          "energy": 7.6382,
+          "best_index": 52258,
+          "search_ms": 2183.5200999994413
+        }
+      ],
+      "vina": [
+        {
+          "exhaustiveness": 1,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.035139703782872,
+          "compute_and_pose_prepare_ms": 63.4668,
+          "check_ok": true,
+          "check_ms": 1.6964,
+          "checked_score": -7.0350957480464205,
+          "pose_sha256": "14aaff97fd741dbcfdf7d7bdd16bf5773031233ea3d4fa18fe90e5ffb9b7c4d9"
+        },
+        {
+          "exhaustiveness": 4,
+          "max_evals_per_run": 4000,
+          "ok": true,
+          "score": -7.035139703782872,
+          "compute_and_pose_prepare_ms": 214.3953,
+          "check_ok": true,
+          "check_ms": 1.665,
+          "checked_score": -7.0350957480464205,
+          "pose_sha256": "14aaff97fd741dbcfdf7d7bdd16bf5773031233ea3d4fa18fe90e5ffb9b7c4d9"
+        }
+      ]
+    }
+  ],
+  "oracle": [
+    {
+      "id": "active_00025",
+      "index": 1,
+      "native_grid": 229.2400818998545,
+      "float_grid": 229.2400818998545,
+      "integer_grid": 229.2529,
+      "oracle_error": 0.0,
+      "quantization_error": 0.012818100145523204
+    },
+    {
+      "id": "active_00025",
+      "index": 4,
+      "native_grid": 260.895149665802,
+      "float_grid": 260.8951496658021,
+      "integer_grid": 260.8879,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.007249665802078198
+    },
+    {
+      "id": "active_00025",
+      "index": 6,
+      "native_grid": 148.7307079918262,
+      "float_grid": 148.7307079918262,
+      "integer_grid": 148.7341,
+      "oracle_error": 0.0,
+      "quantization_error": 0.0033920081738187946
+    },
+    {
+      "id": "active_00025",
+      "index": 9,
+      "native_grid": 158.96416805487385,
+      "float_grid": 158.96416805487388,
+      "integer_grid": 158.9551,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.009068054873893061
+    },
+    {
+      "id": "active_00021",
+      "index": 0,
+      "native_grid": 499.67846710900926,
+      "float_grid": 499.6784671090094,
+      "integer_grid": 499.7026,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.024132890990642863
+    },
+    {
+      "id": "active_00021",
+      "index": 5,
+      "native_grid": 65.72278857994948,
+      "float_grid": 65.72278857994957,
+      "integer_grid": 65.7148,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.007988579949568475
+    },
+    {
+      "id": "active_00021",
+      "index": 10,
+      "native_grid": 157.24864395430205,
+      "float_grid": 157.2486439543021,
+      "integer_grid": 157.2449,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.003743954302109387
+    },
+    {
+      "id": "active_00021",
+      "index": 15,
+      "native_grid": 231.27708605454663,
+      "float_grid": 231.27708605454674,
+      "integer_grid": 231.2533,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.023786054546746982
+    },
+    {
+      "id": "active_00068",
+      "index": 0,
+      "native_grid": 266.68038140784495,
+      "float_grid": 266.6803814078449,
+      "integer_grid": 266.6859,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.005518592155112856
+    },
+    {
+      "id": "active_00068",
+      "index": 5,
+      "native_grid": 239.1361221183623,
+      "float_grid": 239.13612211836232,
+      "integer_grid": 239.1273,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.008822118362331821
+    },
+    {
+      "id": "active_00068",
+      "index": 10,
+      "native_grid": 355.5585130747504,
+      "float_grid": 355.5585130747503,
+      "integer_grid": 355.5616,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.003086925249704109
+    },
+    {
+      "id": "active_00068",
+      "index": 15,
+      "native_grid": 319.76068989679374,
+      "float_grid": 319.76068989679374,
+      "integer_grid": 319.7334,
+      "oracle_error": 0.0,
+      "quantization_error": 0.02728989679371807
+    },
+    {
+      "id": "active_00031",
+      "index": 0,
+      "native_grid": 300.6884926105234,
+      "float_grid": 300.6884926105235,
+      "integer_grid": 300.7009,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.012407389476493336
+    },
+    {
+      "id": "active_00031",
+      "index": 5,
+      "native_grid": 150.77128287091307,
+      "float_grid": 150.77128287091304,
+      "integer_grid": 150.7652,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.0060828709130476
+    },
+    {
+      "id": "active_00031",
+      "index": 10,
+      "native_grid": 231.85035007446962,
+      "float_grid": 231.85035007446965,
+      "integer_grid": 231.8323,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.018050074469641686
+    },
+    {
+      "id": "active_00031",
+      "index": 15,
+      "native_grid": 126.50182869720965,
+      "float_grid": 126.50182869720975,
+      "integer_grid": 126.4793,
+      "oracle_error": 9.947598300641403e-14,
+      "quantization_error": 0.022528697209750703
+    },
+    {
+      "id": "active_00086",
+      "index": 0,
+      "native_grid": 218.58657863457535,
+      "float_grid": 218.58657863457523,
+      "integer_grid": 218.5794,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.007178634575240039
+    },
+    {
+      "id": "active_00086",
+      "index": 5,
+      "native_grid": 258.0877722187284,
+      "float_grid": 258.0877722187285,
+      "integer_grid": 258.0763,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.011472218728499683
+    },
+    {
+      "id": "active_00086",
+      "index": 10,
+      "native_grid": 355.7214391577637,
+      "float_grid": 355.7214391577637,
+      "integer_grid": 355.7239,
+      "oracle_error": 0.0,
+      "quantization_error": 0.0024608422363030513
+    },
+    {
+      "id": "active_00086",
+      "index": 15,
+      "native_grid": 172.99334443739056,
+      "float_grid": 172.99334443739062,
+      "integer_grid": 173.0006,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.007255562609373101
+    },
+    {
+      "id": "active_00077",
+      "index": 0,
+      "native_grid": 152.32091213247233,
+      "float_grid": 152.32091213247244,
+      "integer_grid": 152.3115,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.00941213247244832
+    },
+    {
+      "id": "active_00077",
+      "index": 5,
+      "native_grid": 143.67775952145917,
+      "float_grid": 143.67775952145922,
+      "integer_grid": 143.6903,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.012540478540785216
+    },
+    {
+      "id": "active_00077",
+      "index": 10,
+      "native_grid": 180.3844439614483,
+      "float_grid": 180.38444396144837,
+      "integer_grid": 180.3765,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.007943961448376058
+    },
+    {
+      "id": "active_00077",
+      "index": 15,
+      "native_grid": 227.56397239448773,
+      "float_grid": 227.56397239448796,
+      "integer_grid": 227.563,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.0009723944879738156
+    },
+    {
+      "id": "active_00035",
+      "index": 1,
+      "native_grid": 242.2372871447143,
+      "float_grid": 242.23728714471437,
+      "integer_grid": 242.2477,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.010412855285636624
+    },
+    {
+      "id": "active_00035",
+      "index": 6,
+      "native_grid": 189.43275483504624,
+      "float_grid": 189.43275483504632,
+      "integer_grid": 189.4302,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0025548350463111547
+    },
+    {
+      "id": "active_00035",
+      "index": 11,
+      "native_grid": 152.49096622185334,
+      "float_grid": 152.49096622185345,
+      "integer_grid": 152.4958,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.004833778146547729
+    },
+    {
+      "id": "active_00035",
+      "index": 16,
+      "native_grid": 227.19901218423757,
+      "float_grid": 227.19901218423763,
+      "integer_grid": 227.2205,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.021487815762355922
+    },
+    {
+      "id": "active_00005",
+      "index": 4,
+      "native_grid": 317.87914546266813,
+      "float_grid": 317.8791454626682,
+      "integer_grid": 317.8646,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.014545462668195341
+    },
+    {
+      "id": "active_00005",
+      "index": 9,
+      "native_grid": 131.07810416965904,
+      "float_grid": 131.07810416965924,
+      "integer_grid": 131.1058,
+      "oracle_error": 1.9895196601282805e-13,
+      "quantization_error": 0.027695830340746852
+    },
+    {
+      "id": "active_00005",
+      "index": 14,
+      "native_grid": 165.19176865483936,
+      "float_grid": 165.1917686548394,
+      "integer_grid": 165.1913,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.00046865483938063335
+    },
+    {
+      "id": "active_00005",
+      "index": 19,
+      "native_grid": 188.00527748369092,
+      "float_grid": 188.00527748369103,
+      "integer_grid": 187.9992,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.006077483691029784
+    },
+    {
+      "id": "active_00015",
+      "index": 1,
+      "native_grid": 108.39661737586974,
+      "float_grid": 108.39661737586984,
+      "integer_grid": 108.4029,
+      "oracle_error": 9.947598300641403e-14,
+      "quantization_error": 0.006282624130165004
+    },
+    {
+      "id": "active_00015",
+      "index": 6,
+      "native_grid": 91.78661839560347,
+      "float_grid": 91.7866183956035,
+      "integer_grid": 91.7704,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.016218395603502245
+    },
+    {
+      "id": "active_00015",
+      "index": 11,
+      "native_grid": 152.5703525510818,
+      "float_grid": 152.5703525510819,
+      "integer_grid": 152.5686,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0017525510818927614
+    },
+    {
+      "id": "active_00015",
+      "index": 16,
+      "native_grid": 383.8517434670071,
+      "float_grid": 383.8517434670071,
+      "integer_grid": 383.8642,
+      "oracle_error": 0.0,
+      "quantization_error": 0.012456532992871416
+    },
+    {
+      "id": "active_00080",
+      "index": 2,
+      "native_grid": 284.9427205037318,
+      "float_grid": 284.94272050373183,
+      "integer_grid": 284.9292,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.013520503731854205
+    },
+    {
+      "id": "active_00080",
+      "index": 7,
+      "native_grid": 310.5344499599407,
+      "float_grid": 310.5344499599408,
+      "integer_grid": 310.5457,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.01125004005922392
+    },
+    {
+      "id": "active_00080",
+      "index": 12,
+      "native_grid": 293.2719757311037,
+      "float_grid": 293.2719757311037,
+      "integer_grid": 293.268,
+      "oracle_error": 0.0,
+      "quantization_error": 0.003975731103707858
+    },
+    {
+      "id": "active_00080",
+      "index": 17,
+      "native_grid": 344.5852970451927,
+      "float_grid": 344.5852970451928,
+      "integer_grid": 344.5804,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.00489704519281986
+    },
+    {
+      "id": "active_00039",
+      "index": 2,
+      "native_grid": 215.4016449859714,
+      "float_grid": 215.40164498597147,
+      "integer_grid": 215.3875,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.014144985971483948
+    },
+    {
+      "id": "active_00039",
+      "index": 7,
+      "native_grid": 271.91042137371494,
+      "float_grid": 271.91042137371494,
+      "integer_grid": 271.8993,
+      "oracle_error": 0.0,
+      "quantization_error": 0.011121373714956917
+    },
+    {
+      "id": "active_00039",
+      "index": 12,
+      "native_grid": 247.5039348936895,
+      "float_grid": 247.50393489368955,
+      "integer_grid": 247.5121,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.008165106310457304
+    },
+    {
+      "id": "active_00039",
+      "index": 15,
+      "native_grid": 216.7850564055216,
+      "float_grid": 216.78505640552166,
+      "integer_grid": 216.7737,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.011356405521667057
+    },
+    {
+      "id": "active_00001",
+      "index": 2,
+      "native_grid": 137.52115002249027,
+      "float_grid": 137.52115002249025,
+      "integer_grid": 137.5246,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.0034499775097458496
+    },
+    {
+      "id": "active_00001",
+      "index": 7,
+      "native_grid": 183.5022603174055,
+      "float_grid": 183.5022603174056,
+      "integer_grid": 183.5163,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.014039682594415126
+    },
+    {
+      "id": "active_00001",
+      "index": 12,
+      "native_grid": 293.9721212005918,
+      "float_grid": 293.97212120059186,
+      "integer_grid": 293.9831,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.010978799408121631
+    },
+    {
+      "id": "active_00001",
+      "index": 17,
+      "native_grid": 64.84184492702948,
+      "float_grid": 64.84184492702957,
+      "integer_grid": 64.8531,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.01125507297042816
+    },
+    {
+      "id": "active_00063",
+      "index": 4,
+      "native_grid": 160.67036874142033,
+      "float_grid": 160.67036874142042,
+      "integer_grid": 160.6725,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0021312585795953964
+    },
+    {
+      "id": "active_00063",
+      "index": 9,
+      "native_grid": 260.7172642397789,
+      "float_grid": 260.717264239779,
+      "integer_grid": 260.6959,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.021364239779018135
+    },
+    {
+      "id": "active_00063",
+      "index": 14,
+      "native_grid": 310.4285280151566,
+      "float_grid": 310.42852801515664,
+      "integer_grid": 310.4235,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.005028015156653964
+    },
+    {
+      "id": "active_00063",
+      "index": 19,
+      "native_grid": 88.47985389527365,
+      "float_grid": 88.47985389527373,
+      "integer_grid": 88.4845,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.004646104726262479
+    },
+    {
+      "id": "active_00060",
+      "index": 3,
+      "native_grid": 230.5282623899834,
+      "float_grid": 230.52826238998352,
+      "integer_grid": 230.5203,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.007962389983532603
+    },
+    {
+      "id": "active_00060",
+      "index": 8,
+      "native_grid": 263.1047794206284,
+      "float_grid": 263.10477942062823,
+      "integer_grid": 263.0997,
+      "oracle_error": 1.7053025658242404e-13,
+      "quantization_error": 0.005079420628248954
+    },
+    {
+      "id": "active_00060",
+      "index": 13,
+      "native_grid": 344.73623910805645,
+      "float_grid": 344.73623910805657,
+      "integer_grid": 344.7245,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.011739108056588066
+    },
+    {
+      "id": "active_00060",
+      "index": 18,
+      "native_grid": 249.0383965717164,
+      "float_grid": 249.03839657171653,
+      "integer_grid": 249.0272,
+      "oracle_error": 1.4210854715202004e-13,
+      "quantization_error": 0.011196571716538983
+    },
+    {
+      "id": "active_00048",
+      "index": 3,
+      "native_grid": 211.61783865260966,
+      "float_grid": 211.61783865260963,
+      "integer_grid": 211.6251,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.007261347390368655
+    },
+    {
+      "id": "active_00048",
+      "index": 8,
+      "native_grid": 282.08960799646826,
+      "float_grid": 282.0896079964683,
+      "integer_grid": 282.0635,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.02610799646834039
+    },
+    {
+      "id": "active_00048",
+      "index": 13,
+      "native_grid": 237.7697792831355,
+      "float_grid": 237.76977928313553,
+      "integer_grid": 237.7752,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.005420716864477981
+    },
+    {
+      "id": "active_00048",
+      "index": 18,
+      "native_grid": 261.3320926636857,
+      "float_grid": 261.3320926636857,
+      "integer_grid": 261.3436,
+      "oracle_error": 0.0,
+      "quantization_error": 0.011507336314252825
+    },
+    {
+      "id": "active_00043",
+      "index": 1,
+      "native_grid": 296.36800200738116,
+      "float_grid": 296.3680020073814,
+      "integer_grid": 296.3415,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.026502007381395742
+    },
+    {
+      "id": "active_00043",
+      "index": 3,
+      "native_grid": 416.2284606759712,
+      "float_grid": 416.22846067597095,
+      "integer_grid": 416.233,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.00453932402905366
+    },
+    {
+      "id": "active_00043",
+      "index": 6,
+      "native_grid": 287.41050208441055,
+      "float_grid": 287.41050208441084,
+      "integer_grid": 287.4006,
+      "oracle_error": 2.8421709430404007e-13,
+      "quantization_error": 0.009902084410839507
+    },
+    {
+      "id": "active_00043",
+      "index": 8,
+      "native_grid": 165.0657432875399,
+      "float_grid": 165.06574328754,
+      "integer_grid": 165.0812,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.015456712460007793
+    },
+    {
+      "id": "decoy_00084",
+      "index": 0,
+      "native_grid": 69.49472421657867,
+      "float_grid": 69.49472421657872,
+      "integer_grid": 69.4985,
+      "oracle_error": 4.263256414560601e-14,
+      "quantization_error": 0.0037757834212897023
+    },
+    {
+      "id": "decoy_00084",
+      "index": 5,
+      "native_grid": 77.06476534248465,
+      "float_grid": 77.06476534248469,
+      "integer_grid": 77.0589,
+      "oracle_error": 4.263256414560601e-14,
+      "quantization_error": 0.005865342484696612
+    },
+    {
+      "id": "decoy_00084",
+      "index": 10,
+      "native_grid": 160.9085432391263,
+      "float_grid": 160.90854323912646,
+      "integer_grid": 160.9335,
+      "oracle_error": 1.7053025658242404e-13,
+      "quantization_error": 0.024956760873550365
+    },
+    {
+      "id": "decoy_00084",
+      "index": 15,
+      "native_grid": 140.11281450595533,
+      "float_grid": 140.11281450595544,
+      "integer_grid": 140.0816,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.031214505955432514
+    },
+    {
+      "id": "decoy_00085",
+      "index": 0,
+      "native_grid": 42.653038541099455,
+      "float_grid": 42.653038541099455,
+      "integer_grid": 42.6447,
+      "oracle_error": 0.0,
+      "quantization_error": 0.008338541099455199
+    },
+    {
+      "id": "decoy_00085",
+      "index": 7,
+      "native_grid": 196.99750507483523,
+      "float_grid": 196.99750507483523,
+      "integer_grid": 197.0069,
+      "oracle_error": 0.0,
+      "quantization_error": 0.00939492516477003
+    },
+    {
+      "id": "decoy_00085",
+      "index": 9,
+      "native_grid": 259.08848334020917,
+      "float_grid": 259.08848334020917,
+      "integer_grid": 259.0953,
+      "oracle_error": 0.0,
+      "quantization_error": 0.006816659790843005
+    },
+    {
+      "id": "decoy_00085",
+      "index": 11,
+      "native_grid": 210.80862021862137,
+      "float_grid": 210.8086202186216,
+      "integer_grid": 210.7937,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.014920218621597314
+    },
+    {
+      "id": "decoy_00055",
+      "index": 4,
+      "native_grid": 144.7006211690343,
+      "float_grid": 144.70062116903438,
+      "integer_grid": 144.6931,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.007521169034390596
+    },
+    {
+      "id": "decoy_00055",
+      "index": 9,
+      "native_grid": 220.86674740882856,
+      "float_grid": 220.86674740882856,
+      "integer_grid": 220.87,
+      "oracle_error": 0.0,
+      "quantization_error": 0.003252591171445829
+    },
+    {
+      "id": "decoy_00055",
+      "index": 14,
+      "native_grid": 218.47783931624963,
+      "float_grid": 218.47783931624986,
+      "integer_grid": 218.4787,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.0008606837501474729
+    },
+    {
+      "id": "decoy_00055",
+      "index": 19,
+      "native_grid": 147.97575619596446,
+      "float_grid": 147.97575619596458,
+      "integer_grid": 147.9623,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.013456195964579365
+    },
+    {
+      "id": "decoy_00059",
+      "index": 0,
+      "native_grid": 365.53674000344256,
+      "float_grid": 365.5367400034428,
+      "integer_grid": 365.5036,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.03314000344278156
+    },
+    {
+      "id": "decoy_00059",
+      "index": 2,
+      "native_grid": 150.92499231499704,
+      "float_grid": 150.92499231499713,
+      "integer_grid": 150.9127,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.012292314997125686
+    },
+    {
+      "id": "decoy_00059",
+      "index": 5,
+      "native_grid": 179.97411588871606,
+      "float_grid": 179.9741158887161,
+      "integer_grid": 179.968,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.006115888716124118
+    },
+    {
+      "id": "decoy_00059",
+      "index": 7,
+      "native_grid": 246.90655223486303,
+      "float_grid": 246.90655223486303,
+      "integer_grid": 246.8847,
+      "oracle_error": 0.0,
+      "quantization_error": 0.021852234863018793
+    },
+    {
+      "id": "decoy_00081",
+      "index": 1,
+      "native_grid": 60.30561378427009,
+      "float_grid": 60.30561378427011,
+      "integer_grid": 60.3148,
+      "oracle_error": 1.4210854715202004e-14,
+      "quantization_error": 0.009186215729890534
+    },
+    {
+      "id": "decoy_00081",
+      "index": 3,
+      "native_grid": 355.84067779497803,
+      "float_grid": 355.8406777949781,
+      "integer_grid": 355.8136,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.027077794978083602
+    },
+    {
+      "id": "decoy_00081",
+      "index": 10,
+      "native_grid": 172.6716255623659,
+      "float_grid": 172.67162556236596,
+      "integer_grid": 172.6615,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.010125562365971064
+    },
+    {
+      "id": "decoy_00081",
+      "index": 12,
+      "native_grid": 76.39162845487029,
+      "float_grid": 76.3916284548703,
+      "integer_grid": 76.3845,
+      "oracle_error": 1.4210854715202004e-14,
+      "quantization_error": 0.0071284548702976736
+    },
+    {
+      "id": "decoy_00019",
+      "index": 2,
+      "native_grid": 217.80389237623254,
+      "float_grid": 217.80389237623248,
+      "integer_grid": 217.8146,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.010707623767530094
+    },
+    {
+      "id": "decoy_00019",
+      "index": 7,
+      "native_grid": 207.68186076639174,
+      "float_grid": 207.68186076639182,
+      "integer_grid": 207.6883,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.006439233608176664
+    },
+    {
+      "id": "decoy_00019",
+      "index": 12,
+      "native_grid": 337.6710782349315,
+      "float_grid": 337.67107823493154,
+      "integer_grid": 337.6774,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.00632176506843507
+    },
+    {
+      "id": "decoy_00019",
+      "index": 17,
+      "native_grid": 247.25200949583223,
+      "float_grid": 247.25200949583237,
+      "integer_grid": 247.2513,
+      "oracle_error": 1.4210854715202004e-13,
+      "quantization_error": 0.0007094958323818901
+    },
+    {
+      "id": "decoy_00063",
+      "index": 1,
+      "native_grid": 130.54086334715902,
+      "float_grid": 130.54086334715905,
+      "integer_grid": 130.5376,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.003263347159048635
+    },
+    {
+      "id": "decoy_00063",
+      "index": 6,
+      "native_grid": 153.9403860041288,
+      "float_grid": 153.940386004129,
+      "integer_grid": 153.9516,
+      "oracle_error": 1.9895196601282805e-13,
+      "quantization_error": 0.011213995871003135
+    },
+    {
+      "id": "decoy_00063",
+      "index": 11,
+      "native_grid": 179.42728237206285,
+      "float_grid": 179.42728237206288,
+      "integer_grid": 179.4207,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.006582372062865716
+    },
+    {
+      "id": "decoy_00063",
+      "index": 16,
+      "native_grid": 243.96933236858828,
+      "float_grid": 243.96933236858837,
+      "integer_grid": 243.9705,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0011676314116186859
+    },
+    {
+      "id": "decoy_00065",
+      "index": 0,
+      "native_grid": 260.36631008478935,
+      "float_grid": 260.36631008478935,
+      "integer_grid": 260.3284,
+      "oracle_error": 0.0,
+      "quantization_error": 0.037910084789359644
+    },
+    {
+      "id": "decoy_00065",
+      "index": 2,
+      "native_grid": 317.0234078035146,
+      "float_grid": 317.02340780351466,
+      "integer_grid": 317.0232,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.00020780351468374647
+    },
+    {
+      "id": "decoy_00065",
+      "index": 11,
+      "native_grid": 248.97752360206155,
+      "float_grid": 248.97752360206158,
+      "integer_grid": 248.9664,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.01112360206158769
+    },
+    {
+      "id": "decoy_00065",
+      "index": 13,
+      "native_grid": 187.95473928671734,
+      "float_grid": 187.9547392867175,
+      "integer_grid": 187.9541,
+      "oracle_error": 1.7053025658242404e-13,
+      "quantization_error": 0.0006392867175009087
+    },
+    {
+      "id": "decoy_00000",
+      "index": 1,
+      "native_grid": 187.54902709105713,
+      "float_grid": 187.54902709105718,
+      "integer_grid": 187.5461,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.002927091057188136
+    },
+    {
+      "id": "decoy_00000",
+      "index": 6,
+      "native_grid": 193.33518620722825,
+      "float_grid": 193.3351862072284,
+      "integer_grid": 193.3327,
+      "oracle_error": 1.4210854715202004e-13,
+      "quantization_error": 0.002486207228400872
+    },
+    {
+      "id": "decoy_00000",
+      "index": 11,
+      "native_grid": 93.15099625127722,
+      "float_grid": 93.15099625127728,
+      "integer_grid": 93.1464,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.004596251277277474
+    },
+    {
+      "id": "decoy_00000",
+      "index": 16,
+      "native_grid": 122.0463293759249,
+      "float_grid": 122.04632937592494,
+      "integer_grid": 122.0571,
+      "oracle_error": 4.263256414560601e-14,
+      "quantization_error": 0.010770624075064461
+    },
+    {
+      "id": "decoy_00068",
+      "index": 1,
+      "native_grid": 156.9022707952799,
+      "float_grid": 156.90227079527992,
+      "integer_grid": 156.8876,
+      "oracle_error": 2.842170943040401e-14,
+      "quantization_error": 0.014670795279926097
+    },
+    {
+      "id": "decoy_00068",
+      "index": 8,
+      "native_grid": 130.90840141356102,
+      "float_grid": 130.90840141356114,
+      "integer_grid": 130.9001,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.008301413561127902
+    },
+    {
+      "id": "decoy_00068",
+      "index": 10,
+      "native_grid": 240.9874643196463,
+      "float_grid": 240.98746431964642,
+      "integer_grid": 240.9845,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.002964319646423519
+    },
+    {
+      "id": "decoy_00068",
+      "index": 12,
+      "native_grid": 275.52680682080506,
+      "float_grid": 275.5268068208053,
+      "integer_grid": 275.5266,
+      "oracle_error": 2.2737367544323206e-13,
+      "quantization_error": 0.0002068208053174203
+    },
+    {
+      "id": "decoy_00024",
+      "index": 1,
+      "native_grid": 191.7977331029469,
+      "float_grid": 191.79773310294695,
+      "integer_grid": 191.7605,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.037233102946942154
+    },
+    {
+      "id": "decoy_00024",
+      "index": 6,
+      "native_grid": 117.68958859764997,
+      "float_grid": 117.68958859765004,
+      "integer_grid": 117.6813,
+      "oracle_error": 7.105427357601002e-14,
+      "quantization_error": 0.008288597650050633
+    },
+    {
+      "id": "decoy_00024",
+      "index": 11,
+      "native_grid": 45.5358155095531,
+      "float_grid": 45.535815509553174,
+      "integer_grid": 45.5425,
+      "oracle_error": 7.105427357601002e-14,
+      "quantization_error": 0.006684490446822622
+    },
+    {
+      "id": "decoy_00024",
+      "index": 16,
+      "native_grid": 157.22649024504776,
+      "float_grid": 157.22649024504787,
+      "integer_grid": 157.2117,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.014790245047862527
+    },
+    {
+      "id": "decoy_00044",
+      "index": 3,
+      "native_grid": 293.43487507318656,
+      "float_grid": 293.4348750731867,
+      "integer_grid": 293.4388,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.003924926813340335
+    },
+    {
+      "id": "decoy_00044",
+      "index": 8,
+      "native_grid": 190.16682580436975,
+      "float_grid": 190.16682580436986,
+      "integer_grid": 190.1556,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.01122580436987164
+    },
+    {
+      "id": "decoy_00044",
+      "index": 13,
+      "native_grid": 242.1696839547514,
+      "float_grid": 242.16968395475152,
+      "integer_grid": 242.1707,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.001016045248491082
+    },
+    {
+      "id": "decoy_00044",
+      "index": 18,
+      "native_grid": 206.07059246019702,
+      "float_grid": 206.07059246019708,
+      "integer_grid": 206.0872,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.01660753980291929
+    },
+    {
+      "id": "decoy_00012",
+      "index": 2,
+      "native_grid": 196.85630950335104,
+      "float_grid": 196.85630950335118,
+      "integer_grid": 196.8477,
+      "oracle_error": 1.4210854715202004e-13,
+      "quantization_error": 0.008609503351181047
+    },
+    {
+      "id": "decoy_00012",
+      "index": 7,
+      "native_grid": 284.3478639919255,
+      "float_grid": 284.34786399192564,
+      "integer_grid": 284.3375,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.010363991925657956
+    },
+    {
+      "id": "decoy_00012",
+      "index": 12,
+      "native_grid": 309.1366988522383,
+      "float_grid": 309.13669885223845,
+      "integer_grid": 309.1088,
+      "oracle_error": 1.7053025658242404e-13,
+      "quantization_error": 0.02789885223847932
+    },
+    {
+      "id": "decoy_00012",
+      "index": 17,
+      "native_grid": 159.46747697327987,
+      "float_grid": 159.46747697327996,
+      "integer_grid": 159.4694,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0019230267200498474
+    },
+    {
+      "id": "decoy_00038",
+      "index": 0,
+      "native_grid": 195.50467365704114,
+      "float_grid": 195.50467365704122,
+      "integer_grid": 195.5107,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.006026342958790565
+    },
+    {
+      "id": "decoy_00038",
+      "index": 3,
+      "native_grid": 197.98665121088226,
+      "float_grid": 197.98665121088231,
+      "integer_grid": 197.9879,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.0012487891176817811
+    },
+    {
+      "id": "decoy_00038",
+      "index": 5,
+      "native_grid": 242.79818541192003,
+      "float_grid": 242.79818541192023,
+      "integer_grid": 242.8004,
+      "oracle_error": 1.9895196601282805e-13,
+      "quantization_error": 0.0022145880797665995
+    },
+    {
+      "id": "decoy_00038",
+      "index": 8,
+      "native_grid": 220.50219725341282,
+      "float_grid": 220.502197253413,
+      "integer_grid": 220.5045,
+      "oracle_error": 1.7053025658242404e-13,
+      "quantization_error": 0.0023027465870200103
+    },
+    {
+      "id": "decoy_00023",
+      "index": 3,
+      "native_grid": 290.327570055435,
+      "float_grid": 290.327570055435,
+      "integer_grid": 290.343,
+      "oracle_error": 0.0,
+      "quantization_error": 0.015429944565028109
+    },
+    {
+      "id": "decoy_00023",
+      "index": 8,
+      "native_grid": 160.29368794958688,
+      "float_grid": 160.293687949587,
+      "integer_grid": 160.2835,
+      "oracle_error": 1.1368683772161603e-13,
+      "quantization_error": 0.010187949586992318
+    },
+    {
+      "id": "decoy_00023",
+      "index": 13,
+      "native_grid": 146.95394620773072,
+      "float_grid": 146.95394620773078,
+      "integer_grid": 146.9765,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.02255379226920695
+    },
+    {
+      "id": "decoy_00023",
+      "index": 18,
+      "native_grid": 92.50291496081364,
+      "float_grid": 92.50291496081365,
+      "integer_grid": 92.4978,
+      "oracle_error": 1.4210854715202004e-14,
+      "quantization_error": 0.005114960813656921
+    },
+    {
+      "id": "decoy_00048",
+      "index": 1,
+      "native_grid": 163.1121422840144,
+      "float_grid": 163.1121422840143,
+      "integer_grid": 163.1251,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.012957715985692175
+    },
+    {
+      "id": "decoy_00048",
+      "index": 3,
+      "native_grid": 236.14203181280106,
+      "float_grid": 236.14203181280112,
+      "integer_grid": 236.1363,
+      "oracle_error": 5.684341886080802e-14,
+      "quantization_error": 0.005731812801116121
+    },
+    {
+      "id": "decoy_00048",
+      "index": 5,
+      "native_grid": 226.68361655271093,
+      "float_grid": 226.68361655271102,
+      "integer_grid": 226.6842,
+      "oracle_error": 8.526512829121202e-14,
+      "quantization_error": 0.0005834472889887365
+    },
+    {
+      "id": "decoy_00048",
+      "index": 7,
+      "native_grid": 190.07474974284685,
+      "float_grid": 190.07474974284685,
+      "integer_grid": 190.0487,
+      "oracle_error": 0.0,
+      "quantization_error": 0.02604974284685113
+    }
+  ],
+  "calibration": [
+    {
+      "id": "active_00025",
+      "heavy_atoms": 28,
+      "rotatable_bonds": 5,
+      "conformers": 4,
+      "batch_1024_ms": [
+        26.8147000024328,
+        21.92119999381248,
+        23.255100000824314,
+        27.8796999991755,
+        20.881500000541564
+      ]
+    },
+    {
+      "id": "active_00021",
+      "heavy_atoms": 32,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        28.856500000983942,
+        26.9213000065065,
+        26.52900000248337,
+        26.905099999567028,
+        25.92490000097314
+      ]
+    },
+    {
+      "id": "active_00068",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 9,
+      "conformers": 4,
+      "batch_1024_ms": [
+        25.86400000291178,
+        25.516900001093745,
+        23.809199999959674,
+        31.468500004848465,
+        27.901500005100388
+      ]
+    },
+    {
+      "id": "active_00031",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 9,
+      "conformers": 4,
+      "batch_1024_ms": [
+        26.329899999836925,
+        24.946899997303262,
+        25.86009999504313,
+        25.62719999696128,
+        26.739999993878882
+      ]
+    },
+    {
+      "id": "active_00086",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        29.743800005235244,
+        29.042500005743932,
+        31.796399998711422,
+        26.92139999999199,
+        27.043399997637607
+      ]
+    },
+    {
+      "id": "active_00077",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        15.752100000099745,
+        16.286699996271636,
+        15.590100003464613,
+        15.783900002134033,
+        14.19089999399148
+      ]
+    },
+    {
+      "id": "active_00035",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        34.10460000304738,
+        43.312100002367515,
+        40.486300000338815,
+        35.833699999784585,
+        39.63300000032177
+      ]
+    },
+    {
+      "id": "active_00005",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 5,
+      "conformers": 4,
+      "batch_1024_ms": [
+        31.568999998853542,
+        29.610799996589776,
+        32.12820000044303,
+        31.27179999864893,
+        38.07020000385819
+      ]
+    },
+    {
+      "id": "active_00015",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 8,
+      "conformers": 4,
+      "batch_1024_ms": [
+        30.28979999362491,
+        31.308700003137346,
+        30.651500004751142,
+        29.969299997901544,
+        30.56250000372529
+      ]
+    },
+    {
+      "id": "active_00080",
+      "heavy_atoms": 37,
+      "rotatable_bonds": 8,
+      "conformers": 4,
+      "batch_1024_ms": [
+        33.7948000014876,
+        32.255199999781325,
+        35.18669999903068,
+        44.311899997410364,
+        40.55269999662414
+      ]
+    },
+    {
+      "id": "active_00039",
+      "heavy_atoms": 38,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        31.513000001723412,
+        38.13540000555804,
+        30.864500004099682,
+        31.4317000011215,
+        31.59869999944931
+      ]
+    },
+    {
+      "id": "active_00001",
+      "heavy_atoms": 39,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        45.02859999774955,
+        29.583200004708488,
+        37.66610000457149,
+        38.251499994657934,
+        44.621299995924346
+      ]
+    },
+    {
+      "id": "active_00063",
+      "heavy_atoms": 39,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        27.974899996479508,
+        30.387200000404846,
+        29.386399997747503,
+        27.70069999678526,
+        28.716000000713393
+      ]
+    },
+    {
+      "id": "active_00060",
+      "heavy_atoms": 40,
+      "rotatable_bonds": 8,
+      "conformers": 4,
+      "batch_1024_ms": [
+        34.12170000228798,
+        32.72199999628356,
+        33.27259999787202,
+        34.401500000967644,
+        32.39190000022063
+      ]
+    },
+    {
+      "id": "active_00048",
+      "heavy_atoms": 41,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        37.29569999995874,
+        32.983400000375696,
+        32.00739999738289,
+        32.25759999622824,
+        34.175600005255546
+      ]
+    },
+    {
+      "id": "active_00043",
+      "heavy_atoms": 43,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        60.23450000066077,
+        55.35389999567997,
+        59.073099997476675,
+        53.425699996296316,
+        40.50489999644924
+      ]
+    },
+    {
+      "id": "decoy_00084",
+      "heavy_atoms": 23,
+      "rotatable_bonds": 4,
+      "conformers": 4,
+      "batch_1024_ms": [
+        14.960299995436799,
+        15.236999999615364,
+        14.968200004659593,
+        14.907699995092116,
+        15.191099999356084
+      ]
+    },
+    {
+      "id": "decoy_00085",
+      "heavy_atoms": 27,
+      "rotatable_bonds": 4,
+      "conformers": 3,
+      "batch_1024_ms": [
+        31.212399997457396,
+        30.305200001748744,
+        30.165299998770934,
+        23.91459999489598,
+        19.70430000073975
+      ]
+    },
+    {
+      "id": "decoy_00055",
+      "heavy_atoms": 29,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        27.66910000354983,
+        31.860399998549838,
+        31.99089999543503,
+        21.77490000030957,
+        24.219699997047428
+      ]
+    },
+    {
+      "id": "decoy_00059",
+      "heavy_atoms": 30,
+      "rotatable_bonds": 3,
+      "conformers": 4,
+      "batch_1024_ms": [
+        34.56460000597872,
+        36.861700005829334,
+        25.272700004279613,
+        33.98480000032578,
+        37.71839999535587
+      ]
+    },
+    {
+      "id": "decoy_00081",
+      "heavy_atoms": 30,
+      "rotatable_bonds": 2,
+      "conformers": 3,
+      "batch_1024_ms": [
+        22.66809999855468,
+        25.46710000024177,
+        22.96570000180509,
+        22.23950000188779,
+        21.370499998738524
+      ]
+    },
+    {
+      "id": "decoy_00019",
+      "heavy_atoms": 31,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        27.26099999563303,
+        30.29660000174772,
+        38.84620000462746,
+        39.37500000029104,
+        28.8935999997193
+      ]
+    },
+    {
+      "id": "decoy_00063",
+      "heavy_atoms": 31,
+      "rotatable_bonds": 4,
+      "conformers": 4,
+      "batch_1024_ms": [
+        17.988200001127552,
+        14.700100000482053,
+        17.14670000365004,
+        16.988700001093093,
+        17.244899994693696
+      ]
+    },
+    {
+      "id": "decoy_00065",
+      "heavy_atoms": 32,
+      "rotatable_bonds": 3,
+      "conformers": 3,
+      "batch_1024_ms": [
+        25.95639999344712,
+        27.91359999537235,
+        22.698400003719144,
+        22.993800004769582,
+        23.338899998634588
+      ]
+    },
+    {
+      "id": "decoy_00000",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        36.54380000079982,
+        43.540099999518134,
+        43.077300004370045,
+        37.65130000101635,
+        27.22660000290489
+      ]
+    },
+    {
+      "id": "decoy_00068",
+      "heavy_atoms": 33,
+      "rotatable_bonds": 4,
+      "conformers": 3,
+      "batch_1024_ms": [
+        32.017999998060986,
+        38.032800002838485,
+        36.12280000379542,
+        29.525799996918067,
+        41.53690000384813
+      ]
+    },
+    {
+      "id": "decoy_00024",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        26.393000000098255,
+        28.48440000525443,
+        27.08320000238018,
+        26.88510000007227,
+        26.8558000025223
+      ]
+    },
+    {
+      "id": "decoy_00044",
+      "heavy_atoms": 34,
+      "rotatable_bonds": 7,
+      "conformers": 4,
+      "batch_1024_ms": [
+        28.420599999662954,
+        27.745300001697615,
+        25.899600004777312,
+        26.25379999517463,
+        25.71380000154022
+      ]
+    },
+    {
+      "id": "decoy_00012",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        26.049799998872913,
+        26.877199998125434,
+        25.882599999022204,
+        25.314400001661852,
+        25.22859999589855
+      ]
+    },
+    {
+      "id": "decoy_00038",
+      "heavy_atoms": 35,
+      "rotatable_bonds": 8,
+      "conformers": 4,
+      "batch_1024_ms": [
+        27.52390000387095,
+        26.07269999862183,
+        28.29310000379337,
+        27.169299995875917,
+        27.622000001429114
+      ]
+    },
+    {
+      "id": "decoy_00023",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 6,
+      "conformers": 4,
+      "batch_1024_ms": [
+        32.21299999859184,
+        28.549499998916872,
+        29.468000000633765,
+        29.55439999641385,
+        28.35110000160057
+      ]
+    },
+    {
+      "id": "decoy_00048",
+      "heavy_atoms": 36,
+      "rotatable_bonds": 6,
+      "conformers": 3,
+      "batch_1024_ms": [
+        35.94370000064373,
+        36.43800000281772,
+        34.52629999810597,
+        31.06899999693269,
+        30.520100001012906
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "method": "discrete4096",
+      "roc_auc": 0.3125,
+      "stratified_bootstrap_auc_95": [
+        0.13671875,
+        0.51171875
+      ],
+      "top4_actives": 0,
+      "ef_top4": 0.0
+    },
+    {
+      "method": "discrete16384",
+      "roc_auc": 0.28515625,
+      "stratified_bootstrap_auc_95": [
+        0.109375,
+        0.48828125
+      ],
+      "top4_actives": 1,
+      "ef_top4": 0.5
+    },
+    {
+      "method": "discrete65536",
+      "roc_auc": 0.3515625,
+      "stratified_bootstrap_auc_95": [
+        0.1640625,
+        0.5546875
+      ],
+      "top4_actives": 1,
+      "ef_top4": 0.5
+    },
+    {
+      "method": "vina1",
+      "roc_auc": 0.5625,
+      "stratified_bootstrap_auc_95": [
+        0.35908203125000004,
+        0.74609375
+      ],
+      "top4_actives": 3,
+      "ef_top4": 1.5
+    },
+    {
+      "method": "vina4",
+      "roc_auc": 0.46484375,
+      "stratified_bootstrap_auc_95": [
+        0.2421875,
+        0.671875
+      ],
+      "top4_actives": 3,
+      "ef_top4": 1.5
+    }
+  ],
+  "max_oracle_error": 2.8421709430404007e-13,
+  "max_quantization_error": 0.037910084789359644
+}

@@ -1,0 +1,380 @@
+{
+  "scope": "Same preselected 32-molecule pilot; Vina 1.2.7 no_refine, fixed seed104729, CPU1, E1, no max_evals cap. Warm search excludes receptor maps and per-ligand preparation; load_ms recorded separately.",
+  "results": [
+    {
+      "id": "active_00025",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 458.6688999988837,
+      "output_bytes": 3167,
+      "ok": true,
+      "score": -9.45824369294437,
+      "compute_and_pose_prepare_ms": 8694.4702
+    },
+    {
+      "id": "active_00021",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 789.8170999978902,
+      "output_bytes": 4020,
+      "ok": true,
+      "score": -8.923582835050041,
+      "compute_and_pose_prepare_ms": 13544.3999
+    },
+    {
+      "id": "active_00068",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 822.2607999996399,
+      "output_bytes": 4056,
+      "ok": true,
+      "score": -7.901561111108439,
+      "compute_and_pose_prepare_ms": 20557.3279
+    },
+    {
+      "id": "active_00031",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 538.6215999969863,
+      "output_bytes": 3768,
+      "ok": true,
+      "score": -6.733471009664581,
+      "compute_and_pose_prepare_ms": 15938.237
+    },
+    {
+      "id": "active_00086",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 570.8041999969282,
+      "output_bytes": 3746,
+      "ok": true,
+      "score": -8.994395178816289,
+      "compute_and_pose_prepare_ms": 11771.8832
+    },
+    {
+      "id": "active_00077",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 730.8787000001757,
+      "output_bytes": 3865,
+      "ok": true,
+      "score": -8.657523685842266,
+      "compute_and_pose_prepare_ms": 15890.9763
+    },
+    {
+      "id": "active_00035",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 742.1494000009261,
+      "output_bytes": 4056,
+      "ok": true,
+      "score": -8.435961724638805,
+      "compute_and_pose_prepare_ms": 16844.2727
+    },
+    {
+      "id": "active_00005",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 942.8953000024194,
+      "output_bytes": 4273,
+      "ok": true,
+      "score": -11.158171387511521,
+      "compute_and_pose_prepare_ms": 12339.8175
+    },
+    {
+      "id": "active_00015",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 653.1408000009833,
+      "output_bytes": 4002,
+      "ok": true,
+      "score": -7.296803876423294,
+      "compute_and_pose_prepare_ms": 22677.8283
+    },
+    {
+      "id": "active_00080",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 684.9722000042675,
+      "output_bytes": 4117,
+      "ok": true,
+      "score": -9.096707140195038,
+      "compute_and_pose_prepare_ms": 17147.634
+    },
+    {
+      "id": "active_00039",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 668.6600999964867,
+      "output_bytes": 4053,
+      "ok": true,
+      "score": -9.040855000771126,
+      "compute_and_pose_prepare_ms": 13338.3859
+    },
+    {
+      "id": "active_00001",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 710.376200004248,
+      "output_bytes": 4143,
+      "ok": true,
+      "score": -9.728516972054184,
+      "compute_and_pose_prepare_ms": 11931.1017
+    },
+    {
+      "id": "active_00063",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 991.5043000000878,
+      "output_bytes": 4485,
+      "ok": true,
+      "score": -8.955041130192571,
+      "compute_and_pose_prepare_ms": 15414.7803
+    },
+    {
+      "id": "active_00060",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 849.5368000003509,
+      "output_bytes": 4530,
+      "ok": true,
+      "score": -10.095239950947558,
+      "compute_and_pose_prepare_ms": 23462.7304
+    },
+    {
+      "id": "active_00048",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 891.9867999939015,
+      "output_bytes": 4498,
+      "ok": true,
+      "score": -11.377454021849372,
+      "compute_and_pose_prepare_ms": 17370.9185
+    },
+    {
+      "id": "active_00043",
+      "label": "active",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 1089.6065999986604,
+      "output_bytes": 4721,
+      "ok": true,
+      "score": -11.83240728857971,
+      "compute_and_pose_prepare_ms": 19499.4892
+    },
+    {
+      "id": "decoy_00084",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 277.95310000510653,
+      "output_bytes": 2597,
+      "ok": true,
+      "score": -7.559334721723905,
+      "compute_and_pose_prepare_ms": 4288.1066
+    },
+    {
+      "id": "decoy_00085",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 382.4481999981799,
+      "output_bytes": 3039,
+      "ok": true,
+      "score": -8.462678218594753,
+      "compute_and_pose_prepare_ms": 5592.7579
+    },
+    {
+      "id": "decoy_00055",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 428.30299999332055,
+      "output_bytes": 3324,
+      "ok": true,
+      "score": -6.8203703682201535,
+      "compute_and_pose_prepare_ms": 7668.5117
+    },
+    {
+      "id": "decoy_00059",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 538.1330000018352,
+      "output_bytes": 3638,
+      "ok": true,
+      "score": -5.9378537715749315,
+      "compute_and_pose_prepare_ms": 21111.0878
+    },
+    {
+      "id": "decoy_00081",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 460.85280000261264,
+      "output_bytes": 3244,
+      "ok": true,
+      "score": -8.145901345091874,
+      "compute_and_pose_prepare_ms": 4497.8197
+    },
+    {
+      "id": "decoy_00019",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 525.4316999998991,
+      "output_bytes": 3498,
+      "ok": true,
+      "score": -7.8715220975570315,
+      "compute_and_pose_prepare_ms": 10491.1658
+    },
+    {
+      "id": "decoy_00063",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 510.38189999962924,
+      "output_bytes": 3408,
+      "ok": true,
+      "score": -7.570598042803765,
+      "compute_and_pose_prepare_ms": 6342.5935
+    },
+    {
+      "id": "decoy_00065",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 490.8088000011048,
+      "output_bytes": 3363,
+      "ok": true,
+      "score": -10.092233121932896,
+      "compute_and_pose_prepare_ms": 6865.944
+    },
+    {
+      "id": "decoy_00000",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 559.8831000024802,
+      "output_bytes": 3731,
+      "ok": true,
+      "score": -8.552373234239248,
+      "compute_and_pose_prepare_ms": 12524.2641
+    },
+    {
+      "id": "decoy_00068",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 559.1016999969725,
+      "output_bytes": 3594,
+      "ok": true,
+      "score": -9.54767858964912,
+      "compute_and_pose_prepare_ms": 7096.4168
+    },
+    {
+      "id": "decoy_00024",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 586.8413999996847,
+      "output_bytes": 3802,
+      "ok": true,
+      "score": -7.810191987880799,
+      "compute_and_pose_prepare_ms": 16798.2997
+    },
+    {
+      "id": "decoy_00044",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 682.3855999973603,
+      "output_bytes": 3777,
+      "ok": true,
+      "score": -9.690816924677616,
+      "compute_and_pose_prepare_ms": 16511.9704
+    },
+    {
+      "id": "decoy_00012",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 715.2161000049091,
+      "output_bytes": 3832,
+      "ok": true,
+      "score": -9.328252273144395,
+      "compute_and_pose_prepare_ms": 11232.4143
+    },
+    {
+      "id": "decoy_00038",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 616.578600005596,
+      "output_bytes": 3908,
+      "ok": true,
+      "score": -8.882486648393249,
+      "compute_and_pose_prepare_ms": 16183.5459
+    },
+    {
+      "id": "decoy_00023",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 672.1976999979233,
+      "output_bytes": 3922,
+      "ok": true,
+      "score": -9.613072845673477,
+      "compute_and_pose_prepare_ms": 14983.9941
+    },
+    {
+      "id": "decoy_00048",
+      "label": "decoy",
+      "exhaustiveness": 1,
+      "max_evals": 0,
+      "load_ms": 654.2170000029728,
+      "output_bytes": 3938,
+      "ok": true,
+      "score": -8.944114130357297,
+      "compute_and_pose_prepare_ms": 16484.5698
+    }
+  ],
+  "roc_auc": 0.6640625,
+  "auc_bootstrap_95": [
+    0.46474609375,
+    0.84765625
+  ],
+  "top4_actives": 4,
+  "redocking": {
+    "scope": "Redocking with known bound conformer. This is an optimistic conformational-control experiment, not independently generated ligand conformers or virtual screening. The finite bank uses random rotations, never inserts the reference orientation explicitly. Selected-pose RMSD uses RDKit symmetry-aware CalcRMS without alignment; bank coverage minimum is atom-index RMSD.",
+    "finite_bank_poses": 65536,
+    "coarse_best_energy": 5.4732,
+    "coarse_best_index": 3921,
+    "coarse_selected_symmetry_rmsd_A": 9.05389414147305,
+    "bank_minimum_atom_index_rmsd_A": 2.3352724948065484,
+    "coarse_search_and_coverage_ms": 2770.270499997423,
+    "vina": {
+      "ok": true,
+      "score": -10.25730983059325,
+      "compute_and_pose_prepare_ms": 44396.3688
+    },
+    "vina_exhaustiveness": 4,
+    "vina_max_evals": 0,
+    "vina_selected_symmetry_rmsd_A": 0.4432537013381838
+  }
+}

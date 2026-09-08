@@ -1,0 +1,73 @@
+{
+  "scope": "Local SQLite/Node/Python IPC; real molecular scoring and CSPRNG challenges. No network identity/admission service.",
+  "runs": [
+    {
+      "jobs": [
+        {
+          "id": "active_00031",
+          "start": 8192,
+          "count": 1024,
+          "mode": "C"
+        },
+        {
+          "id": "active_00021",
+          "start": 8192,
+          "count": 1024,
+          "mode": "C"
+        }
+      ],
+      "lease_ms": 8.887100000009696,
+      "validate_and_challenge_ms": 7.027899999997089,
+      "verify_ms": 2.6951000000110525,
+      "credit_ms": 6.981400000000804,
+      "client_kernel_ms": 22.445700000000002,
+      "client_commit_ms": 7.077600000000004,
+      "replay_rejected": true,
+      "accepted": true,
+      "checked_poses": 34,
+      "opened_bytes": 160768,
+      "best_scores": [
+        204941,
+        156754
+      ]
+    },
+    {
+      "jobs": [
+        {
+          "id": "active_00068",
+          "start": 8192,
+          "count": 1024,
+          "mode": "C"
+        },
+        {
+          "id": "active_00025",
+          "start": 8192,
+          "count": 1024,
+          "mode": "C"
+        }
+      ],
+      "lease_ms": 6.298499999985552,
+      "validate_and_challenge_ms": 6.832900000006248,
+      "verify_ms": 2.4942999999950644,
+      "credit_ms": 7.036099999993439,
+      "client_kernel_ms": 11.235699999999994,
+      "client_commit_ms": 3.1758999999999986,
+      "replay_rejected": true,
+      "accepted": true,
+      "checked_poses": 34,
+      "opened_bytes": 170496,
+      "best_scores": [
+        96992,
+        38959
+      ]
+    }
+  ],
+  "final_state": {
+    "units": {
+      "COMPLETED": 4
+    },
+    "leases": {
+      "ACCEPTED": 2
+    }
+  }
+}

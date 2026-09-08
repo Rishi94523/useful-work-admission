@@ -1,0 +1,49 @@
+{
+  "scope": "Two adjacent disjoint ranges per four ligands; exact quantized poses and per-atom interpolation tuples. These cache hit rates do not bound all algorithms or cross-campaign caches.",
+  "results": [
+    {
+      "id": "active_00025",
+      "previous_poses": 4096,
+      "new_poses": 4096,
+      "exact_pose_cache_hits": 0,
+      "unique_new_pose_coordinates": 4096,
+      "new_atom_queries": 114688,
+      "queries_reusable_from_previous_range": 0,
+      "unique_new_atom_queries": 114688,
+      "analysis_ms": 95.18679999746382
+    },
+    {
+      "id": "active_00005",
+      "previous_poses": 4096,
+      "new_poses": 4096,
+      "exact_pose_cache_hits": 0,
+      "unique_new_pose_coordinates": 4096,
+      "new_atom_queries": 151552,
+      "queries_reusable_from_previous_range": 0,
+      "unique_new_atom_queries": 151552,
+      "analysis_ms": 134.4604999976582
+    },
+    {
+      "id": "decoy_00084",
+      "previous_poses": 4096,
+      "new_poses": 4096,
+      "exact_pose_cache_hits": 0,
+      "unique_new_pose_coordinates": 4096,
+      "new_atom_queries": 94208,
+      "queries_reusable_from_previous_range": 0,
+      "unique_new_atom_queries": 94208,
+      "analysis_ms": 96.10670000256505
+    },
+    {
+      "id": "decoy_00065",
+      "previous_poses": 4096,
+      "new_poses": 4096,
+      "exact_pose_cache_hits": 0,
+      "unique_new_pose_coordinates": 4096,
+      "new_atom_queries": 131072,
+      "queries_reusable_from_previous_range": 0,
+      "unique_new_atom_queries": 131072,
+      "analysis_ms": 123.2190000009723
+    }
+  ]
+}

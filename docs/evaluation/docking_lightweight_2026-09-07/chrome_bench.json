@@ -1,0 +1,1241 @@
+{
+  "runtime": "chrome",
+  "version": "152.0.7977.76",
+  "cold_loopback_asset_load_ms": 166.13520000000017,
+  "map_bytes": 27634932,
+  "host_process_memory": {
+    "rss": 408252416,
+    "heapTotal": 327798784,
+    "heapUsed": 190750800,
+    "external": 32093948,
+    "arrayBuffers": 28220062
+  },
+  "summary": [
+    {
+      "mode": "B",
+      "jobs": 1,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 1.3999999985098839,
+          "kernel_ms": 1,
+          "commit_ms": 0.5,
+          "opening_ms": 0.5,
+          "client_ms": 2,
+          "useful_work_fraction": 0.6999999992549419,
+          "owned_array_bytes": 27635956,
+          "opening_wire_bytes": 2039,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 1.3999999985098839,
+          "kernel_ms": 1.1999999955296516,
+          "commit_ms": 0.20000000298023224,
+          "opening_ms": 0.09999999403953552,
+          "client_ms": 1.4999999925494194,
+          "useful_work_fraction": 0.9333333369758394,
+          "owned_array_bytes": 27635956,
+          "opening_wire_bytes": 2039,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 1.5,
+          "kernel_ms": 2,
+          "commit_ms": 0.19999999552965164,
+          "opening_ms": 0.10000000149011612,
+          "client_ms": 2.2999999970197678,
+          "useful_work_fraction": 0.6521739138885346,
+          "owned_array_bytes": 27635956,
+          "opening_wire_bytes": 2039,
+          "commitment_wire_bytes": 1604
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 1,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 9.900000005960464,
+          "kernel_ms": 8.100000001490116,
+          "commit_ms": 0.6999999955296516,
+          "opening_ms": 0.3999999985098839,
+          "client_ms": 9.199999995529652,
+          "useful_work_fraction": 1,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 9009,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 4.5999999940395355,
+          "kernel_ms": 3.7999999970197678,
+          "commit_ms": 0.5,
+          "opening_ms": 0.30000000447034836,
+          "client_ms": 4.600000001490116,
+          "useful_work_fraction": 0.9999999983803086,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 10297,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 5.0999999940395355,
+          "kernel_ms": 5,
+          "commit_ms": 1.2000000029802322,
+          "opening_ms": 0.20000000298023224,
+          "client_ms": 6.4000000059604645,
+          "useful_work_fraction": 0.7968749983265297,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 9654,
+          "commitment_wire_bytes": 5701
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 1,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 18.399999998509884,
+          "kernel_ms": 17.399999998509884,
+          "commit_ms": 2.100000001490116,
+          "opening_ms": 1.1000000014901161,
+          "client_ms": 20.600000001490116,
+          "useful_work_fraction": 0.8932038833581993,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 22559,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 14.399999998509884,
+          "kernel_ms": 15.799999997019768,
+          "commit_ms": 1.3999999985098839,
+          "opening_ms": 0.8999999985098839,
+          "client_ms": 18.099999994039536,
+          "useful_work_fraction": 0.7955801106769012,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 18669,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 14.900000005960464,
+          "kernel_ms": 13.899999998509884,
+          "commit_ms": 1.3000000044703484,
+          "opening_ms": 1,
+          "client_ms": 16.200000002980232,
+          "useful_work_fraction": 0.9197530866184807,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 21783,
+          "commitment_wire_bytes": 22085
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 4,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 3.699999988079071,
+          "kernel_ms": 3.1999999955296516,
+          "commit_ms": 0.5,
+          "opening_ms": 0.30000000447034836,
+          "client_ms": 4,
+          "useful_work_fraction": 0.9249999970197678,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 5608,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 3.3999999910593033,
+          "kernel_ms": 3.5,
+          "commit_ms": 0.5,
+          "opening_ms": 0.30000000447034836,
+          "client_ms": 4.300000004470348,
+          "useful_work_fraction": 0.790697671517351,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 7135,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 4.100000008940697,
+          "kernel_ms": 3.4999999925494194,
+          "commit_ms": 0.3999999985098839,
+          "opening_ms": 0.20000000298023224,
+          "client_ms": 4.0999999940395355,
+          "useful_work_fraction": 1,
+          "owned_array_bytes": 27639028,
+          "opening_wire_bytes": 6626,
+          "commitment_wire_bytes": 6411
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 4,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 14.700000002980232,
+          "kernel_ms": 14.50000000745058,
+          "commit_ms": 1.2999999895691872,
+          "opening_ms": 0.7999999970197678,
+          "client_ms": 16.599999994039536,
+          "useful_work_fraction": 0.8855421691721973,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 19311,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 13.899999998509884,
+          "kernel_ms": 14,
+          "commit_ms": 1.400000013411045,
+          "opening_ms": 1,
+          "client_ms": 16.400000013411045,
+          "useful_work_fraction": 0.8475609748258052,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 21237,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 15.099999994039536,
+          "kernel_ms": 14.800000004470348,
+          "commit_ms": 1.5000000074505806,
+          "opening_ms": 0.8000000044703484,
+          "client_ms": 17.100000016391277,
+          "useful_work_fraction": 0.8830409344775069,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 16732,
+          "commitment_wire_bytes": 22799
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 4,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 59.50000000745058,
+          "kernel_ms": 60.3999999910593,
+          "commit_ms": 5.9000000059604645,
+          "opening_ms": 1.1999999955296516,
+          "client_ms": 67.49999999254942,
+          "useful_work_fraction": 0.8814814816891575,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 27235,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 61.20000000298023,
+          "kernel_ms": 57,
+          "commit_ms": 5.0999999940395355,
+          "opening_ms": 0.6000000014901161,
+          "client_ms": 62.69999999552965,
+          "useful_work_fraction": 0.9760765551410469,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 24904,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 54.399999998509884,
+          "kernel_ms": 52.00000000745058,
+          "commit_ms": 4.199999995529652,
+          "opening_ms": 0.8000000044703484,
+          "client_ms": 57.00000000745058,
+          "useful_work_fraction": 0.9543859647613887,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 26457,
+          "commitment_wire_bytes": 88335
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 16,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 16.899999998509884,
+          "kernel_ms": 16.399999983608723,
+          "commit_ms": 1.9000000059604645,
+          "opening_ms": 0.7000000029802322,
+          "client_ms": 18.99999999254942,
+          "useful_work_fraction": 0.8894736844808937,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 18866,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 15.200000025331974,
+          "kernel_ms": 15.299999982118607,
+          "commit_ms": 1.5000000074505806,
+          "opening_ms": 0.6000000014901161,
+          "client_ms": 17.399999991059303,
+          "useful_work_fraction": 0.8735632202955309,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 17339,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 16.00000000745058,
+          "kernel_ms": 15.800000004470348,
+          "commit_ms": 1.3999999910593033,
+          "opening_ms": 0.7000000029802322,
+          "client_ms": 17.899999998509884,
+          "useful_work_fraction": 0.893854749093996,
+          "owned_array_bytes": 27651316,
+          "opening_wire_bytes": 18866,
+          "commitment_wire_bytes": 25641
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 16,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 60.5,
+          "kernel_ms": 61.30000000447035,
+          "commit_ms": 5.600000001490116,
+          "opening_ms": 0.6000000014901161,
+          "client_ms": 67.50000000745058,
+          "useful_work_fraction": 0.8962962961973641,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 28344,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 66.90000001341105,
+          "kernel_ms": 64.50000002235174,
+          "commit_ms": 6,
+          "opening_ms": 1.2000000029802322,
+          "client_ms": 71.70000002533197,
+          "useful_work_fraction": 0.9330543931628303,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 30276,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 67.49999998509884,
+          "kernel_ms": 63.50000001490116,
+          "commit_ms": 5.299999997019768,
+          "opening_ms": 1.1000000014901161,
+          "client_ms": 69.90000001341105,
+          "useful_work_fraction": 0.965665235653051,
+          "owned_array_bytes": 27700468,
+          "opening_wire_bytes": 29637,
+          "commitment_wire_bytes": 91193
+        }
+      ]
+    },
+    {
+      "mode": "B",
+      "jobs": 16,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 251.79999999701977,
+          "kernel_ms": 243.2999999895692,
+          "commit_ms": 18.19999998807907,
+          "opening_ms": 1.3999999985098839,
+          "client_ms": 262.89999997615814,
+          "useful_work_fraction": 0.9577786231261125,
+          "owned_array_bytes": 27897076,
+          "opening_wire_bytes": 35816,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 251.19999999552965,
+          "kernel_ms": 239.49999999254942,
+          "commit_ms": 17.399999998509884,
+          "opening_ms": 1.5,
+          "client_ms": 258.3999999910593,
+          "useful_work_fraction": 0.9721362229265528,
+          "owned_array_bytes": 27897076,
+          "opening_wire_bytes": 35815,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 261.90000001341105,
+          "kernel_ms": 267.3999999910593,
+          "commit_ms": 16.80000000447035,
+          "opening_ms": 0.9000000059604645,
+          "client_ms": 285.1000000014901,
+          "useful_work_fraction": 0.9186250438865037,
+          "owned_array_bytes": 27897076,
+          "opening_wire_bytes": 36591,
+          "commitment_wire_bytes": 353337
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 1,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 1,
+          "kernel_ms": 0.8999999985098839,
+          "commit_ms": 0.10000000149011612,
+          "opening_ms": 0.6000000014901161,
+          "client_ms": 1.6000000014901161,
+          "useful_work_fraction": 0.6249999994179234,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 0.9000000059604645,
+          "kernel_ms": 1.0999999940395355,
+          "commit_ms": 0.10000000149011612,
+          "opening_ms": 0.6999999955296516,
+          "client_ms": 1.8999999910593033,
+          "useful_work_fraction": 0.47368421589238496,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 1,
+          "kernel_ms": 0.7999999970197678,
+          "commit_ms": 0.20000000298023224,
+          "opening_ms": 0.6999999955296516,
+          "client_ms": 1.6999999955296516,
+          "useful_work_fraction": 0.5882352956644804,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 1,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 6.700000002980232,
+          "kernel_ms": 4.199999995529652,
+          "commit_ms": 0.4000000059604645,
+          "opening_ms": 2.5,
+          "client_ms": 7.100000001490116,
+          "useful_work_fraction": 0.9436619720526854,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 138034,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 3.8000000044703484,
+          "kernel_ms": 3.399999998509884,
+          "commit_ms": 0.5,
+          "opening_ms": 3.2000000029802322,
+          "client_ms": 7.100000001490116,
+          "useful_work_fraction": 0.5352112681229326,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 138035,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 3.5,
+          "kernel_ms": 3.899999998509884,
+          "commit_ms": 0.5,
+          "opening_ms": 3.399999998509884,
+          "client_ms": 7.799999997019768,
+          "useful_work_fraction": 0.44871794888939537,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 138035,
+          "commitment_wire_bytes": 5701
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 1,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 14.100000001490116,
+          "kernel_ms": 14.399999998509884,
+          "commit_ms": 1.7000000029802322,
+          "opening_ms": 5.899999998509884,
+          "client_ms": 22,
+          "useful_work_fraction": 0.6409090909768235,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 279830,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 14.400000005960464,
+          "kernel_ms": 14.199999995529652,
+          "commit_ms": 1.6000000014901161,
+          "opening_ms": 4.299999997019768,
+          "client_ms": 20.099999994039536,
+          "useful_work_fraction": 0.7164179109567487,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 229863,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 14.299999997019768,
+          "kernel_ms": 15.799999997019768,
+          "commit_ms": 1.5,
+          "opening_ms": 4.899999998509884,
+          "client_ms": 22.19999999552965,
+          "useful_work_fraction": 0.6441441441396089,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 249848,
+          "commitment_wire_bytes": 22085
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 4,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 3.9000000059604645,
+          "kernel_ms": 3.4000000059604645,
+          "commit_ms": 0.5999999940395355,
+          "opening_ms": 3.600000001490116,
+          "client_ms": 7.600000001490116,
+          "useful_work_fraction": 0.5131578954204999,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 152857,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 3.399999998509884,
+          "kernel_ms": 3.300000011920929,
+          "commit_ms": 0.5999999940395355,
+          "opening_ms": 2.899999998509884,
+          "client_ms": 6.800000004470348,
+          "useful_work_fraction": 0.49999999945216317,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 135459,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 3.3000000193715096,
+          "kernel_ms": 3.1999999955296516,
+          "commit_ms": 0.6999999955296516,
+          "opening_ms": 3.1999999955296516,
+          "client_ms": 7.099999986588955,
+          "useful_work_fraction": 0.46478873600067777,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 141768,
+          "commitment_wire_bytes": 6411
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 4,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 15.50000000745058,
+          "kernel_ms": 14.199999995529652,
+          "commit_ms": 1.6999999955296516,
+          "opening_ms": 4.700000002980232,
+          "client_ms": 20.599999994039536,
+          "useful_work_fraction": 0.7524271850454076,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 245783,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 14.399999991059303,
+          "kernel_ms": 13.700000002980232,
+          "commit_ms": 1.8999999985098839,
+          "opening_ms": 6.399999998509884,
+          "client_ms": 22,
+          "useful_work_fraction": 0.6545454541390593,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 287559,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 14,
+          "kernel_ms": 13.600000001490116,
+          "commit_ms": 1.9000000059604645,
+          "opening_ms": 5.600000001490116,
+          "client_ms": 21.100000008940697,
+          "useful_work_fraction": 0.6635071087235916,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 275689,
+          "commitment_wire_bytes": 22799
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 4,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 56.49999999254942,
+          "kernel_ms": 62.5,
+          "commit_ms": 6.800000004470348,
+          "opening_ms": 7.899999998509884,
+          "client_ms": 77.20000000298023,
+          "useful_work_fraction": 0.7318652848493302,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 361103,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 56.00000000745058,
+          "kernel_ms": 57.70000000298023,
+          "commit_ms": 6.299999997019768,
+          "opening_ms": 6,
+          "client_ms": 70,
+          "useful_work_fraction": 0.8000000001064369,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 328396,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 56.100000001490116,
+          "kernel_ms": 54.29999999701977,
+          "commit_ms": 9.899999998509884,
+          "opening_ms": 6.5,
+          "client_ms": 70.69999999552965,
+          "useful_work_fraction": 0.7934936351490426,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 334630,
+          "commitment_wire_bytes": 88335
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 16,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 15.899999991059303,
+          "kernel_ms": 15.600000001490116,
+          "commit_ms": 2.4000000283122063,
+          "opening_ms": 7.4000000059604645,
+          "client_ms": 25.400000035762787,
+          "useful_work_fraction": 0.6259842507351323,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 396857,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 16.900000005960464,
+          "kernel_ms": 16.49999998509884,
+          "commit_ms": 2.8000000193715096,
+          "opening_ms": 7.200000002980232,
+          "client_ms": 26.50000000745058,
+          "useful_work_fraction": 0.637735849102225,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 394805,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 16.700000002980232,
+          "kernel_ms": 16.099999994039536,
+          "commit_ms": 2.400000013411045,
+          "opening_ms": 6.200000002980232,
+          "client_ms": 24.700000010430813,
+          "useful_work_fraction": 0.676113360159021,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 330999,
+          "commitment_wire_bytes": 25641
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 16,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 63.399999998509884,
+          "kernel_ms": 65.70000000298023,
+          "commit_ms": 7.5,
+          "opening_ms": 9.899999998509884,
+          "client_ms": 83.10000000149012,
+          "useful_work_fraction": 0.7629362213883637,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 466298,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 68.69999999552965,
+          "kernel_ms": 68.59999998658895,
+          "commit_ms": 8.100000001490116,
+          "opening_ms": 18,
+          "client_ms": 94.69999998807907,
+          "useful_work_fraction": 0.7254487856829744,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 500646,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 66.60000001639128,
+          "kernel_ms": 66.09999998658895,
+          "commit_ms": 7.799999997019768,
+          "opening_ms": 9.399999998509884,
+          "client_ms": 83.2999999821186,
+          "useful_work_fraction": 0.7995198082915703,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 491827,
+          "commitment_wire_bytes": 91193
+        }
+      ]
+    },
+    {
+      "mode": "C",
+      "jobs": 16,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 261.7000000104308,
+          "kernel_ms": 272.09999998658895,
+          "commit_ms": 25.100000008940697,
+          "opening_ms": 9.5,
+          "client_ms": 306.69999999552965,
+          "useful_work_fraction": 0.8532768177836494,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 497299,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 256,
+          "kernel_ms": 261.7999999895692,
+          "commit_ms": 27.700000002980232,
+          "opening_ms": 11,
+          "client_ms": 300.4999999925494,
+          "useful_work_fraction": 0.85191347755856,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 537704,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 265.09999998658895,
+          "kernel_ms": 264.59999999403954,
+          "commit_ms": 25.200000002980232,
+          "opening_ms": 9.799999997019768,
+          "client_ms": 299.59999999403954,
+          "useful_work_fraction": 0.8848464619221064,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 531814,
+          "commitment_wire_bytes": 353337
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 1,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 0.8999999985098839,
+          "kernel_ms": 0.8999999985098839,
+          "commit_ms": 0.10000000149011612,
+          "opening_ms": 1.1000000014901161,
+          "client_ms": 2.100000001490116,
+          "useful_work_fraction": 0.42857142755774413,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 0.8999999985098839,
+          "kernel_ms": 0.7999999970197678,
+          "commit_ms": 0.10000000149011612,
+          "opening_ms": 1.2999999970197678,
+          "client_ms": 2.1999999955296516,
+          "useful_work_fraction": 0.4090909092448467,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        },
+        {
+          "useful_ms": 0.8000000044703484,
+          "kernel_ms": 0.7999999970197678,
+          "commit_ms": 0.10000000149011612,
+          "opening_ms": 0.5,
+          "client_ms": 1.3999999985098839,
+          "useful_work_fraction": 0.5714285752298881,
+          "owned_array_bytes": 27664628,
+          "opening_wire_bytes": 38903,
+          "commitment_wire_bytes": 1604
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 1,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 3.2999999970197678,
+          "kernel_ms": 4.5,
+          "commit_ms": 0.5,
+          "opening_ms": 3.100000001490116,
+          "client_ms": 8.100000001490116,
+          "useful_work_fraction": 0.4074074069645288,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 157753,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 3.7000000029802322,
+          "kernel_ms": 3.5,
+          "commit_ms": 0.6000000014901161,
+          "opening_ms": 3,
+          "client_ms": 7.100000001490116,
+          "useful_work_fraction": 0.5211267608737595,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 157753,
+          "commitment_wire_bytes": 5701
+        },
+        {
+          "useful_ms": 3.2999999970197678,
+          "kernel_ms": 3.2000000029802322,
+          "commit_ms": 0.5,
+          "opening_ms": 2.7000000029802322,
+          "client_ms": 6.4000000059604645,
+          "useful_work_fraction": 0.5156249990541255,
+          "owned_array_bytes": 27753716,
+          "opening_wire_bytes": 157753,
+          "commitment_wire_bytes": 5701
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 1,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 14.5,
+          "kernel_ms": 14,
+          "commit_ms": 1.5,
+          "opening_ms": 11.899999998509884,
+          "client_ms": 27.399999998509884,
+          "useful_work_fraction": 0.5291970803207505,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 639609,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 14.199999995529652,
+          "kernel_ms": 13.700000002980232,
+          "commit_ms": 1.5,
+          "opening_ms": 12.200000002980232,
+          "client_ms": 27.400000005960464,
+          "useful_work_fraction": 0.5182481749065931,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 639609,
+          "commitment_wire_bytes": 22085
+        },
+        {
+          "useful_ms": 13.800000004470348,
+          "kernel_ms": 14,
+          "commit_ms": 1.5999999940395355,
+          "opening_ms": 11.799999997019768,
+          "client_ms": 27.399999991059303,
+          "useful_work_fraction": 0.50364963536399,
+          "owned_array_bytes": 28110068,
+          "opening_wire_bytes": 639609,
+          "commitment_wire_bytes": 22085
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 4,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 3.5,
+          "kernel_ms": 3.1000000089406967,
+          "commit_ms": 0.30000000447034836,
+          "opening_ms": 3.7000000029802322,
+          "client_ms": 7.100000016391277,
+          "useful_work_fraction": 0.4929577453408159,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 152857,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 3.5,
+          "kernel_ms": 3.4000000059604645,
+          "commit_ms": 0.4999999850988388,
+          "opening_ms": 2.8000000044703484,
+          "client_ms": 6.699999995529652,
+          "useful_work_fraction": 0.5223880600500383,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 152857,
+          "commitment_wire_bytes": 6411
+        },
+        {
+          "useful_ms": 3.100000001490116,
+          "kernel_ms": 3.2000000029802322,
+          "commit_ms": 0.6000000014901161,
+          "opening_ms": 3.2999999970197678,
+          "client_ms": 7.100000001490116,
+          "useful_work_fraction": 0.4366197184280989,
+          "owned_array_bytes": 27751668,
+          "opening_wire_bytes": 152857,
+          "commitment_wire_bytes": 6411
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 4,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 12.900000005960464,
+          "kernel_ms": 13,
+          "commit_ms": 1.7999999970197678,
+          "opening_ms": 13.299999997019768,
+          "client_ms": 28.099999994039536,
+          "useful_work_fraction": 0.45907473340557875,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 620001,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 13.100000001490116,
+          "kernel_ms": 12.899999998509884,
+          "commit_ms": 1.7999999970197678,
+          "opening_ms": 11.299999997019768,
+          "client_ms": 25.99999999254942,
+          "useful_work_fraction": 0.5038461540478486,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 620001,
+          "commitment_wire_bytes": 22799
+        },
+        {
+          "useful_ms": 13.199999995529652,
+          "kernel_ms": 12.5,
+          "commit_ms": 1.7000000029802322,
+          "opening_ms": 11.600000001490116,
+          "client_ms": 25.80000000447035,
+          "useful_work_fraction": 0.5116279067148255,
+          "owned_array_bytes": 28101876,
+          "opening_wire_bytes": 620001,
+          "commitment_wire_bytes": 22799
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 4,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 54.29999998956919,
+          "kernel_ms": 53.600000001490116,
+          "commit_ms": 6.100000001490116,
+          "opening_ms": 46,
+          "client_ms": 105.70000000298023,
+          "useful_work_fraction": 0.5137180698962932,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 2514401,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 53.5,
+          "kernel_ms": 53.099999994039536,
+          "commit_ms": 5.899999998509884,
+          "opening_ms": 45.899999998509884,
+          "client_ms": 104.8999999910593,
+          "useful_work_fraction": 0.5100095329319336,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 2514401,
+          "commitment_wire_bytes": 88335
+        },
+        {
+          "useful_ms": 52.8999999910593,
+          "kernel_ms": 54.70000000298023,
+          "commit_ms": 5.899999998509884,
+          "opening_ms": 45.399999998509884,
+          "client_ms": 106,
+          "useful_work_fraction": 0.4990566036892387,
+          "owned_array_bytes": 29502708,
+          "opening_wire_bytes": 2514401,
+          "commitment_wire_bytes": 88335
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 16,
+      "poses_per_job": 256,
+      "repeats": [
+        {
+          "useful_ms": 14.999999985098839,
+          "kernel_ms": 14.599999986588955,
+          "commit_ms": 2.1000000089406967,
+          "opening_ms": 13,
+          "client_ms": 29.69999999552965,
+          "useful_work_fraction": 0.505050504624801,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 696081,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 15.200000002980232,
+          "kernel_ms": 14.399999991059303,
+          "commit_ms": 2.2000000029802322,
+          "opening_ms": 12.700000002980232,
+          "client_ms": 29.299999997019768,
+          "useful_work_fraction": 0.5187713312125014,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 696081,
+          "commitment_wire_bytes": 25641
+        },
+        {
+          "useful_ms": 16.399999983608723,
+          "kernel_ms": 16.799999989569187,
+          "commit_ms": 2.399999998509884,
+          "opening_ms": 13.700000002980232,
+          "client_ms": 32.8999999910593,
+          "useful_work_fraction": 0.49848024279834297,
+          "owned_array_bytes": 28165364,
+          "opening_wire_bytes": 696081,
+          "commitment_wire_bytes": 25641
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 16,
+      "poses_per_job": 1024,
+      "repeats": [
+        {
+          "useful_ms": 60.8999999910593,
+          "kernel_ms": 61.50000002235174,
+          "commit_ms": 8.299999997019768,
+          "opening_ms": 51.29999999701977,
+          "client_ms": 121.10000001639128,
+          "useful_work_fraction": 0.5028901732685078,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 2818625,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 62.50000002235174,
+          "kernel_ms": 63.70000000298023,
+          "commit_ms": 7,
+          "opening_ms": 52.79999999701977,
+          "client_ms": 123.5,
+          "useful_work_fraction": 0.5060728746749129,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 2818625,
+          "commitment_wire_bytes": 91193
+        },
+        {
+          "useful_ms": 61.69999998807907,
+          "kernel_ms": 63.100000001490116,
+          "commit_ms": 7.3000000193715096,
+          "opening_ms": 51,
+          "client_ms": 121.40000002086163,
+          "useful_work_fraction": 0.5082372321044186,
+          "owned_array_bytes": 29756660,
+          "opening_wire_bytes": 2818625,
+          "commitment_wire_bytes": 91193
+        }
+      ]
+    },
+    {
+      "mode": "E",
+      "jobs": 16,
+      "poses_per_job": 4096,
+      "repeats": [
+        {
+          "useful_ms": 246.8000000193715,
+          "kernel_ms": 246.60000000149012,
+          "commit_ms": 25.99999999254942,
+          "opening_ms": 209.29999999701977,
+          "client_ms": 481.8999999910593,
+          "useful_work_fraction": 0.512139448067961,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 11412097,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 269.70000000298023,
+          "kernel_ms": 280.5,
+          "commit_ms": 26.30000000447035,
+          "opening_ms": 203.39999999850988,
+          "client_ms": 510.20000000298023,
+          "useful_work_fraction": 0.528616228932585,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 11412097,
+          "commitment_wire_bytes": 353337
+        },
+        {
+          "useful_ms": 253.09999998658895,
+          "kernel_ms": 249.79999999701977,
+          "commit_ms": 26.100000008940697,
+          "opening_ms": 212.5,
+          "client_ms": 488.40000000596046,
+          "useful_work_fraction": 0.5182227681889846,
+          "owned_array_bytes": 36121844,
+          "opening_wire_bytes": 11412097,
+          "commitment_wire_bytes": 353337
+        }
+      ]
+    }
+  ],
+  "chrome_metrics": [
+    {
+      "name": "Timestamp",
+      "value": 40540.979033
+    },
+    {
+      "name": "AudioHandlers",
+      "value": 0
+    },
+    {
+      "name": "AudioWorkletProcessors",
+      "value": 0
+    },
+    {
+      "name": "Documents",
+      "value": 1
+    },
+    {
+      "name": "Frames",
+      "value": 1
+    },
+    {
+      "name": "JSEventListeners",
+      "value": 0
+    },
+    {
+      "name": "LayoutObjects",
+      "value": 3
+    },
+    {
+      "name": "MediaKeySessions",
+      "value": 0
+    },
+    {
+      "name": "MediaKeys",
+      "value": 0
+    },
+    {
+      "name": "Nodes",
+      "value": 7
+    },
+    {
+      "name": "Resources",
+      "value": 1
+    },
+    {
+      "name": "ContextLifecycleStateObservers",
+      "value": 3
+    },
+    {
+      "name": "V8PerContextDatas",
+      "value": 2
+    },
+    {
+      "name": "WorkerGlobalScopes",
+      "value": 0
+    },
+    {
+      "name": "UACSSResources",
+      "value": 0
+    },
+    {
+      "name": "RTCPeerConnections",
+      "value": 0
+    },
+    {
+      "name": "ResourceFetchers",
+      "value": 1
+    },
+    {
+      "name": "AdSubframes",
+      "value": 0
+    },
+    {
+      "name": "DetachedScriptStates",
+      "value": 0
+    },
+    {
+      "name": "ArrayBufferContents",
+      "value": 2049
+    },
+    {
+      "name": "LayoutCount",
+      "value": 0
+    },
+    {
+      "name": "RecalcStyleCount",
+      "value": 0
+    },
+    {
+      "name": "LayoutDuration",
+      "value": 0
+    },
+    {
+      "name": "RecalcStyleDuration",
+      "value": 0
+    },
+    {
+      "name": "DevToolsCommandDuration",
+      "value": 0.000011
+    },
+    {
+      "name": "ScriptDuration",
+      "value": 0
+    },
+    {
+      "name": "V8CompileDuration",
+      "value": 0
+    },
+    {
+      "name": "TaskDuration",
+      "value": 0.000013
+    },
+    {
+      "name": "TaskOtherDuration",
+      "value": 0.000002
+    },
+    {
+      "name": "ThreadTime",
+      "value": 0.000044
+    },
+    {
+      "name": "ProcessTime",
+      "value": 18.483947
+    },
+    {
+      "name": "JSHeapUsedSize",
+      "value": 1802932
+    },
+    {
+      "name": "JSHeapTotalSize",
+      "value": 70778880
+    },
+    {
+      "name": "FirstMeaningfulPaint",
+      "value": 0
+    },
+    {
+      "name": "DomContentLoaded",
+      "value": 40521.359557
+    },
+    {
+      "name": "NavigationStart",
+      "value": 40521.33845
+    }
+  ]
+}

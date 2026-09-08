@@ -103,7 +103,8 @@ class Campaign:
                 # Independent with-replacement cost-weighted samples. Cost is
                 # server calibration per pose, not a client-reported value.
                 # Sample job by total calibrated cost, then pose uniformly.
-                # O(jobs + samples), without materializing every pose.
+                # O(jobs + samples * log(jobs)): choices uses cumulative weights
+                # and binary search, without materializing every pose.
                 jobs=rng.choices(range(len(tasks)),weights=[t['estimated_cost'] for t in tasks],k=samples)
                 chosen=[(j,rng.randrange(tasks[j]['count'])) for j in jobs]
             else:

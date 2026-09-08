@@ -1,6 +1,6 @@
 # Lightweight docking evidence
 
-Investigation started 7 September 2026 and completed 8 September local time. Directory names retain the starting date. See the [report](../../research/LIGHTWEIGHT_DOCKING_WORK_2026-09-07.md), [derived tables](tables.md), [figure](tradeoffs.png), and [source ledger](../../research/LIGHTWEIGHT_DOCKING_SOURCES_2026-09-07.json).
+Investigation started 7 September 2026 and completed 8 September local time. Directory names retain the starting date. See the [report](../../research/LIGHTWEIGHT_DOCKING_FINDINGS_2026-09-08.md), [derived tables](tables.md), [figure](tradeoffs.png), and [source ledger](../../research/LIGHTWEIGHT_DOCKING_SOURCES_2026-09-07.json).
 
 This is a research artifact, not deployed admission middleware. Molecular-kernel time is only a proxy for useful time; the current coarse bank fails scientific quality checks. Post-commit sampling limits acceptance of many incorrect records under stated assumptions. It does not prove fresh CPU expenditure or an exact global minimum.
 

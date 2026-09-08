@@ -1,6 +1,8 @@
 # Lightweight enforcement of useful docking work
 
-Investigation in progress, 2026-09-07. Measurements and conclusions are added as checks complete.
+**Completed findings, 8 September:** read [the final investigation and recommendation](LIGHTWEIGHT_DOCKING_FINDINGS_2026-09-08.md). It supersedes the work-in-progress notes below and includes the molecular quality controls, actual browser tiers, partial-work/cache attacks and remaining security assumptions.
+
+Historical checkpoint notes from 2026-09-07, retained for provenance. The completed report linked above contains the final measurements and conclusions.
 
 > Can we make attacker cost scale with the amount of assigned USEFUL docking work while keeping server verification much cheaper and keeping cryptographic/non-useful client overhead a minority of total work?
 

@@ -1,5 +1,7 @@
 # Bounded scientific search, succinct proofs and enforceable difficulty
 
+**Follow-up:** the user rejected proof overhead dominating useful computation. The [lightweight docking investigation](LIGHTWEIGHT_DOCKING_WORK_2026-09-07.md) evaluates independent molecular records, post-commit audits and disjoint multi-ligand campaigns. Its recommendation supersedes this report's implementation priority; the measurements below remain historical evidence.
+
 Investigation and measurements completed 7 September 2026. This report supersedes the next-step recommendation in the earlier [docking feasibility report](DOCKING_GROTH16_FEASIBILITY_2026-09-07.md). [Evidence, source code and reproduction](../evaluation/docking_ladder_2026-09-07/README.md) accompany the findings. Measurements, analytical results and unimplemented designs are distinguished below.
 
 ## Recommendation

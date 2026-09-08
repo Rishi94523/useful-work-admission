@@ -12,6 +12,9 @@ def replace(text,a,b):
     if a not in text:raise ValueError('Patch anchor absent: '+a[:80])
     return text.replace(a,b)
 def main():
+    global SRC
+    no_trace='--no-trace' in sys.argv
+    if no_trace:SRC=BASE/'source-no-trace'
     SRC.mkdir(parents=True,exist_ok=True);OUT.mkdir(parents=True,exist_ok=True)
     changes=[]
     for p in (OLD/'source/src/lib').iterdir():
@@ -37,10 +40,10 @@ def main():
             s=replace(s,'    int evalcount = 0;','    extern int run_eval_count, run_mc_steps;\n    extern std::vector<double> run_trace;\n    int evalcount = 0;')
             s=replace(s,'\t\toutput_type candidate = tmp;','\t\t++run_mc_steps;\n\t\toutput_type candidate = tmp;')
             s=replace(s,'\tVINA_CHECK(!out.empty());','\trun_eval_count += evalcount;\n\tVINA_CHECK(!out.empty());')
-            s=replace(s,'\t\tif(step == 0 || metropolis_accept','\t\trun_trace.push_back(candidate.e);\n\t\trun_trace.push_back(evalcount);\n\t\tif(step == 0 || metropolis_accept')
+            if not no_trace:s=replace(s,'\t\tif(step == 0 || metropolis_accept','\t\trun_trace.push_back(candidate.e);\n\t\trun_trace.push_back(evalcount);\n\t\tif(step == 0 || metropolis_accept')
         dest=SRC/p.name;dest.write_text(s)
         if s!=original:changes.append({'file':p.name,'upstream_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'patched_sha256':hashlib.sha256(dest.read_bytes()).hexdigest()})
-    native='--native' in sys.argv;build=BASE/('native-build' if native else 'wasm-build');build.mkdir(exist_ok=True)
+    native='--native' in sys.argv;build=BASE/('native-build' if native else 'wasm-build-no-trace' if no_trace else 'wasm-build');build.mkdir(exist_ok=True)
     env=os.environ.copy();env['EM_CONFIG']=str(SDK/'.emscripten');env['EM_CACHE']=str(SDK/'upstream/emscripten/cache')
     compiler=[shutil.which('g++')] if native else [sys.executable,str(SDK/'upstream/emscripten/em++.py')]
     flags=['-O3','-std=c++17','-DNDEBUG','-ffp-contract=off','-I'+str(SRC),'-I'+str(BOOST)]
@@ -54,10 +57,10 @@ def main():
             stamp.write_text(sig)
         print(p.name,flush=True);return obj
     with ThreadPoolExecutor(max_workers=3) as pool:objects=list(pool.map(compile_one,sources))
-    target=BASE/('whole_run.exe' if native else 'whole_run.mjs')
+    target=BASE/('whole_run.exe' if native else 'whole_run_no_trace.mjs' if no_trace else 'whole_run.mjs')
     link=['-static-libgcc','-static-libstdc++'] if native else ['--no-entry','-fexceptions','-sDISABLE_EXCEPTION_CATCHING=0','-sMODULARIZE=1','-sEXPORT_ES6=1','-sENVIRONMENT=web,worker,node','-sALLOW_MEMORY_GROWTH=1','-sSTACK_SIZE=1048576','-sEXPORTED_FUNCTIONS=["_wr_init","_wr_ligand","_wr_run","_wr_memory"]','-sEXPORTED_RUNTIME_METHODS=["ccall","FS"]']
     subprocess.run([*compiler,*flags,*map(str,objects),*link,'-o',str(target)],env=env,check=True)
     record={'engine':'Vina 1.2.7 pinned upstream; direct unit seed; sequential CPU1; no_refine=true','compiler':subprocess.check_output([*compiler,'--version'],env=env,text=True).splitlines()[0],'flags':flags,'link':link,'patches':changes,'output_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
     if not native:record['wasm_sha256']=hashlib.sha256(target.with_suffix('.wasm').read_bytes()).hexdigest()
-    (OUT/('build_native.json' if native else 'build_wasm.json')).write_text(json.dumps(record,indent=2)+'\n')
+    (OUT/('build_native.json' if native else 'build_wasm_no_trace.json' if no_trace else 'build_wasm.json')).write_text(json.dumps(record,indent=2)+'\n')
 if __name__=='__main__':main()

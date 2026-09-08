@@ -20,7 +20,7 @@ def main():
             for q in [1,4,8,16,32]:
                 if q>n:continue
                 p=math.comb(k,q)/math.comb(n,q) if k>=q else 0
-                bounds.append({'n':n,'computed':k,'q':q,'pass_probability':p,'expected_relative_work_per_accept':(k/n)/p if p else None,'scope':'Conditional distinct-unit model; no correct guessing/cache, equal run cost. Null when no acceptance possible.'})
+                bounds.append({'n':n,'computed':k,'q':q,'pass_probability':p,'expected_relative_work_per_accept':(k/n)/p if p else None,'scope':'Conditional distinct-unit model with NEW science per attempt; this expected-cost column does NOT apply to retries of the same partially cached cohort. See retry_attack.json for that correction. Equal run cost; null when no acceptance possible.'})
     plan=json.loads((OUT/'plan.json').read_text());bytes_raw=sum(x['bytes'] for x in plan['maps']);compressed=sum(len(gzip.compress((ROOT/x['path']).read_bytes(),mtime=0)) for x in plan['maps'])
     # Later work repairs false highly ranked records, but top-k alone cannot reveal
     # an honestly computed optimum deliberately hidden among poor claimed results.
@@ -31,6 +31,16 @@ def main():
                 if q+later>n:continue
                 aggregation.append({'total_units':n,'admission_audits':q,'later_distinct_replays':later,'probability_one_hidden_record_missed':1-(q+later)/n,'scope':'Analytical uniform sampling, one bad record; targeted validation of reported top-k gives no guarantee of selecting a hidden true optimum.'})
     output={'scope':'Warm molecular-kernel ratios exclude reusable preparation, network/DB and production queues. Full measured check includes ligand switching; no all-ligand server cache implemented.','tiers':rows,'bounds':bounds,'map_bytes':bytes_raw,'map_gzip_bytes':compressed,'bandwidth_projection_seconds':{'10Mbps':compressed*8/10e6,'100Mbps':compressed*8/100e6},'browser_init':b['initialization'],'attacks':a['attacks'],'all_honest_audits_pass':all(x['accepted'] for x in a['honest']),'tamper':a['tamper'],'aggregate_sampling':aggregation}
+    trace=json.loads((OUT/'trace_ablation.json').read_text())
+    output['trace_ablation']={'scope':trace['scope'],'groups':[]}
+    for cap in [4000,16000]:
+        group=[x for x in trace['rows'] if x['cap']==cap]
+        output['trace_ablation']['groups'].append({'cap':cap,'pairs':len(group),'all_pose_score_equal':all(x['pose_equal'] for x in group),'median_trace_to_plain_search_ratio':float(np.median([x['trace_search_ms']/x['plain_search_ms'] for x in group])),'aggregate_trace_to_plain_search_ratio':sum(x['trace_search_ms'] for x in group)/sum(x['plain_search_ms'] for x in group)})
+    output['scientific_repair']=a['scientific_repair']
+    output['honest_audit_transcripts']=len(a['honest'])
+    if (OUT/'retry_attack.json').exists():
+        retry=json.loads((OUT/'retry_attack.json').read_text())
+        output['retry_policy']={'scope':retry['scope'],'limitation':retry['limitation'],'runs':[{'guarded':x['guarded'],'attempts':len(x['attempts']),'accepted':x['accepted'],'additional_science_per_retry':x['additional_science_per_retry']} for x in retry['runs']]}
     (OUT/'economics.json').write_text(json.dumps(output,indent=2)+'\n')
     lines=['# Whole-run measured cost table','','Times are local milliseconds; client with preparation excludes one-time map/module startup and Internet transfer. Server full checking includes selected ligand preparation.','', '| Cap | Ligands × runs | Molecular ms | Warm client ms | Client + ligand setup ms | Warm molecular fraction | Commit ms | q=8 warm/full check ms |', '|---:|---:|---:|---:|---:|---:|---:|---:|']
     for x in rows:

@@ -46,6 +46,17 @@ for(const f of [.1,.25,.5,.75,.9,1]){
 const t=performance.now(),cached=await p.commit('new-credit-binding',base.units,base.records),commitMs=performance.now()-t;
 const draws=p.sample(n,8);ligandLoadMs=0;const cacheCheck=await p.audit(cached.binding,base.units,cached,draws,draws.map(i=>base.records[i]),replay);
 result.attacks.push({kind:'precomputed-scientific-credit',new_molecular_ms:0,client_commit_ms:commitMs,...cacheCheck});
+// Later top-one replay can repair a falsely promoted result; it cannot discover
+// a true best result deliberately hidden by a false high score.
+result.scientific_repair=[];
+for(const kind of ['false-top','hidden-best']){
+ const records=structuredClone(base.records),target=kind==='false-top'?0:base.records.reduce((best,r,i)=>r.score<base.records[best].score?i:best,0);
+ records[target].score=kind==='false-top'?-1000:1000;
+ const c=await p.commit('science-'+kind,base.units,records),draws=p.sample(n,8),admission=await p.audit(c.binding,base.units,c,draws,draws.map(i=>records[i]),replay);
+ let repairs=0;const start=performance.now(),selected=[];
+ for(const id of new Set(base.units.map(u=>u.ligand))){const indices=base.units.map((u,i)=>u.ligand===id?i:-1).filter(i=>i>=0),best=indices.reduce((b,i)=>records[i].score<records[b].score?i:b,indices[0]);selected.push(best);const checked=p.record(replay(base.units[best]));if(JSON.stringify(checked)!==JSON.stringify(records[best])){records[best]=checked;repairs++;}}
+ result.scientific_repair.push({kind,target,admission_accepted:admission.accepted,admission_draws:draws,later_selected:selected,later_replay_ms:performance.now()-start,repaired_records:repairs,hidden_or_false_record_remaining:JSON.stringify(records[target])!==JSON.stringify(base.records[target]),scope:'Actual replay of each ligand reported top-one. Does not certify the true global minimum.'});
+}
 // A lower search budget cannot substitute solely by being a valid pose.
 for(const cap of [100,1000]){
  const records=[];let cost=0;for(const u of base.units){const r=replay({...u,cap});cost+=r.search_ms;records.push(p.record(r));}

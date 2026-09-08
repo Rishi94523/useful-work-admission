@@ -1,0 +1,34 @@
+[
+  {
+    "file": "native.json.gz",
+    "raw_file": "native.json",
+    "raw_sha256": "959b2b9acf3ace041615952dfe6b7a8312af689ccd8ce3467a9e4a378cb05a4c",
+    "gzip_sha256": "5f3e94c9403c347385ee7cac3eadb6891b4c2fc2b62a35eb817b3bf81e801dad",
+    "raw_bytes": 13156306,
+    "gzip_bytes": 1673055
+  },
+  {
+    "file": "browser.json.gz",
+    "raw_file": "browser.json",
+    "raw_sha256": "01da2749a869f706f2467a567f1e8122773783093e75b6abee15996ad1ba990c",
+    "gzip_sha256": "e6a82f60b764d4e85914151d5ab8639594435376d21666c057239e31ba9c9e2f",
+    "raw_bytes": 35639066,
+    "gzip_bytes": 8121274
+  },
+  {
+    "file": "wasm_science.json.gz",
+    "raw_file": "wasm_science.json",
+    "raw_sha256": "96967682fc613f620a08d4624596a1b286c1d4dad1bd63ac6d54c07f2104e922",
+    "gzip_sha256": "73ae9704ccfb71404e202be361de1c772f9b78fc7979fc2296f3921c79a8ffe1",
+    "raw_bytes": 9317342,
+    "gzip_bytes": 1234679
+  },
+  {
+    "file": "wasm_control.json.gz",
+    "raw_file": "wasm_control.json",
+    "raw_sha256": "62d673bd6be93992d1ce7f1b5ca42d000d1eac0afde6ac1476aec09691867cfc",
+    "gzip_sha256": "f40929df01ad98099f1253f427c03a964491577f558d39caa05d23eaf9741e00",
+    "raw_bytes": 4353,
+    "gzip_bytes": 1479
+  }
+]

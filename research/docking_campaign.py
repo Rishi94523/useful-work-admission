@@ -72,7 +72,7 @@ class Campaign:
         with self.transaction() as db:
             self._expire(db,now)
             # Random selection is a prototype policy, not a scalable SQL plan.
-            candidates=db.execute("SELECT * FROM units WHERE campaign=? AND state IN ('UNASSIGNED','EXPIRED') ORDER BY RANDOM()",(campaign,)).fetchall()
+            candidates=self._lease_candidates(db,campaign)
             chosen=[];ligands=set()
             for row in candidates:
                 if row['ligand'] in ligands:continue
@@ -86,6 +86,12 @@ class Campaign:
             for row in chosen:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,row['task']))
         return payload
 
+    def _lease_candidates(self,db,campaign):
+        return db.execute("SELECT * FROM units WHERE campaign=? AND state IN ('UNASSIGNED','EXPIRED') ORDER BY RANDOM()",(campaign,)).fetchall()
+
+    def _before_challenge(self,db,tasks):
+        pass
+
     def _live(self,db,lease,owner,binding,status):
         now=self.clock();self._expire(db,now)
         row=db.execute('SELECT * FROM leases WHERE id=?',(lease,)).fetchone()
@@ -98,6 +104,7 @@ class Campaign:
         if not 1<=samples<=128:raise ValueError('Invalid sample budget')
         with self.transaction() as db:
             row=self._live(db,lease,owner,binding,'OPEN');tasks=json.loads(row['tasks'])
+            self._before_challenge(db,tasks)
             rng=secrets.SystemRandom()
             if weighted:
                 # Independent with-replacement cost-weighted samples. Cost is

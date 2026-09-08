@@ -23,6 +23,7 @@ def main():
         mol=Chem.Mol(ref)
         for i,p in enumerate(heavy(row['pose'])[order]):mol.GetConformer().SetAtomPosition(i,tuple(map(float,p)))
         return float(rdMolAlign.CalcRMS(mol,ref,maxMatches=10000))
+    if np.linalg.norm(xyz-initial[order],axis=1).max()>.01:raise ValueError('Reference atom mapping is not coordinate-preserving')
     for cap in caps:
         crystal=[{**r,'rmsd_A':rmsd(r)} for r in rows if r['id']=='crystal' and r['cap']==cap and r['ok']]
         for n in [1,2,4,8,16,32]:
@@ -40,7 +41,7 @@ def main():
             lo=[r for r in rows if r['id']==l['id'] and r['cap']==low and r['ok']];hi={r['seed']:r for r in rows if r['id']==l['id'] and r['cap']==high and r['ok']}
             for r in lo:
                 h=hi[r['seed']];total+=1;matches+=int(r['pose']==h['pose'] and r['score']==h['score']);scores_close+=int(abs(r['score']-h['score'])<.001);ratios.append(r['search_ms']/h['search_ms'])
-        shortcuts.append({'low_cap':low,'assigned_cap':high,'exact_records_matching':matches,'score_within_0_001':scores_close,'total':total,'median_cost_ratio':float(np.median(ratios))})
+        shortcuts.append({'low_cap':low,'assigned_cap':high,'exact_final_pose_score_matches':matches,'scope':'Final pose and score only; excludes committed trajectory trace.','score_within_0_001':scores_close,'total':total,'median_cost_ratio':float(np.median(ratios))})
     runtime=[]
     for cap in caps:
         times_by_ligand=[[x['search_ms'] for x in rows if x['id']==l['id'] and x['cap']==cap and x['ok']] for l in ligands]
@@ -51,10 +52,12 @@ def main():
                 for li in group:
                     total+=sum(rng.choice(times_by_ligand[li],r,replace=False))
                 samples.append(total)
-            runtime.append({'cap':cap,'ligands':j,'runs':r,'method':'Resampling sums of measured native runtimes; not new browser executions','mean_ms':float(np.mean(samples)),'cv':float(np.std(samples)/np.mean(samples)),'p05_p95_ms':np.percentile(samples,[5,95]).tolist()})
+            runtime.append({'cap':cap,'ligands':j,'runs':r,'method':f"Resampling sums of measured {'Node/WASM' if wasm else 'native'} runtimes; not new browser executions",'mean_ms':float(np.mean(samples)),'cv':float(np.std(samples)/np.mean(samples)),'p05_p95_ms':np.percentile(samples,[5,95]).tolist()})
     old=json.loads((ROOT/'docs/evaluation/docking_lightweight_2026-09-07/uncapped_controls.json').read_text())
     output={'scope':'One FA10 target, same 16 active/16 presumed-decoy selection, fixed input conformer with flexible torsions. Redocking uses known bound input conformation but random initial placement/torsions.','backend':'wasm' if wasm else 'native','quality':quality,'shortcut_comparison':shortcuts,'runtime_resampling':runtime,'historical_uncapped_e1':{'roc_auc':old['roc_auc'],'bootstrap95':old['auc_bootstrap_95'],'redocking_e4_rmsd_A':old['redocking']['vina_selected_symmetry_rmsd_A']},'eval_count_range':{str(cap):[min(r['evals'] for r in rows if r['cap']==cap and r['ok']),max(r['evals'] for r in rows if r['cap']==cap and r['ok'])] for cap in caps},'failures':[r for r in rows if not r['ok']]}
     if wasm and (OUT/'wasm_control.json').exists():
         control=json.loads((OUT/'wasm_control.json').read_text())['rows'][0];output['same_wasm_uncapped_e8_redocking']={**{k:v for k,v in control.items() if k!='pose'},'rmsd_A':rmsd(control)}
+    if (OUT/'stock_control.json').exists():
+        control=json.loads((OUT/'stock_control.json').read_text());output['stock_default_refinement_e8_redocking']={'score':control['score'],'wall_ms':control['wall_ms'],'rmsd_A':rmsd(control)}
     (OUT/('science_wasm_summary.json' if wasm else 'science_summary.json')).write_text(json.dumps(output,indent=2)+'\n');print(json.dumps([{k:r[k] for k in ['cap','runs','roc_auc','redocking_selected_rmsd_A']} for r in quality]))
 if __name__=='__main__':main()

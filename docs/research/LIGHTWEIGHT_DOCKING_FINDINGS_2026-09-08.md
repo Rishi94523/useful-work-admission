@@ -1,5 +1,7 @@
 # Lightweight docking: measured findings and protocol decision
 
+Follow-up: the [completed whole-run Vina investigation](WHOLE_RUN_DOCKING_2026-09-08.md) replaces the coarse-bank next-step recommendation with actual independently seeded flexible searches, replay audits, preparation economics and a partial-cache retry attack. The measurements below remain the historical rigid-bank baseline.
+
 Investigation completed 8 September 2026, following the [initial checkpoint](LIGHTWEIGHT_DOCKING_WORK_2026-09-07.md). [Evidence and reproduction](../evaluation/docking_lightweight_2026-09-07/README.md), [all timing tables](../evaluation/docking_lightweight_2026-09-07/tables.md), [source ledger](LIGHTWEIGHT_DOCKING_SOURCES_2026-09-07.json). Directory names retain the starting date.
 
 > Can we make attacker cost scale with the amount of assigned USEFUL docking work while keeping server verification much cheaper and keeping cryptographic/non-useful client overhead a minority of total work?

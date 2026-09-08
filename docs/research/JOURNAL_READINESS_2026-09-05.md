@@ -6,7 +6,13 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: useful-work enforcement without full Groth16, 8 September
+## Latest update: whole-run Vina auditing, 8 September
+
+The [completed independent-run investigation](WHOLE_RUN_DOCKING_2026-09-08.md) replaces the rigid-bank recommendation below. Actual flexible Vina runs, post-commit complete-run replay, trace binding and one-use precomputed scientific credits are implemented. All 46 honest audit transcripts passed. Warm client molecular fractions are 94.1–99.2%, but the four requirements are not satisfied together: bounded WASM redocking remains at least 3.52 Å versus stock Vina 0.48 Å; the 256-run warm molecular ratio of 14.7× falls to 2.08× including ligand setup on both sides; first initialization is 11.04 seconds with a large memory footprint.
+
+The investigation also demonstrates a partial-cache retry attack and adds a global three-challenge cap per scientific range. This limits repeated chances across identities but creates work-pool exhaustion and recovery costs. Historical precomputation is accepted as one-use scientific credit, not misclassified as fresh CPU work. Keep whole-run auditing as a research baseline; test stronger scientifically justified units and reusable preparation before claiming journal readiness. No novel security contribution or deployed admission system is established. Human feedback and Cloudflare remain deferred. Both research questions are preserved below/above.
+
+## Previous update: useful-work enforcement without full Groth16, 8 September
 
 > Can we make attacker cost scale with the amount of assigned USEFUL docking work while keeping server verification much cheaper and keeping cryptographic/non-useful client overhead a minority of total work?
 

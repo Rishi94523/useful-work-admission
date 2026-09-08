@@ -17,8 +17,10 @@ try:
  with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as d:
   c=WholeRunCampaign(Path(d)/'credits.sqlite')
   for l in plan['ligands'][:4]:c.register('fa10',engine,receptor,l['id'],l['input_sha256'],'fixed-maps30A',0,4,4000,4*l['heavy_atoms'])
+  future_units=[{'ligand':l['id'],'input':l['input_sha256'],'seed':104729+13007*i,'cap':4000,'engine':engine,'run':i} for l in plan['ligands'][:4] for i in range(4)]
+  precomputed=call({'mode':'precompute','units':future_units})
   t=time.perf_counter();lease=c.lease('fa10','research-worker',jobs=4,ttl=600);leaseMs=(time.perf_counter()-t)*1000;units=c.units(lease)
-  computed=call({'mode':'compute','units':units,'binding':lease['binding']});root=computed['commitment']['root']
+  computed=call({'mode':'recommit','units':units,'binding':lease['binding']});root=computed['commitment']['root']
   t=time.perf_counter();challenge=c.commit(lease['lease'],'research-worker',lease['binding'],root,samples=4);challengeMs=(time.perf_counter()-t)*1000
   checked=call({'mode':'audit','draws':c.flat_draws(lease,challenge)});assert checked['accepted']
   t=time.perf_counter();c.finish(lease['lease'],'research-worker',lease['binding'],challenge['id'],root,True,{'scientific_status':'provisional','credit_kind':'previously-uncompleted-work'});creditMs=(time.perf_counter()-t)*1000
@@ -27,6 +29,6 @@ try:
   except LookupError:exhausted=True
   try:c.finish(lease['lease'],'research-worker',lease['binding'],challenge['id'],root,True,{})
   except ValueError:replayed=True
-  assert exhausted and replayed;evidence['bundles'].append({'jobs':4,'runs_per_job':4,'lease_ms':leaseMs,'challenge_ms':challengeMs,'credit_ms':creditMs,'compute_ms':computed['compute_ms'],'audit':checked,'completed_pool_exhausted':exhausted,'duplicate_credit_rejected':replayed,'snapshot':c.snapshot()})
+  assert exhausted and replayed;evidence['bundles'].append({'jobs':4,'runs_per_job':4,'precomputed_before_lease':precomputed,'lease_ms':leaseMs,'challenge_ms':challengeMs,'credit_ms':creditMs,'post_issuance_compute_ms':computed['compute_ms'],'post_issuance_commit_ms':computed['commit_ms'],'audit':checked,'completed_pool_exhausted':exhausted,'duplicate_credit_rejected':replayed,'snapshot':c.snapshot()})
 finally:p.stdin.write('{"mode":"quit"}\n');p.stdin.flush();p.stdin.close();p.wait(timeout=10)
 (OUT/'integration.json').write_text(json.dumps(evidence,indent=2)+'\n');print(json.dumps(evidence))

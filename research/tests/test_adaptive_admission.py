@@ -55,5 +55,15 @@ class AdaptiveTests(unittest.TestCase):
         self.complete(self.c.request('test','a'),False)
         other=AdaptiveAdmission(self.c.path,clock=lambda:self.now[0])
         self.assertEqual(other.request('test','a')['tier'],'medium')
+    def test_trusted_stronger_audit_policy_is_bound_and_not_global(self):
+        strong=AdaptiveAdmission(self.c.path,clock=lambda:self.now[0],audit_samples={'high':27})
+        strong.risk_state('a')
+        with strong.transaction() as db:db.execute('UPDATE risk SET score=40 WHERE identity=?',('a',))
+        lease=strong.request('test','a');self.assertEqual(lease['q'],27)
+        with self.assertRaises(ValueError):strong.commit(lease['lease'],'a',lease['binding'],'a'*64,samples=8)
+        ch=strong.commit(lease['lease'],'a',lease['binding'],'a'*64)
+        self.assertEqual(len(strong.flat_draws(lease,ch)),27)
+        self.assertEqual(self.c.TIERS['high'][3],8)
+        with self.assertRaises(ValueError):AdaptiveAdmission(self.c.path,audit_samples={'high':0})
 
 if __name__=='__main__':unittest.main()

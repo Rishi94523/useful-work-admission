@@ -9,6 +9,8 @@
   "json_gzip_bytes": 1034865,
   "base64_binary_trace_json_bytes": 2567346,
   "base64_binary_trace_gzip_bytes": 1046948,
+  "energy_float64_counter_delta_json_bytes": 1870913,
+  "energy_float64_counter_delta_gzip_bytes": 834636,
   "lossless_roundtrips": 256,
   "attacks": [
     {

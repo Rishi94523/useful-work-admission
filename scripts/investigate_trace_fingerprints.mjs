@@ -16,6 +16,23 @@ const records=high.records,raw=p.encode(records),gz=gzipSync(raw),binary=[];
 // Exact IEEE754 encoding of the trace; no lossy energy quantization.
 for(const r of records){const buf=Buffer.alloc(r.trace.length*8);r.trace.forEach((v,i)=>buf.writeDoubleLE(v,i*8));const restored=Array.from({length:r.trace.length},(_,i)=>buf.readDoubleLE(i*8));assert.deepEqual(restored,r.trace);binary.push({score:r.score,pose:r.pose,trace:buf.toString('base64')});}
 const binaryJson=p.encode(binary),cases=[];
+// Vina's trace alternates float64 energy and cumulative integer eval count.
+// Preserve energy bits, delta-code only exact nonnegative integer counters.
+const compact=[];
+for(const r of records){
+ assert.equal(r.trace.length%2,0);const parts=[];let previous=0;
+ for(let i=0;i<r.trace.length;i+=2){
+  const energy=Buffer.alloc(8);energy.writeDoubleLE(r.trace[i]);parts.push(energy);
+  const count=r.trace[i+1];assert(Number.isSafeInteger(count)&&count>=previous);let delta=count-previous;previous=count;const bytes=[];
+  do{let b=delta%128;delta=Math.floor(delta/128);if(delta)b|=128;bytes.push(b);}while(delta);parts.push(Buffer.from(bytes));
+ }
+ const buf=Buffer.concat(parts),restored=[];let at=0,count=0;
+ while(at<buf.length){const energy=buf.readDoubleLE(at);at+=8;let delta=0,factor=1,byte;
+  do{byte=buf[at++];delta+=(byte&127)*factor;factor*=128;}while(byte&128);
+  count+=delta;restored.push(energy,count);
+ }
+ assert.deepEqual(restored,r.trace);compact.push({score:r.score,pose:r.pose,trace_pairs:r.trace.length/2,trace:buf.toString('base64')});
+}
 for(const kind of ['zero-trace','copied-other-seed','short-prefix-padding']){
  const forged=records.map((r,i)=>kind==='zero-trace'?{...r,trace:r.trace.map(()=>0)}:kind==='copied-other-seed'?records[(i+1)%records.length]:{...low.records[i],trace:[...low.records[i].trace,...Array(Math.max(0,r.trace.length-low.records[i].trace.length)).fill(0)]});
  const c=await p.commit('new-binding',high.units,forged);await p.validateCommit('new-binding',high.units,c);
@@ -27,5 +44,5 @@ const field=2305843009213693951n,alpha=1234567n;
 const sum=xs=>xs.reduce((s,x,i)=>(s+BigInt(x)*(i===0?1n:alpha))%field,0n);
 // A public linear checksum can be preserved by compensating alterations.
 const original=[3n,7n],forged=[(3n+alpha)%field,6n];assert.equal(sum(original),sum(forged));
-const output={scope:'Compression and counterexamples use archived actual Vina records. No new Vina timing, no general cryptographic construction, no novelty claim.',records:records.length,short_run_prefix_matches:prefixes,exact_short_full_records:exact,short_final_pose_score_matches:sameFinal,distinct_cross_seed_trace_hashes:distinct.size,json_bytes:raw.length,json_gzip_bytes:gz.length,base64_binary_trace_json_bytes:binaryJson.length,base64_binary_trace_gzip_bytes:gzipSync(binaryJson).length,lossless_roundtrips:records.length,attacks:cases,public_linear_checksum_collision:{field:field.toString(),alpha:alpha.toString(),original:original.map(String),forged:forged.map(String),checksum:sum(original).toString()},block_splicing_model:[16,64,256].map(blocks=>({blocks,q:4,invalid_boundaries:1,skip_fraction:(blocks-1)/blocks,pass_probability:1-4/blocks,scope:'Theoretical checkpoint-splicing counterexample: cached valid suffix with one invalid transition from seeded prefix. Assumes local checks trust unverified committed entry state. Not an implemented Vina checkpoint attack.'}))};
+const output={scope:'Compression and counterexamples use archived actual Vina records. No new Vina timing, no general cryptographic construction, no novelty claim.',records:records.length,short_run_prefix_matches:prefixes,exact_short_full_records:exact,short_final_pose_score_matches:sameFinal,distinct_cross_seed_trace_hashes:distinct.size,json_bytes:raw.length,json_gzip_bytes:gz.length,base64_binary_trace_json_bytes:binaryJson.length,base64_binary_trace_gzip_bytes:gzipSync(binaryJson).length,energy_float64_counter_delta_json_bytes:p.encode(compact).length,energy_float64_counter_delta_gzip_bytes:gzipSync(p.encode(compact)).length,lossless_roundtrips:records.length,attacks:cases,public_linear_checksum_collision:{field:field.toString(),alpha:alpha.toString(),original:original.map(String),forged:forged.map(String),checksum:sum(original).toString()},block_splicing_model:[16,64,256].map(blocks=>({blocks,q:4,invalid_boundaries:1,skip_fraction:(blocks-1)/blocks,pass_probability:1-4/blocks,scope:'Theoretical checkpoint-splicing counterexample: cached valid suffix with one invalid transition from seeded prefix. Assumes local checks trust unverified committed entry state. Not an implemented Vina checkpoint attack.'}))};
 await writeFile('docs/evaluation/adaptive_docking_2026-09-08/fingerprints.json',JSON.stringify(output,null,2)+'\n');console.log(output);

@@ -16,6 +16,10 @@ For T allowed challenges against a fixed incomplete cache, a union bound gives a
 
 The low tier audits 4/16 units; the medium and high tiers audit 8/64 and 8/256. The asymmetry comes principally from increasing independently auditable unit count while retaining q, not from constant-time verification of a longer trajectory. Increasing the per-run cap also increases the server cost of replaying that run. Even at fixed q, parsing commitments, manifests and the present linear leaf list grows with N. Network ingress, finite queues and identity policies remain conventional outer controls.
 
+The stronger high-tier follow-up exposes a trusted q27 option, with q8 defaults retained for reproducibility. For230 correct records among256, q8 passes with probability0.419199, q27 with0.0469365, q40 with0.00936234, and q57 with0.000965814. Actual three-bundle replay medians grow from1.278 s atq8 to4.095/6.552/8.738 s atq27/40/57 including local IPC but excluding newly measured database work. This is a measurable confidence/cost tradeoff, not nearly constant verification as confidence increases.
+
+Even q27 misses a single incorrect record with probability229/256=89.453%. That is compatible with discouraging a large fractional omission and incompatible with claiming that every accepted scientific result is true. In the favorable homogeneous fixed-cache model with at most three attempts, q27's optimal historical work per expected credit is0.997264 of full completion (255/256 correct records). This analytic sensitivity does not cover heterogeneous costs, adaptive caches or a cheaper correct-output algorithm.
+
 ## A. Core useful-work questions
 
 | Attack | Current treatment | What remains unresolved |
@@ -28,7 +32,7 @@ The low tier audits 4/16 units; the medium and high tiers audit 8/64 and 8/256. 
 | Share a result cache | Previously credited canonical ranges cannot earn another credit | Pooling legitimately uncredited work is allowed; identity churn remains an outer issue |
 | Reuse grids/scoring tables | Allowed and measured separately; cache experiment preserves the search relation | Attackers receive the same savings; redundant preparation cannot be counted as enforced useful work |
 | Faster native/GPU/optimized solver | Treat as implementation/hardware advantage, not cheating by itself | GPU docking software is not automatically compatible with this exact seeded trace relation |
-| Bias scientific output | Provisional storage; later replay/replication and top-k checks | Top-k validation repairs false winners, but cannot discover a concealed better unsampled pose by itself |
+| Bias scientific output | Admission records are marked provisional; later replay/replication and top-k checks are proposed | Durable output ingestion and aggregate repair are not integrated; top-k validation alone cannot discover a concealed better unsampled pose |
 
 Registration is trusted. The current identity includes the engine version and input hashes; operators must not manufacture new scientific credit by relabeling equivalent engines, alternate file encodings or already explored conformers. The present single-database tests establish uniqueness within the registered canonical domain, not global chemical equivalence across independent services. Experimental optimized-engine benchmarks use separate databases and do not mint production credits.
 
@@ -42,7 +46,9 @@ The local research harness invokes trusted verification and credit-finalization 
 
 The defensible interpretation is: a previously uncredited canonical assignment can consume at most one admission credit in the shared ledger after the prescribed probabilistic audit. Work may predate the request. Previously performed useful work does not become free merely because it is retrieved from cache, but marginal retrieval cost is low. A pool can spread historical computation across members; it cannot multiply ledger credits for the same completed range. This property depends on correct canonicalization and a shared atomic ledger.
 
-A accepted bundle is **probabilistically audited**, not fully validated scientific truth. Completed accounting coverage can therefore include incorrect records after a lucky attack. Later repair is a separate scientific expense and must not issue a second access credit. To consume every output as trusted science would require broader validation, redundancy, or an explicit contamination model. If replication is performed by untrusted contributors, two matching colluders are not independent evidence; trusted replay or a defensible assignment/adversary model is necessary.
+An accepted bundle is **probabilistically audited**, not fully validated scientific truth. Completed accounting coverage can therefore include incorrect records after a lucky attack. Later repair is a separate scientific expense and must not issue a second access credit. To consume every output as trusted science would require broader validation, redundancy, or an explicit contamination model. If replication is performed by untrusted contributors, two matching colluders are not independent evidence; trusted replay or a defensible assignment/adversary model is necessary.
+
+The local admission harness receives full client records in memory, retains metrics and stores provisional verdict metadata in SQLite. It does not yet implement durable scientific ingestion-before-credit or a downstream scientific consumer. The separate quality benchmarks archive their poses. A production work-credit claim must make output availability durable before finalizing credit, define recovery after failed audits, and account for later repair cost; the current admission timing excludes those unimplemented stages.
 
 ## Specialized verification candidates
 

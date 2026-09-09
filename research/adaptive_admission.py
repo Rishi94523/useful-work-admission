@@ -18,7 +18,19 @@ class AdaptiveAdmission(WholeRunCampaign):
     TIERS = {'low': (1, 16, 4000, 4), 'medium': (4, 16, 16000, 8),
              'high': (16, 16, 16000, 8)}
 
-    def __init__(self, path, clock=None, global_burst=32, global_rate=2):
+    def __init__(self, path, clock=None, global_burst=32, global_rate=2, audit_samples=None):
+        # Trusted deployment policy only. Existing leases retain their stored q;
+        # client commit arguments cannot override it. Defaults reproduce v2.
+        self.TIERS = dict(type(self).TIERS)
+        if audit_samples is not None:
+            if not isinstance(audit_samples, dict) or any(t not in self.TIERS for t in audit_samples):
+                raise ValueError('Invalid trusted audit configuration')
+            for tier, q in audit_samples.items():
+                jobs, runs, cap, _ = self.TIERS[tier]
+                if type(q) is not int or not 1 <= q <= jobs*runs:
+                    raise ValueError('Invalid trusted audit sample count')
+                self.TIERS[tier] = jobs, runs, cap, q
+            self.VERSION = type(self).VERSION + '/q=' + ','.join(str(self.TIERS[t][3]) for t in ['low','medium','high'])
         super().__init__(path, clock)
         self.global_burst, self.global_rate = global_burst, global_rate
         with self.transaction() as db:

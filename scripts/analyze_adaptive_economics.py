@@ -41,8 +41,18 @@ for filename in ['adaptive_loop.json','adaptive_loop_calibrated.json']:
 cached=None
 if (OUT/'cached_tier_economics.json').exists():
  c=json.loads((OUT/'cached_tier_economics.json').read_text());cached={'scope':c['scope'],'client_init':c['client_init'],'server_init':c['server_init'],'tiers':summarize_rows(c['rows'])}
+confidence=None
+if (OUT/'audit_confidence.json').exists():
+ data=json.loads((OUT/'audit_confidence.json').read_text());sweep=[];db=cached['tiers']['high']['database_and_scheduler_total_ms']['median'] if cached else 0
+ for q in [8,16,27,40,57]:
+  entries=[(r,a) for r in data['rows'] for a in r['audits'] if a['q']==q]
+  sweep.append({'q':q,'repetitions':len(entries),'N':256,'correct_records_if_90_percent':230,'pass_probability_90_percent':math.comb(230,q)/math.comb(256,q),'client_total_ms':stats([r['client']['total_ms'] for r,a in entries]),'server_molecular_ms':stats([a['server']['molecular_ms'] for r,a in entries]),'server_pipeline_ms':stats([a['server']['total_ms'] for r,a in entries]),'server_ipc_wall_ms':stats([a['server_ipc_wall_ms'] for r,a in entries]),'opening_bytes':stats([a['server']['opening_bytes'] for r,a in entries]),'client_to_server_ipc_ratio':stats([r['client']['total_ms']/a['server_ipc_wall_ms'] for r,a in entries]),'client_to_server_ratio_with_historical_db_allowance':stats([r['client']['total_ms']/(a['server_ipc_wall_ms']+db) for r,a in entries])})
+ for row in sweep:
+  faster=cached['tiers']['high']['client_total_ms']['median'] if cached else None
+  row['historical_faster_client_sensitivity']={'scope':'Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.','client_ms':faster,'server_plus_historical_db_ms':row['server_ipc_wall_ms']['median']+db,'client_to_server_ratio':faster/(row['server_ipc_wall_ms']['median']+db) if faster else None}
+ confidence={'scope':data['scope'],'client_init':data['client_init'],'server_init':data['server_init'],'db_allowance_scope':'The extra DB allowance reuses the separately observed high-tier median; it is not a fresh DB measurement in this sweep.','db_allowance_ms':db,'rows':sweep}
 simulations={}
-for filename in ['policy_simulation.json','policy_simulation_calibrated.json']:
+for filename in ['policy_simulation.json','policy_simulation_calibrated.json','policy_simulation_stronger_audit.json']:
  if not (OUT/filename).exists():continue
  d=json.loads((OUT/filename).read_text());groups={}
  for s in d['scenarios']:
@@ -53,20 +63,26 @@ for filename in ['policy_simulation.json','policy_simulation_calibrated.json']:
   summaries.append({'scenario':key,'trajectories':len(g),'accepts':accepts,'challenged_attempts':attempts,'trajectories_with_credit':sum(s['accepted']>0 for s in g),'modeled_molecular_ms':cost,'modeled_ms_per_credit':cost/accepts if accepts else None,'terminal_states':dict(Counter(s['rows'][-1]['status'] for s in g))})
  simulations[filename]={'scope':d['scope'],'summaries':summaries}
 bounds=[];rng=__import__('random').Random(104729)
-for n,q in [(16,4),(64,8),(256,8)]:
+for n,q in [(16,4),(64,8),(256,8),(256,27)]:
  for f in [.1,.25,.5,.75,.9]:
   k=math.floor(n*f);p=math.comb(k,q)/math.comb(n,q) if k>=q else 0;trials=20000;passed=sum(all(i<k for i in rng.sample(range(n),q)) for _ in range(trials))
   bounds.append({'N':n,'q':q,'requested_fraction':f,'k':k,'record_fraction':k/n,'theoretical_pass':p,'uniform_sample_simulation_trials':trials,'passes':passed,'simulated_pass':passed/trials,'wilson95':rate_interval(passed,trials)})
 cache_model=[]
-for n,q in [(16,4),(64,8),(256,8)]:
+for n,q in [(16,4),(64,8),(256,8),(256,27)]:
  ratios=[]
  for k in range(q,n+1):
-  p=math.comb(k,q)/math.comb(n,q);any_pass=1-(1-p)**3
+  p=math.comb(k,q)/math.comb(n,q);any_pass=1 if p==1 else -math.expm1(3*math.log1p(-p))
   ratios.append((k/n/any_pass,k,p,any_pass))
  best=min(ratios);cache_model.append({'N':n,'q':q,'challenges':3,'best_fraction':best[1]/n,'best_correct_records':best[1],'single_pass':best[2],'any_pass':best[3],'historical_work_per_expected_credit_relative_to_full':best[0]})
 oldplan=json.loads(Path('docs/evaluation/docking_whole_runs_2026-09-08/plan.json').read_text());assets=[]
+oldbrowser=json.loads(Path('docs/evaluation/docking_whole_runs_2026-09-08/browser.json').read_text());heterogeneous=[]
+for r in oldbrowser['rows']:
+ if r['cap']!=16000 or r['ligands']!=16 or r['runs']!=16:continue
+ costs=sorted(t['search_ms'] for t in r['times']);n=len(costs)
+ for f in [.1,.25,.5,.75,.9]:
+  k=math.floor(n*f);heterogeneous.append({'repetition':r['rep'],'N':n,'k':k,'record_fraction':k/n,'fraction_of_measured_search_cost':sum(costs[:k])/sum(costs),'q':8,'pass_probability':math.comb(k,8)/math.comb(n,8) if k>=8 else 0})
 for p in [Path(m['path']) for m in oldplan['maps']]+[Path('tmp/docking-runs/whole_run.wasm'),Path('tmp/docking-runs/whole_run_type_cache.wasm')]:
  if p.exists():
   b=p.read_bytes();assets.append({'path':p.as_posix(),'bytes':len(b),'gzip_bytes':len(gzip.compress(b,mtime=0)),'sha256':hashlib.sha256(b).hexdigest()})
-out={'scope':'Observed complete local runs, historical runtime model simulations and analytic bounds kept separate. Server full ratios include measured local IPC and SQLite transactions where available; internet RTT/mobile/network throughput not measured. Memory is WASM heap capacity, not full browser RSS. Risk timing includes its SQL, so no unsupported pure CPU/DB split.','live':live,'shared_type_cache':cached,'policy_simulations':simulations,'audit_bounds':bounds,'fixed_cache_model':{'scope':'Analytic favorable-to-attacker fixed homogeneous tier/cache, three independent challenges, one possible credit. Ignores new-tier cost and cooldown. Not an implemented adaptive attack or cryptographic lower bound. Small savings can remain even with finite retries.','rows':cache_model},'cold_assets':assets}
+out={'scope':'Observed complete local runs, historical runtime model simulations and analytic bounds kept separate. Server full ratios include measured local IPC and SQLite transactions where available; internet RTT/mobile/network throughput not measured. Memory is WASM heap capacity, not full browser RSS. Risk timing includes its SQL, so no unsupported pure CPU/DB split.','live':live,'shared_type_cache':cached,'confidence_sweep':confidence,'policy_simulations':simulations,'audit_bounds':bounds,'fixed_cache_model':{'scope':'Analytic favorable-to-attacker fixed homogeneous tier/cache, three independent challenges, one possible credit. Ignores new-tier cost and cooldown. Not an implemented adaptive attack or cryptographic lower bound. Small savings can remain even with finite retries.','rows':cache_model},'cheapest_records_sensitivity':{'scope':'Oracle cheapest-record selection on archived measured per-run Chrome times. Descriptive sensitivity, not a new attack execution; obtaining perfect future cost rankings is not free. Demonstrates why a correct-record fraction is not a CPU fraction.','rows':heterogeneous},'cold_assets':assets}
 (OUT/'economics_summary.json').write_text(json.dumps(out,indent=2)+'\n');print('Wrote economics_summary.json')

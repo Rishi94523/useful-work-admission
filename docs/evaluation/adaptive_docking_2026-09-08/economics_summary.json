@@ -2847,6 +2847,336 @@
       }
     }
   },
+  "confidence_sweep": {
+    "scope": "Actual committed 256-run Chrome bundles with independent complete-run Node audits at q8/16/27/40/57. Three bundles, rotating q order. No extra work credits, no stateful risk/DB stage in this diagnostic. Server IPC is local; cold init separate.",
+    "client_init": {
+      "ready": true,
+      "fetch_ms": 356.69999999925494,
+      "init_ms": 19530,
+      "heap_bytes": 192872448,
+      "browser": "152.0.7977.83",
+      "worker": true
+    },
+    "server_init": {
+      "ready": true,
+      "init_ms": 16907.7782,
+      "heap_bytes": 192872448
+    },
+    "db_allowance_scope": "The extra DB allowance reuses the separately observed high-tier median; it is not a fresh DB measurement in this sweep.",
+    "db_allowance_ms": 41.11849999753758,
+    "rows": [
+      {
+        "q": 8,
+        "repetitions": 3,
+        "N": 256,
+        "correct_records_if_90_percent": 230,
+        "pass_probability_90_percent": 0.41919863480458325,
+        "client_total_ms": {
+          "n": 3,
+          "median": 42492.599999997765,
+          "min": 40885.0,
+          "max": 44007.699999999255,
+          "mean": 42461.76666666567
+        },
+        "server_molecular_ms": {
+          "n": 3,
+          "median": 1237.796,
+          "min": 1007.2244,
+          "max": 1326.7312,
+          "mean": 1190.5838666666666
+        },
+        "server_pipeline_ms": {
+          "n": 3,
+          "median": 1269.0470000000205,
+          "min": 1034.9915000000037,
+          "max": 1503.1266000000032,
+          "mean": 1269.0550333333424
+        },
+        "server_ipc_wall_ms": {
+          "n": 3,
+          "median": 1278.276699998969,
+          "min": 1043.0716000009852,
+          "max": 1514.0680999975302,
+          "mean": 1278.4721333324949
+        },
+        "opening_bytes": {
+          "n": 3,
+          "median": 87816.0,
+          "min": 83647.0,
+          "max": 90129.0,
+          "mean": 87197.33333333333
+        },
+        "client_to_server_ipc_ratio": {
+          "n": 3,
+          "median": 31.984467838640082,
+          "min": 29.065865663553073,
+          "max": 40.7379512585307,
+          "mean": 33.92942825357462
+        },
+        "client_to_server_ratio_with_historical_db_allowance": {
+          "n": 3,
+          "median": 30.987682841432388,
+          "min": 28.29737601914704,
+          "max": 39.19294227096859,
+          "mean": 32.82600037718267
+        },
+        "historical_faster_client_sensitivity": {
+          "scope": "Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.",
+          "client_ms": 20983.5,
+          "server_plus_historical_db_ms": 1319.3951999965066,
+          "client_to_server_ratio": 15.903877776768901
+        }
+      },
+      {
+        "q": 16,
+        "repetitions": 3,
+        "N": 256,
+        "correct_records_if_90_percent": 230,
+        "pass_probability_90_percent": 0.17051477169570128,
+        "client_total_ms": {
+          "n": 3,
+          "median": 42492.599999997765,
+          "min": 40885.0,
+          "max": 44007.699999999255,
+          "mean": 42461.76666666567
+        },
+        "server_molecular_ms": {
+          "n": 3,
+          "median": 2653.1711,
+          "min": 2267.4007,
+          "max": 2659.659,
+          "mean": 2526.7436000000002
+        },
+        "server_pipeline_ms": {
+          "n": 3,
+          "median": 2710.7073999999993,
+          "min": 2463.6976999999897,
+          "max": 2719.519099999976,
+          "mean": 2631.308066666655
+        },
+        "server_ipc_wall_ms": {
+          "n": 3,
+          "median": 2720.873099999153,
+          "min": 2476.0772999979963,
+          "max": 2730.679500000406,
+          "mean": 2642.543299999185
+        },
+        "opening_bytes": {
+          "n": 3,
+          "median": 174808.0,
+          "min": 162974.0,
+          "max": 177372.0,
+          "mean": 171718.0
+        },
+        "client_to_server_ipc_ratio": {
+          "n": 3,
+          "median": 15.617266384092295,
+          "min": 14.972463813491816,
+          "max": 17.773152720246202,
+          "mean": 16.120960972610103
+        },
+        "client_to_server_ratio_with_historical_db_allowance": {
+          "n": 3,
+          "median": 15.384768005829082,
+          "min": 14.750353380740709,
+          "max": 17.4828275178583,
+          "mean": 15.872649634809363
+        },
+        "historical_faster_client_sensitivity": {
+          "scope": "Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.",
+          "client_ms": 20983.5,
+          "server_plus_historical_db_ms": 2761.9915999966906,
+          "client_to_server_ratio": 7.597235270384291
+        }
+      },
+      {
+        "q": 27,
+        "repetitions": 3,
+        "N": 256,
+        "correct_records_if_90_percent": 230,
+        "pass_probability_90_percent": 0.046936458842692784,
+        "client_total_ms": {
+          "n": 3,
+          "median": 42492.599999997765,
+          "min": 40885.0,
+          "max": 44007.699999999255,
+          "mean": 42461.76666666567
+        },
+        "server_molecular_ms": {
+          "n": 3,
+          "median": 3965.3009,
+          "min": 3871.5246999999995,
+          "max": 4168.732,
+          "mean": 4001.852533333333
+        },
+        "server_pipeline_ms": {
+          "n": 3,
+          "median": 4074.5399999999936,
+          "min": 3967.5424999999814,
+          "max": 4270.054000000004,
+          "mean": 4104.045499999993
+        },
+        "server_ipc_wall_ms": {
+          "n": 3,
+          "median": 4094.878299998527,
+          "min": 3985.4301000013947,
+          "max": 4285.725300000195,
+          "mean": 4122.011233333372
+        },
+        "opening_bytes": {
+          "n": 3,
+          "median": 294822.0,
+          "min": 290393.0,
+          "max": 297254.0,
+          "mean": 294156.3333333333
+        },
+        "client_to_server_ipc_ratio": {
+          "n": 3,
+          "median": 10.66198601751487,
+          "min": 9.539808816024243,
+          "max": 10.747010478923167,
+          "mean": 10.316268437487427
+        },
+        "client_to_server_ratio_with_historical_db_allowance": {
+          "n": 3,
+          "median": 10.553107442937366,
+          "min": 9.449150903025764,
+          "max": 10.640167806716178,
+          "mean": 10.214142050893102
+        },
+        "historical_faster_client_sensitivity": {
+          "scope": "Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.",
+          "client_ms": 20983.5,
+          "server_plus_historical_db_ms": 4135.9967999960645,
+          "client_to_server_ratio": 5.073384002623011
+        }
+      },
+      {
+        "q": 40,
+        "repetitions": 3,
+        "N": 256,
+        "correct_records_if_90_percent": 230,
+        "pass_probability_90_percent": 0.009362337552938032,
+        "client_total_ms": {
+          "n": 3,
+          "median": 42492.599999997765,
+          "min": 40885.0,
+          "max": 44007.699999999255,
+          "mean": 42461.76666666567
+        },
+        "server_molecular_ms": {
+          "n": 3,
+          "median": 6375.6233999999995,
+          "min": 6072.8952,
+          "max": 6402.908800000001,
+          "mean": 6283.809133333333
+        },
+        "server_pipeline_ms": {
+          "n": 3,
+          "median": 6527.54760000002,
+          "min": 6217.541700000002,
+          "max": 6561.3168000000005,
+          "mean": 6435.468700000008
+        },
+        "server_ipc_wall_ms": {
+          "n": 3,
+          "median": 6551.546299997426,
+          "min": 6242.085900001257,
+          "max": 6591.711599998234,
+          "mean": 6461.781266665639
+        },
+        "opening_bytes": {
+          "n": 3,
+          "median": 434296.0,
+          "min": 432086.0,
+          "max": 449675.0,
+          "mean": 438685.6666666667
+        },
+        "client_to_server_ipc_ratio": {
+          "n": 3,
+          "median": 6.549893842375955,
+          "min": 6.485888682495377,
+          "max": 6.6762174485927215,
+          "mean": 6.570666657821351
+        },
+        "client_to_server_ratio_with_historical_db_allowance": {
+          "n": 3,
+          "median": 6.50703007529213,
+          "min": 6.445436145946663,
+          "max": 6.6348299800453665,
+          "mean": 6.529098733761386
+        },
+        "historical_faster_client_sensitivity": {
+          "scope": "Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.",
+          "client_ms": 20983.5,
+          "server_plus_historical_db_ms": 6592.664799994964,
+          "client_to_server_ratio": 3.182855588231337
+        }
+      },
+      {
+        "q": 57,
+        "repetitions": 3,
+        "N": 256,
+        "correct_records_if_90_percent": 230,
+        "pass_probability_90_percent": 0.0009658142287671239,
+        "client_total_ms": {
+          "n": 3,
+          "median": 42492.599999997765,
+          "min": 40885.0,
+          "max": 44007.699999999255,
+          "mean": 42461.76666666567
+        },
+        "server_molecular_ms": {
+          "n": 3,
+          "median": 8505.155699999998,
+          "min": 8468.8281,
+          "max": 8700.496699999998,
+          "mean": 8558.160166666665
+        },
+        "server_pipeline_ms": {
+          "n": 3,
+          "median": 8705.445899999992,
+          "min": 8670.708799999993,
+          "max": 8903.326799999995,
+          "mean": 8759.82716666666
+        },
+        "server_ipc_wall_ms": {
+          "n": 3,
+          "median": 8738.311299999623,
+          "min": 8703.532800001994,
+          "max": 8936.21979999807,
+          "mean": 8792.687966666563
+        },
+        "opening_bytes": {
+          "n": 3,
+          "median": 626868.0,
+          "min": 611639.0,
+          "max": 630057.0,
+          "mean": 622854.6666666666
+        },
+        "client_to_server_ipc_ratio": {
+          "n": 3,
+          "median": 4.882224376748259,
+          "min": 4.678821639142309,
+          "max": 4.924643863393865,
+          "mean": 4.8285632930948115
+        },
+        "client_to_server_ratio_with_historical_db_allowance": {
+          "n": 3,
+          "median": 4.8592675159042695,
+          "min": 4.656908356396132,
+          "max": 4.902087737968032,
+          "mean": 4.806087870089478
+        },
+        "historical_faster_client_sensitivity": {
+          "scope": "Cross-experiment sensitivity, NOT a simultaneous measured ratio. Earlier Chrome client was faster; reason is unproven.",
+          "client_ms": 20983.5,
+          "server_plus_historical_db_ms": 8779.42979999716,
+          "client_to_server_ratio": 2.3900754921471994
+        }
+      }
+    ]
+  },
   "policy_simulations": {
     "policy_simulation.json": {
       "scope": "Actual SQLite policy, scheduler and CSPRNG challenges. Molecular outcomes use known masks; timing costs are scaled from historical browser tier medians, NOT new Vina runs. High-rate valid traffic models precomputed uncredited results or accelerated clients; zero post-request compute is not zero historical work.",
@@ -3444,6 +3774,81 @@
         0.4128264861302727,
         0.4265043751978836
       ]
+    },
+    {
+      "N": 256,
+      "q": 27,
+      "requested_fraction": 0.1,
+      "k": 25,
+      "record_fraction": 0.09765625,
+      "theoretical_pass": 0,
+      "uniform_sample_simulation_trials": 20000,
+      "passes": 0,
+      "simulated_pass": 0.0,
+      "wilson95": [
+        0,
+        0.00019204311235897808
+      ]
+    },
+    {
+      "N": 256,
+      "q": 27,
+      "requested_fraction": 0.25,
+      "k": 64,
+      "record_fraction": 0.25,
+      "theoretical_pass": 3.6252653352200304e-19,
+      "uniform_sample_simulation_trials": 20000,
+      "passes": 0,
+      "simulated_pass": 0.0,
+      "wilson95": [
+        0,
+        0.00019204311235897808
+      ]
+    },
+    {
+      "N": 256,
+      "q": 27,
+      "requested_fraction": 0.5,
+      "k": 128,
+      "record_fraction": 0.5,
+      "theoretical_pass": 1.6087732605071195e-09,
+      "uniform_sample_simulation_trials": 20000,
+      "passes": 0,
+      "simulated_pass": 0.0,
+      "wilson95": [
+        0,
+        0.00019204311235897808
+      ]
+    },
+    {
+      "N": 256,
+      "q": 27,
+      "requested_fraction": 0.75,
+      "k": 192,
+      "record_fraction": 0.75,
+      "theoretical_pass": 0.00025737815073374184,
+      "uniform_sample_simulation_trials": 20000,
+      "passes": 7,
+      "simulated_pass": 0.00035,
+      "wilson95": [
+        0.00016955101329104707,
+        0.0007223576688892798
+      ]
+    },
+    {
+      "N": 256,
+      "q": 27,
+      "requested_fraction": 0.9,
+      "k": 230,
+      "record_fraction": 0.8984375,
+      "theoretical_pass": 0.046936458842692784,
+      "uniform_sample_simulation_trials": 20000,
+      "passes": 958,
+      "simulated_pass": 0.0479,
+      "wilson95": [
+        0.045026117095423236,
+        0.05094752828677176
+      ]
     }
   ],
   "fixed_cache_model": {
@@ -3478,6 +3883,156 @@
         "single_pass": 0.7729125025827225,
         "any_pass": 0.988289385822487,
         "historical_work_per_expected_credit_relative_to_full": 0.980229084615509
+      },
+      {
+        "N": 256,
+        "q": 27,
+        "challenges": 3,
+        "best_fraction": 0.99609375,
+        "best_correct_records": 255,
+        "single_pass": 0.89453125,
+        "any_pass": 0.998826801776886,
+        "historical_work_per_expected_credit_relative_to_full": 0.997263738045451
+      }
+    ]
+  },
+  "cheapest_records_sensitivity": {
+    "scope": "Oracle cheapest-record selection on archived measured per-run Chrome times. Descriptive sensitivity, not a new attack execution; obtaining perfect future cost rankings is not free. Demonstrates why a correct-record fraction is not a CPU fraction.",
+    "rows": [
+      {
+        "repetition": 0,
+        "N": 256,
+        "k": 25,
+        "record_fraction": 0.09765625,
+        "fraction_of_measured_search_cost": 0.055521744851634976,
+        "q": 8,
+        "pass_probability": 2.6401534050297467e-09
+      },
+      {
+        "repetition": 0,
+        "N": 256,
+        "k": 64,
+        "record_fraction": 0.25,
+        "fraction_of_measured_search_cost": 0.16036828080794788,
+        "q": 8,
+        "pass_probability": 1.0804387645378215e-05
+      },
+      {
+        "repetition": 0,
+        "N": 256,
+        "k": 128,
+        "record_fraction": 0.5,
+        "fraction_of_measured_search_cost": 0.36844529245345087,
+        "q": 8,
+        "pass_probability": 0.003489942284089333
+      },
+      {
+        "repetition": 0,
+        "N": 256,
+        "k": 192,
+        "record_fraction": 0.75,
+        "fraction_of_measured_search_cost": 0.642826008290019,
+        "q": 8,
+        "pass_probability": 0.0964464236083717
+      },
+      {
+        "repetition": 0,
+        "N": 256,
+        "k": 230,
+        "record_fraction": 0.8984375,
+        "fraction_of_measured_search_cost": 0.8376167839989472,
+        "q": 8,
+        "pass_probability": 0.41919863480458325
+      },
+      {
+        "repetition": 1,
+        "N": 256,
+        "k": 25,
+        "record_fraction": 0.09765625,
+        "fraction_of_measured_search_cost": 0.05788143316028419,
+        "q": 8,
+        "pass_probability": 2.6401534050297467e-09
+      },
+      {
+        "repetition": 1,
+        "N": 256,
+        "k": 64,
+        "record_fraction": 0.25,
+        "fraction_of_measured_search_cost": 0.1598965828635991,
+        "q": 8,
+        "pass_probability": 1.0804387645378215e-05
+      },
+      {
+        "repetition": 1,
+        "N": 256,
+        "k": 128,
+        "record_fraction": 0.5,
+        "fraction_of_measured_search_cost": 0.36195997740327324,
+        "q": 8,
+        "pass_probability": 0.003489942284089333
+      },
+      {
+        "repetition": 1,
+        "N": 256,
+        "k": 192,
+        "record_fraction": 0.75,
+        "fraction_of_measured_search_cost": 0.6241273663679885,
+        "q": 8,
+        "pass_probability": 0.0964464236083717
+      },
+      {
+        "repetition": 1,
+        "N": 256,
+        "k": 230,
+        "record_fraction": 0.8984375,
+        "fraction_of_measured_search_cost": 0.8262031313785241,
+        "q": 8,
+        "pass_probability": 0.41919863480458325
+      },
+      {
+        "repetition": 2,
+        "N": 256,
+        "k": 25,
+        "record_fraction": 0.09765625,
+        "fraction_of_measured_search_cost": 0.056952532022700474,
+        "q": 8,
+        "pass_probability": 2.6401534050297467e-09
+      },
+      {
+        "repetition": 2,
+        "N": 256,
+        "k": 64,
+        "record_fraction": 0.25,
+        "fraction_of_measured_search_cost": 0.1598361160994974,
+        "q": 8,
+        "pass_probability": 1.0804387645378215e-05
+      },
+      {
+        "repetition": 2,
+        "N": 256,
+        "k": 128,
+        "record_fraction": 0.5,
+        "fraction_of_measured_search_cost": 0.3693551899993014,
+        "q": 8,
+        "pass_probability": 0.003489942284089333
+      },
+      {
+        "repetition": 2,
+        "N": 256,
+        "k": 192,
+        "record_fraction": 0.75,
+        "fraction_of_measured_search_cost": 0.6453771014576133,
+        "q": 8,
+        "pass_probability": 0.0964464236083717
+      },
+      {
+        "repetition": 2,
+        "N": 256,
+        "k": 230,
+        "record_fraction": 0.8984375,
+        "fraction_of_measured_search_cost": 0.8418939521580651,
+        "q": 8,
+        "pass_probability": 0.41919863480458325
       }
     ]
   },

@@ -3,11 +3,13 @@ import json,math,random,sys,tempfile,time,shutil
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from research.adaptive_admission import AdaptiveAdmission
+stronger='--stronger-audit' in sys.argv
+policy_args={'audit_samples':{'high':27}} if stronger else {}
 OUT=ROOT/'docs/evaluation/adaptive_docking_2026-09-08';OUT.mkdir(parents=True,exist_ok=True)
 old=json.loads((ROOT/'docs/evaluation/docking_whole_runs_2026-09-08/economics.json').read_text())
 calibration={name:next(x for x in old['tiers'] if (x['ligands'],x['runs'],x['cap'])==spec[:3]) for name,spec in AdaptiveAdmission.TIERS.items()}
 template_dir=tempfile.TemporaryDirectory(dir=ROOT/'tmp');template=Path(template_dir.name)/'template.sqlite'
-base=AdaptiveAdmission(template,clock=lambda:0)
+base=AdaptiveAdmission(template,clock=lambda:0,**policy_args)
 for li in range(16):
     for block in range(32):
         for cap,offset in [(4000,0),(16000,1000)]:base.register('science','engine','maps',str(li),'input'+str(li),'box',offset+16*block,16,cap,16)
@@ -17,7 +19,7 @@ def run(name,fraction=1,rep=0):
     now=[0];rng=random.Random(5000+rep);rows=[];cache=set();attempted=set();science=0;accepted=0
     with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as d:
         local=Path(d)/'policy.sqlite';shutil.copyfile(template,local)
-        c=AdaptiveAdmission(local,clock=lambda:now[0])
+        c=AdaptiveAdmission(local,clock=lambda:now[0],**policy_args)
         for step in range(64 if name=='identity-churn' else 32):
             owner='visitor'+str(step) if name=='identity-churn' else 'visitor'
             t=time.perf_counter();lease=c.request('science',owner);admission_ms=(time.perf_counter()-t)*1000
@@ -48,7 +50,7 @@ scenarios=[run(x) for x in ['honest','valid-spam','abandon-open','abandon-commit
 for fraction in [.1,.25,.5,.75,.9]:
     for name in ['partial','retry-cache']:
         for rep in range(10):scenarios.append(run(name,fraction,rep))
-output={'scope':'Actual SQLite policy, scheduler and CSPRNG challenges. Molecular outcomes use known masks; timing costs are scaled from historical browser tier medians, NOT new Vina runs. High-rate valid traffic models precomputed uncredited results or accelerated clients; zero post-request compute is not zero historical work.','policy':AdaptiveAdmission.VERSION,'calibration':calibration,'scenarios':scenarios}
-(OUT/'policy_simulation_calibrated.json').write_text(json.dumps(output,indent=2)+'\n')
+output={'scope':'Actual SQLite policy, scheduler and CSPRNG challenges. Molecular outcomes use known masks; timing costs are scaled from historical browser tier medians, NOT new Vina runs. High-rate valid traffic models precomputed uncredited results or accelerated clients; zero post-request compute is not zero historical work.','policy':base.VERSION,'audit_samples':{t:base.TIERS[t][3] for t in base.TIERS},'calibration':calibration,'scenarios':scenarios}
+(OUT/('policy_simulation_stronger_audit.json' if stronger else 'policy_simulation_calibrated.json')).write_text(json.dumps(output,indent=2)+'\n')
 template_dir.cleanup()
 print([{k:x[k] for k in ['scenario','fraction','accepted','modeled_total_molecular_ms']} for x in scenarios[:5]])

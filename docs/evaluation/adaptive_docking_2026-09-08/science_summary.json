@@ -1,0 +1,965 @@
+{
+  "scope": "Predeclared exploratory gates on three prepared targets; HIVPR preparation failure retained. Independent-conformer ranking, source and independent redocking. Nominal global budgets match; actual compute differs. Local refinement includes generation/reload and is not equal-budget global search. stock_completed is a legacy count of attempts including failures; stock_attempts and stock_successes disambiguate it.",
+  "gate_counts": [
+    {
+      "method": "global",
+      "bound": 4000,
+      "targets": 3,
+      "redocking_passes": 1,
+      "ranking_passes": 0,
+      "both_on_same_target": 0
+    },
+    {
+      "method": "global",
+      "bound": 16000,
+      "targets": 3,
+      "redocking_passes": 1,
+      "ranking_passes": 1,
+      "both_on_same_target": 0
+    },
+    {
+      "method": "global",
+      "bound": 64000,
+      "targets": 3,
+      "redocking_passes": 1,
+      "ranking_passes": 0,
+      "both_on_same_target": 0
+    },
+    {
+      "method": "global",
+      "bound": 256000,
+      "targets": 3,
+      "redocking_passes": 1,
+      "ranking_passes": 0,
+      "both_on_same_target": 0
+    },
+    {
+      "method": "local",
+      "bound": 200,
+      "targets": 3,
+      "redocking_passes": 1,
+      "ranking_passes": 0,
+      "both_on_same_target": 0
+    }
+  ],
+  "targets": [
+    {
+      "target": "fa10",
+      "rows": 754,
+      "superseded_measurements": 72,
+      "failures": [
+        {
+          "key": "active_00043:independent:local:200:1",
+          "target": "fa10",
+          "id": "active_00043",
+          "label": "active",
+          "conformer": "independent",
+          "method": "local",
+          "cost_schema": 2,
+          "source_reload_ms": 4780.620399999985,
+          "steps": 200,
+          "run": 1,
+          "seed": 117736,
+          "input_sha256": "155add1acd247c7cf35fb31032c5e7f3fff0b70ba1f3b432d050831756f5387e",
+          "generation_ms": 91.03219999998691,
+          "generation_score": -3.2757070093917977,
+          "pose_load_ms": 4532.089800000016,
+          "ok": false,
+          "error": "\n\nVina runtime error: The ligand is outside the grid box. Increase the size of the grid box or center it accordingly around the ligand.\n",
+          "call_ms": 1.5954000000201631,
+          "total_compute_ms": 9405.337800000008
+        },
+        {
+          "key": "active_00043:independent:local:200:2",
+          "target": "fa10",
+          "id": "active_00043",
+          "label": "active",
+          "conformer": "independent",
+          "method": "local",
+          "cost_schema": 2,
+          "source_reload_ms": 4352.242199999979,
+          "steps": 200,
+          "run": 2,
+          "seed": 130743,
+          "input_sha256": "155add1acd247c7cf35fb31032c5e7f3fff0b70ba1f3b432d050831756f5387e",
+          "generation_ms": 79.58350000000792,
+          "generation_score": -5.402162456172396,
+          "pose_load_ms": 4470.891800000012,
+          "ok": false,
+          "error": "\n\nVina runtime error: The ligand is outside the grid box. Increase the size of the grid box or center it accordingly around the ligand.\n",
+          "call_ms": 0.18570000000181608,
+          "total_compute_ms": 8902.9032
+        }
+      ],
+      "ligand_preparation_failures": [],
+      "stock_ranking": {
+        "auc": 0.875,
+        "auc_bootstrap95": [
+          0.640625,
+          1.0
+        ],
+        "top_quartile_hits": 3,
+        "top_quartile_size": 4,
+        "top_quartile_enrichment": 1.5
+      },
+      "stock_auc_missing_result_bounds": [
+        0.875,
+        0.875
+      ],
+      "stock_ranking_successes": 16,
+      "stock_completed": 18,
+      "stock_redocking": [
+        {
+          "conformer": "source",
+          "score": -10.902,
+          "wall_ms": 126998.13380000023,
+          "rmsd_A": 0.4781798824710215
+        },
+        {
+          "conformer": "independent",
+          "score": -10.245,
+          "wall_ms": 120955.68200000025,
+          "rmsd_A": 8.759865857634464
+        }
+      ],
+      "configs": [
+        {
+          "method": "global",
+          "bound": 4000,
+          "runs": 16,
+          "posthoc_low_tier_followup": true,
+          "nominal_eval_budget": 64000,
+          "ranking": {
+            "auc": 0.453125,
+            "auc_bootstrap95": [
+              0.17148437500000002,
+              0.75
+            ],
+            "top_quartile_hits": 1,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 917.0740500000029,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 3.517437739321054,
+              "oracle_rmsd_A": 3.517437739321054,
+              "successful_runs": 0,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 13.024736619218064,
+              "oracle_rmsd_A": 7.378825471831543,
+              "successful_runs": 0,
+              "runs": 16
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 16000,
+          "runs": 16,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.765625,
+            "auc_bootstrap95": [
+              0.483984375,
+              0.984375
+            ],
+            "top_quartile_hits": 3,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 2086.1978499999987,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 8.695448692778884,
+              "oracle_rmsd_A": 5.354659192002793,
+              "successful_runs": 0,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 9.639269843976773,
+              "oracle_rmsd_A": 7.123887674139031,
+              "successful_runs": 0,
+              "runs": 16
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 64000,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.78125,
+            "auc_bootstrap95": [
+              0.5,
+              1.0
+            ],
+            "top_quartile_hits": 3,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 1999.1220499999963,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 8.677361002560051,
+              "oracle_rmsd_A": 1.6463930936292221,
+              "successful_runs": 1,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 8.449260065606335,
+              "oracle_rmsd_A": 7.583240227221474,
+              "successful_runs": 0,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 256000,
+          "runs": 1,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.609375,
+            "auc_bootstrap95": [
+              0.296875,
+              0.890625
+            ],
+            "top_quartile_hits": 3,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 1959.1879000000026,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 1.6463930936292221,
+              "oracle_rmsd_A": 1.6463930936292221,
+              "successful_runs": 1,
+              "runs": 1
+            },
+            "independent": {
+              "selected_rmsd_A": 8.449260065606335,
+              "oracle_rmsd_A": 8.449260065606335,
+              "successful_runs": 0,
+              "runs": 1
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "local",
+          "bound": 200,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": null,
+          "ranking": null,
+          "ranking_complete": false,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 19582.16629999999,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 10.629781065478255,
+              "oracle_rmsd_A": 6.759565426120233,
+              "successful_runs": 0,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 13.046078942780088,
+              "oracle_rmsd_A": 7.342122396231897,
+              "successful_runs": 0,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        }
+      ],
+      "long_redocking": [
+        {
+          "conformer": "source",
+          "runs": 1,
+          "selected_rmsd_A": 1.6463930936292221,
+          "oracle_rmsd_A": 1.6463930936292221,
+          "total_compute_ms": 6938.739200000011
+        },
+        {
+          "conformer": "source",
+          "runs": 2,
+          "selected_rmsd_A": 1.6463930936292221,
+          "oracle_rmsd_A": 1.3637757444866072,
+          "total_compute_ms": 13693.184700000042
+        },
+        {
+          "conformer": "source",
+          "runs": 4,
+          "selected_rmsd_A": 0.5027660676199219,
+          "oracle_rmsd_A": 0.38661051136770685,
+          "total_compute_ms": 27339.863000000012
+        },
+        {
+          "conformer": "source",
+          "runs": 8,
+          "selected_rmsd_A": 0.5027660676199219,
+          "oracle_rmsd_A": 0.38661051136770685,
+          "total_compute_ms": 54630.161999999895
+        },
+        {
+          "conformer": "independent",
+          "runs": 1,
+          "selected_rmsd_A": 8.449260065606335,
+          "oracle_rmsd_A": 8.449260065606335,
+          "total_compute_ms": 6597.936500000011
+        },
+        {
+          "conformer": "independent",
+          "runs": 2,
+          "selected_rmsd_A": 8.88675116922658,
+          "oracle_rmsd_A": 8.449260065606335,
+          "total_compute_ms": 13268.396999999997
+        },
+        {
+          "conformer": "independent",
+          "runs": 4,
+          "selected_rmsd_A": 8.872065187288696,
+          "oracle_rmsd_A": 8.449260065606335,
+          "total_compute_ms": 26376.67710000003
+        },
+        {
+          "conformer": "independent",
+          "runs": 8,
+          "selected_rmsd_A": 8.745640701586705,
+          "oracle_rmsd_A": 1.4854108438408549,
+          "total_compute_ms": 54198.373300000036
+        }
+      ],
+      "stock_attempts": 18,
+      "stock_successes": 18,
+      "stock_failures": []
+    },
+    {
+      "target": "hivpr",
+      "preparation_failed": "Receptor preparation failed: Atom # 0 (N) in mol doesn't have implicit Hs -> continue with next atom... \nMolecule doesn't contain wanted_smarts: [NX3h1] -> continue with next pattern... \nMolecule doesn't contain pattern: [NX3h1] -> linker label for N-term will not be made. \nMolecule doesn't contain wanted_smarts: [CX3h1] -> continue with next pattern... \nMolecule doesn't contain pattern: [CX3h1] -> linker label for C-term will not be made. \nMolecule doesn't contain the standard backbone of nucleotides or amino acids. -> no templates will be made. \n\nError: Creation of data structure for receptor failed.\n\nDetails:\nTemplate generation failed for unknown residues: {'GLZ'}, which appear to be linking fragments. \nGeneration of chemical templates with modified backbones, which involves guessing of linker positions and types, are not currently supported. \nRecommendations:\n1. (to parameterize the residues) Use --add_templates to pass the additional templates with valid linker_labels, \n2. (to skip the residues) Use --delete_residues to ignore them. Residues will be deleted from the prepared receptor. \n\n\nF:\\Projects\\antigravity\\Capstone\\tmp\\docking-audit\\deps\\meeko\\polymer.py:856: RuntimeWarning: Input residues {'A:27': 'GLZ', 'A:29': 'ASQ', 'A:48': 'GLZ', 'B:126': 'GLZ', 'B:128': 'ASQ', 'B:147': 'GLZ'} not in residue_templates\n\n  warnings.warn(err, RuntimeWarning)\nF:\\Projects\\antigravity\\Capstone\\tmp\\docking-audit\\deps\\meeko\\polymer.py:857: RuntimeWarning: Trying to resolve unknown residues by building chemical templates... \n  warnings.warn(\"Trying to resolve unknown residues by building chemical templates... \", RuntimeWarning)\n"
+    },
+    {
+      "target": "hs90a",
+      "rows": 754,
+      "superseded_measurements": 0,
+      "failures": [],
+      "ligand_preparation_failures": [],
+      "stock_ranking": null,
+      "stock_auc_missing_result_bounds": [
+        0.25,
+        0.375
+      ],
+      "stock_ranking_successes": 15,
+      "stock_completed": 18,
+      "stock_redocking": [
+        {
+          "conformer": "source",
+          "score": -8.383,
+          "wall_ms": 42655.3801,
+          "rmsd_A": 0.6941307186297513
+        },
+        {
+          "conformer": "independent",
+          "score": -8.242,
+          "wall_ms": 42109.06620000015,
+          "rmsd_A": 0.6329386369797773
+        }
+      ],
+      "configs": [
+        {
+          "method": "global",
+          "bound": 4000,
+          "runs": 16,
+          "posthoc_low_tier_followup": true,
+          "nominal_eval_budget": 64000,
+          "ranking": {
+            "auc": 0.296875,
+            "auc_bootstrap95": [
+              0.046875,
+              0.59375
+            ],
+            "top_quartile_hits": 0,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 735.5776499999865,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 4.896839871516398,
+              "oracle_rmsd_A": 1.2604736663795733,
+              "successful_runs": 1,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 1.9670740153380557,
+              "oracle_rmsd_A": 0.48797699275124184,
+              "successful_runs": 2,
+              "runs": 16
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": true
+        },
+        {
+          "method": "global",
+          "bound": 16000,
+          "runs": 16,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.296875,
+            "auc_bootstrap95": [
+              0.046875,
+              0.625
+            ],
+            "top_quartile_hits": 0,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 1709.5972000000038,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 0.48653940324406464,
+              "oracle_rmsd_A": 0.48653940324406464,
+              "successful_runs": 2,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 0.7098292368271015,
+              "oracle_rmsd_A": 0.7098292368271015,
+              "successful_runs": 4,
+              "runs": 16
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": true
+        },
+        {
+          "method": "global",
+          "bound": 64000,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.171875,
+            "auc_bootstrap95": [
+              0.0,
+              0.40625
+            ],
+            "top_quartile_hits": 0,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 1659.1149499999592,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 0.3986908120791893,
+              "oracle_rmsd_A": 0.3986908120791893,
+              "successful_runs": 2,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 0.5143037217265862,
+              "oracle_rmsd_A": 0.5143037217265862,
+              "successful_runs": 2,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": true
+        },
+        {
+          "method": "global",
+          "bound": 256000,
+          "runs": 1,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.296875,
+            "auc_bootstrap95": [
+              0.046875,
+              0.609375
+            ],
+            "top_quartile_hits": 0,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 1740.4334499999968,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 0.3986908120791893,
+              "oracle_rmsd_A": 0.3986908120791893,
+              "successful_runs": 1,
+              "runs": 1
+            },
+            "independent": {
+              "selected_rmsd_A": 0.6552744740668878,
+              "oracle_rmsd_A": 0.6552744740668878,
+              "successful_runs": 1,
+              "runs": 1
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": true
+        },
+        {
+          "method": "local",
+          "bound": 200,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": null,
+          "ranking": {
+            "auc": 0.265625,
+            "auc_bootstrap95": [
+              0.0625,
+              0.5625
+            ],
+            "top_quartile_hits": 0,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 0.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 7913.837049999987,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 6.660388945781689,
+              "oracle_rmsd_A": 6.660388945781689,
+              "successful_runs": 0,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 1.9910460818373845,
+              "oracle_rmsd_A": 1.9910460818373845,
+              "successful_runs": 1,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": true
+        }
+      ],
+      "long_redocking": [
+        {
+          "conformer": "source",
+          "runs": 1,
+          "selected_rmsd_A": 0.4663538941034529,
+          "oracle_rmsd_A": 0.4663538941034529,
+          "total_compute_ms": 2594.694599999988
+        },
+        {
+          "conformer": "source",
+          "runs": 2,
+          "selected_rmsd_A": 0.646237431739928,
+          "oracle_rmsd_A": 0.4663538941034529,
+          "total_compute_ms": 5316.992999999988
+        },
+        {
+          "conformer": "source",
+          "runs": 4,
+          "selected_rmsd_A": 0.646237431739928,
+          "oracle_rmsd_A": 0.45658320958257687,
+          "total_compute_ms": 10499.092499999999
+        },
+        {
+          "conformer": "source",
+          "runs": 8,
+          "selected_rmsd_A": 0.7260324936379793,
+          "oracle_rmsd_A": 0.45658320958257687,
+          "total_compute_ms": 21117.763600000006
+        },
+        {
+          "conformer": "independent",
+          "runs": 1,
+          "selected_rmsd_A": 0.6523161879724504,
+          "oracle_rmsd_A": 0.6523161879724504,
+          "total_compute_ms": 2647.4573999999557
+        },
+        {
+          "conformer": "independent",
+          "runs": 2,
+          "selected_rmsd_A": 0.6523161879724504,
+          "oracle_rmsd_A": 0.5217734182573888,
+          "total_compute_ms": 5166.046399999934
+        },
+        {
+          "conformer": "independent",
+          "runs": 4,
+          "selected_rmsd_A": 0.6523161879724504,
+          "oracle_rmsd_A": 0.5145683098040003,
+          "total_compute_ms": 10388.133299999929
+        },
+        {
+          "conformer": "independent",
+          "runs": 8,
+          "selected_rmsd_A": 0.6523161879724504,
+          "oracle_rmsd_A": 0.47541871497181787,
+          "total_compute_ms": 21393.2919999999
+        }
+      ],
+      "stock_attempts": 18,
+      "stock_successes": 17,
+      "stock_failures": [
+        {
+          "key": "hs90a:active_00054:independent",
+          "target": "hs90a",
+          "id": "active_00054",
+          "label": "active",
+          "conformer": "independent",
+          "input_sha256": "0e057bd711b51a008d77b3fe3cd741c2a5a715902c841350efd32b5bc75db59f",
+          "cpu_per_process": 1,
+          "concurrent_quality_workers": 3,
+          "isolated_timing": false,
+          "ok": false,
+          "error": "Command '['F:\\\\Projects\\\\antigravity\\\\Capstone\\\\tmp\\\\docking-pilot\\\\native\\\\vina_1.2.7_win.exe', '--receptor', 'F:\\\\Projects\\\\antigravity\\\\Capstone\\\\tmp\\\\adaptive-docking\\\\hs90a\\\\receptor.pdbqt', '--ligand', 'F:\\\\Projects\\\\antigravity\\\\Capstone\\\\tmp\\\\adaptive-docking\\\\hs90a\\\\ligands\\\\active_00054_independent.pdbqt', '--cpu', '1', '--seed', '104729', '--exhaustiveness', '8', '--num_modes', '9', '--out', 'F:\\\\Projects\\\\antigravity\\\\Capstone\\\\tmp\\\\adaptive-docking\\\\hs90a\\\\active_00054_independent_stock.pdbqt', '--center_x', '2.6995909090909085', '--size_x', '30', '--center_y', '11.453863636363634', '--size_y', '30', '--center_z', '24.8025', '--size_z', '30']' timed out after 600 seconds",
+          "wall_ms": 600051.0081000002
+        }
+      ]
+    },
+    {
+      "target": "tryb1",
+      "rows": 754,
+      "superseded_measurements": 0,
+      "failures": [
+        {
+          "key": "active_00024:independent:local:200:1",
+          "target": "tryb1",
+          "id": "active_00024",
+          "label": "active",
+          "conformer": "independent",
+          "method": "local",
+          "cost_schema": 2,
+          "source_reload_ms": 1850.9450999999972,
+          "steps": 200,
+          "run": 1,
+          "seed": 117736,
+          "input_sha256": "6317361a5cf2dbc7d70e265e6184a4b2b3c419b8caf886a28fc271c823bff7ea",
+          "generation_ms": 65.88489999999001,
+          "generation_score": 23674796.327477105,
+          "pose_load_ms": 1867.2445000000007,
+          "ok": false,
+          "error": "\n\nVina runtime error: The ligand is outside the grid box. Increase the size of the grid box or center it accordingly around the ligand.\n",
+          "call_ms": 1.0120000000024447,
+          "total_compute_ms": 3785.0864999999903
+        },
+        {
+          "key": "decoy_00030:independent:local:200:0",
+          "target": "tryb1",
+          "id": "decoy_00030",
+          "label": "decoy",
+          "conformer": "independent",
+          "method": "local",
+          "cost_schema": 2,
+          "source_reload_ms": 0,
+          "steps": 200,
+          "run": 0,
+          "seed": 104729,
+          "input_sha256": "8b2a7273c2e0a82bc419715a9081ebe62742e4b3adc13d8e97ff67b7e61f41cb",
+          "generation_ms": 60.32690000004368,
+          "generation_score": 7165636.8948734095,
+          "pose_load_ms": 3399.63890000002,
+          "ok": false,
+          "error": "\n\nVina runtime error: The ligand is outside the grid box. Increase the size of the grid box or center it accordingly around the ligand.\n",
+          "call_ms": 0.26769999996759,
+          "total_compute_ms": 3460.233500000031
+        }
+      ],
+      "ligand_preparation_failures": [],
+      "stock_ranking": {
+        "auc": 0.65625,
+        "auc_bootstrap95": [
+          0.34375,
+          0.8910156249999979
+        ],
+        "top_quartile_hits": 3,
+        "top_quartile_size": 4,
+        "top_quartile_enrichment": 1.5
+      },
+      "stock_auc_missing_result_bounds": [
+        0.65625,
+        0.65625
+      ],
+      "stock_ranking_successes": 16,
+      "stock_completed": 18,
+      "stock_redocking": [
+        {
+          "conformer": "source",
+          "score": -9.37,
+          "wall_ms": 44365.41690000013,
+          "rmsd_A": 0.26101635669348144
+        },
+        {
+          "conformer": "independent",
+          "score": -7.898,
+          "wall_ms": 48707.257900000055,
+          "rmsd_A": 14.551109743563572
+        }
+      ],
+      "configs": [
+        {
+          "method": "global",
+          "bound": 4000,
+          "runs": 16,
+          "posthoc_low_tier_followup": true,
+          "nominal_eval_budget": 64000,
+          "ranking": {
+            "auc": 0.484375,
+            "auc_bootstrap95": [
+              0.1875,
+              0.78125
+            ],
+            "top_quartile_hits": 2,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 929.1860500000003,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 10.32657694606867,
+              "oracle_rmsd_A": 6.942410615474004,
+              "successful_runs": 0,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 5.003751319683141,
+              "oracle_rmsd_A": 4.896259184316124,
+              "successful_runs": 0,
+              "runs": 16
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 16000,
+          "runs": 16,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.6875,
+            "auc_bootstrap95": [
+              0.40625,
+              0.9375
+            ],
+            "top_quartile_hits": 3,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 3230.4639500000194,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 10.32657694606867,
+              "oracle_rmsd_A": 3.7282121050176307,
+              "successful_runs": 0,
+              "runs": 16
+            },
+            "independent": {
+              "selected_rmsd_A": 2.9093540586290874,
+              "oracle_rmsd_A": 2.9093540586290874,
+              "successful_runs": 0,
+              "runs": 16
+            }
+          },
+          "ranking_gate": true,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 64000,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.59375,
+            "auc_bootstrap95": [
+              0.28125,
+              0.859375
+            ],
+            "top_quartile_hits": 2,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.0
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 3066.820700000004,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 8.366167710119498,
+              "oracle_rmsd_A": 8.258110418994631,
+              "successful_runs": 0,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 10.644994797122692,
+              "oracle_rmsd_A": 7.866050741587595,
+              "successful_runs": 0,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "global",
+          "bound": 256000,
+          "runs": 1,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": 256000,
+          "ranking": {
+            "auc": 0.640625,
+            "auc_bootstrap95": [
+              0.328125,
+              0.90625
+            ],
+            "top_quartile_hits": 3,
+            "top_quartile_size": 4,
+            "top_quartile_enrichment": 1.5
+          },
+          "ranking_complete": true,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 2961.7851999999984,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 8.526352477872532,
+              "oracle_rmsd_A": 8.526352477872532,
+              "successful_runs": 0,
+              "runs": 1
+            },
+            "independent": {
+              "selected_rmsd_A": 11.747499259253173,
+              "oracle_rmsd_A": 11.747499259253173,
+              "successful_runs": 0,
+              "runs": 1
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        },
+        {
+          "method": "local",
+          "bound": 200,
+          "runs": 4,
+          "posthoc_low_tier_followup": false,
+          "nominal_eval_budget": null,
+          "ranking": null,
+          "ranking_complete": false,
+          "cost_accounting_complete": true,
+          "median_total_compute_ms": 15556.093499999974,
+          "redocking": {
+            "source": {
+              "selected_rmsd_A": 10.370608390283346,
+              "oracle_rmsd_A": 9.954461948910533,
+              "successful_runs": 0,
+              "runs": 4
+            },
+            "independent": {
+              "selected_rmsd_A": 8.671340365293547,
+              "oracle_rmsd_A": 7.480537717200651,
+              "successful_runs": 0,
+              "runs": 4
+            }
+          },
+          "ranking_gate": false,
+          "redocking_gate_independent": false
+        }
+      ],
+      "long_redocking": [
+        {
+          "conformer": "source",
+          "runs": 1,
+          "selected_rmsd_A": 8.526352477872532,
+          "oracle_rmsd_A": 8.526352477872532,
+          "total_compute_ms": 5827.545800000022
+        },
+        {
+          "conformer": "source",
+          "runs": 2,
+          "selected_rmsd_A": 0.25947261601475163,
+          "oracle_rmsd_A": 0.25947261601475163,
+          "total_compute_ms": 11145.380300000019
+        },
+        {
+          "conformer": "source",
+          "runs": 4,
+          "selected_rmsd_A": 0.2061115269422401,
+          "oracle_rmsd_A": 0.2061115269422401,
+          "total_compute_ms": 21783.384300000034
+        },
+        {
+          "conformer": "source",
+          "runs": 8,
+          "selected_rmsd_A": 0.2061115269422401,
+          "oracle_rmsd_A": 0.19357785156206458,
+          "total_compute_ms": 45263.19960000005
+        },
+        {
+          "conformer": "independent",
+          "runs": 1,
+          "selected_rmsd_A": 9.775305381812492,
+          "oracle_rmsd_A": 9.775305381812492,
+          "total_compute_ms": 6010.861600000004
+        },
+        {
+          "conformer": "independent",
+          "runs": 2,
+          "selected_rmsd_A": 14.599264667994541,
+          "oracle_rmsd_A": 9.775305381812492,
+          "total_compute_ms": 11687.703899999964
+        },
+        {
+          "conformer": "independent",
+          "runs": 4,
+          "selected_rmsd_A": 14.599264667994541,
+          "oracle_rmsd_A": 9.775305381812492,
+          "total_compute_ms": 23225.72629999998
+        },
+        {
+          "conformer": "independent",
+          "runs": 8,
+          "selected_rmsd_A": 14.599264667994541,
+          "oracle_rmsd_A": 9.775305381812492,
+          "total_compute_ms": 45215.17989999987
+        }
+      ],
+      "stock_attempts": 18,
+      "stock_successes": 18,
+      "stock_failures": []
+    }
+  ]
+}

@@ -8,6 +8,14 @@ const target=JSON.parse(await readFile(folder+'science_inputs.json','utf8')).tar
 if(!target||target.preparation_failed)throw Error('Target not prepared');
 const output=folder+'science_'+targetName+'.jsonl';let prior=[];
 try{prior=(await readFile(output,'utf8')).trim().split('\n').filter(Boolean).map(JSON.parse);}catch(e){if(e.code!=='ENOENT')throw e;}
+const latest=new Map(prior.map(r=>[r.key,r]));let complete=true;
+for(const l of target.ligands)for(const c of (l.id==='crystal'?['source','independent']:['independent'])){
+ for(const [cap,n] of [[16000,16],[64000,4],[256000,1],...(l.id==='crystal'?[[1000000,8]]:[])])for(let i=0;i<n;i++){
+  const row=latest.get([l.id,c,'global',cap,i].join(':'));if(!row||row.input_sha256!==l[c].sha256)complete=false;
+ }
+ for(let i=0;i<4;i++){const row=latest.get([l.id,c,'local',200,i].join(':'));if(!row||row.cost_schema!==2||row.input_sha256!==l[c].sha256)complete=false;}
+}
+if(complete){console.log(targetName,'complete; preserved prior outcomes and timings');process.exit(0);}
 const files=await Promise.all(target.maps.map(async m=>({name:m.name,data:await readFile(m.path)})));
 const engine=await createEngine(factory,files,await readFile(target.ligands[0].independent.path,'utf8'));
 for(const ligand of target.ligands)for(const conformer of (ligand.id==='crystal'?['source','independent']:['independent'])){

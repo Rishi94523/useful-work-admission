@@ -3547,6 +3547,191 @@
           }
         }
       ]
+    },
+    "policy_simulation_stronger_audit.json": {
+      "scope": "Actual SQLite policy, scheduler and CSPRNG challenges. Molecular outcomes use known masks; timing costs are scaled from historical browser tier medians, NOT new Vina runs. High-rate valid traffic models precomputed uncredited results or accelerated clients; zero post-request compute is not zero historical work.",
+      "summaries": [
+        {
+          "scenario": "honest:1",
+          "trajectories": 1,
+          "accepts": 32,
+          "challenged_attempts": 32,
+          "trajectories_with_credit": 1,
+          "modeled_molecular_ms": 10294.400000000001,
+          "modeled_ms_per_credit": 321.70000000000005,
+          "terminal_states": {
+            "assigned": 1
+          }
+        },
+        {
+          "scenario": "valid-spam:1",
+          "trajectories": 1,
+          "accepts": 17,
+          "challenged_attempts": 17,
+          "trajectories_with_credit": 1,
+          "modeled_molecular_ms": 184765.6000000001,
+          "modeled_ms_per_credit": 10868.564705882358,
+          "terminal_states": {
+            "cooldown": 1
+          }
+        },
+        {
+          "scenario": "abandon-open:1",
+          "trajectories": 1,
+          "accepts": 31,
+          "challenged_attempts": 31,
+          "trajectories_with_credit": 1,
+          "modeled_molecular_ms": 10294.400000000001,
+          "modeled_ms_per_credit": 332.07741935483875,
+          "terminal_states": {
+            "assigned": 1
+          }
+        },
+        {
+          "scenario": "abandon-committed:1",
+          "trajectories": 1,
+          "accepts": 31,
+          "challenged_attempts": 31,
+          "trajectories_with_credit": 1,
+          "modeled_molecular_ms": 10294.400000000001,
+          "modeled_ms_per_credit": 332.07741935483875,
+          "terminal_states": {
+            "assigned": 1
+          }
+        },
+        {
+          "scenario": "identity-churn:1",
+          "trajectories": 1,
+          "accepts": 39,
+          "challenged_attempts": 39,
+          "trajectories_with_credit": 1,
+          "modeled_molecular_ms": 12546.300000000007,
+          "modeled_ms_per_credit": 321.70000000000016,
+          "terminal_states": {
+            "capacity": 1
+          }
+        },
+        {
+          "scenario": "partial:0.1",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 30872.93750000001,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "retry-cache:0.1",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 30587.95625000001,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "partial:0.25",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 80062.75000000003,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "retry-cache:0.25",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 80062.75000000003,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "partial:0.5",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 160125.50000000006,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "retry-cache:0.5",
+          "trajectories": 10,
+          "accepts": 0,
+          "challenged_attempts": 30,
+          "trajectories_with_credit": 0,
+          "modeled_molecular_ms": 159555.53750000006,
+          "modeled_ms_per_credit": null,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "partial:0.75",
+          "trajectories": 10,
+          "accepts": 8,
+          "challenged_attempts": 38,
+          "trajectories_with_credit": 6,
+          "modeled_molecular_ms": 252713.40000000008,
+          "modeled_ms_per_credit": 31589.17500000001,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "retry-cache:0.75",
+          "trajectories": 10,
+          "accepts": 5,
+          "challenged_attempts": 35,
+          "trajectories_with_credit": 3,
+          "modeled_molecular_ms": 240444.6875000001,
+          "modeled_ms_per_credit": 48088.937500000015,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "partial:0.9",
+          "trajectories": 10,
+          "accepts": 18,
+          "challenged_attempts": 47,
+          "trajectories_with_credit": 9,
+          "modeled_molecular_ms": 351200.1875000001,
+          "modeled_ms_per_credit": 19511.121527777785,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        },
+        {
+          "scenario": "retry-cache:0.9",
+          "trajectories": 10,
+          "accepts": 16,
+          "challenged_attempts": 46,
+          "trajectories_with_credit": 8,
+          "modeled_molecular_ms": 295307.90312500007,
+          "modeled_ms_per_credit": 18456.743945312504,
+          "terminal_states": {
+            "cooldown": 10
+          }
+        }
+      ]
     }
   },
   "audit_bounds": [

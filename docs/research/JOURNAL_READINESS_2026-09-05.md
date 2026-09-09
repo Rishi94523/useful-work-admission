@@ -6,7 +6,21 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: whole-run Vina auditing, 8 September
+## Latest update: adaptive admission and multi-target docking, 9 September
+
+The [adaptive investigation](ADAPTIVE_DOCKING_FINDINGS_2026-09-08.md) implements the missing conventional outer controller: server-side risk, work tiers, abandonment penalties, retry/range limits, issuance budgets and cooldown. Real Chrome/Node/SQLite trials show honest visitors remaining low, valid spam escalating and then cooling down, and partial-work/retry failures increasing cost or terminating admission. It does not solve generic bot detection or Sybil resistance.
+
+Shared XS scoring tables repair much of the preparation overhead: optimized warm low-tier client median0.355 s; medium6.400 s; high20.984 s, with97–99% molecular-kernel time. Full local high-tier client/server ratio is16.39× atq8, but medium narrowly misses the20% server-cost gate and cold Chrome initialization is10.245 s. These are historical16-ligand FA10 browser measurements, not demonstrated latency across the new scientific panel or devices.
+
+Stronger whole-run sampling is implemented and measured. For230 correct records among256, q27 reduces theoretical pass probability to4.694%, versus41.920% atq8. Median replay plus local IPC rises from1.278 s to4.095 s. The stronger sweep's browser runs were roughly twice as slow as the earlier tier measurements; cross-experiment ratios are explicitly sensitivity calculations. No nearly constant verifier cost or generic attacker computational lower bound is established.
+
+Scientific quality remains the blocking result. The original and post-hoc MMFF-converged cohorts cover **4,173 unique bounded/refinement records**, three prepared targets, independently generated conformers and matched stock comparisons. The corrected4×64k setting reaches≤2 Å onFA10/HS90A, but its AUC is≥0.65 only onFA10. Other corrected settings fail the2/3 independent-redocking gate. No tested configuration satisfies both declared scientific gates. Strong stock failures on some identical independent inputs indicate a preparation/scoring/search problem broader than the audit protocol; they do not turn the bounded workload into validated science.
+
+Keep whole-run sampling as a useful experimental baseline. **Do not submit the present system as a demonstrated journal-ready useful-work CAPTCHA, or return to full Groth16 simply because the science gates fail.** The next defensible milestone is a target-specific, independently validated scientific campaign followed by the complete browser/admission benchmark on exactly those inputs. A paper also needs a substantive contribution beyond prior volunteer-computing spot-checking/reputation, stronger cheap-correct-output and heterogeneous-cost adversarial analysis, durable scientific ingestion and repair, real devices/network/deadline/concurrency evidence, and an independent replication. The [verification analysis](DOCKING_VERIFICATION_ANALYSIS_2026-09-08.md) separates correct records, historical one-use work credit and scientific truth.
+
+The ledger prevents repeated redemption within its trusted canonical registration domain; equivalence across encodings/engine versions and global chemical identity are not automatically solved. Human feedback, retraining and Cloudflare deployment remain deferred. Both original research questions below/above are unchanged.
+
+## Previous update: whole-run Vina auditing, 8 September
 
 The [completed independent-run investigation](WHOLE_RUN_DOCKING_2026-09-08.md) replaces the rigid-bank recommendation below. Actual flexible Vina runs, post-commit complete-run replay, trace binding and one-use precomputed scientific credits are implemented. All 46 honest audit transcripts passed. Warm client molecular fractions are 94.1–99.2%, but the four requirements are not satisfied together: bounded WASM redocking remains at least 3.52 Å versus stock Vina 0.48 Å; the 256-run warm molecular ratio of 14.7× falls to 2.08× including ligand setup on both sides; first initialization is 11.04 seconds with a large memory footprint.
 

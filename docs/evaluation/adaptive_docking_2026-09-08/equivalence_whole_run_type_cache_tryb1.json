@@ -1,0 +1,55 @@
+{
+  "variant": "whole_run_type_cache",
+  "target": "tryb1",
+  "init_ms": 17181.5686,
+  "rows": [
+    {
+      "id": "crystal_source",
+      "cap": 4000,
+      "seed": 104729,
+      "record_sha256": "a5fa84d58226977e808511dab3a992db62166ae1bb226eeb2701cc2f5420c470",
+      "score": -3.1656412674592147,
+      "trace_values": 118,
+      "molecular_ms": 50.2681,
+      "call_ms": 54.925100000000384,
+      "load_ms": 0,
+      "heap_bytes": 192872448
+    },
+    {
+      "id": "crystal_source",
+      "cap": 16000,
+      "seed": 117736,
+      "record_sha256": "737a5733bbd5c3a9adb678a1c401b4dae5ae3b3bfbf7d692eaafd17022e3112e",
+      "score": -6.7035838342306615,
+      "trace_values": 640,
+      "molecular_ms": 93.708,
+      "call_ms": 98.36579999999958,
+      "load_ms": 0,
+      "heap_bytes": 192872448
+    },
+    {
+      "id": "crystal_independent",
+      "cap": 4000,
+      "seed": 104729,
+      "record_sha256": "ed8b7fd4908bedfb1584e8d67eab04478843d712ea90a01ee9bd287e9b08700c",
+      "score": -6.131211233029187,
+      "trace_values": 152,
+      "molecular_ms": 22.7314,
+      "call_ms": 26.931899999999587,
+      "load_ms": 2.378999999997177,
+      "heap_bytes": 192872448
+    },
+    {
+      "id": "crystal_independent",
+      "cap": 16000,
+      "seed": 117736,
+      "record_sha256": "93810c37253fc21a6df30fc0a2383251c9c63d6b6eab4ef129eed80a09cf5304",
+      "score": -6.319907057630029,
+      "trace_values": 592,
+      "molecular_ms": 87.2434,
+      "call_ms": 89.73719999999958,
+      "load_ms": 2.378999999997177,
+      "heap_bytes": 192872448
+    }
+  ]
+}

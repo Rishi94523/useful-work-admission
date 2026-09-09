@@ -1,0 +1,4 @@
+{"target":"fa10","init_ms":10875.2171,"heap_bytes":1180893184,"scope":"One Node/WASM worker per target; not a browser runtime measurement."}
+{"target":"hs90a","init_ms":10279.068500000001,"heap_bytes":1181089792,"scope":"One Node/WASM worker per target; not a browser runtime measurement."}
+{"target":"tryb1","init_ms":11192.947199999999,"heap_bytes":1181024256,"scope":"One Node/WASM worker per target; not a browser runtime measurement."}
+{"target":"fa10","init_ms":19634.6398,"heap_bytes":1180893184,"scope":"One Node/WASM worker per target; not a browser runtime measurement."}

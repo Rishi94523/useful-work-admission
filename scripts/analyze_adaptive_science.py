@@ -23,7 +23,9 @@ for target in inputs['targets']:
     if target.get('preparation_failed'):results.append(target);continue
     path=OUT/('science_'+target['target']+'.jsonl')
     if not path.exists():results.append({'target':target['target'],'pending':True});continue
-    raw_rows=list(map(json.loads,path.read_text().splitlines()));rows=list({r['key']:r for r in raw_rows}.values());crystal=next(x for x in target['ligands'] if x['id']=='crystal')
+    raw_rows=list(map(json.loads,path.read_text().splitlines()));lowpath=OUT/('low_science_'+target['target']+'.jsonl')
+    if lowpath.exists():raw_rows+=list(map(json.loads,lowpath.read_text().splitlines()))
+    rows=list({r['key']:r for r in raw_rows}.values());crystal=next(x for x in target['ligands'] if x['id']=='crystal')
     ref=Chem.RemoveHs(Chem.SDMolSupplier(str((ROOT/crystal['source']['path']).with_suffix('.sdf')))[0]);orders={}
     for conf in ['source','independent']:
         m=Chem.RemoveHs(Chem.SDMolSupplier(str((ROOT/crystal[conf]['path']).with_suffix('.sdf')))[0]);xyz=np.array(m.GetConformer().GetPositions());initial=heavy((ROOT/crystal[conf]['path']).read_text());_,order=linear_sum_assignment(np.linalg.norm(xyz[:,None,:]-initial[None,:,:],axis=-1))
@@ -35,8 +37,10 @@ for target in inputs['targets']:
         return float(rdMolAlign.CalcRMS(m,ref,maxMatches=10000))
     controls=[r for r in stock if r['target']==target['target']];rank_control=[r for r in controls if r['label']!='redocking' and r['ok']]
     control_quality=quality([r['label']=='active' for r in rank_control],[r['score'] for r in rank_control]) if len(rank_control)==16 else None
+    ca=[r['score'] for r in rank_control if r['label']=='active'];cd=[r['score'] for r in rank_control if r['label']=='decoy'];known_wins=sum((a<d)+.5*(a==d) for a in ca for d in cd)
+    control_auc_bounds=[known_wins/64,(known_wins+64-len(ca)*len(cd))/64]
     configs=[]
-    for method,bound,count in [('global',16000,16),('global',64000,4),('global',256000,1),('local',200,4)]:
+    for method,bound,count in ([('global',4000,16)] if lowpath.exists() else [])+[('global',16000,16),('global',64000,4),('global',256000,1),('local',200,4)]:
         group=[r for r in rows if r['method']==method and r.get('cap',r.get('steps'))==bound];scores=[];labels=[];costs=[];complete=True
         for l in [x for x in target['ligands'] if x['label']!='redocking']:
             values=[r for r in group if r['id']==l['id'] and r['conformer']=='independent' and r.get('ok')]
@@ -47,13 +51,22 @@ for target in inputs['targets']:
             values=[r for r in group if r['id']=='crystal' and r['conformer']==conf and r.get('ok')]
             if values:
                 best=min(values,key=lambda r:r['score']);redocking[conf]={'selected_rmsd_A':rmsd(best),'oracle_rmsd_A':min(map(rmsd,values)),'successful_runs':sum(rmsd(r)<=2 for r in values),'runs':len(values)}
-        configs.append({'method':method,'bound':bound,'runs':count,'nominal_eval_budget':bound*count if method=='global' else None,'ranking':q,'ranking_complete':complete and len(scores)==16,'cost_accounting_complete':method!='local' or all('source_reload_ms' in r for r in group),'median_total_compute_ms':float(np.median(costs)) if costs else None,'redocking':redocking,
+        configs.append({'method':method,'bound':bound,'runs':count,'posthoc_low_tier_followup':bound==4000,'nominal_eval_budget':bound*count if method=='global' else None,'ranking':q,'ranking_complete':complete and len(scores)==16,'cost_accounting_complete':method!='local' or all('source_reload_ms' in r for r in group),'median_total_compute_ms':float(np.median(costs)) if costs else None,'redocking':redocking,
                         'ranking_gate':bool(q and control_quality and q['auc']>=.65 and q['auc']>=control_quality['auc']-.05),'redocking_gate_independent':redocking.get('independent',{}).get('selected_rmsd_A',float('inf'))<=2})
     long=[]
     for conf in ['source','independent']:
         for n in [1,2,4,8]:
             r=[x for x in rows if x['id']=='crystal' and x['conformer']==conf and x.get('cap')==1000000 and x['run']<n and x.get('ok')]
             if r:long.append({'conformer':conf,'runs':len(r),'selected_rmsd_A':rmsd(min(r,key=lambda x:x['score'])),'oracle_rmsd_A':min(map(rmsd,r)),'total_compute_ms':sum(x['call_ms'] for x in r)})
-    results.append({'target':target['target'],'rows':len(rows),'superseded_measurements':len(raw_rows)-len(rows),'failures':[{k:v for k,v in r.items() if k!='pose'} for r in rows if not r.get('ok')],'ligand_preparation_failures':target['failures'],'stock_ranking':control_quality,'stock_completed':len(controls),'stock_redocking':[{k:r[k] for k in ['conformer','score','wall_ms']}|{'rmsd_A':rmsd(r)} for r in controls if r['id']=='crystal' and r['ok']],'configs':configs,'long_redocking':long})
-output={'scope':'Predeclared exploratory gates on three prepared targets; HIVPR preparation failure retained. Independent-conformer ranking, source and independent redocking. Nominal global budgets match; actual compute differs. Local refinement includes generation/reload and is not equal-budget global search.','targets':results}
+    results.append({'target':target['target'],'rows':len(rows),'superseded_measurements':len(raw_rows)-len(rows),'failures':[{k:v for k,v in r.items() if k!='pose'} for r in rows if not r.get('ok')],'ligand_preparation_failures':target['failures'],'stock_ranking':control_quality,'stock_auc_missing_result_bounds':control_auc_bounds,'stock_ranking_successes':len(rank_control),'stock_completed':len(controls),'stock_redocking':[{k:r[k] for k in ['conformer','score','wall_ms']}|{'rmsd_A':rmsd(r)} for r in controls if r['id']=='crystal' and r['ok']],'configs':configs,'long_redocking':long})
+for t in results:
+    if 'configs' not in t:continue
+    cs=[r for r in stock if r['target']==t['target']]
+    t['stock_attempts']=len(cs);t['stock_successes']=sum(r['ok'] for r in cs)
+    t['stock_failures']=[{k:v for k,v in r.items() if k!='pose'} for r in cs if not r['ok']]
+gate_counts=[];prepared=[t for t in results if 'configs' in t]
+for first in prepared[0]['configs']:
+    cs=[next(c for c in t['configs'] if (c['method'],c['bound'])==(first['method'],first['bound'])) for t in prepared]
+    gate_counts.append({'method':first['method'],'bound':first['bound'],'targets':len(cs),'redocking_passes':sum(c['redocking_gate_independent'] for c in cs),'ranking_passes':sum(c['ranking_gate'] for c in cs),'both_on_same_target':sum(c['redocking_gate_independent'] and c['ranking_gate'] for c in cs)})
+output={'scope':'Predeclared exploratory gates on three prepared targets; HIVPR preparation failure retained. Independent-conformer ranking, source and independent redocking. Nominal global budgets match; actual compute differs. Local refinement includes generation/reload and is not equal-budget global search. stock_completed is a legacy count of attempts including failures; stock_attempts and stock_successes disambiguate it.','gate_counts':gate_counts,'targets':results}
 (OUT/'science_summary.json').write_text(json.dumps(output,indent=2)+'\n');print([{k:t.get(k) for k in ['target','rows','stock_completed','preparation_failed']} for t in results])

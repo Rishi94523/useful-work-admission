@@ -1,0 +1,1551 @@
+{
+  "scope": "Pre-outcome size-stratified 8+8 selection from first96 eligible molecules; ETKDG independent coordinates. Target failures retained.",
+  "targets": [
+    {
+      "target": "fa10",
+      "sources": [
+        {
+          "url": "https://dude.docking.org/targets/fa10/actives_final.sdf.gz",
+          "bytes": 662846,
+          "sha256": "1311c2b89ff47c99a4b1326baeca49607efc61fcb9dfc6af0badd9a51858dc24"
+        },
+        {
+          "url": "https://dude.docking.org/targets/fa10/decoys_final.sdf.gz",
+          "bytes": 17419595,
+          "sha256": "5e21991f9c279ea6056766da0a66b7f99b18a97e4ccdbe3d54b2ee2ec8dc38f8"
+        },
+        {
+          "url": "https://dude.docking.org/targets/fa10/crystal_ligand.mol2",
+          "bytes": 5804,
+          "sha256": "51240e12a81912995303d83da6e2514d9dca4803e8d39d4bbb285173b0728133"
+        },
+        {
+          "url": "https://dude.docking.org/targets/fa10/receptor.pdb",
+          "bytes": 124809,
+          "sha256": "3d69c9386e6f57dc72a2a7d3d4db1eeaa5bb63d80c22798c70d0cd827eab8ea8"
+        }
+      ],
+      "center": [
+        2.1616875000000007,
+        -8.645875000000002,
+        -13.3505625
+      ],
+      "size": [
+        30,
+        30,
+        30
+      ],
+      "receptor": "tmp/adaptive-docking/fa10/receptor.pdbqt",
+      "receptor_sha256": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+      "preparation_and_maps_ms": 33107.58000000351,
+      "selection": [
+        {
+          "id": "active_00025",
+          "label": "active",
+          "smiles": "O=C1CN(S(=O)(=O)/C=C/c2ccc(Cl)s2)CCN1Cc1cc2c[nH+]ccc2[nH]1"
+        },
+        {
+          "id": "active_00009",
+          "label": "active",
+          "smiles": "O=C(Nc1c(O)cc(Cl)cc1C(=O)Nc1ccc(Cl)cn1)c1ccc(N2CCCCC2=O)cc1"
+        },
+        {
+          "id": "active_00092",
+          "label": "active",
+          "smiles": "O=C(N[C@H]1c2ccccc2C[C@H]1NC(=O)c1ccc(Cl)s1)c1ccc(-n2ccccc2=O)cc1"
+        },
+        {
+          "id": "active_00037",
+          "label": "active",
+          "smiles": "CN(C)Cc1nccn1-c1ccc(N2CC[C@H](NS(=O)(=O)c3ccc4c(Cl)c[nH]c4c3)C2=O)c(F)c1"
+        },
+        {
+          "id": "active_00024",
+          "label": "active",
+          "smiles": "CS(=O)(=O)c1ccccc1-c1ccc(CCNS(=O)(=O)c2cc(C(N)=[NH2+])ccc2O)c(OCC(=O)[O-])c1"
+        },
+        {
+          "id": "active_00090",
+          "label": "active",
+          "smiles": "NC(=[NH2+])c1cccc(OC[C@H](Cc2ccccc2)NC(=O)c2ccc(-c3ccccc3S(N)(=O)=O)cc2)c1"
+        },
+        {
+          "id": "active_00057",
+          "label": "active",
+          "smiles": "CS(=O)(=O)NC[C@@]1(C(=O)Nc2ccc(-c3ccccc3S(N)(=O)=O)cn2)CC(c2ccc3onc(N)c3c2)=NO1"
+        },
+        {
+          "id": "active_00043",
+          "label": "active",
+          "smiles": "C[N+]1(Cc2ccccc2-c2ccc(NC(=O)c3cc(C(F)(F)F)nn3-c3ccc4onc(N)c4c3)c(F)c2)CCOCC1"
+        },
+        {
+          "id": "decoy_00084",
+          "label": "decoy",
+          "smiles": "COc1cc(/C=C2\\C(=O)N(c3nnn[n-]3)N=C2C)cc(I)c1O"
+        },
+        {
+          "id": "decoy_00070",
+          "label": "decoy",
+          "smiles": "CSc1cccc2nc3c4c(n([O-])c(=O)c3cc12)C(=O)C[C@H](S(=O)(=O)C(C)C)N4"
+        },
+        {
+          "id": "decoy_00001",
+          "label": "decoy",
+          "smiles": "Cc1ccccc1NC(=O)C(=O)N/N=C/c1ccc(OC(=O)c2ccccc2Br)cc1"
+        },
+        {
+          "id": "decoy_00072",
+          "label": "decoy",
+          "smiles": "COc1cc([C@H]2C(C(=O)c3ccc4c(c3)C[C@@H](C)O4)=C([O-])C(=O)N2CCO)ccc1O"
+        },
+        {
+          "id": "decoy_00045",
+          "label": "decoy",
+          "smiles": "Cc1ccc(NC(=O)C[C@H]2C(=O)Nc3ccccc3N2C(=O)CSc2ncccc2Cl)cc1"
+        },
+        {
+          "id": "decoy_00028",
+          "label": "decoy",
+          "smiles": "COc1cccc([C@@H]2C3=C(CC(C)(C)CC3=O)Nc3nc(SCCC(C)C)[nH]c(=O)c32)c1OC"
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "smiles": "CSc1ccc([C@H]2C(C#N)=C(N)Oc3cc(OC(=O)c4cc5ccccc5oc4=O)ccc32)cc1"
+        },
+        {
+          "id": "decoy_00048",
+          "label": "decoy",
+          "smiles": "Cc1cc(C)nc(-n2nc(C)c(CC(=O)Nc3ccccc3N[C@]34C[C@H]5C[C@H](C[C@H](C5)C3)C4)c2C)n1"
+        }
+      ],
+      "failures": [],
+      "ligands": [
+        {
+          "id": "active_00025",
+          "label": "active",
+          "heavy_atoms": 28,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00025_source.pdbqt",
+            "sha256": "df98db96ea847c9ffd62df108aff9260ea601ed3a29140b1f7775086298c1f56"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00025_independent.pdbqt",
+            "sha256": "b5badcdc41a560de077fe944639c7f3336a0ab60e6aa78901ddf39fe29933c15"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 265.3985999932047
+        },
+        {
+          "id": "active_00009",
+          "label": "active",
+          "heavy_atoms": 34,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00009_source.pdbqt",
+            "sha256": "3f5e1b4c61a3603aaad6096130687a4aa9ce75b1dc307461d33c07ee84b7417c"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00009_independent.pdbqt",
+            "sha256": "6ea206d4d836be9bb4d9ac742f56841e0b1883f754e9e5eaf971495e1eaee244"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 225.27699999773176
+        },
+        {
+          "id": "active_00092",
+          "label": "active",
+          "heavy_atoms": 34,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00092_source.pdbqt",
+            "sha256": "b17671f607eb4015efde49731811284a07d59b5574489c64d6a17ee20ce468ba"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00092_independent.pdbqt",
+            "sha256": "068e6af9c69d774f403ade05325848bb07ca7a0b101924271f6f34f517aeb9ae"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 256.7909000063082
+        },
+        {
+          "id": "active_00037",
+          "label": "active",
+          "heavy_atoms": 36,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00037_source.pdbqt",
+            "sha256": "9acf298a71092755fe3665c3308ee88f6b4a7b9b5406f26308d48ca1837bb9df"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00037_independent.pdbqt",
+            "sha256": "283bcedc986b5b315283170b97562f0de400febfb6271a04a2742264da6e87e4"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 283.1739000030211
+        },
+        {
+          "id": "active_00024",
+          "label": "active",
+          "heavy_atoms": 37,
+          "rotatable_bonds": 12,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00024_source.pdbqt",
+            "sha256": "ba09e71122237034dff637870011453304832f7e76c7e50c11590d002ac3da06"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00024_independent.pdbqt",
+            "sha256": "3f8de5f969e86ffbca30163e86cfbc0a9980f7dc262d044dbf9aebbde3c32eb5"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 279.4950000024983
+        },
+        {
+          "id": "active_00090",
+          "label": "active",
+          "heavy_atoms": 38,
+          "rotatable_bonds": 11,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00090_source.pdbqt",
+            "sha256": "5f1cdf216312d6ff5cb0b5333a15ddebedae5ec93d01379df91e99be4a12b81d"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00090_independent.pdbqt",
+            "sha256": "054c08efc0d640f47bc438437a0478a3c61ef01a990a18ec62c7f212be865795"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 350.4683999999543
+        },
+        {
+          "id": "active_00057",
+          "label": "active",
+          "heavy_atoms": 40,
+          "rotatable_bonds": 10,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00057_source.pdbqt",
+            "sha256": "e67e664e37c573763ef7ca29ab53e3a72d0d2d4067c1df71d6b098b3d1f953d4"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00057_independent.pdbqt",
+            "sha256": "d06d7c5f40ebc2615be729f51823a037af688775f58332f00e19fc8b536f45c0"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 320.41059999755817
+        },
+        {
+          "id": "active_00043",
+          "label": "active",
+          "heavy_atoms": 43,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00043_source.pdbqt",
+            "sha256": "d690cf9640b25753e1669cc0eeceff338dfcb7edaa897961e91dae6cb04e3289"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/active_00043_independent.pdbqt",
+            "sha256": "155add1acd247c7cf35fb31032c5e7f3fff0b70ba1f3b432d050831756f5387e"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 351.5982999961125
+        },
+        {
+          "id": "decoy_00084",
+          "label": "decoy",
+          "heavy_atoms": 23,
+          "rotatable_bonds": 4,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00084_source.pdbqt",
+            "sha256": "6898dcd0033a2349e335bd622ba286cb77ddde01086a1d98dc1657e65d8cd20e"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00084_independent.pdbqt",
+            "sha256": "9417726bd6be4c132fa8488715faafce2d871f653342047c1c9ed36d8f835342"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 107.84469999634894
+        },
+        {
+          "id": "decoy_00070",
+          "label": "decoy",
+          "heavy_atoms": 29,
+          "rotatable_bonds": 3,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00070_source.pdbqt",
+            "sha256": "9fd6cb0b4aac6714a08c8fb97e557948d5bfba190b7176a0788b11df77942589"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00070_independent.pdbqt",
+            "sha256": "66dacdc864ab8569993251bca62227c815f1e89efbddf3f9ff666a37032d36c2"
+          },
+          "mmff_status": 0,
+          "preparation_ms": 179.82150000170805
+        },
+        {
+          "id": "decoy_00001",
+          "label": "decoy",
+          "heavy_atoms": 31,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00001_source.pdbqt",
+            "sha256": "c934bc4fbac5cbc24a7c624171c616f16472f06ee60ded4b90346933a6d6a48b"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00001_independent.pdbqt",
+            "sha256": "13f1aa63b8e245fda6748506106972bab3010aa31b75aed9945049fb00266648"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 198.45010000426555
+        },
+        {
+          "id": "decoy_00072",
+          "label": "decoy",
+          "heavy_atoms": 31,
+          "rotatable_bonds": 8,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00072_source.pdbqt",
+            "sha256": "300315e552c2f805a864425a829810315fc6aed03b472456eadf107f7051c64d"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00072_independent.pdbqt",
+            "sha256": "92484797301f7d4f80e58647c54fa1832486ebcfe91d7cc3946f7efcf163908d"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 233.18399999698158
+        },
+        {
+          "id": "decoy_00045",
+          "label": "decoy",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00045_source.pdbqt",
+            "sha256": "ad55590515b1ede00f33493af2438ee86d6691d22e442643886dc41efa6be67b"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00045_independent.pdbqt",
+            "sha256": "39b4c403edd595c1e50295d007cd2b17f67c62452d39c9d394bbb8d45a255f36"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 222.6918999949703
+        },
+        {
+          "id": "decoy_00028",
+          "label": "decoy",
+          "heavy_atoms": 34,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00028_source.pdbqt",
+            "sha256": "4d661ae75c740bf735821c6025b004f1a3d5dd6496d7257afc968831240bb761"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00028_independent.pdbqt",
+            "sha256": "35503e5abf3717589175e4ef94b1681e9fac92af0750ab3c3dac61c4e20d19ee"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 288.1465000027674
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "heavy_atoms": 35,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00034_source.pdbqt",
+            "sha256": "a4a016825523bdd599f54bf2aa34ef8e979b6e99b30722ed47d5b5a8fe8e4357"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00034_independent.pdbqt",
+            "sha256": "5d3a984d77e49a927a22995050fdc8d3db0278755b5cf9ebec7ee130ce38edcd"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 214.98910000082105
+        },
+        {
+          "id": "decoy_00048",
+          "label": "decoy",
+          "heavy_atoms": 36,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00048_source.pdbqt",
+            "sha256": "1f0b8c4def3752a9bbf50fc2e65c474fcd348fe3a9d7217b812954b8206acc17"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/decoy_00048_independent.pdbqt",
+            "sha256": "f5b4fdb0a030eafb8f888b9775a7ec97a3feba2010a4eebf6789eec90c9fd413"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 427.4449999938952
+        },
+        {
+          "id": "crystal",
+          "label": "redocking",
+          "source": {
+            "path": "tmp/adaptive-docking/fa10/ligands/crystal_source.pdbqt",
+            "sha256": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/fa10/ligands/crystal_independent.pdbqt",
+            "sha256": "95a665a06e8d53b6fa92f1bbc0ab298e1b60f54a54bb9030065e0b3deea52a20"
+          },
+          "heavy_atoms": 32
+        }
+      ],
+      "maps": [
+        {
+          "name": "fa10.At.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.At.map",
+          "sha256": "0e79ad0d785d8367a43a9665190825ba13da0397fceff3aa0046a60f0a194ab0",
+          "bytes": 3830343
+        },
+        {
+          "name": "fa10.Br_H.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.Br_H.map",
+          "sha256": "e8829ff7d0c2aae0132ada5cf2f9560171bdb6f05498b2156d639a089b5dfa15",
+          "bytes": 3870053
+        },
+        {
+          "name": "fa10.C_H.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.C_H.map",
+          "sha256": "c26a37ad4a0b5ab266d205914aa3de9b132d1a4a2045a7f3b82b55c83fba47d5",
+          "bytes": 3884993
+        },
+        {
+          "name": "fa10.C_P.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.C_P.map",
+          "sha256": "82ef9728d31a5c14a84f5ed4e1a254e9056b4e710d5718990a2192bc9f0a6a92",
+          "bytes": 3884140
+        },
+        {
+          "name": "fa10.Cl_H.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.Cl_H.map",
+          "sha256": "c0d7206e91e20c706c70d0095193c48d2af88b1034726a25de63dc340715fb94",
+          "bytes": 3900667
+        },
+        {
+          "name": "fa10.F_H.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.F_H.map",
+          "sha256": "da8864bbf20fc41a081b34a9f04e8fe4f82e25c23254cbd0135c06156057ec90",
+          "bytes": 3957918
+        },
+        {
+          "name": "fa10.I_H.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.I_H.map",
+          "sha256": "7576ddf12bdb0de98503ce6ea847a008553526ca5a2bcd08550f9767a2b6061d",
+          "bytes": 3841575
+        },
+        {
+          "name": "fa10.Met_D.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.Met_D.map",
+          "sha256": "5da0fe7ceae22342b004c6e59d7fcc5bcf00c7a043840d097f948cb2559a5152",
+          "bytes": 4058310
+        },
+        {
+          "name": "fa10.N_A.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.N_A.map",
+          "sha256": "8adc1bb0c4c965ca9ce62fd24bddc19a4ebf34ff641b228f3b4de8436ec16562",
+          "bytes": 3912372
+        },
+        {
+          "name": "fa10.N_D.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.N_D.map",
+          "sha256": "255b4aec4220cd32ae87441f2b238456a3eb45e1fe0845d0be8a4f1945695816",
+          "bytes": 3914849
+        },
+        {
+          "name": "fa10.N_DA.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.N_DA.map",
+          "sha256": "c2fcfcfe57b4ae8ad7a7bab64f4900d69600e57415babf6d6f38d73ecbf823da",
+          "bytes": 3925863
+        },
+        {
+          "name": "fa10.N_P.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.N_P.map",
+          "sha256": "a152cf77b0bf8f833056be2aeee64628050e6b7a09e9dfd7fe4d108c5d28a420",
+          "bytes": 3900258
+        },
+        {
+          "name": "fa10.O_A.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.O_A.map",
+          "sha256": "5236d3843d796d1e8846ce450ba850e8b5a8ff1ed443ab3fc44bd283671ae636",
+          "bytes": 3929116
+        },
+        {
+          "name": "fa10.O_D.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.O_D.map",
+          "sha256": "78da6b91fa88ffac3a22f34c4db6ac457aa4e3b59959e450992711de7fd73169",
+          "bytes": 3932791
+        },
+        {
+          "name": "fa10.O_DA.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.O_DA.map",
+          "sha256": "55cbbb3cdda51552a0f5a87d12f88bd911afed99d42e8972060a1bf68df3fa60",
+          "bytes": 3943760
+        },
+        {
+          "name": "fa10.O_P.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.O_P.map",
+          "sha256": "2ec7ccfe03c5976c7e0629d0199834d8e80389196d750a756d335c66f7fc73ac",
+          "bytes": 3916389
+        },
+        {
+          "name": "fa10.P_P.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.P_P.map",
+          "sha256": "32c03bc92e9af63d4e1fb14f2bd0218f8adf5f694adaeac2dc2868be9815ac73",
+          "bytes": 3856075
+        },
+        {
+          "name": "fa10.S_P.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.S_P.map",
+          "sha256": "7e5579e664adb22e004452954ce4aebd95b636de68823ec58b2555f29328a501",
+          "bytes": 3870051
+        },
+        {
+          "name": "fa10.Si.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.Si.map",
+          "sha256": "9327c69a5a8dd749a2801414be66c3af82000bbe0bd00db2f5e120f5294421a1",
+          "bytes": 3842970
+        },
+        {
+          "name": "fa10.W.map",
+          "path": "tmp/adaptive-docking/fa10/maps/fa10.W.map",
+          "sha256": "cda7c1a92df47e75d40f491e7a3bdd50ba4c36236cfba2b0b2c1e340377adae2",
+          "bytes": 4504870
+        }
+      ]
+    },
+    {
+      "target": "hivpr",
+      "preparation_failed": "Receptor preparation failed: Atom # 0 (N) in mol doesn't have implicit Hs -> continue with next atom... \nMolecule doesn't contain wanted_smarts: [NX3h1] -> continue with next pattern... \nMolecule doesn't contain pattern: [NX3h1] -> linker label for N-term will not be made. \nMolecule doesn't contain wanted_smarts: [CX3h1] -> continue with next pattern... \nMolecule doesn't contain pattern: [CX3h1] -> linker label for C-term will not be made. \nMolecule doesn't contain the standard backbone of nucleotides or amino acids. -> no templates will be made. \n\nError: Creation of data structure for receptor failed.\n\nDetails:\nTemplate generation failed for unknown residues: {'GLZ'}, which appear to be linking fragments. \nGeneration of chemical templates with modified backbones, which involves guessing of linker positions and types, are not currently supported. \nRecommendations:\n1. (to parameterize the residues) Use --add_templates to pass the additional templates with valid linker_labels, \n2. (to skip the residues) Use --delete_residues to ignore them. Residues will be deleted from the prepared receptor. \n\n\nF:\\Projects\\antigravity\\Capstone\\tmp\\docking-audit\\deps\\meeko\\polymer.py:856: RuntimeWarning: Input residues {'A:27': 'GLZ', 'A:29': 'ASQ', 'A:48': 'GLZ', 'B:126': 'GLZ', 'B:128': 'ASQ', 'B:147': 'GLZ'} not in residue_templates\n\n  warnings.warn(err, RuntimeWarning)\nF:\\Projects\\antigravity\\Capstone\\tmp\\docking-audit\\deps\\meeko\\polymer.py:857: RuntimeWarning: Trying to resolve unknown residues by building chemical templates... \n  warnings.warn(\"Trying to resolve unknown residues by building chemical templates... \", RuntimeWarning)\n"
+    },
+    {
+      "target": "hs90a",
+      "sources": [
+        {
+          "url": "https://dude.docking.org/targets/hs90a/actives_final.sdf.gz",
+          "bytes": 84449,
+          "sha256": "8d4d13775a950d3ed20f48a9295d0e28aa02f3329b62c00f08f5abf2578bc5f5"
+        },
+        {
+          "url": "https://dude.docking.org/targets/hs90a/decoys_final.sdf.gz",
+          "bytes": 3802621,
+          "sha256": "63fbcfc352ad175b00d297f6ef22bea94767591ca215793b4347a24d5f29956e"
+        },
+        {
+          "url": "https://dude.docking.org/targets/hs90a/crystal_ligand.mol2",
+          "bytes": 3653,
+          "sha256": "45fdff579346cacb1ecdded9d5ae58bc934be0e97bb0096ca047b4ae092e3b87"
+        },
+        {
+          "url": "https://dude.docking.org/targets/hs90a/receptor.pdb",
+          "bytes": 109725,
+          "sha256": "acfca441f80c6765fe09362fdf882d45fcfba281e0a3a4edb2a1f3fc58d87743"
+        }
+      ],
+      "center": [
+        2.6995909090909085,
+        11.453863636363634,
+        24.8025
+      ],
+      "size": [
+        30,
+        30,
+        30
+      ],
+      "receptor": "tmp/adaptive-docking/hs90a/receptor.pdbqt",
+      "receptor_sha256": "0e35da4b26866de32e1fab423efa17419805294f24ecedd61871194d871786f5",
+      "preparation_and_maps_ms": 24555.51810000179,
+      "selection": [
+        {
+          "id": "active_00020",
+          "label": "active",
+          "smiles": "Oc1ccc2c(-c3cc(Br)c(O)cc3O)noc2c1"
+        },
+        {
+          "id": "active_00002",
+          "label": "active",
+          "smiles": "CCCn1c(Sc2nc3cccc(Cl)c3s2)nc2c(N)ncnc21"
+        },
+        {
+          "id": "active_00065",
+          "label": "active",
+          "smiles": "CCCCn1c(Sc2nc3cncc(Cl)c3s2)nc2c(N)ncnc21"
+        },
+        {
+          "id": "active_00080",
+          "label": "active",
+          "smiles": "CCc1cc(-c2[nH]nc(C)c2-c2ccc3c(c2)OCCO3)c(O)cc1O"
+        },
+        {
+          "id": "active_00072",
+          "label": "active",
+          "smiles": "Oc1cc(O)c(-c2n[nH]cc2N2CC[NH+](Cc3ccccc3)CC2)cc1Cl"
+        },
+        {
+          "id": "active_00085",
+          "label": "active",
+          "smiles": "CC(=O)OCCCCn1c(Sc2nc3cccc(Cl)c3s2)nc2c(N)ncnc21"
+        },
+        {
+          "id": "active_00048",
+          "label": "active",
+          "smiles": "Nc1ncnc2c1nc(Sc1cc3c(cc1Br)OCO3)n2CCCc1cn(CCCO)nn1"
+        },
+        {
+          "id": "active_00054",
+          "label": "active",
+          "smiles": "C=CC/N=C1/C(O)=C/C2=N/C(=O)/C(C)=C/C=C\\[C@H](OC)[C@@H](OC(N)=O)/C(C)=C/[C@H](C)[C@H](O)[C@@H](OC)C[C@H](C)C[C@@H]1C2=O"
+        },
+        {
+          "id": "decoy_00085",
+          "label": "decoy",
+          "smiles": "CC(C)[NH2+][C@H](COc1c(Br)cc([N+](=O)[O-])cc1Br)C(N)=O"
+        },
+        {
+          "id": "decoy_00049",
+          "label": "decoy",
+          "smiles": "COC(=O)[C@H](CCSC)NC(=O)N1CCc2[nH]c[nH+]c2[C@@H]1c1ccc(F)c(F)c1F"
+        },
+        {
+          "id": "decoy_00026",
+          "label": "decoy",
+          "smiles": "Cc1cccc(S(=O)(=O)/N=C2\\N=c3ccccc3=[NH+][C@H]2Nc2cccc(C(=O)[O-])c2)c1"
+        },
+        {
+          "id": "decoy_00021",
+          "label": "decoy",
+          "smiles": "CC(=O)/[NH+]=c1/ccc2c(CN3C(=O)N[C@@](C)(c4ccc(Cl)cc4Cl)C3=O)cc(O)oc-2c1"
+        },
+        {
+          "id": "decoy_00078",
+          "label": "decoy",
+          "smiles": "O=C(NCc1cc2ccccc2[nH]1)[C@@H]1CN(C(=O)c2cccc(Cl)c2)CC12CC[NH2+]CC2"
+        },
+        {
+          "id": "decoy_00028",
+          "label": "decoy",
+          "smiles": "CCCC1=Nc2ccccc2[C@@H]2N/C(=N\\C(=O)C3=CC4=c5ccccc5=[NH+][C@@H]4C(C)=N3)NN12"
+        },
+        {
+          "id": "decoy_00091",
+          "label": "decoy",
+          "smiles": "N#Cc1c(NC(=O)CC[N@H+]2CCCC[C@@H]2CNC(=O)Nc2ccccc2)sc2c1CCCC2"
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "smiles": "Cc1ccc([C@@]2(C)NC(=O)N(CC(=O)N[C@@H](C[N@@H+]3CCc4ccccc4C3)C(C)(C)C)C2=O)cc1"
+        }
+      ],
+      "failures": [],
+      "ligands": [
+        {
+          "id": "active_00020",
+          "label": "active",
+          "heavy_atoms": 19,
+          "rotatable_bonds": 4,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00020_source.pdbqt",
+            "sha256": "b50604ae7e76dd5dfc531bda1eb05f1cb9d1f65d7689229006155644697e8469"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00020_independent.pdbqt",
+            "sha256": "4c9dca09b0a3a2f2a09ccd424ecaf39dcf146a1815ed7d143559d52ccfc01da2"
+          },
+          "mmff_status": 0,
+          "preparation_ms": 111.58360000263201
+        },
+        {
+          "id": "active_00002",
+          "label": "active",
+          "heavy_atoms": 24,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00002_source.pdbqt",
+            "sha256": "60fced6f861014dde0e1f528bdddb40eb6d50691d332be1cff09dd10446324c6"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00002_independent.pdbqt",
+            "sha256": "97bdfc6d67df950fe5965abebc940172be1dd647ebc0bbb3df84d26dd507b669"
+          },
+          "mmff_status": 0,
+          "preparation_ms": 100.49399999843445
+        },
+        {
+          "id": "active_00065",
+          "label": "active",
+          "heavy_atoms": 25,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00065_source.pdbqt",
+            "sha256": "4feefa8387c52b095bdf7ad5a62f87241cdd0b407505eed3afa87019b8a368e5"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00065_independent.pdbqt",
+            "sha256": "ea780512d37fd582d36feac51f773f85fc2f533cc8620c5b519340d742eb9f08"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 100.43050000240328
+        },
+        {
+          "id": "active_00080",
+          "label": "active",
+          "heavy_atoms": 26,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00080_source.pdbqt",
+            "sha256": "a00cdf5b723d1ae4349a68e2a5c858e92d589876d92ce4ec419acbc23c151d50"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00080_independent.pdbqt",
+            "sha256": "bfd2940a32d33e5f05ea7941b877ba1ba9b75a3b977dbeca1cee0877ab2e7acf"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 115.92080000264104
+        },
+        {
+          "id": "active_00072",
+          "label": "active",
+          "heavy_atoms": 27,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00072_source.pdbqt",
+            "sha256": "93fcc92e89760cddcb9db6d4d1e515f202addf848bfe341473285dea71db4af4"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00072_independent.pdbqt",
+            "sha256": "c252272b2c488e32fc705ddf23c37ec94d8a8a3c7da1f9319b23c102efb53e17"
+          },
+          "mmff_status": 0,
+          "preparation_ms": 128.48500000109198
+        },
+        {
+          "id": "active_00085",
+          "label": "active",
+          "heavy_atoms": 29,
+          "rotatable_bonds": 8,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00085_source.pdbqt",
+            "sha256": "06b0c76bec649543af131b1a20a8110a0888643607ac5b47b1a0e4bb8e694872"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00085_independent.pdbqt",
+            "sha256": "6c2f3f19ff95e1c0ff38b3e1b865f3964bc35371785688ed1e74a2179f3263bb"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 136.44539999950211
+        },
+        {
+          "id": "active_00048",
+          "label": "active",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 11,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00048_source.pdbqt",
+            "sha256": "1b8e0d4853be3940ddd5970804580bd17b9c9aa9453380990a0e16604dd83849"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00048_independent.pdbqt",
+            "sha256": "7cb1819265e50b2e7dd335fb34fd83c116d1ded6e1e863abada401cfcbc2fd82"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 184.95899999834364
+        },
+        {
+          "id": "active_00054",
+          "label": "active",
+          "heavy_atoms": 42,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00054_source.pdbqt",
+            "sha256": "4b7dd0e491e62c190f81ffe1f238a1a64f4e93a104a12ed954c7afee19cec55e"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/active_00054_independent.pdbqt",
+            "sha256": "0e057bd711b51a008d77b3fe3cd741c2a5a715902c841350efd32b5bc75db59f"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 534.8163999951794
+        },
+        {
+          "id": "decoy_00085",
+          "label": "decoy",
+          "heavy_atoms": 21,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00085_source.pdbqt",
+            "sha256": "96d43b6806e58d7b7606376a0ca9ef66ae737333f3318e9176763e4ce3ef5bdf"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00085_independent.pdbqt",
+            "sha256": "1c6c05599c6a59fb67ad58579533247d4af1b78c423291c3d12863c647b7cccb"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 91.67420000449056
+        },
+        {
+          "id": "decoy_00049",
+          "label": "decoy",
+          "heavy_atoms": 30,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00049_source.pdbqt",
+            "sha256": "e50571f027cd1250a44e7491f0e726788d676d6d062b91233f29e931e873f8aa"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00049_independent.pdbqt",
+            "sha256": "5fcd8b4f512aafa76515b8dc93a6e2432d03730ad8059ddaa33444056f2cc197"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 174.02230000152485
+        },
+        {
+          "id": "decoy_00026",
+          "label": "decoy",
+          "heavy_atoms": 31,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00026_source.pdbqt",
+            "sha256": "f384d1a67d7ada9a3149317fc267ea45a8df9460c38714d71336ff0c26fd7892"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00026_independent.pdbqt",
+            "sha256": "fac6b096de542726e53b3cc8e97268fd1342cf28b47af7eb0da3883a29051cd3"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 194.48240000201622
+        },
+        {
+          "id": "decoy_00021",
+          "label": "decoy",
+          "heavy_atoms": 32,
+          "rotatable_bonds": 4,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00021_source.pdbqt",
+            "sha256": "e10f6a381efc9262a1765bec949ed5ba427123aa9168485e7b1c578802471305"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00021_independent.pdbqt",
+            "sha256": "e3041590e1a13188b9c0bf2d0d359f3bac78951b777ad8f4ebe92a536d3debc8"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 187.7798999994411
+        },
+        {
+          "id": "decoy_00078",
+          "label": "decoy",
+          "heavy_atoms": 32,
+          "rotatable_bonds": 4,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00078_source.pdbqt",
+            "sha256": "45989ebeea07752bd3ee51314e339b664b6796de15094cbdbbf1db7f9515356e"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00078_independent.pdbqt",
+            "sha256": "b2624096e5c98766be87b49944b31cbd36625842fa2ddf4aa6a3d770051757e9"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 269.2615000050864
+        },
+        {
+          "id": "decoy_00028",
+          "label": "decoy",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 3,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00028_source.pdbqt",
+            "sha256": "774ae4b3a48e37e3d04e3e9e8d1022de112b163d89c907a9c81f0bf1d42ad7fd"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00028_independent.pdbqt",
+            "sha256": "c7f1db0aad89bbf6e9b3264312229b9cf26c2c3b8879a67c0e1df87b34dd657d"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 223.9040999993449
+        },
+        {
+          "id": "decoy_00091",
+          "label": "decoy",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00091_source.pdbqt",
+            "sha256": "5b06a9b0fe02210feb4973807efb5081b07b1369e5307443f5b66a71892e77d5"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00091_independent.pdbqt",
+            "sha256": "2ba79b7aa089f9cbd759baf9b613ba0dd032d2e257b6d269faf0195ddf493931"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 279.47349999885773
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "heavy_atoms": 35,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00034_source.pdbqt",
+            "sha256": "8f04c04de233271ef28976f850cb40cc6513e2ce497ba23ccb95d37901fe3545"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/decoy_00034_independent.pdbqt",
+            "sha256": "34b54ca9a7db8839a0928fd278c4c09c1e60968f926f36f46082c3ed18b3a1ce"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 338.40679999411805
+        },
+        {
+          "id": "crystal",
+          "label": "redocking",
+          "source": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/crystal_source.pdbqt",
+            "sha256": "75ab7bb256d6e3e275cbaa560326d42e6aa827bc8628610515b50d5670334c88"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/hs90a/ligands/crystal_independent.pdbqt",
+            "sha256": "d8cec7c8e7ac015410fa32fd7f8fdc52eb5682ed4286cac9fc92998d9bbae603"
+          },
+          "heavy_atoms": 22
+        }
+      ],
+      "maps": [
+        {
+          "name": "fa10.At.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.At.map",
+          "sha256": "ff6933d273ea6a461d9a5649e80a6cbf244db6332c46c495eedcae2b34d6ada0",
+          "bytes": 3872806
+        },
+        {
+          "name": "fa10.Br_H.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.Br_H.map",
+          "sha256": "5a1a11ff11f5e67f8c551b65563a3e7f897da48e0496d9199f97f8da4f79aaf1",
+          "bytes": 3915073
+        },
+        {
+          "name": "fa10.C_H.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.C_H.map",
+          "sha256": "2c968871422f75a2572b4f245e5bc4f3e0ad196a144a8d0bce215a0d89921205",
+          "bytes": 3930606
+        },
+        {
+          "name": "fa10.C_P.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.C_P.map",
+          "sha256": "052d730baddfab9d0798004b56259244878c67cd01023508d20d9f395f5d5045",
+          "bytes": 3927843
+        },
+        {
+          "name": "fa10.Cl_H.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.Cl_H.map",
+          "sha256": "4504dfd9518d83de928c42917e8487dde222b8bc5015f4f7734463b1e42f34c0",
+          "bytes": 3946007
+        },
+        {
+          "name": "fa10.F_H.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.F_H.map",
+          "sha256": "8cd8cb2e1b8ab7f1ab3f1409c406b7fa0f9ac6ab3635e53f488b5a0ef5a9770a",
+          "bytes": 4008909
+        },
+        {
+          "name": "fa10.I_H.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.I_H.map",
+          "sha256": "9b680d9e872cf7168003190208838dc0dfd9f281875ae2668416435884140019",
+          "bytes": 3886336
+        },
+        {
+          "name": "fa10.Met_D.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.Met_D.map",
+          "sha256": "6226bb5977060e4c00a3e0df3a634cbe35089042e96ef2a913d70890cdedbc62",
+          "bytes": 4121564
+        },
+        {
+          "name": "fa10.N_A.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.N_A.map",
+          "sha256": "8fa35955185933befd6cee9ee58a7c5b1ab63358efc62ed553168d04e54f2436",
+          "bytes": 3954969
+        },
+        {
+          "name": "fa10.N_D.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.N_D.map",
+          "sha256": "623daea0185813cadf61e0806721baac03fed5326553aaf55c37a13b88c0b6e6",
+          "bytes": 3959866
+        },
+        {
+          "name": "fa10.N_DA.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.N_DA.map",
+          "sha256": "509d9ad57b3c3d7b181647091c5a7019de16bed281ed5c8bc94d66740597ac65",
+          "bytes": 3968431
+        },
+        {
+          "name": "fa10.N_P.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.N_P.map",
+          "sha256": "1572193bcdc86ab818c60f0067d8cf47dac96ac552738da1b76f3d4fe760aa4f",
+          "bytes": 3943415
+        },
+        {
+          "name": "fa10.O_A.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.O_A.map",
+          "sha256": "bb4cc8101249ecb656c604452a3e1683dc685049e11aaee594d0f54f0cd761e6",
+          "bytes": 3972013
+        },
+        {
+          "name": "fa10.O_D.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.O_D.map",
+          "sha256": "064baaea24ceaf75a0c8d994c9a4e6790bcf7b5c899ad67782127bc06b864fe5",
+          "bytes": 3978447
+        },
+        {
+          "name": "fa10.O_DA.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.O_DA.map",
+          "sha256": "f938f9fb837c31d4d59076e1808fb31174eb9d68f453760c24d9ddbe093990d0",
+          "bytes": 3987556
+        },
+        {
+          "name": "fa10.O_P.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.O_P.map",
+          "sha256": "5ecfaea16bcb803bfb1f9f73d2ae76c8b13a9d3c9508647fd1a3898104cc664f",
+          "bytes": 3960920
+        },
+        {
+          "name": "fa10.P_P.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.P_P.map",
+          "sha256": "e373380b78cd10ac511b63f6d8a9aa5a7fbe5baa10ee73823b77236a3eeebf84",
+          "bytes": 3899336
+        },
+        {
+          "name": "fa10.S_P.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.S_P.map",
+          "sha256": "861188912a6cb8c559be4a42eb0e1a328b71092a7077670806770f85c7417180",
+          "bytes": 3913162
+        },
+        {
+          "name": "fa10.Si.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.Si.map",
+          "sha256": "28afb771613be82f98a8509030d2468c6a05cf9b16b29635c529cd09e6e62c52",
+          "bytes": 3885479
+        },
+        {
+          "name": "fa10.W.map",
+          "path": "tmp/adaptive-docking/hs90a/maps/fa10.W.map",
+          "sha256": "bacf9f252a267310268a368c294ed8303b31fdb0994b7e0eb3325a7ad1b83d04",
+          "bytes": 4653415
+        }
+      ]
+    },
+    {
+      "target": "tryb1",
+      "sources": [
+        {
+          "url": "https://dude.docking.org/targets/tryb1/actives_final.sdf.gz",
+          "bytes": 160967,
+          "sha256": "a7f41c6a386f11e8008ec163d0b6c0164d47978ac43bd30e16b14ac5b839f2d2"
+        },
+        {
+          "url": "https://dude.docking.org/targets/tryb1/decoys_final.sdf.gz",
+          "bytes": 6461483,
+          "sha256": "70f6121ed10155d1afa365a1fda79d6912d1d20f7fcd6ab70663e77ebe30d412"
+        },
+        {
+          "url": "https://dude.docking.org/targets/tryb1/crystal_ligand.mol2",
+          "bytes": 5124,
+          "sha256": "be6374dcfd8c11ddf93d3e7a164006c1f45b4bf4395acbe694dd4422775ca2f8"
+        },
+        {
+          "url": "https://dude.docking.org/targets/tryb1/receptor.pdb",
+          "bytes": 218951,
+          "sha256": "e3fd584350ec57b729fb445e2b7a14aa99257036159b8000ef4d365901468df6"
+        }
+      ],
+      "center": [
+        25.381076923076918,
+        76.91234615384616,
+        83.61373076923077
+      ],
+      "size": [
+        30,
+        30,
+        30
+      ],
+      "receptor": "tmp/adaptive-docking/tryb1/receptor.pdbqt",
+      "receptor_sha256": "2184abb1b37d25c3a9d2741a6a0cd545679116463e92e4cb56db3ec6482aedde",
+      "preparation_and_maps_ms": 28025.71159999934,
+      "selection": [
+        {
+          "id": "active_00031",
+          "label": "active",
+          "smiles": "NC(=[NH2+])NCCC[C@H]1C(=O)N(C(=O)NC2CCCCC2)[C@@H]1C(=O)[O-]"
+        },
+        {
+          "id": "active_00081",
+          "label": "active",
+          "smiles": "CC(C)(C)OC(=O)N1CCN(C(=O)N2C(=O)[C@H](CCC[NH+]=C(N)N)[C@H]2C(N)=O)CC1"
+        },
+        {
+          "id": "active_00076",
+          "label": "active",
+          "smiles": "O=C(CCc1ccccc1)Nc1ccc(C(=O)OCN2C(=O)c3ccccc3S2(=O)=O)cc1"
+        },
+        {
+          "id": "active_00039",
+          "label": "active",
+          "smiles": "CC(C)(C)OC(=O)N1CCN(C(=O)N2C(=O)[C@H](CCC[NH+]=C(N)N)[C@H]2C(=O)N2CCCCC2)CC1"
+        },
+        {
+          "id": "active_00028",
+          "label": "active",
+          "smiles": "O=C(CCCC(=O)N1CCN(C(=O)N2C(=O)[C@H](CC3CC[NH2+]CC3)[C@H]2C(=O)[O-])CC1)Nc1ccccc1"
+        },
+        {
+          "id": "active_00024",
+          "label": "active",
+          "smiles": "NC(=[NH2+])N1CCC[C@@H](C[C@H]2C(=O)N(C(=O)N3CCN(C(=O)CCCCCc4ccccn4)CC3)[C@@H]2C(=O)[O-])C1"
+        },
+        {
+          "id": "active_00069",
+          "label": "active",
+          "smiles": "O=C([O-])[C@@H]1[C@@H](CC2CC[NH2+]CC2)C(=O)N1C(=O)N1CCN(C(=O)CCCCCc2cccc3ccccc23)CC1"
+        },
+        {
+          "id": "active_00044",
+          "label": "active",
+          "smiles": "[NH3+]CCCC[C@H](NC(=O)OCc1ccccc1)C(=O)c1noc(Cc2ccc(C(=O)NC3Cc4ccccc4C3)cc2)n1"
+        },
+        {
+          "id": "decoy_00074",
+          "label": "decoy",
+          "smiles": "C[C@H]1CCC[N@@H+](CCCNC(=O)NNC(=O)c2cc(Br)c[nH]2)C1"
+        },
+        {
+          "id": "decoy_00090",
+          "label": "decoy",
+          "smiles": "CCN1NC=C(NC(=O)c2ccc([C@H]3CCC[N@@H+]3Cc3nc[nH]c3C)s2)N1"
+        },
+        {
+          "id": "decoy_00093",
+          "label": "decoy",
+          "smiles": "C[NH+](C)CCC(=O)Nc1ccc(NC(=O)c2cc(F)cc([N+](=O)[O-])c2N)cc1"
+        },
+        {
+          "id": "decoy_00083",
+          "label": "decoy",
+          "smiles": "C[C@H](C(=O)Nc1sc2c(c1C(N)=O)CCC2)N1CCC[N@@H+](CC(=O)NC(C)(C)C)CC1"
+        },
+        {
+          "id": "decoy_00030",
+          "label": "decoy",
+          "smiles": "CCOCCCNC(=O)[C@H]1CN(C(=O)c2cnc3c(c(C)nn3C)c2Cl)CC12CC[NH2+]CC2"
+        },
+        {
+          "id": "decoy_00026",
+          "label": "decoy",
+          "smiles": "O=C([C@H]1C[C@@H](O)C2=[N+]1Cc1ccccc1N2)N(c1ccccc1O)S(=O)(=O)Oc1ccccc1"
+        },
+        {
+          "id": "decoy_00005",
+          "label": "decoy",
+          "smiles": "O=C(NCCCN1CCCC1=O)C(=O)NC[C@H](c1ccco1)[NH+]1CCN(c2ccc(F)cc2)CC1"
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "smiles": "COc1cc(C(=O)N2C[C@@H](C(=O)NCc3cn4cc(C)ccc4n3)C3(CC[NH2+]CC3)C2)cc(OC)c1OC"
+        }
+      ],
+      "failures": [],
+      "ligands": [
+        {
+          "id": "active_00031",
+          "label": "active",
+          "heavy_atoms": 24,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00031_source.pdbqt",
+            "sha256": "1ee8aecc6bb785ec623302eee419254199f45b3642fe5073674a1e4b58b6dbe3"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00031_independent.pdbqt",
+            "sha256": "8c51f5ec8ff90334b79a9d1116563eec7e32c66f6adc75ef96cfeaf0e16a4f9e"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 198.18110000051092
+        },
+        {
+          "id": "active_00081",
+          "label": "active",
+          "heavy_atoms": 30,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00081_source.pdbqt",
+            "sha256": "bfd996c1745faaa0ee133e0e6102f6d18d9fbc9be1bbbd32233cceda1a9eaf98"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00081_independent.pdbqt",
+            "sha256": "1a9eb2ac9e8dbeac33747be2e8c60c8eaaed9353d3d2b12c153928a1c66b3cd3"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 294.37550000147894
+        },
+        {
+          "id": "active_00076",
+          "label": "active",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00076_source.pdbqt",
+            "sha256": "958fa29498b4aacde14867fcfd2f3c215fbfb0838b7e19200713df5698e8a72a"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00076_independent.pdbqt",
+            "sha256": "8a254a94713813a0a04f3ed92f16e100296bd9480a53719ae7dd4fa24f11fdf0"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 221.505999994406
+        },
+        {
+          "id": "active_00039",
+          "label": "active",
+          "heavy_atoms": 35,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00039_source.pdbqt",
+            "sha256": "dbc62e3df9692953b2c0beeffaa7c5608de83716842c39a89c5f13d287da2712"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00039_independent.pdbqt",
+            "sha256": "c8b18e2488e7beea4025437da2c227538fbbf6a04261887468c33d694ccfa7b3"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 364.0244999987772
+        },
+        {
+          "id": "active_00028",
+          "label": "active",
+          "heavy_atoms": 37,
+          "rotatable_bonds": 8,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00028_source.pdbqt",
+            "sha256": "ef19538aad8b7d16da0301953b203924e0e0e590823730889ba48f55f777b0d5"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00028_independent.pdbqt",
+            "sha256": "a6d82869b116da6aabe3028f51997313c331cbf945e5ed9cb9ce9c0816a21764"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 389.80029999947874
+        },
+        {
+          "id": "active_00024",
+          "label": "active",
+          "heavy_atoms": 39,
+          "rotatable_bonds": 9,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00024_source.pdbqt",
+            "sha256": "7e506f9d55c2695bbf363b4596e8bf28c3aefb387d2113a83e55fdfbfe494773"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00024_independent.pdbqt",
+            "sha256": "6317361a5cf2dbc7d70e265e6184a4b2b3c419b8caf886a28fc271c823bff7ea"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 442.5883999938378
+        },
+        {
+          "id": "active_00069",
+          "label": "active",
+          "heavy_atoms": 40,
+          "rotatable_bonds": 9,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00069_source.pdbqt",
+            "sha256": "ef5c0e477e6f6c197fdf6897ad2aa641fcc27214ed8556f775d237aea5f7b5ee"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00069_independent.pdbqt",
+            "sha256": "5e19b9d727485bacb21279df667824f384675903103537095d8f61d0faf724a8"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 652.4087000070722
+        },
+        {
+          "id": "active_00044",
+          "label": "active",
+          "heavy_atoms": 43,
+          "rotatable_bonds": 14,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00044_source.pdbqt",
+            "sha256": "bfc96c589a8f600cf2cd3d29bbba6a7cc7b7ddcc940a9d7276b7de3c534eecc7"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/active_00044_independent.pdbqt",
+            "sha256": "cb25e141c8332e1f299c9643d1ab619e7d37682f3983f8c0b76fe2492cfded0a"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 400.9055000060471
+        },
+        {
+          "id": "decoy_00074",
+          "label": "decoy",
+          "heavy_atoms": 23,
+          "rotatable_bonds": 5,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00074_source.pdbqt",
+            "sha256": "65e6a1327d0f09ca14c8275adcc965008b19aafb0c1e6473b03bcd9020180524"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00074_independent.pdbqt",
+            "sha256": "6640b099f43c0b4d6f6bc30ad04b819ad3a77e696ac0504e8a1a2ed27a751651"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 161.50210000341758
+        },
+        {
+          "id": "decoy_00090",
+          "label": "decoy",
+          "heavy_atoms": 27,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00090_source.pdbqt",
+            "sha256": "9dc47e290c24fe751c3fe4c6b91a2997d6ed0644432aab580b1fefe43733743c"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00090_independent.pdbqt",
+            "sha256": "fe1635555f2cc39cd619c10aae2f3719c50c8e74c8f7da0ab5b51c6840d661fd"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 186.46460000309162
+        },
+        {
+          "id": "decoy_00093",
+          "label": "decoy",
+          "heavy_atoms": 28,
+          "rotatable_bonds": 8,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00093_source.pdbqt",
+            "sha256": "afaf0f36b0ca79d42db63fd2354cbe114c46a0f184e55bd463f4c4e15ea066c0"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00093_independent.pdbqt",
+            "sha256": "f5ea7d37ebcc91e88ab81cc3e064d3346aee8ae38758e2442df07b38ac234dc4"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 156.1844999960158
+        },
+        {
+          "id": "decoy_00083",
+          "label": "decoy",
+          "heavy_atoms": 31,
+          "rotatable_bonds": 6,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00083_source.pdbqt",
+            "sha256": "7b2ffca8ee8ecb09aa92bf08348a4621f182e9d8cb62e8da7e131cbfa8d9a1f5"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00083_independent.pdbqt",
+            "sha256": "ce453b13b44e95ab0ee684168bbc96ace504f1e8e453863880b39a83cf33514a"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 330.2613000050769
+        },
+        {
+          "id": "decoy_00030",
+          "label": "decoy",
+          "heavy_atoms": 33,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00030_source.pdbqt",
+            "sha256": "cf65d53370bcf483cfb833b0f9f0c8fed5d6e89f49b01511f1ea01bc64566df7"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00030_independent.pdbqt",
+            "sha256": "8b2a7273c2e0a82bc419715a9081ebe62742e4b3adc13d8e97ff67b7e61f41cb"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 292.05410000577103
+        },
+        {
+          "id": "decoy_00026",
+          "label": "decoy",
+          "heavy_atoms": 34,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00026_source.pdbqt",
+            "sha256": "0fa0e95570f1269bca187630d0219c76406b0d73e82f728086dff5ca748303f9"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00026_independent.pdbqt",
+            "sha256": "3bea6feac100a71b9d04fd615d2e83b7451e23baa8605d88669864119dd47288"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 199.64210000034655
+        },
+        {
+          "id": "decoy_00005",
+          "label": "decoy",
+          "heavy_atoms": 35,
+          "rotatable_bonds": 9,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00005_source.pdbqt",
+            "sha256": "6866dba2f1334c29316cf60fe4b18cb0ad94fa5bc3e5e55443c18d9f9e94604c"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00005_independent.pdbqt",
+            "sha256": "80215585e8fcd13e5382a6fa6a3a0509acb01b9cabcc2fe704fa5be3911a9488"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 295.8212999947136
+        },
+        {
+          "id": "decoy_00034",
+          "label": "decoy",
+          "heavy_atoms": 38,
+          "rotatable_bonds": 7,
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00034_source.pdbqt",
+            "sha256": "0992f8ec91a877a83e68518893f9b793ff97d67b6010d9f21abc348c2e178fe0"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/decoy_00034_independent.pdbqt",
+            "sha256": "24793c92e8ecd010fca0310c1a0dd20f653b119337cd14547796690764ac6e4c"
+          },
+          "mmff_status": 1,
+          "preparation_ms": 281.574400003592
+        },
+        {
+          "id": "crystal",
+          "label": "redocking",
+          "source": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/crystal_source.pdbqt",
+            "sha256": "89e24190fc72e1e61544badb60f9a766b3924cf2094b5a3509b84328190b3111"
+          },
+          "independent": {
+            "path": "tmp/adaptive-docking/tryb1/ligands/crystal_independent.pdbqt",
+            "sha256": "e2fe902fdff1e5c55c360b8d8e5c849af619fc8a05d42da4b827207382cb8542"
+          },
+          "heavy_atoms": 26
+        }
+      ],
+      "maps": [
+        {
+          "name": "fa10.At.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.At.map",
+          "sha256": "70e34b10d0660016e62277463139fbe1f881a1de681883387f4c58b888df059a",
+          "bytes": 3981540
+        },
+        {
+          "name": "fa10.Br_H.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.Br_H.map",
+          "sha256": "c1c5af80a2b9d25cd35f705ec6122c36f4957c1c61090b8a7272ba5225e18d42",
+          "bytes": 4020190
+        },
+        {
+          "name": "fa10.C_H.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.C_H.map",
+          "sha256": "099d3d8e59b3f9b8b783f9001ac01dfd77ec62c1a2dfd1a7bcdd795b0e5e1827",
+          "bytes": 4034103
+        },
+        {
+          "name": "fa10.C_P.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.C_P.map",
+          "sha256": "468c400dc79d2f9cfaaa79eddfef6af3415f9847b1bfcc1c37c0cf1f38623830",
+          "bytes": 4031907
+        },
+        {
+          "name": "fa10.Cl_H.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.Cl_H.map",
+          "sha256": "bbcc4007d7951df824d8f12899cebc89d7d3fef2c7d153af3716629b9586dd46",
+          "bytes": 4048917
+        },
+        {
+          "name": "fa10.F_H.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.F_H.map",
+          "sha256": "ec642e5fa2a18edb08fd20ff9c80151f9553692c2b106e031e96c5210a331279",
+          "bytes": 4105984
+        },
+        {
+          "name": "fa10.I_H.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.I_H.map",
+          "sha256": "6b10d6c0930c357d2ba9bcaab84d4f2555241e99a7f4e398aeabe9594f091f8b",
+          "bytes": 3994677
+        },
+        {
+          "name": "fa10.Met_D.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.Met_D.map",
+          "sha256": "50fd418bbf474ef4fd9d2f778a54e4fe7b6a2205bd54c9dfb4b601f88d3a5720",
+          "bytes": 4214669
+        },
+        {
+          "name": "fa10.N_A.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.N_A.map",
+          "sha256": "6ad6e50557c21d8305077da81358c3e72082af418df12fb031136e84ddd06cf4",
+          "bytes": 4056275
+        },
+        {
+          "name": "fa10.N_D.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.N_D.map",
+          "sha256": "847a302c29f08697da88fb15cd2874f98360f4e37af3860fb32cfe5825091a95",
+          "bytes": 4062555
+        },
+        {
+          "name": "fa10.N_DA.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.N_DA.map",
+          "sha256": "d62c821b8b1987657a8f15caa540a5270425ad278d1df58089ea4fad050205aa",
+          "bytes": 4073032
+        },
+        {
+          "name": "fa10.N_P.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.N_P.map",
+          "sha256": "d7570e3d8a1c403a1055ecae9edcc6894b02bbb1b8517301640248e358d6c4f8",
+          "bytes": 4045975
+        },
+        {
+          "name": "fa10.O_A.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.O_A.map",
+          "sha256": "aadf363e641bfd1caefe0da33bac76b45ce30c1688dcead12336146c3d13c6ec",
+          "bytes": 4073339
+        },
+        {
+          "name": "fa10.O_D.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.O_D.map",
+          "sha256": "e8056db4e9b1771eb8bb591ac740d4f52bf8fd9f458fbc52fa617eac419797cc",
+          "bytes": 4079994
+        },
+        {
+          "name": "fa10.O_DA.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.O_DA.map",
+          "sha256": "1648597b5965e23fbb9c4687c30fa27f9676ff3ec78349f4b446da4c65b4c280",
+          "bytes": 4091440
+        },
+        {
+          "name": "fa10.O_P.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.O_P.map",
+          "sha256": "89dab371e74c8b512bfdd22d4db821fdf909c39ddf262e4ec34523eda198e503",
+          "bytes": 4062137
+        },
+        {
+          "name": "fa10.P_P.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.P_P.map",
+          "sha256": "44b5b0cc7e95ced5c85612190672a21943a97739c55fb12174de8486c3e8abb1",
+          "bytes": 4005729
+        },
+        {
+          "name": "fa10.S_P.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.S_P.map",
+          "sha256": "5d564a6697a28e1c3f91a8f02158e27a61ee77a999a4a1caef77d06651920c9f",
+          "bytes": 4018404
+        },
+        {
+          "name": "fa10.Si.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.Si.map",
+          "sha256": "a97ccdd6f00bcc6afe00795b17810ff04d4350dea7e2adb5c1bf5ed1b3d9f590",
+          "bytes": 3993986
+        },
+        {
+          "name": "fa10.W.map",
+          "path": "tmp/adaptive-docking/tryb1/maps/fa10.W.map",
+          "sha256": "bd1ba5ac3dca79e529f4632e2f989374ae9eb22e3a4912d8853d9e8f62fc3136",
+          "bytes": 4720888
+        }
+      ]
+    }
+  ]
+}

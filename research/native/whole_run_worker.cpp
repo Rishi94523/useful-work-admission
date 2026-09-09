@@ -42,6 +42,17 @@ const char* wr_run(int seed,int max_evals,int exhaustiveness){
  }catch(const std::exception& e){result="{\"ok\":false,\"error\":"+quote(e.what())+"}";}catch(...){result="{\"ok\":false,\"error\":\"search failure\"}";}
  return result.c_str();
 }
+const char* wr_refine(int max_steps){
+ try {
+  if(!engine||max_steps<1||max_steps>1000)throw std::runtime_error("bad local bound");
+  auto t=std::chrono::steady_clock::now();engine->restore_initial(104729);
+  auto energies=engine->optimize(max_steps);
+  const double ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-t).count();
+  engine->write_pose("/refined.pdbqt");std::ifstream f("/refined.pdbqt");std::ostringstream pose;pose<<f.rdbuf();
+  std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":true,\"score\":"<<energies.at(0)<<",\"search_ms\":"<<ms<<",\"pose\":"<<quote(pose.str())<<"}";result=o.str();
+ }catch(const std::exception& e){result="{\"ok\":false,\"error\":"+quote(e.what())+"}";}
+ return result.c_str();
+}
 }
 #ifndef __EMSCRIPTEN__
 int main(int argc,char** argv){

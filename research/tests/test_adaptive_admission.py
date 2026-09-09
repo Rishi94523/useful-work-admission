@@ -9,6 +9,7 @@ def populate(c, cohorts=4):
     for ligand in range(16):
         for cohort in range(cohorts):
             c.register('test','engine','maps',str(ligand),'input-'+str(ligand),'box',16*cohort,16,16000,16)
+            c.register('test','engine','maps',str(ligand),'input-'+str(ligand),'box',1000+16*cohort,16,4000,16)
 
 
 class AdaptiveTests(unittest.TestCase):

@@ -7,14 +7,15 @@ The trusted verifier alone calls finish; this module never accepts client verdic
 import hashlib
 import json
 import secrets
+from time import perf_counter
 from research.docking_campaign import canonical
 from research.whole_run_campaign import WholeRunCampaign
 
 
 class AdaptiveAdmission(WholeRunCampaign):
-    VERSION = 'adaptive-outer-v1'
+    VERSION = 'adaptive-outer-v2'
     # Chosen from measured browser.json tiers, not predicted from instruction count.
-    TIERS = {'low': (1, 16, 16000, 4), 'medium': (4, 16, 16000, 8),
+    TIERS = {'low': (1, 16, 4000, 4), 'medium': (4, 16, 16000, 8),
              'high': (16, 16, 16000, 8)}
 
     def __init__(self, path, clock=None, global_burst=32, global_rate=2):
@@ -30,6 +31,8 @@ class AdaptiveAdmission(WholeRunCampaign):
               CREATE TABLE IF NOT EXISTS risk_events(identity TEXT,at REAL,kind TEXT,delta REAL,score REAL);
               CREATE TABLE IF NOT EXISTS range_failures(task TEXT PRIMARY KEY,failures INTEGER);
               CREATE TABLE IF NOT EXISTS admission_budget(id INTEGER PRIMARY KEY,tokens REAL,updated REAL);
+              CREATE INDEX IF NOT EXISTS adaptive_lease_expiry ON leases(status,expires);
+              CREATE INDEX IF NOT EXISTS adaptive_lease_owner ON leases(owner,status);
             ''')
             db.execute('INSERT OR IGNORE INTO admission_budget VALUES(1,?,?)',
                        (global_burst, self.clock()))
@@ -82,6 +85,7 @@ class AdaptiveAdmission(WholeRunCampaign):
             tokens = min(self.global_burst, bucket['tokens']+max(0, now-bucket['updated'])*self.global_rate)
             db.execute('UPDATE admission_budget SET tokens=?,updated=? WHERE id=1', (tokens-1 if tokens>=1 else tokens,now))
             if tokens < 1: return {'status':'capacity','reason':'global-rate-budget'}
+            risk_start = perf_counter()
             state = self._state(db, identity, now)
             if state['cooldown'] > now:
                 self._save(db, state)
@@ -99,6 +103,7 @@ class AdaptiveAdmission(WholeRunCampaign):
             if db.execute("SELECT count(*) FROM leases WHERE status IN ('OPEN','COMMITTED')").fetchone()[0] >= 16:
                 return {'status':'capacity','risk':state['score'],'reason':'global-outstanding-budget'}
             tier = self.tier(state['score']); jobs,runs,cap,q = self.TIERS[tier]
+            risk_ms = (perf_counter()-risk_start)*1000
             candidates = self._lease_candidates(db,campaign)
             chosen=[]; ligands=set()
             for row in candidates:
@@ -118,7 +123,7 @@ class AdaptiveAdmission(WholeRunCampaign):
                        (lease,identity,now,now+120,'OPEN',canonical(tasks).decode(),binding))
             db.execute('INSERT INTO admission VALUES(?,?,?)',(lease,tier,q))
             for row in chosen:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,row['task']))
-            return {'status':'assigned','risk':state['score'],'velocity_10s':velocity,**payload}
+            return {'status':'assigned','risk':state['score'],'velocity_10s':velocity,'risk_processing_ms':risk_ms,**payload}
 
     def commit(self, lease, owner, binding, commitment, samples=None, weighted=False):
         with self.transaction() as db:
@@ -140,13 +145,15 @@ class AdaptiveAdmission(WholeRunCampaign):
                     old=db.execute('SELECT failures FROM range_failures WHERE task=?',(task['task'],)).fetchone()
                     prior=max(prior,old['failures'] if old else 0)
                     db.execute('INSERT INTO range_failures VALUES(?,1) ON CONFLICT(task) DO UPDATE SET failures=failures+1',(task['task'],))
+            risk_start=perf_counter()
             state=self._event(db,owner,self.clock(),'success' if accepted else 'audit_failure',
                               -2 if accepted else 18+min(6,2*prior),failure=not accepted,success=accepted)
+            risk_ms=(perf_counter()-risk_start)*1000
             db.execute('UPDATE leases SET status=?,result=? WHERE id=?',
                        ('ACCEPTED' if accepted else 'REJECTED',canonical(result).decode(),lease))
             if accepted:db.execute("UPDATE units SET state='COMPLETED',completed_lease=?,lease=NULL WHERE lease=? AND state='LEASED'",(lease,lease))
             else:db.execute("UPDATE units SET state='EXPIRED',lease=NULL WHERE lease=? AND state='LEASED'",(lease,))
-            return {'accepted':accepted,'risk':state['score'],'next_tier':self.tier(state['score']) if state['score']<60 else 'cooldown'}
+            return {'accepted':accepted,'risk':state['score'],'risk_processing_ms':risk_ms,'next_tier':self.tier(state['score']) if state['score']<60 else 'cooldown'}
 
     def risk_state(self, identity):
         with self.transaction() as db:

@@ -1,0 +1,25 @@
+{
+  "scope": "Exact serialized score/pose/full-trace hashes on selected ligands and seeds. Finite regression evidence, not a proof over all inputs. Single-worker XS Vina only; AD4 excluded.",
+  "checks": [
+    {
+      "target": "old_fa10",
+      "records_per_variant": 32,
+      "exact_score_pose_trace_match": true
+    },
+    {
+      "target": "fa10",
+      "records_per_variant": 4,
+      "exact_score_pose_trace_match": true
+    },
+    {
+      "target": "hs90a",
+      "records_per_variant": 4,
+      "exact_score_pose_trace_match": true
+    },
+    {
+      "target": "tryb1",
+      "records_per_variant": 4,
+      "exact_score_pose_trace_match": true
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "scope": "Individual measured runs, not confidence intervals. OS peak working set includes renderer overhead. Earlier profiling builds precede added finalizer export; each measurement carries its own WASM hash. The final equivalence experiment separately records the final build hashes.",
+  "rows": [
+    {
+      "target": "fa10",
+      "variant": "baseline",
+      "init_ms": 4609.29999999702,
+      "module_ms": 16.899999998509884,
+      "init_heap_bytes": 576192512,
+      "init_live_bytes": 360976648,
+      "observed_allocator_live_peak_bytes": 537485200,
+      "max_postrun_heap_bytes": 576192512,
+      "renderer_os_peak_working_set_bytes": 638025728,
+      "renderer_os_peak_commit_bytes": 1100296192,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "4f8b00bceda88f8c6f3ae4c63e0c8f267362af995ea00d14f2ec13812b9d0351"
+    },
+    {
+      "target": "fa10",
+      "variant": "moves",
+      "init_ms": 4144.9000000059605,
+      "module_ms": 13.299999997019768,
+      "init_heap_bytes": 400097280,
+      "init_live_bytes": 360976664,
+      "observed_allocator_live_peak_bytes": 360976664,
+      "max_postrun_heap_bytes": 400097280,
+      "renderer_os_peak_working_set_bytes": 492552192,
+      "renderer_os_peak_commit_bytes": 774705152,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": null,
+      "measurement_wasm_sha256": "4ea102f5f8a20baf48d1d0a786f60a3aff1b7e1d8574a77da1504d1fc6166690"
+    },
+    {
+      "target": "fa10",
+      "variant": "compact",
+      "init_ms": 3018.6999999955297,
+      "module_ms": 15,
+      "init_heap_bytes": 44761088,
+      "init_live_bytes": 42916208,
+      "observed_allocator_live_peak_bytes": 42916208,
+      "max_postrun_heap_bytes": 92930048,
+      "renderer_os_peak_working_set_bytes": 176254976,
+      "renderer_os_peak_commit_bytes": 221618176,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "2794d5108f8cd91a8e894af292bd476a599cade60af3459e40d0fcc706c12a6a"
+    },
+    {
+      "target": "fa10",
+      "variant": "compact_single",
+      "init_ms": 3126,
+      "module_ms": 14,
+      "init_heap_bytes": 44761088,
+      "init_live_bytes": 42916208,
+      "observed_allocator_live_peak_bytes": 42916208,
+      "max_postrun_heap_bytes": 53739520,
+      "renderer_os_peak_working_set_bytes": 139522048,
+      "renderer_os_peak_commit_bytes": 142458880,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "3d62b6b9accd602aef25bb54cbe916fc926ef78055c15b957a50f912967592af"
+    },
+    {
+      "target": "hs90a",
+      "variant": "baseline",
+      "init_ms": 2881.6999999955297,
+      "module_ms": 16.899999998509884,
+      "init_heap_bytes": 480116736,
+      "init_live_bytes": 274315768,
+      "observed_allocator_live_peak_bytes": 447228680,
+      "max_postrun_heap_bytes": 480116736,
+      "renderer_os_peak_working_set_bytes": 543870976,
+      "renderer_os_peak_commit_bytes": 922554368,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "4f8b00bceda88f8c6f3ae4c63e0c8f267362af995ea00d14f2ec13812b9d0351"
+    },
+    {
+      "target": "hs90a",
+      "variant": "compact",
+      "init_ms": 2673.10000000149,
+      "module_ms": 15.699999995529652,
+      "init_heap_bytes": 37289984,
+      "init_live_bytes": 32470688,
+      "observed_allocator_live_peak_bytes": 32470688,
+      "max_postrun_heap_bytes": 77398016,
+      "renderer_os_peak_working_set_bytes": 159588352,
+      "renderer_os_peak_commit_bytes": 189562880,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "2794d5108f8cd91a8e894af292bd476a599cade60af3459e40d0fcc706c12a6a"
+    },
+    {
+      "target": "tryb1",
+      "variant": "baseline",
+      "init_ms": 3405.60000000149,
+      "module_ms": 13.899999998509884,
+      "init_heap_bytes": 480116736,
+      "init_live_bytes": 307068984,
+      "observed_allocator_live_peak_bytes": 477928376,
+      "max_postrun_heap_bytes": 480116736,
+      "renderer_os_peak_working_set_bytes": 574980096,
+      "renderer_os_peak_commit_bytes": 924315648,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "4f8b00bceda88f8c6f3ae4c63e0c8f267362af995ea00d14f2ec13812b9d0351"
+    },
+    {
+      "target": "tryb1",
+      "variant": "compact",
+      "init_ms": 2375.89999999851,
+      "module_ms": 14.300000004470348,
+      "init_heap_bytes": 31064064,
+      "init_live_bytes": 26809224,
+      "observed_allocator_live_peak_bytes": 26809224,
+      "max_postrun_heap_bytes": 92930048,
+      "renderer_os_peak_working_set_bytes": 184127488,
+      "renderer_os_peak_commit_bytes": 219332608,
+      "exact_against_baseline": true,
+      "chrome_node_first_two_exact": true,
+      "measurement_wasm_sha256": "2794d5108f8cd91a8e894af292bd476a599cade60af3459e40d0fcc706c12a6a"
+    }
+  ],
+  "archives": [
+    {
+      "file": "baseline_fa10_working_set.json.gz",
+      "uncompressed_bytes": 1231545,
+      "sha256": "473f6de5014b1abb942eccdd425a293ceaa4c50da4ba2e032e73fc14e83eae17"
+    },
+    {
+      "file": "baseline_hs90a_working_set.json.gz",
+      "uncompressed_bytes": 675776,
+      "sha256": "b204b842df9d95bf6269be88b9b4d2dfdce8af99ea070ea927a404acbacce41c"
+    },
+    {
+      "file": "baseline_tryb1_working_set.json.gz",
+      "uncompressed_bytes": 681039,
+      "sha256": "3a6db03227d8e2f44d5d11abd945e9137fa439ac1476dbddd46fe32514117539"
+    },
+    {
+      "file": "compact_fa10_working_set.json.gz",
+      "uncompressed_bytes": 1102875,
+      "sha256": "fafa2427f2c1913ae61c29462776b49795501cbcf4b8e1921a65f136a1fa0e49"
+    },
+    {
+      "file": "compact_hs90a_working_set.json.gz",
+      "uncompressed_bytes": 609823,
+      "sha256": "7185cef6dbbc3758399fdbfc15f57584ff36c16560705d6fe440a58d702e88d2"
+    },
+    {
+      "file": "compact_single_fa10_working_set.json.gz",
+      "uncompressed_bytes": 1151124,
+      "sha256": "472edd8ec787cb9b8cdff18227344c676369382311d843ea8f0fa1638f17f065"
+    },
+    {
+      "file": "compact_tryb1_working_set.json.gz",
+      "uncompressed_bytes": 588205,
+      "sha256": "220450826164317c2033b64296c03d90da16d0b43b86b8b3f58e961a8f38802b"
+    },
+    {
+      "file": "moves_fa10_working_set.json.gz",
+      "uncompressed_bytes": 1344550,
+      "sha256": "11795705dadfd7eb59d0f7405a7539c8d09e1786990058055145bc3e99e3a3f3"
+    }
+  ]
+}

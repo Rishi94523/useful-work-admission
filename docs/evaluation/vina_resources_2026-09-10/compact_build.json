@@ -1,0 +1,25 @@
+{
+  "variant": "compact",
+  "wasm_sha256": "0f7cc492959b57efdabd7031bc4603bf65f945000cd2114e84d977dd984662f6",
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "-DNDEBUG",
+    "-ffp-contract=off",
+    "-fexceptions",
+    "-IF:\\Projects\\antigravity\\Capstone\\tmp\\vina-resources\\compact\\source",
+    "-IF:\\Projects\\antigravity\\Capstone\\tmp\\docking-pilot\\boost\\ucrt64\\include"
+  ],
+  "link": [
+    "--no-entry",
+    "-fexceptions",
+    "-sDISABLE_EXCEPTION_CATCHING=0",
+    "-sMODULARIZE=1",
+    "-sEXPORT_ES6=1",
+    "-sENVIRONMENT=web,worker,node",
+    "-sALLOW_MEMORY_GROWTH=1",
+    "-sSTACK_SIZE=1048576",
+    "-sEXPORTED_FUNCTIONS=[\"_vt_init\",\"_vt_run\",\"_vt_memory\",\"_vt_seeds\",\"_vt_profile\",\"_vt_finalize\"]",
+    "-sEXPORTED_RUNTIME_METHODS=[\"ccall\",\"FS\"]"
+  ]
+}

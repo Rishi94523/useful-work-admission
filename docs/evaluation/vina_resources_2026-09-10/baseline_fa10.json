@@ -1,0 +1,908 @@
+{
+  "variant": "baseline",
+  "target": "fa10",
+  "browser": "152.0.7977.83",
+  "init": {
+    "ok": true,
+    "module_ms": 16.899999998509884,
+    "init_ms": 4609.29999999702,
+    "profile": [
+      {
+        "phase": "before_engine",
+        "heap_bytes": 17956864,
+        "live_bytes": 144,
+        "free_bytes": 5008,
+        "time_ms": 112.4
+      },
+      {
+        "phase": "after_engine",
+        "heap_bytes": 17956864,
+        "live_bytes": 11088,
+        "free_bytes": 2256,
+        "time_ms": 113.1
+      },
+      {
+        "phase": "after_receptor",
+        "heap_bytes": 17956864,
+        "live_bytes": 553768,
+        "free_bytes": 295160,
+        "time_ms": 222.7
+      },
+      {
+        "phase": "table_before_store",
+        "heap_bytes": 192872448,
+        "live_bytes": 183535472,
+        "free_bytes": 249008,
+        "time_ms": 1773.5
+      },
+      {
+        "phase": "table_after_store",
+        "heap_bytes": 400097280,
+        "live_bytes": 366391008,
+        "free_bytes": 25920,
+        "time_ms": 1848.1
+      },
+      {
+        "phase": "ligand_store_before",
+        "heap_bytes": 400097280,
+        "live_bytes": 183429104,
+        "free_bytes": 182987824,
+        "time_ms": 1848.6
+      },
+      {
+        "phase": "ligand_store_after",
+        "heap_bytes": 400097280,
+        "live_bytes": 366284640,
+        "free_bytes": 132288,
+        "time_ms": 1871.5
+      },
+      {
+        "phase": "after_ligand",
+        "heap_bytes": 400097280,
+        "live_bytes": 183426040,
+        "free_bytes": 182990888,
+        "time_ms": 1871.7
+      },
+      {
+        "phase": "table_before_store",
+        "heap_bytes": 400097280,
+        "live_bytes": 345793600,
+        "free_bytes": 20623328,
+        "time_ms": 3272.3
+      },
+      {
+        "phase": "table_after_store",
+        "heap_bytes": 576192512,
+        "live_bytes": 508058792,
+        "free_bytes": 120696,
+        "time_ms": 3340.3
+      },
+      {
+        "phase": "type_store_before",
+        "heap_bytes": 576192512,
+        "live_bytes": 345691520,
+        "free_bytes": 162487968,
+        "time_ms": 3340.4
+      },
+      {
+        "phase": "type_store_after",
+        "heap_bytes": 576192512,
+        "live_bytes": 507956616,
+        "free_bytes": 222872,
+        "time_ms": 3361.3
+      },
+      {
+        "phase": "grid_store_before",
+        "heap_bytes": 576192512,
+        "live_bytes": 522958224,
+        "free_bytes": 634512,
+        "time_ms": 4713.8
+      },
+      {
+        "phase": "grid_store_after",
+        "heap_bytes": 576192512,
+        "live_bytes": 537485200,
+        "free_bytes": 636048,
+        "time_ms": 4718.2
+      },
+      {
+        "phase": "after_maps",
+        "heap_bytes": 576192512,
+        "live_bytes": 360688848,
+        "free_bytes": 177432400,
+        "time_ms": 4719
+      },
+      {
+        "phase": "after_save",
+        "heap_bytes": 576192512,
+        "live_bytes": 360976496,
+        "free_bytes": 177144752,
+        "time_ms": 4719.8
+      },
+      {
+        "phase": "snapshot",
+        "heap_bytes": 576192512,
+        "live_bytes": 360976648,
+        "free_bytes": 177144600,
+        "time_ms": 4720.4
+      }
+    ]
+  },
+  "runs": [
+    {
+      "index": 0,
+      "n": 4,
+      "cap": 64000,
+      "ok": true,
+      "total_ms": 820,
+      "evals": 64011,
+      "steps": 1246,
+      "wall_ms": 821.8999999985099,
+      "profile": [
+        {
+          "phase": "before_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 144,
+          "free_bytes": 5008,
+          "time_ms": 112.4
+        },
+        {
+          "phase": "after_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 11088,
+          "free_bytes": 2256,
+          "time_ms": 113.1
+        },
+        {
+          "phase": "after_receptor",
+          "heap_bytes": 17956864,
+          "live_bytes": 553768,
+          "free_bytes": 295160,
+          "time_ms": 222.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 192872448,
+          "live_bytes": 183535472,
+          "free_bytes": 249008,
+          "time_ms": 1773.5
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 366391008,
+          "free_bytes": 25920,
+          "time_ms": 1848.1
+        },
+        {
+          "phase": "ligand_store_before",
+          "heap_bytes": 400097280,
+          "live_bytes": 183429104,
+          "free_bytes": 182987824,
+          "time_ms": 1848.6
+        },
+        {
+          "phase": "ligand_store_after",
+          "heap_bytes": 400097280,
+          "live_bytes": 366284640,
+          "free_bytes": 132288,
+          "time_ms": 1871.5
+        },
+        {
+          "phase": "after_ligand",
+          "heap_bytes": 400097280,
+          "live_bytes": 183426040,
+          "free_bytes": 182990888,
+          "time_ms": 1871.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 345793600,
+          "free_bytes": 20623328,
+          "time_ms": 3272.3
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 576192512,
+          "live_bytes": 508058792,
+          "free_bytes": 120696,
+          "time_ms": 3340.3
+        },
+        {
+          "phase": "type_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 345691520,
+          "free_bytes": 162487968,
+          "time_ms": 3340.4
+        },
+        {
+          "phase": "type_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 507956616,
+          "free_bytes": 222872,
+          "time_ms": 3361.3
+        },
+        {
+          "phase": "grid_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 522958224,
+          "free_bytes": 634512,
+          "time_ms": 4713.8
+        },
+        {
+          "phase": "grid_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 537485200,
+          "free_bytes": 636048,
+          "time_ms": 4718.2
+        },
+        {
+          "phase": "after_maps",
+          "heap_bytes": 576192512,
+          "live_bytes": 360688848,
+          "free_bytes": 177432400,
+          "time_ms": 4719
+        },
+        {
+          "phase": "after_save",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976496,
+          "free_bytes": 177144752,
+          "time_ms": 4719.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976648,
+          "free_bytes": 177144600,
+          "time_ms": 4720.4
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009768,
+          "free_bytes": 177111480,
+          "time_ms": 5551.5
+        }
+      ],
+      "pool_sha256": "6dabd0aec816433347eb53aed290236f3f2778a0e5a294e3aca99f0435dd80f3",
+      "trace_sha256": "495bd824ab4bc3157797a47cafc757c95306177cd79ee5dc967335a926b8fdd0"
+    },
+    {
+      "index": 1,
+      "n": 4,
+      "cap": 64000,
+      "ok": true,
+      "total_ms": 1204.7,
+      "evals": 64025,
+      "steps": 1165,
+      "wall_ms": 1206.1000000014901,
+      "profile": [
+        {
+          "phase": "before_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 144,
+          "free_bytes": 5008,
+          "time_ms": 112.4
+        },
+        {
+          "phase": "after_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 11088,
+          "free_bytes": 2256,
+          "time_ms": 113.1
+        },
+        {
+          "phase": "after_receptor",
+          "heap_bytes": 17956864,
+          "live_bytes": 553768,
+          "free_bytes": 295160,
+          "time_ms": 222.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 192872448,
+          "live_bytes": 183535472,
+          "free_bytes": 249008,
+          "time_ms": 1773.5
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 366391008,
+          "free_bytes": 25920,
+          "time_ms": 1848.1
+        },
+        {
+          "phase": "ligand_store_before",
+          "heap_bytes": 400097280,
+          "live_bytes": 183429104,
+          "free_bytes": 182987824,
+          "time_ms": 1848.6
+        },
+        {
+          "phase": "ligand_store_after",
+          "heap_bytes": 400097280,
+          "live_bytes": 366284640,
+          "free_bytes": 132288,
+          "time_ms": 1871.5
+        },
+        {
+          "phase": "after_ligand",
+          "heap_bytes": 400097280,
+          "live_bytes": 183426040,
+          "free_bytes": 182990888,
+          "time_ms": 1871.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 345793600,
+          "free_bytes": 20623328,
+          "time_ms": 3272.3
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 576192512,
+          "live_bytes": 508058792,
+          "free_bytes": 120696,
+          "time_ms": 3340.3
+        },
+        {
+          "phase": "type_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 345691520,
+          "free_bytes": 162487968,
+          "time_ms": 3340.4
+        },
+        {
+          "phase": "type_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 507956616,
+          "free_bytes": 222872,
+          "time_ms": 3361.3
+        },
+        {
+          "phase": "grid_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 522958224,
+          "free_bytes": 634512,
+          "time_ms": 4713.8
+        },
+        {
+          "phase": "grid_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 537485200,
+          "free_bytes": 636048,
+          "time_ms": 4718.2
+        },
+        {
+          "phase": "after_maps",
+          "heap_bytes": 576192512,
+          "live_bytes": 360688848,
+          "free_bytes": 177432400,
+          "time_ms": 4719
+        },
+        {
+          "phase": "after_save",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976496,
+          "free_bytes": 177144752,
+          "time_ms": 4719.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976648,
+          "free_bytes": 177144600,
+          "time_ms": 4720.4
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009768,
+          "free_bytes": 177111480,
+          "time_ms": 5551.5
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009896,
+          "free_bytes": 177111352,
+          "time_ms": 6766.8
+        }
+      ],
+      "pool_sha256": "10b669e62f76edeb8130c56fa26dab8118bc4cb7ff628053b46f3dcb678dc82a",
+      "trace_sha256": "41bc62a78e6a647a3a85b2abfe5eb68ca13bae9140c36031ba37f08cf1c201ae"
+    },
+    {
+      "index": 2,
+      "n": 4,
+      "cap": 256000,
+      "ok": true,
+      "total_ms": 3833.2,
+      "evals": 256026,
+      "steps": 3720,
+      "wall_ms": 3833.6999999955297,
+      "profile": [
+        {
+          "phase": "before_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 144,
+          "free_bytes": 5008,
+          "time_ms": 112.4
+        },
+        {
+          "phase": "after_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 11088,
+          "free_bytes": 2256,
+          "time_ms": 113.1
+        },
+        {
+          "phase": "after_receptor",
+          "heap_bytes": 17956864,
+          "live_bytes": 553768,
+          "free_bytes": 295160,
+          "time_ms": 222.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 192872448,
+          "live_bytes": 183535472,
+          "free_bytes": 249008,
+          "time_ms": 1773.5
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 366391008,
+          "free_bytes": 25920,
+          "time_ms": 1848.1
+        },
+        {
+          "phase": "ligand_store_before",
+          "heap_bytes": 400097280,
+          "live_bytes": 183429104,
+          "free_bytes": 182987824,
+          "time_ms": 1848.6
+        },
+        {
+          "phase": "ligand_store_after",
+          "heap_bytes": 400097280,
+          "live_bytes": 366284640,
+          "free_bytes": 132288,
+          "time_ms": 1871.5
+        },
+        {
+          "phase": "after_ligand",
+          "heap_bytes": 400097280,
+          "live_bytes": 183426040,
+          "free_bytes": 182990888,
+          "time_ms": 1871.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 345793600,
+          "free_bytes": 20623328,
+          "time_ms": 3272.3
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 576192512,
+          "live_bytes": 508058792,
+          "free_bytes": 120696,
+          "time_ms": 3340.3
+        },
+        {
+          "phase": "type_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 345691520,
+          "free_bytes": 162487968,
+          "time_ms": 3340.4
+        },
+        {
+          "phase": "type_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 507956616,
+          "free_bytes": 222872,
+          "time_ms": 3361.3
+        },
+        {
+          "phase": "grid_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 522958224,
+          "free_bytes": 634512,
+          "time_ms": 4713.8
+        },
+        {
+          "phase": "grid_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 537485200,
+          "free_bytes": 636048,
+          "time_ms": 4718.2
+        },
+        {
+          "phase": "after_maps",
+          "heap_bytes": 576192512,
+          "live_bytes": 360688848,
+          "free_bytes": 177432400,
+          "time_ms": 4719
+        },
+        {
+          "phase": "after_save",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976496,
+          "free_bytes": 177144752,
+          "time_ms": 4719.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976648,
+          "free_bytes": 177144600,
+          "time_ms": 4720.4
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009768,
+          "free_bytes": 177111480,
+          "time_ms": 5551.5
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009896,
+          "free_bytes": 177111352,
+          "time_ms": 6766.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361042800,
+          "free_bytes": 177078448,
+          "time_ms": 10608.8
+        }
+      ],
+      "pool_sha256": "4d426a7eb98b2670f4dbe7e5f9a5c7992f0d2c1a270bf0320326ea215ea5a83f",
+      "trace_sha256": "b0d244cc92517ac673ddcae2c3e65ac1be0db23a82d02cd8573a7d024edd2065"
+    },
+    {
+      "index": 3,
+      "n": 4,
+      "cap": 0,
+      "ok": true,
+      "total_ms": 10831.5,
+      "evals": 1173499,
+      "steps": 21420,
+      "wall_ms": 10833.60000000149,
+      "profile": [
+        {
+          "phase": "before_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 144,
+          "free_bytes": 5008,
+          "time_ms": 112.4
+        },
+        {
+          "phase": "after_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 11088,
+          "free_bytes": 2256,
+          "time_ms": 113.1
+        },
+        {
+          "phase": "after_receptor",
+          "heap_bytes": 17956864,
+          "live_bytes": 553768,
+          "free_bytes": 295160,
+          "time_ms": 222.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 192872448,
+          "live_bytes": 183535472,
+          "free_bytes": 249008,
+          "time_ms": 1773.5
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 366391008,
+          "free_bytes": 25920,
+          "time_ms": 1848.1
+        },
+        {
+          "phase": "ligand_store_before",
+          "heap_bytes": 400097280,
+          "live_bytes": 183429104,
+          "free_bytes": 182987824,
+          "time_ms": 1848.6
+        },
+        {
+          "phase": "ligand_store_after",
+          "heap_bytes": 400097280,
+          "live_bytes": 366284640,
+          "free_bytes": 132288,
+          "time_ms": 1871.5
+        },
+        {
+          "phase": "after_ligand",
+          "heap_bytes": 400097280,
+          "live_bytes": 183426040,
+          "free_bytes": 182990888,
+          "time_ms": 1871.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 345793600,
+          "free_bytes": 20623328,
+          "time_ms": 3272.3
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 576192512,
+          "live_bytes": 508058792,
+          "free_bytes": 120696,
+          "time_ms": 3340.3
+        },
+        {
+          "phase": "type_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 345691520,
+          "free_bytes": 162487968,
+          "time_ms": 3340.4
+        },
+        {
+          "phase": "type_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 507956616,
+          "free_bytes": 222872,
+          "time_ms": 3361.3
+        },
+        {
+          "phase": "grid_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 522958224,
+          "free_bytes": 634512,
+          "time_ms": 4713.8
+        },
+        {
+          "phase": "grid_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 537485200,
+          "free_bytes": 636048,
+          "time_ms": 4718.2
+        },
+        {
+          "phase": "after_maps",
+          "heap_bytes": 576192512,
+          "live_bytes": 360688848,
+          "free_bytes": 177432400,
+          "time_ms": 4719
+        },
+        {
+          "phase": "after_save",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976496,
+          "free_bytes": 177144752,
+          "time_ms": 4719.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976648,
+          "free_bytes": 177144600,
+          "time_ms": 4720.4
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009768,
+          "free_bytes": 177111480,
+          "time_ms": 5551.5
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009896,
+          "free_bytes": 177111352,
+          "time_ms": 6766.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361042800,
+          "free_bytes": 177078448,
+          "time_ms": 10608.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361501656,
+          "free_bytes": 176619592,
+          "time_ms": 21453.1
+        }
+      ],
+      "pool_sha256": "6ac725ed7f4f4cada3f37cd7804a76e17a0f8e1ea3dec6656ee08d5a5b5147a7",
+      "trace_sha256": "5ccc4c773390827627d5f468d308180921770bef525a36af16fdab64e7419f5d"
+    },
+    {
+      "index": 0,
+      "n": 128,
+      "cap": 64000,
+      "ok": true,
+      "total_ms": 623.6,
+      "evals": 64011,
+      "steps": 1246,
+      "wall_ms": 624.2000000029802,
+      "profile": [
+        {
+          "phase": "before_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 144,
+          "free_bytes": 5008,
+          "time_ms": 112.4
+        },
+        {
+          "phase": "after_engine",
+          "heap_bytes": 17956864,
+          "live_bytes": 11088,
+          "free_bytes": 2256,
+          "time_ms": 113.1
+        },
+        {
+          "phase": "after_receptor",
+          "heap_bytes": 17956864,
+          "live_bytes": 553768,
+          "free_bytes": 295160,
+          "time_ms": 222.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 192872448,
+          "live_bytes": 183535472,
+          "free_bytes": 249008,
+          "time_ms": 1773.5
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 366391008,
+          "free_bytes": 25920,
+          "time_ms": 1848.1
+        },
+        {
+          "phase": "ligand_store_before",
+          "heap_bytes": 400097280,
+          "live_bytes": 183429104,
+          "free_bytes": 182987824,
+          "time_ms": 1848.6
+        },
+        {
+          "phase": "ligand_store_after",
+          "heap_bytes": 400097280,
+          "live_bytes": 366284640,
+          "free_bytes": 132288,
+          "time_ms": 1871.5
+        },
+        {
+          "phase": "after_ligand",
+          "heap_bytes": 400097280,
+          "live_bytes": 183426040,
+          "free_bytes": 182990888,
+          "time_ms": 1871.7
+        },
+        {
+          "phase": "table_before_store",
+          "heap_bytes": 400097280,
+          "live_bytes": 345793600,
+          "free_bytes": 20623328,
+          "time_ms": 3272.3
+        },
+        {
+          "phase": "table_after_store",
+          "heap_bytes": 576192512,
+          "live_bytes": 508058792,
+          "free_bytes": 120696,
+          "time_ms": 3340.3
+        },
+        {
+          "phase": "type_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 345691520,
+          "free_bytes": 162487968,
+          "time_ms": 3340.4
+        },
+        {
+          "phase": "type_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 507956616,
+          "free_bytes": 222872,
+          "time_ms": 3361.3
+        },
+        {
+          "phase": "grid_store_before",
+          "heap_bytes": 576192512,
+          "live_bytes": 522958224,
+          "free_bytes": 634512,
+          "time_ms": 4713.8
+        },
+        {
+          "phase": "grid_store_after",
+          "heap_bytes": 576192512,
+          "live_bytes": 537485200,
+          "free_bytes": 636048,
+          "time_ms": 4718.2
+        },
+        {
+          "phase": "after_maps",
+          "heap_bytes": 576192512,
+          "live_bytes": 360688848,
+          "free_bytes": 177432400,
+          "time_ms": 4719
+        },
+        {
+          "phase": "after_save",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976496,
+          "free_bytes": 177144752,
+          "time_ms": 4719.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 360976648,
+          "free_bytes": 177144600,
+          "time_ms": 4720.4
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009768,
+          "free_bytes": 177111480,
+          "time_ms": 5551.5
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361009896,
+          "free_bytes": 177111352,
+          "time_ms": 6766.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361042800,
+          "free_bytes": 177078448,
+          "time_ms": 10608.8
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361501656,
+          "free_bytes": 176619592,
+          "time_ms": 21453.1
+        },
+        {
+          "phase": "snapshot",
+          "heap_bytes": 576192512,
+          "live_bytes": 361501792,
+          "free_bytes": 176619456,
+          "time_ms": 22095.5
+        }
+      ],
+      "pool_sha256": "6dabd0aec816433347eb53aed290236f3f2778a0e5a294e3aca99f0435dd80f3",
+      "trace_sha256": "495bd824ab4bc3157797a47cafc757c95306177cd79ee5dc967335a926b8fdd0"
+    }
+  ],
+  "input_hashes": {
+    "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+    "ligand": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c"
+  },
+  "wasm_sha256": "4f8b00bceda88f8c6f3ae4c63e0c8f267362af995ea00d14f2ec13812b9d0351"
+}

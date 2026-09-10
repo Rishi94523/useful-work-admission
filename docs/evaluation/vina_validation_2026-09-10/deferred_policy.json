@@ -1,0 +1,1803 @@
+{
+  "scope": "Monte Carlo of policy exposure, not a deployed reputation experiment. All attacks submit zero-work invalid results; selected full-run replay detects them. Fresh identities are not assumed costly. Work-credit and audit implementations are unchanged.",
+  "deferred": [
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.010000000000000009,
+      "no_detection_before_cap_probability": 0.99,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.010000000000000009,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.010000000000000009,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 4.90099501,
+      "expected_bad_grants_simulated": 4.90113,
+      "mean_standard_error": 0.0017031078171279607,
+      "eventual_detection_probability": 0.04900995010000009,
+      "no_detection_before_cap_probability": 0.9509900498999999,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 4.9701,
+      "expected_bad_grants_simulated": 4.96975,
+      "mean_standard_error": 0.0007025342059594715,
+      "eventual_detection_probability": 0.04900995010000009,
+      "no_detection_before_cap_probability": 0.970299,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.04900995010000009,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 18.209306240276913,
+      "expected_bad_grants_simulated": 18.22896,
+      "mean_standard_error": 0.014224970885100847,
+      "eventual_detection_probability": 0.18209306240276923,
+      "no_detection_before_cap_probability": 0.8179069375972308,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 18.548623854991238,
+      "expected_bad_grants_simulated": 18.53415,
+      "mean_standard_error": 0.012367888559559155,
+      "eventual_detection_probability": 0.18209306240276923,
+      "no_detection_before_cap_probability": 0.8345137614500875,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 19.56179249911955,
+      "expected_bad_grants_simulated": 19.55788,
+      "mean_standard_error": 0.005118785117155315,
+      "eventual_detection_probability": 0.18209306240276923,
+      "no_detection_before_cap_probability": 0.9043820750088044,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 63.39676587267702,
+      "expected_bad_grants_simulated": 63.53312,
+      "mean_standard_error": 0.11305672933928562,
+      "eventual_detection_probability": 0.6339676587267709,
+      "no_detection_before_cap_probability": 0.3660323412732292,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 64.65357195457302,
+      "expected_bad_grants_simulated": 64.68301,
+      "mean_standard_error": 0.11069681843330056,
+      "eventual_detection_probability": 0.6339676587267709,
+      "no_detection_before_cap_probability": 0.37346428045426916,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.01,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 69.52680273216757,
+      "expected_bad_grants_simulated": 69.5735,
+      "mean_standard_error": 0.10069576542174818,
+      "eventual_detection_probability": 0.6339676587267709,
+      "no_detection_before_cap_probability": 0.4047319726783238,
+      "honest_client_server_compute_ratio": 100.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.020000000000000018,
+      "no_detection_before_cap_probability": 0.98,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.020000000000000018,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.020000000000000018,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 4.80396016,
+      "expected_bad_grants_simulated": 4.80372,
+      "mean_standard_error": 0.002358600696593736,
+      "eventual_detection_probability": 0.09607920320000007,
+      "no_detection_before_cap_probability": 0.9039207967999999,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 4.9404,
+      "expected_bad_grants_simulated": 4.93886,
+      "mean_standard_error": 0.0009934932683660935,
+      "eventual_detection_probability": 0.09607920320000007,
+      "no_detection_before_cap_probability": 0.9411919999999999,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.09607920320000007,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 16.619601412245274,
+      "expected_bad_grants_simulated": 16.60295,
+      "mean_standard_error": 0.018452908119675357,
+      "eventual_detection_probability": 0.33239202824490577,
+      "no_detection_before_cap_probability": 0.6676079717550942,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 17.24323345714835,
+      "expected_bad_grants_simulated": 17.2608,
+      "mean_standard_error": 0.01593285825455438,
+      "eventual_detection_probability": 0.33239202824490577,
+      "no_detection_before_cap_probability": 0.6951353308570327,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 19.146359655622653,
+      "expected_bad_grants_simulated": 19.14141,
+      "mean_standard_error": 0.006901217891581446,
+      "eventual_detection_probability": 0.33239202824490577,
+      "no_detection_before_cap_probability": 0.8170728068875467,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 43.36902220526231,
+      "expected_bad_grants_simulated": 43.34134,
+      "mean_standard_error": 0.1040975467195857,
+      "eventual_detection_probability": 0.8673804441052471,
+      "no_detection_before_cap_probability": 0.13261955589475294,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 45.09560829369254,
+      "expected_bad_grants_simulated": 44.93827,
+      "mean_standard_error": 0.1027520772245736,
+      "eventual_detection_probability": 0.8673804441052471,
+      "no_detection_before_cap_probability": 0.13808783412614842,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.02,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 51.88447132392414,
+      "expected_bad_grants_simulated": 51.92577,
+      "mean_standard_error": 0.09655837630299788,
+      "eventual_detection_probability": 0.8673804441052471,
+      "no_detection_before_cap_probability": 0.16231057352151643,
+      "honest_client_server_compute_ratio": 50.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.050000000000000044,
+      "no_detection_before_cap_probability": 0.95,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.050000000000000044,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.050000000000000044,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 4.524381249999999,
+      "expected_bad_grants_simulated": 4.52818,
+      "mean_standard_error": 0.0034908997034872537,
+      "eventual_detection_probability": 0.22621906250000023,
+      "no_detection_before_cap_probability": 0.7737809374999998,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 4.8525,
+      "expected_bad_grants_simulated": 4.85425,
+      "mean_standard_error": 0.0014935500265865953,
+      "eventual_detection_probability": 0.22621906250000023,
+      "no_detection_before_cap_probability": 0.8573749999999999,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.22621906250000023,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 12.83028155182915,
+      "expected_bad_grants_simulated": 12.87756,
+      "mean_standard_error": 0.022120356632879486,
+      "eventual_detection_probability": 0.6415140775914581,
+      "no_detection_before_cap_probability": 0.3584859224085419,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 14.055713630835625,
+      "expected_bad_grants_simulated": 14.05385,
+      "mean_standard_error": 0.019726175326071953,
+      "eventual_detection_probability": 0.6415140775914581,
+      "no_detection_before_cap_probability": 0.3972143184582182,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 18.02526121523242,
+      "expected_bad_grants_simulated": 18.03025,
+      "mean_standard_error": 0.00952013947931211,
+      "eventual_detection_probability": 0.6415140775914581,
+      "no_detection_before_cap_probability": 0.5987369392383787,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 19.881589415593304,
+      "expected_bad_grants_simulated": 19.88697,
+      "mean_standard_error": 0.05947996739118312,
+      "eventual_detection_probability": 0.994079470779666,
+      "no_detection_before_cap_probability": 0.0059205292203339975,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 21.86879713639147,
+      "expected_bad_grants_simulated": 21.82791,
+      "mean_standard_error": 0.059438799449751674,
+      "eventual_detection_probability": 0.994079470779666,
+      "no_detection_before_cap_probability": 0.006560143180425483,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.05,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 29.802232705806805,
+      "expected_bad_grants_simulated": 29.75913,
+      "mean_standard_error": 0.05850337035483022,
+      "eventual_detection_probability": 0.994079470779666,
+      "no_detection_before_cap_probability": 0.00988836470965895,
+      "honest_client_server_compute_ratio": 20.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.09999999999999998,
+      "no_detection_before_cap_probability": 0.9,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.09999999999999998,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.09999999999999998,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 4.0951,
+      "expected_bad_grants_simulated": 4.09297,
+      "mean_standard_error": 0.0044671988258475235,
+      "eventual_detection_probability": 0.40950999999999993,
+      "no_detection_before_cap_probability": 0.5904900000000001,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 4.71,
+      "expected_bad_grants_simulated": 4.70993,
+      "mean_standard_error": 0.0020156722403073877,
+      "eventual_detection_probability": 0.40950999999999993,
+      "no_detection_before_cap_probability": 0.7290000000000001,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.40950999999999993,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 8.78423345409431,
+      "expected_bad_grants_simulated": 8.8091,
+      "mean_standard_error": 0.02024690275747658,
+      "eventual_detection_probability": 0.8784233454094307,
+      "no_detection_before_cap_probability": 0.12157665459056935,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 10.49905364703001,
+      "expected_bad_grants_simulated": 10.51638,
+      "mean_standard_error": 0.018747960737539378,
+      "eventual_detection_probability": 0.8784233454094307,
+      "no_detection_before_cap_probability": 0.15009463529699918,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 16.513215599000002,
+      "expected_bad_grants_simulated": 16.51309,
+      "mean_standard_error": 0.010781004072881533,
+      "eventual_detection_probability": 0.8784233454094307,
+      "no_detection_before_cap_probability": 0.3486784401000001,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 9.999734386011127,
+      "expected_bad_grants_simulated": 10.00189,
+      "mean_standard_error": 0.030073295601082413,
+      "eventual_detection_probability": 0.9999734386011124,
+      "no_detection_before_cap_probability": 2.6561398887587544e-05,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 11.999672081495218,
+      "expected_bad_grants_simulated": 12.03855,
+      "mean_standard_error": 0.029988798446341967,
+      "eventual_detection_probability": 0.9999734386011124,
+      "no_detection_before_cap_probability": 3.279185047850314e-05,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.1,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 19.999238226519545,
+      "expected_bad_grants_simulated": 20.0037,
+      "mean_standard_error": 0.030135791755974285,
+      "eventual_detection_probability": 0.9999734386011124,
+      "no_detection_before_cap_probability": 7.617734804586657e-05,
+      "honest_client_server_compute_ratio": 10.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.25,
+      "no_detection_before_cap_probability": 0.75,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.25,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.25,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 3.05078125,
+      "expected_bad_grants_simulated": 3.05661,
+      "mean_standard_error": 0.005060900039132571,
+      "eventual_detection_probability": 0.7626953125,
+      "no_detection_before_cap_probability": 0.2373046875,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 4.3125,
+      "expected_bad_grants_simulated": 4.30995,
+      "mean_standard_error": 0.002673776629753252,
+      "eventual_detection_probability": 0.7626953125,
+      "no_detection_before_cap_probability": 0.421875,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 0.7626953125,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 3.987315152244264,
+      "expected_bad_grants_simulated": 3.97963,
+      "mean_standard_error": 0.010677251081992342,
+      "eventual_detection_probability": 0.996828788061066,
+      "no_detection_before_cap_probability": 0.0031712119389339932,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 5.977449159545358,
+      "expected_bad_grants_simulated": 5.96435,
+      "mean_standard_error": 0.010574351466831874,
+      "eventual_detection_probability": 0.996828788061066,
+      "no_detection_before_cap_probability": 0.005637710113660432,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 13.77474594116211,
+      "expected_bad_grants_simulated": 13.77248,
+      "mean_standard_error": 0.00876754898447405,
+      "eventual_detection_probability": 0.996828788061066,
+      "no_detection_before_cap_probability": 0.056313514709472656,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 3.999999999998717,
+      "expected_bad_grants_simulated": 3.99714,
+      "mean_standard_error": 0.010988253984198589,
+      "eventual_detection_probability": 0.9999999999996793,
+      "no_detection_before_cap_probability": 3.207202185381504e-13,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 5.999999999997719,
+      "expected_bad_grants_simulated": 6.00752,
+      "mean_standard_error": 0.011005446183342907,
+      "eventual_detection_probability": 0.9999999999996793,
+      "no_detection_before_cap_probability": 5.701692774011562e-13,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 0.25,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 13.999999999977218,
+      "expected_bad_grants_simulated": 13.98963,
+      "mean_standard_error": 0.010979045041591742,
+      "eventual_detection_probability": 0.9999999999996793,
+      "no_detection_before_cap_probability": 5.695261966737109e-12,
+      "honest_client_server_compute_ratio": 4.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 1,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 3.0,
+      "expected_bad_grants_simulated": 3.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 5,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 5.0,
+      "expected_bad_grants_simulated": 5.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 1.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 3.0,
+      "expected_bad_grants_simulated": 3.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 20,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 11.0,
+      "expected_bad_grants_simulated": 11.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 0,
+      "expected_bad_grants_exact": 1.0,
+      "expected_bad_grants_simulated": 1.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 2,
+      "expected_bad_grants_exact": 3.0,
+      "expected_bad_grants_simulated": 3.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    },
+    {
+      "audit_probability": 1.0,
+      "identity_grant_cap": 100,
+      "verdict_lag_admissions": 10,
+      "expected_bad_grants_exact": 11.0,
+      "expected_bad_grants_simulated": 11.0,
+      "mean_standard_error": 0.0,
+      "eventual_detection_probability": 1.0,
+      "no_detection_before_cap_probability": 0.0,
+      "honest_client_server_compute_ratio": 1.0,
+      "simulation_trials": 100000
+    }
+  ],
+  "immediate_bundles": [
+    {
+      "n": 4,
+      "q": 1,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 1,
+      "correct_runs": 1,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 4,
+      "q": 1,
+      "correct_runs": 2,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 4,
+      "q": 1,
+      "correct_runs": 3,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 4,
+      "q": 1,
+      "correct_runs": 3,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 4,
+      "q": 2,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 2,
+      "correct_runs": 1,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 2,
+      "correct_runs": 2,
+      "pass_probability": 0.16666666666666666,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.42129629629629617
+    },
+    {
+      "n": 4,
+      "q": 2,
+      "correct_runs": 3,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 4,
+      "q": 2,
+      "correct_runs": 3,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 4,
+      "q": 4,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 4,
+      "correct_runs": 1,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 4,
+      "correct_runs": 2,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 4,
+      "correct_runs": 3,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 4,
+      "q": 4,
+      "correct_runs": 3,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 1,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 1,
+      "correct_runs": 2,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 8,
+      "q": 1,
+      "correct_runs": 4,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 8,
+      "q": 1,
+      "correct_runs": 6,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 8,
+      "q": 1,
+      "correct_runs": 7,
+      "pass_probability": 0.875,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.998046875
+    },
+    {
+      "n": 8,
+      "q": 2,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 2,
+      "correct_runs": 2,
+      "pass_probability": 0.03571428571428571,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.10336188046647221
+    },
+    {
+      "n": 8,
+      "q": 2,
+      "correct_runs": 4,
+      "pass_probability": 0.21428571428571427,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.5149416909620992
+    },
+    {
+      "n": 8,
+      "q": 2,
+      "correct_runs": 6,
+      "pass_probability": 0.5357142857142857,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.8999180029154519
+    },
+    {
+      "n": 8,
+      "q": 2,
+      "correct_runs": 7,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 8,
+      "q": 4,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 4,
+      "correct_runs": 2,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 4,
+      "correct_runs": 4,
+      "pass_probability": 0.014285714285714285,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.04224781341107853
+    },
+    {
+      "n": 8,
+      "q": 4,
+      "correct_runs": 6,
+      "pass_probability": 0.21428571428571427,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.5149416909620992
+    },
+    {
+      "n": 8,
+      "q": 4,
+      "correct_runs": 7,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 8,
+      "q": 8,
+      "correct_runs": 0,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 8,
+      "correct_runs": 2,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 8,
+      "correct_runs": 4,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 8,
+      "correct_runs": 6,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 8,
+      "q": 8,
+      "correct_runs": 7,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 1.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 16,
+      "q": 1,
+      "correct_runs": 1,
+      "pass_probability": 0.0625,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.176025390625
+    },
+    {
+      "n": 16,
+      "q": 1,
+      "correct_runs": 4,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 16,
+      "q": 1,
+      "correct_runs": 8,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 16,
+      "q": 1,
+      "correct_runs": 12,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 16,
+      "q": 1,
+      "correct_runs": 14,
+      "pass_probability": 0.875,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.998046875
+    },
+    {
+      "n": 16,
+      "q": 2,
+      "correct_runs": 1,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 16,
+      "q": 2,
+      "correct_runs": 4,
+      "pass_probability": 0.05,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.1426250000000001
+    },
+    {
+      "n": 16,
+      "q": 2,
+      "correct_runs": 8,
+      "pass_probability": 0.23333333333333334,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.5493703703703705
+    },
+    {
+      "n": 16,
+      "q": 2,
+      "correct_runs": 12,
+      "pass_probability": 0.55,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.908875
+    },
+    {
+      "n": 16,
+      "q": 2,
+      "correct_runs": 14,
+      "pass_probability": 0.7583333333333333,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.9858859953703704
+    },
+    {
+      "n": 16,
+      "q": 4,
+      "correct_runs": 1,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 16,
+      "q": 4,
+      "correct_runs": 4,
+      "pass_probability": 0.0005494505494505495,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.0016474461265096885
+    },
+    {
+      "n": 16,
+      "q": 4,
+      "correct_runs": 8,
+      "pass_probability": 0.038461538461538464,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.11100364132908502
+    },
+    {
+      "n": 16,
+      "q": 4,
+      "correct_runs": 12,
+      "pass_probability": 0.27197802197802196,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.6141367029450442
+    },
+    {
+      "n": 16,
+      "q": 4,
+      "correct_runs": 14,
+      "pass_probability": 0.55,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.908875
+    },
+    {
+      "n": 16,
+      "q": 8,
+      "correct_runs": 1,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 16,
+      "q": 8,
+      "correct_runs": 4,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 16,
+      "q": 8,
+      "correct_runs": 8,
+      "pass_probability": 7.77000777000777e-05,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.00023308212166295306
+    },
+    {
+      "n": 16,
+      "q": 8,
+      "correct_runs": 12,
+      "pass_probability": 0.038461538461538464,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.11100364132908502
+    },
+    {
+      "n": 16,
+      "q": 8,
+      "correct_runs": 14,
+      "pass_probability": 0.23333333333333334,
+      "client_server_replay_ratio": 2.0,
+      "three_attempt_success": 0.5493703703703705
+    },
+    {
+      "n": 32,
+      "q": 1,
+      "correct_runs": 3,
+      "pass_probability": 0.09375,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.255706787109375
+    },
+    {
+      "n": 32,
+      "q": 1,
+      "correct_runs": 8,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 32,
+      "q": 1,
+      "correct_runs": 16,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 32,
+      "q": 1,
+      "correct_runs": 24,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 32,
+      "q": 1,
+      "correct_runs": 28,
+      "pass_probability": 0.875,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.998046875
+    },
+    {
+      "n": 32,
+      "q": 2,
+      "correct_runs": 3,
+      "pass_probability": 0.006048387096774193,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.01803563359896876
+    },
+    {
+      "n": 32,
+      "q": 2,
+      "correct_runs": 8,
+      "pass_probability": 0.056451612903225805,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.15997438404216024
+    },
+    {
+      "n": 32,
+      "q": 2,
+      "correct_runs": 16,
+      "pass_probability": 0.24193548387096775,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.5643692725991072
+    },
+    {
+      "n": 32,
+      "q": 2,
+      "correct_runs": 24,
+      "pass_probability": 0.5564516129032258,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.9127384319089658
+    },
+    {
+      "n": 32,
+      "q": 2,
+      "correct_runs": 28,
+      "pass_probability": 0.7620967741935484,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.9865351663463797
+    },
+    {
+      "n": 32,
+      "q": 4,
+      "correct_runs": 3,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 32,
+      "q": 4,
+      "correct_runs": 8,
+      "pass_probability": 0.001946607341490545,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.00582846156028638
+    },
+    {
+      "n": 32,
+      "q": 4,
+      "correct_runs": 16,
+      "pass_probability": 0.05061179087875417,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.14428035731218702
+    },
+    {
+      "n": 32,
+      "q": 4,
+      "correct_runs": 24,
+      "pass_probability": 0.2954949944382647,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.6503349307370894
+    },
+    {
+      "n": 32,
+      "q": 4,
+      "correct_runs": 28,
+      "pass_probability": 0.5693826473859844,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.920150062619435
+    },
+    {
+      "n": 32,
+      "q": 8,
+      "correct_runs": 3,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 32,
+      "q": 8,
+      "correct_runs": 8,
+      "pass_probability": 9.507239763079586e-08,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 2.8521716577412093e-07
+    },
+    {
+      "n": 32,
+      "q": 8,
+      "correct_runs": 16,
+      "pass_probability": 0.0012235817575083426,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.0036662556474614805
+    },
+    {
+      "n": 32,
+      "q": 8,
+      "correct_runs": 24,
+      "pass_probability": 0.06992299135791906,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.19544316913031246
+    },
+    {
+      "n": 32,
+      "q": 8,
+      "correct_runs": 28,
+      "pass_probability": 0.2954949944382647,
+      "client_server_replay_ratio": 4.0,
+      "three_attempt_success": 0.6503349307370894
+    },
+    {
+      "n": 64,
+      "q": 1,
+      "correct_runs": 6,
+      "pass_probability": 0.09375,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.255706787109375
+    },
+    {
+      "n": 64,
+      "q": 1,
+      "correct_runs": 16,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 64,
+      "q": 1,
+      "correct_runs": 32,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 64,
+      "q": 1,
+      "correct_runs": 48,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 64,
+      "q": 1,
+      "correct_runs": 57,
+      "pass_probability": 0.890625,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.9986915588378906
+    },
+    {
+      "n": 64,
+      "q": 2,
+      "correct_runs": 6,
+      "pass_probability": 0.00744047619047619,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.02215575842347095
+    },
+    {
+      "n": 64,
+      "q": 2,
+      "correct_runs": 16,
+      "pass_probability": 0.05952380952380952,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.1681530747219523
+    },
+    {
+      "n": 64,
+      "q": 2,
+      "correct_runs": 32,
+      "pass_probability": 0.24603174603174602,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.571393078101317
+    },
+    {
+      "n": 64,
+      "q": 2,
+      "correct_runs": 48,
+      "pass_probability": 0.5595238095238095,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.914539129143721
+    },
+    {
+      "n": 64,
+      "q": 2,
+      "correct_runs": 57,
+      "pass_probability": 0.7916666666666666,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.9909577546296297
+    },
+    {
+      "n": 64,
+      "q": 4,
+      "correct_runs": 6,
+      "pass_probability": 2.360806829341996e-05,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 7.082253287060691e-05
+    },
+    {
+      "n": 64,
+      "q": 4,
+      "correct_runs": 16,
+      "pass_probability": 0.002864445619601622,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.008568745215597806
+    },
+    {
+      "n": 64,
+      "q": 4,
+      "correct_runs": 32,
+      "pass_probability": 0.05659640905542545,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.16036105359913944
+    },
+    {
+      "n": 64,
+      "q": 4,
+      "correct_runs": 48,
+      "pass_probability": 0.30624386190224373,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.6660968502142671
+    },
+    {
+      "n": 64,
+      "q": 4,
+      "correct_runs": 57,
+      "pass_probability": 0.6216948704389212,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.945858947994984
+    },
+    {
+      "n": 64,
+      "q": 8,
+      "correct_runs": 6,
+      "pass_probability": 0,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0
+    },
+    {
+      "n": 64,
+      "q": 8,
+      "correct_runs": 16,
+      "pass_probability": 2.9077088020810705e-06,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 8.72310104194085e-06
+    },
+    {
+      "n": 64,
+      "q": 8,
+      "correct_runs": 32,
+      "pass_probability": 0.002376391102791711,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.007112245024393227
+    },
+    {
+      "n": 64,
+      "q": 8,
+      "correct_runs": 48,
+      "pass_probability": 0.0852541562789617,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.23457730567396673
+    },
+    {
+      "n": 64,
+      "q": 8,
+      "correct_runs": 57,
+      "pass_probability": 0.37332800237119385,
+      "client_server_replay_ratio": 8.0,
+      "three_attempt_success": 0.7538947563994135
+    },
+    {
+      "n": 128,
+      "q": 1,
+      "correct_runs": 12,
+      "pass_probability": 0.09375,
+      "client_server_replay_ratio": 128.0,
+      "three_attempt_success": 0.255706787109375
+    },
+    {
+      "n": 128,
+      "q": 1,
+      "correct_runs": 32,
+      "pass_probability": 0.25,
+      "client_server_replay_ratio": 128.0,
+      "three_attempt_success": 0.578125
+    },
+    {
+      "n": 128,
+      "q": 1,
+      "correct_runs": 64,
+      "pass_probability": 0.5,
+      "client_server_replay_ratio": 128.0,
+      "three_attempt_success": 0.875
+    },
+    {
+      "n": 128,
+      "q": 1,
+      "correct_runs": 96,
+      "pass_probability": 0.75,
+      "client_server_replay_ratio": 128.0,
+      "three_attempt_success": 0.984375
+    },
+    {
+      "n": 128,
+      "q": 1,
+      "correct_runs": 115,
+      "pass_probability": 0.8984375,
+      "client_server_replay_ratio": 128.0,
+      "three_attempt_success": 0.9989523887634277
+    },
+    {
+      "n": 128,
+      "q": 2,
+      "correct_runs": 12,
+      "pass_probability": 0.00812007874015748,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.024162964587136737
+    },
+    {
+      "n": 128,
+      "q": 2,
+      "correct_runs": 32,
+      "pass_probability": 0.0610236220472441,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.17212646359347838
+    },
+    {
+      "n": 128,
+      "q": 2,
+      "correct_runs": 64,
+      "pass_probability": 0.24803149606299213,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.5747944232108937
+    },
+    {
+      "n": 128,
+      "q": 2,
+      "correct_runs": 96,
+      "pass_probability": 0.5610236220472441,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.9154091376588265
+    },
+    {
+      "n": 128,
+      "q": 2,
+      "correct_runs": 115,
+      "pass_probability": 0.8064714566929134,
+      "client_server_replay_ratio": 64.0,
+      "three_attempt_success": 0.9927517179751123
+    },
+    {
+      "n": 128,
+      "q": 4,
+      "correct_runs": 12,
+      "pass_probability": 4.640044994375703e-05,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.00013919489092584225
+    },
+    {
+      "n": 128,
+      "q": 4,
+      "correct_runs": 32,
+      "pass_probability": 0.0033708286464191974,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.010078436782959721
+    },
+    {
+      "n": 128,
+      "q": 4,
+      "correct_runs": 64,
+      "pass_probability": 0.059559055118110237,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.168246594922016
+    },
+    {
+      "n": 128,
+      "q": 4,
+      "correct_runs": 96,
+      "pass_probability": 0.31139482564679416,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.6734792049201324
+    },
+    {
+      "n": 128,
+      "q": 4,
+      "correct_runs": 115,
+      "pass_probability": 0.6480446194225722,
+      "client_server_replay_ratio": 32.0,
+      "three_attempt_success": 0.9564023754725091
+    },
+    {
+      "n": 128,
+      "q": 8,
+      "correct_runs": 12,
+      "pass_probability": 3.462258387567918e-10,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 1.0386774773607499e-09
+    },
+    {
+      "n": 128,
+      "q": 8,
+      "correct_runs": 32,
+      "pass_probability": 7.35698432281932e-06,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 2.2070790593353706e-05
+    },
+    {
+      "n": 128,
+      "q": 8,
+      "correct_runs": 64,
+      "pass_probability": 0.0030958642767920487,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.009258869375441403
+    },
+    {
+      "n": 128,
+      "q": 8,
+      "correct_runs": 96,
+      "pass_probability": 0.09274726889357486,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.2532334562094827
+    },
+    {
+      "n": 128,
+      "q": 8,
+      "correct_runs": 115,
+      "pass_probability": 0.41371267712002185,
+      "client_server_replay_ratio": 16.0,
+      "three_attempt_success": 0.7984738022625004
+    }
+  ],
+  "capacity": {
+    "formula": "stable only if arrival_rate * audit_probability * replay_seconds < replay_worker_count (before headroom)",
+    "example_replay_seconds": 0.75,
+    "one_worker_max_arrivals_per_second_at_p05": 26.666666666666664
+  },
+  "interpretation": [
+    "Deferred access is already consumed even if its scientific credit is later rejected.",
+    "Unlimited cheap trusted identities bypass per-identity exposure caps.",
+    "Identity acquisition/reputation and global issuance limits are necessary external assumptions.",
+    "Unsampled scientific output remains provisional; audit probability is not an accuracy estimate for selected top-ranked poses.",
+    "These models do not establish that an unaudited accepted individual performed work."
+  ]
+}

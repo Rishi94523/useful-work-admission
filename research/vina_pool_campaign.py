@@ -67,3 +67,21 @@ class VinaPoolCampaign(Campaign):
    rows=db.execute('SELECT p.ordinal,u.state,o.verified FROM pool_members p JOIN units u ON u.task=p.task LEFT JOIN pool_outputs o ON o.task=u.task WHERE p.pool=? ORDER BY p.ordinal',(pool,)).fetchall()
    complete=sum(r['state']=='COMPLETED' for r in rows);verified=sum(r['verified']==1 for r in rows)
    return {'assigned_goal':len(rows),'completed':complete,'replay_verified':verified,'aggregate_ready_provisional':bool(rows) and complete==len(rows),'all_replay_verified':bool(rows) and verified==len(rows)}
+ def ordered_outputs(self,pool,require_verified=False):
+  """Read a complete pool in canonical merge order, checking storage integrity."""
+  with self.transaction() as db:
+   rows=db.execute('SELECT p.ordinal,p.task,o.payload,o.digest,o.verified FROM pool_members p LEFT JOIN pool_outputs o ON o.task=p.task WHERE p.pool=? ORDER BY p.ordinal',(pool,)).fetchall()
+   if not rows or any(r['payload'] is None for r in rows):raise LookupError('Incomplete pool')
+   if require_verified and any(not r['verified'] for r in rows):raise ValueError('Pool contains unaudited outputs')
+   result=[]
+   for r in rows:
+    payload=bytes(r['payload'])
+    if hashlib.sha256(payload).hexdigest()!=r['digest']:raise ValueError('Stored output digest mismatch')
+    result.append({'ordinal':r['ordinal'],'task':r['task'],'payload':payload,'verified':bool(r['verified'])})
+   return result
+ def mark_replay_verified(self,task,expected_digest):
+  """Trusted later verifier upgrades the exact durable output it replayed."""
+  with self.transaction() as db:
+   row=db.execute('SELECT payload,digest FROM pool_outputs WHERE task=?',(task,)).fetchone()
+   if not row or row['digest']!=expected_digest or hashlib.sha256(bytes(row['payload'])).hexdigest()!=expected_digest:raise ValueError('Missing or changed replayed output')
+   db.execute('UPDATE pool_outputs SET verified=1 WHERE task=?',(task,))

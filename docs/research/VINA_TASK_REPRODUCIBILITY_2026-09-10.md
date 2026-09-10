@@ -17,6 +17,8 @@ node scripts/benchmark_vina_tasks_browser.mjs
 python scripts/benchmark_vina_task_ingestion.py
 python scripts/quantify_vina_task_audits.py
 python scripts/analyze_vina_tasks.py
+python scripts/analyze_vina_task_dimensions.py
+python scripts/write_vina_task_results.py
 python scripts/plot_vina_tasks.py
 python scripts/package_vina_tasks.py
 python -m unittest research.tests.test_vina_pool_campaign research.tests.test_adaptive_admission research.tests.test_whole_run_campaign research.tests.test_docking_campaign
@@ -29,6 +31,8 @@ The campaign resumes from existing aggregate keys and native per-task metrics; t
 ## What each measurement includes
 
 Native `search_ms` sums the Monte Carlo sections, including light trace instrumentation. It excludes model copies, file writes, map initialization and final aggregation. The campaign records actual evaluation counts and finalizer times where separately measured. An evaluation cap can overshoot at the next outer-loop check; it is not a hard millisecond deadline. Equal evaluation counts and equal elapsed time are separately reported. Wall-matched arms select the available prefix nearest the reference's measured MC time without consulting quality, and can still overshoot/undershoot. This is not an exact end-to-end resource match or repeated thermal-controlled timing trial.
+
+The retained-minima parameter is nine, matching the CLI default rather than the Python API's default twenty. Output uses a deliberately broad energy range of 1000 to expose all retained poses for analysis; the matched stock control uses the same display range. This output filter does not change the internal search or the first score-selected pose. Best-RMSD-among-returned-poses is an oracle sampling diagnostic under that broad range, not a promise that prospective screening would select that pose or that it would pass the usual default output-energy filter.
 
 Browser measurements execute the same task source in a Chrome module worker and replay in Node using the same WASM. They report map initialization separately, along with pure MC timing and the enclosing task/serialization timing. Commitments in this harness are constructed by host Node after receiving Chrome outputs: those numbers must not be described as browser commitment timings. No network, production database, mobile device, real participant, energy or abandonment experiment is implied.
 

@@ -2,6 +2,21 @@ import hashlib,tempfile,unittest
 from pathlib import Path
 from research.vina_pool_campaign import VinaPoolCampaign
 class PoolTests(unittest.TestCase):
+ def test_multiple_ligand_pools_are_leased_atomically(self):
+  with tempfile.TemporaryDirectory(dir='tmp') as d:
+   c=VinaPoolCampaign(Path(d)/'p.sqlite',clock=lambda:0)
+   spec={'model_version':'e','receptor':'r','ligand':'a','conformer_bank':'input-a','region':'b','search_parameters':{'max_evals':0}}
+   c.register_pool('a',spec,[1,2]);c.register_pool('b',dict(spec,ligand='b',conformer_bank='input-b'),[1,2])
+   with self.assertRaises(LookupError):c.lease_many(['a','missing'],'x',2)
+   self.assertEqual(c.snapshot()['units'],{'UNASSIGNED':4})
+   c.register_pool('alias',spec,[1,2])
+   with self.assertRaises(ValueError):c.lease_many(['a','alias'],'x',2)
+   lease=c.lease_many(['a','b'],'x',2);self.assertEqual(len(lease['tasks']),4)
+   ch=c.commit(lease['lease'],'x',lease['binding'],'a'*64,samples=2)
+   ids=[t['task'] for t in lease['tasks']];verified=[ids[j] for j,_ in ch['draws']]
+   c.finish_outputs(lease['lease'],'x',lease['binding'],ch['id'],'a'*64,{task:b'fixture' for task in ids},verified)
+   self.assertTrue(c.coverage('a')['aggregate_ready_provisional']);self.assertTrue(c.coverage('b')['aggregate_ready_provisional'])
+   self.assertEqual(c.coverage('a')['replay_verified']+c.coverage('b')['replay_verified'],2)
  def test_many_visitors_durable_coverage_and_no_duplicate_credit(self):
   with tempfile.TemporaryDirectory(dir='tmp') as d:
    path=Path(d)/'p.sqlite';c=VinaPoolCampaign(path,clock=lambda:0)

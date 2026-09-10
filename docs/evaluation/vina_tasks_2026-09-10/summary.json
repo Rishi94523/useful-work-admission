@@ -1,0 +1,1729 @@
+{
+  "scope": "Small preselected4-active/4-decoy subset per target. Aggregate-level scientific quality. Native same-build decomposition equality is distinct from downloaded-binary agreement and from browser evidence. Historical stock E8 quality controls use identical corrected inputs but concurrent wall times are not matched performance.",
+  "rows": 312,
+  "errors": [],
+  "equivalence": [
+    {
+      "target": "fa10",
+      "cap": 16000,
+      "same_build_exact": true,
+      "stock_score": -6.778,
+      "split_score": -8.322287211280987,
+      "split_run_ms": [
+        106.4482,
+        97.4672,
+        97.637,
+        88.6076
+      ],
+      "aggregation_ms": 22.1056,
+      "official_binary_pose_exact": false
+    },
+    {
+      "target": "fa10",
+      "cap": 0,
+      "same_build_exact": true,
+      "stock_score": -10.902,
+      "split_score": -10.619984974529252,
+      "split_run_ms": [
+        7024.5054,
+        6478.0947,
+        7733.1403,
+        10618.7308
+      ],
+      "aggregation_ms": 62.2896,
+      "official_binary_pose_exact": false
+    },
+    {
+      "target": "hs90a",
+      "cap": 16000,
+      "same_build_exact": true,
+      "stock_score": -7.462,
+      "split_score": -6.698852156583907,
+      "split_run_ms": [
+        47.5402,
+        49.314,
+        47.5243,
+        43.3611
+      ],
+      "aggregation_ms": 26.1805,
+      "official_binary_pose_exact": false
+    },
+    {
+      "target": "hs90a",
+      "cap": 0,
+      "same_build_exact": true,
+      "stock_score": -8.331,
+      "split_score": -8.272593933059127,
+      "split_run_ms": [
+        2238.0308,
+        2118.1997,
+        2100.3943,
+        2441.5205
+      ],
+      "aggregation_ms": 17.2014,
+      "official_binary_pose_exact": false
+    },
+    {
+      "target": "tryb1",
+      "cap": 16000,
+      "same_build_exact": true,
+      "stock_score": -7.297,
+      "split_score": -6.7130776797857274,
+      "split_run_ms": [
+        38.3487,
+        37.1309,
+        41.924,
+        38.6121
+      ],
+      "aggregation_ms": 20.7298,
+      "official_binary_pose_exact": false
+    },
+    {
+      "target": "tryb1",
+      "cap": 0,
+      "same_build_exact": true,
+      "stock_score": -9.378,
+      "split_score": -9.317547940394213,
+      "split_run_ms": [
+        2361.3242,
+        2426.3195,
+        2324.3706,
+        2345.6651
+      ],
+      "aggregation_ms": 20.3371,
+      "official_binary_pose_exact": false
+    }
+  ],
+  "targets": [
+    {
+      "target": "fa10",
+      "selected_ranking_ids": [
+        "active_00025",
+        "active_00092",
+        "active_00090",
+        "active_00043",
+        "decoy_00084",
+        "decoy_00001",
+        "decoy_00028",
+        "decoy_00048"
+      ],
+      "stock_subset_quality": {
+        "auc": 0.9375,
+        "bootstrap95": [
+          0.75,
+          1.0
+        ],
+        "top2_enrichment": 2
+      },
+      "stock_subset_auc_bounds": [
+        0.9375,
+        0.9375
+      ],
+      "stock_subset_successes": 8,
+      "stock_missing_ids": [],
+      "configs": [
+        {
+          "method": "normal",
+          "point": 1,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 8.741479260185315,
+              "best_returned_pose_rmsd_A": 6.726690979318882,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 7,
+              "best_rmsd_pose_score": -7.81,
+              "top_pose_score": -9.511,
+              "search_ms": 7871.0009,
+              "runs": 1,
+              "finalizer_ms": 12.4641,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.55958005869739,
+              "best_returned_pose_rmsd_A": 8.395427416159347,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 6,
+              "best_rmsd_pose_score": -8.327,
+              "top_pose_score": -8.785,
+              "search_ms": 11987.1053,
+              "runs": 1,
+              "finalizer_ms": 17.8215,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 6332.840399999999
+        },
+        {
+          "method": "normal",
+          "point": 2,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.62,
+              "top_pose_score": -10.62,
+              "search_ms": 14529.4884,
+              "runs": 2,
+              "finalizer_ms": 18.2953,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.74277352481751,
+              "best_returned_pose_rmsd_A": 8.395427416159347,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.151,
+              "top_pose_score": -10.279,
+              "search_ms": 23046.8831,
+              "runs": 2,
+              "finalizer_ms": 30.4722,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 13630.1868
+        },
+        {
+          "method": "normal",
+          "point": 4,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.62,
+              "top_pose_score": -10.62,
+              "search_ms": 28441.1427,
+              "runs": 4,
+              "finalizer_ms": 24.8688,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.74277352481751,
+              "best_returned_pose_rmsd_A": 1.6121598769197796,
+              "best_returned_pose_rank": 4,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.978,
+              "top_pose_score": -10.279,
+              "search_ms": 45659.8317,
+              "runs": 4,
+              "finalizer_ms": 45.407,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 29765.420899999997
+        },
+        {
+          "method": "normal",
+          "point": 8,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.991,
+              "top_pose_score": -10.991,
+              "search_ms": 66523.0545,
+              "runs": 8,
+              "finalizer_ms": 87.7874,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.74277352481751,
+              "best_returned_pose_rmsd_A": 1.6121598769197796,
+              "best_returned_pose_rank": 4,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.978,
+              "top_pose_score": -10.279,
+              "search_ms": 92503.945,
+              "runs": 8,
+              "finalizer_ms": 85.9526,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 60242.97215
+        },
+        {
+          "method": "normal",
+          "point": 16,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.991,
+              "top_pose_score": -10.991,
+              "search_ms": 146152.0467,
+              "runs": 16,
+              "finalizer_ms": 63.8955,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.739330773863637,
+              "best_returned_pose_rmsd_A": 1.6121598769197796,
+              "best_returned_pose_rank": 4,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.93,
+              "top_pose_score": -10.24,
+              "search_ms": 192696.049,
+              "runs": 16,
+              "finalizer_ms": 122.4042,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "normal",
+          "point": 32,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rmsd_A": 0.46571977223433414,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.991,
+              "top_pose_score": -10.991,
+              "search_ms": 291273.756,
+              "runs": 32,
+              "finalizer_ms": 228.6868,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.770075571581469,
+              "best_returned_pose_rmsd_A": 1.285160204021273,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.273,
+              "top_pose_score": -10.217,
+              "search_ms": 381103.1363,
+              "runs": 32,
+              "finalizer_ms": 219.3548,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "matched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 6.146477540530836,
+              "best_returned_pose_rmsd_A": 1.3128402178102254,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.445,
+              "top_pose_score": -8.611,
+              "search_ms": 11331.5302,
+              "runs": 75,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0134081131304278
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.346858862769874,
+              "best_returned_pose_rmsd_A": 6.28754925676531,
+              "best_returned_pose_rank": 7,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -7.71,
+              "top_pose_score": -8.957,
+              "search_ms": 12797.1079,
+              "runs": 79,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0122798985969597
+            }
+          ],
+          "ranking_median_search_ms": 8126.96075
+        },
+        {
+          "method": "matched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46656792110045436,
+              "best_returned_pose_rmsd_A": 0.46656792110045436,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.969,
+              "top_pose_score": -10.969,
+              "search_ms": 9813.0323,
+              "runs": 19,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0254155798735036
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.737505937050916,
+              "best_returned_pose_rmsd_A": 6.33531049702775,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.086,
+              "top_pose_score": -9.874,
+              "search_ms": 12602.2813,
+              "runs": 20,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0231919906618443
+            }
+          ],
+          "ranking_median_search_ms": 7779.8764
+        },
+        {
+          "method": "matched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.875,
+            "bootstrap95": [
+              0.5,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.62,
+              "top_pose_score": -10.62,
+              "search_ms": 14805.5741,
+              "runs": 5,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.078868527172287
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.693393163057795,
+              "best_returned_pose_rmsd_A": 1.6121598769197796,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.894,
+              "top_pose_score": -9.903,
+              "search_ms": 14617.0183,
+              "runs": 5,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0228971772212274
+            }
+          ],
+          "ranking_median_search_ms": 8173.986349999999
+        },
+        {
+          "method": "wallmatched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 1.3128402178102254,
+              "best_returned_pose_rmsd_A": 1.3128402178102254,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.046,
+              "top_pose_score": -9.046,
+              "search_ms": 7831.491500000003,
+              "runs": 45,
+              "finalizer_ms": 680.1852,
+              "search_ratio": 0.9949803842609144,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.346858862769874,
+              "best_returned_pose_rmsd_A": 6.28754925676531,
+              "best_returned_pose_rank": 7,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -7.71,
+              "top_pose_score": -8.957,
+              "search_ms": 12006.0467,
+              "runs": 74,
+              "finalizer_ms": 998.6517,
+              "search_ratio": 1.0015801479611597,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 6388.1163
+        },
+        {
+          "method": "wallmatched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.9375,
+            "bootstrap95": [
+              0.75,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46656792110045436,
+              "best_returned_pose_rmsd_A": 0.46656792110045436,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.969,
+              "top_pose_score": -10.969,
+              "search_ms": 7843.270499999998,
+              "runs": 16,
+              "finalizer_ms": 214.3689,
+              "search_ratio": 0.9964768902516575,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.76470001447568,
+              "best_returned_pose_rmsd_A": 6.33531049702775,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.374,
+              "top_pose_score": -9.717,
+              "search_ms": 11918.7186,
+              "runs": 19,
+              "finalizer_ms": 251.9554,
+              "search_ratio": 0.9942949779543524,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 6251.9086
+        },
+        {
+          "method": "wallmatched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.875,
+            "bootstrap95": [
+              0.5,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rmsd_A": 0.48803752417206603,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -10.62,
+              "top_pose_score": -10.62,
+              "search_ms": 8928.059000000001,
+              "runs": 3,
+              "finalizer_ms": 42.5382,
+              "search_ratio": 1.1342977994069345,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 8.693393163057795,
+              "best_returned_pose_rmsd_A": 1.6121598769197796,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.894,
+              "top_pose_score": -9.903,
+              "search_ms": 11656.1472,
+              "runs": 4,
+              "finalizer_ms": 60.1462,
+              "search_ratio": 0.9723904903046109,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 6193.29115
+        }
+      ]
+    },
+    {
+      "target": "hs90a",
+      "selected_ranking_ids": [
+        "active_00020",
+        "active_00065",
+        "active_00085",
+        "active_00054",
+        "decoy_00085",
+        "decoy_00026",
+        "decoy_00028",
+        "decoy_00034"
+      ],
+      "stock_subset_quality": null,
+      "stock_subset_auc_bounds": [
+        0.1875,
+        0.4375
+      ],
+      "stock_subset_successes": 7,
+      "stock_missing_ids": [
+        "active_00054"
+      ],
+      "configs": [
+        {
+          "method": "normal",
+          "point": 1,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.45463501844886545,
+              "best_returned_pose_rmsd_A": 0.45463501844886545,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.286,
+              "top_pose_score": -8.286,
+              "search_ms": 2327.9997,
+              "runs": 1,
+              "finalizer_ms": 18.3675,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.5053928265131087,
+              "best_returned_pose_rmsd_A": 0.5053928265131087,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 7,
+              "best_rmsd_pose_score": -8.063,
+              "top_pose_score": -8.063,
+              "search_ms": 2092.8236,
+              "runs": 1,
+              "finalizer_ms": 10.6389,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 8383.9185
+        },
+        {
+          "method": "normal",
+          "point": 2,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.273,
+              "top_pose_score": -8.273,
+              "search_ms": 6474.294400000001,
+              "runs": 2,
+              "finalizer_ms": 25.8298,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.5657622372436224,
+              "best_returned_pose_rmsd_A": 0.5657622372436224,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.282,
+              "top_pose_score": -8.282,
+              "search_ms": 5959.0587,
+              "runs": 2,
+              "finalizer_ms": 22.7493,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 17945.8266
+        },
+        {
+          "method": "normal",
+          "point": 4,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.273,
+              "top_pose_score": -8.273,
+              "search_ms": 14567.284599999999,
+              "runs": 4,
+              "finalizer_ms": 24.498,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.49721113130229627,
+              "best_returned_pose_rmsd_A": 0.49721113130229627,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.285,
+              "top_pose_score": -8.285,
+              "search_ms": 14696.9708,
+              "runs": 4,
+              "finalizer_ms": 42.6662,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 38717.36465
+        },
+        {
+          "method": "normal",
+          "point": 8,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.273,
+              "top_pose_score": -8.273,
+              "search_ms": 23638.6759,
+              "runs": 8,
+              "finalizer_ms": 27.4328,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4844898910663203,
+              "best_returned_pose_rmsd_A": 0.4844898910663203,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.206,
+              "top_pose_score": -8.206,
+              "search_ms": 30722.4424,
+              "runs": 8,
+              "finalizer_ms": 48.4857,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 77958.17495
+        },
+        {
+          "method": "normal",
+          "point": 16,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.41943273379866053,
+              "best_returned_pose_rmsd_A": 0.41943273379866053,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.247,
+              "top_pose_score": -8.247,
+              "search_ms": 53087.3894,
+              "runs": 16,
+              "finalizer_ms": 85.8522,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4011592859791141,
+              "best_returned_pose_rmsd_A": 0.4011592859791141,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.286,
+              "top_pose_score": -8.286,
+              "search_ms": 63628.3345,
+              "runs": 16,
+              "finalizer_ms": 82.0833,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "normal",
+          "point": 32,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.48353471248899826,
+              "best_returned_pose_rmsd_A": 0.48353471248899826,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.256,
+              "top_pose_score": -8.256,
+              "search_ms": 124751.47499999999,
+              "runs": 32,
+              "finalizer_ms": 148.4029,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4711455092740361,
+              "best_returned_pose_rmsd_A": 0.4711455092740361,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.283,
+              "top_pose_score": -8.283,
+              "search_ms": 127362.5385,
+              "runs": 32,
+              "finalizer_ms": 166.6186,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "matched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.4125005785119912,
+              "best_returned_pose_rmsd_A": 0.4125005785119912,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.262,
+              "top_pose_score": -8.262,
+              "search_ms": 4688.8551,
+              "runs": 51,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0163333876328837
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4711455092740361,
+              "best_returned_pose_rmsd_A": 0.4711455092740361,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.283,
+              "top_pose_score": -8.283,
+              "search_ms": 4594.2123,
+              "runs": 49,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0077536396534483
+            }
+          ],
+          "ranking_median_search_ms": 9856.4956
+        },
+        {
+          "method": "matched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.5661615172690246,
+              "best_returned_pose_rmsd_A": 0.5661615172690246,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.356,
+              "top_pose_score": -8.356,
+              "search_ms": 4338.0736,
+              "runs": 13,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.035167456082648
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.099,
+              "top_pose_score": -8.099,
+              "search_ms": 4408.5336,
+              "runs": 13,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0683758050498788
+            }
+          ],
+          "ranking_median_search_ms": 9977.1244
+        },
+        {
+          "method": "matched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.273,
+              "top_pose_score": -8.273,
+              "search_ms": 5404.0135,
+              "runs": 4,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.2735167829132994
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.5657622372436224,
+              "best_returned_pose_rmsd_A": 0.5657622372436224,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.282,
+              "top_pose_score": -8.282,
+              "search_ms": 5378.9758,
+              "runs": 4,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.3147258818802319
+            }
+          ],
+          "ranking_median_search_ms": 11169.753499999999
+        },
+        {
+          "method": "wallmatched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.46764516462805394,
+              "best_returned_pose_rmsd_A": 0.46764516462805394,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.035,
+              "top_pose_score": -8.035,
+              "search_ms": 2326.2991,
+              "runs": 24,
+              "finalizer_ms": 271.4126,
+              "search_ratio": 0.9992695016240768,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.099,
+              "top_pose_score": -8.099,
+              "search_ms": 2052.8388,
+              "runs": 22,
+              "finalizer_ms": 240.1811,
+              "search_ratio": 0.9808943285998877,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 8416.414449999998
+        },
+        {
+          "method": "wallmatched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 4.592231552999438,
+              "best_returned_pose_rmsd_A": 1.3414116377228065,
+              "best_returned_pose_rank": 2,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -7.5,
+              "top_pose_score": -7.502,
+              "search_ms": 2383.4994,
+              "runs": 7,
+              "finalizer_ms": 78.8562,
+              "search_ratio": 1.023840080391763,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rmsd_A": 0.4820896747965615,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.099,
+              "top_pose_score": -8.099,
+              "search_ms": 2077.5272,
+              "runs": 6,
+              "finalizer_ms": 70.9876,
+              "search_ratio": 0.9926910227885426,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 8384.776199999998
+        },
+        {
+          "method": "wallmatched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.1875,
+            "bootstrap95": [
+              0.0,
+              0.5625
+            ],
+            "top2_enrichment": 0
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rmsd_A": 0.38095334956586824,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -8.273,
+              "top_pose_score": -8.273,
+              "search_ms": 2898.0994,
+              "runs": 2,
+              "finalizer_ms": 30.259,
+              "search_ratio": 1.2448882188429837,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 0.5053928265131087,
+              "best_returned_pose_rmsd_A": 0.5053928265131087,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 7,
+              "best_rmsd_pose_score": -8.063,
+              "top_pose_score": -8.063,
+              "search_ms": 1408.7347,
+              "runs": 1,
+              "finalizer_ms": 17.6052,
+              "search_ratio": 0.6731263447143848,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 8768.744449999998
+        }
+      ]
+    },
+    {
+      "target": "tryb1",
+      "selected_ranking_ids": [
+        "active_00031",
+        "active_00076",
+        "active_00024",
+        "active_00044",
+        "decoy_00074",
+        "decoy_00093",
+        "decoy_00026",
+        "decoy_00034"
+      ],
+      "stock_subset_quality": {
+        "auc": 0.5625,
+        "bootstrap95": [
+          0.125,
+          1.0
+        ],
+        "top2_enrichment": 1
+      },
+      "stock_subset_auc_bounds": [
+        0.5625,
+        0.5625
+      ],
+      "stock_subset_successes": 8,
+      "stock_missing_ids": [],
+      "configs": [
+        {
+          "method": "normal",
+          "point": 1,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.3125,
+            "bootstrap95": [
+              0.0,
+              0.75
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 8.557937631228683,
+              "best_returned_pose_rmsd_A": 8.557937631228683,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 7,
+              "best_rmsd_pose_score": -7.318,
+              "top_pose_score": -7.318,
+              "search_ms": 2430.5762,
+              "runs": 1,
+              "finalizer_ms": 17.9888,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.127509676760017,
+              "best_returned_pose_rmsd_A": 7.127509676760017,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 4,
+              "best_rmsd_pose_score": -6.914,
+              "top_pose_score": -6.914,
+              "search_ms": 2494.0972,
+              "runs": 1,
+              "finalizer_ms": 11.752,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 13574.0541
+        },
+        {
+          "method": "normal",
+          "point": 2,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.375,
+            "bootstrap95": [
+              0.0,
+              0.8125
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.3172588120858961,
+              "best_returned_pose_rmsd_A": 0.3172588120858961,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.352,
+              "top_pose_score": -9.352,
+              "search_ms": 7117.1451,
+              "runs": 2,
+              "finalizer_ms": 29.9588,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.127509676760017,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 6,
+              "returned_poses": 8,
+              "best_rmsd_pose_score": -6.429,
+              "top_pose_score": -6.914,
+              "search_ms": 6918.6293000000005,
+              "runs": 2,
+              "finalizer_ms": 21.2623,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 31213.4775
+        },
+        {
+          "method": "normal",
+          "point": 4,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.4375,
+            "bootstrap95": [
+              0.0,
+              0.875
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.3181171167982003,
+              "best_returned_pose_rmsd_A": 0.3181171167982003,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.318,
+              "top_pose_score": -9.318,
+              "search_ms": 15832.1971,
+              "runs": 4,
+              "finalizer_ms": 35.6482,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.127509676760017,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 6,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.429,
+              "top_pose_score": -6.914,
+              "search_ms": 19493.8781,
+              "runs": 4,
+              "finalizer_ms": 37.3151,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 65327.645300000004
+        },
+        {
+          "method": "normal",
+          "point": 8,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.625,
+            "bootstrap95": [
+              0.25,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.3181171167982003,
+              "best_returned_pose_rmsd_A": 0.3181171167982003,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.318,
+              "top_pose_score": -9.318,
+              "search_ms": 32967.9222,
+              "runs": 8,
+              "finalizer_ms": 53.6798,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 15.184418645947057,
+              "best_returned_pose_rmsd_A": 7.127509676760017,
+              "best_returned_pose_rank": 4,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.947,
+              "top_pose_score": -7.448,
+              "search_ms": 43435.4335,
+              "runs": 8,
+              "finalizer_ms": 53.4717,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 144417.98225
+        },
+        {
+          "method": "normal",
+          "point": 16,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.363767095818191,
+              "best_returned_pose_rmsd_A": 0.363767095818191,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.175,
+              "top_pose_score": -9.175,
+              "search_ms": 67789.3797,
+              "runs": 16,
+              "finalizer_ms": 99.6469,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 15.184418645947057,
+              "best_returned_pose_rmsd_A": 7.127509676760017,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.947,
+              "top_pose_score": -7.448,
+              "search_ms": 78929.60829999999,
+              "runs": 16,
+              "finalizer_ms": 150.8896,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "normal",
+          "point": 32,
+          "ranking_complete": false,
+          "ranking": null,
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.3729708691449893,
+              "best_returned_pose_rmsd_A": 0.3729708691449893,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.23,
+              "top_pose_score": -9.23,
+              "search_ms": 136248.3043,
+              "runs": 32,
+              "finalizer_ms": 180.359,
+              "search_ratio": null,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 15.184418645947057,
+              "best_returned_pose_rmsd_A": 7.118131993502442,
+              "best_returned_pose_rank": 6,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.944,
+              "top_pose_score": -7.448,
+              "search_ms": 165855.2029,
+              "runs": 32,
+              "finalizer_ms": 284.0272,
+              "search_ratio": null,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": null
+        },
+        {
+          "method": "matched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.5625,
+            "bootstrap95": [
+              0.0625,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.363767095818191,
+              "best_returned_pose_rmsd_A": 0.363767095818191,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.175,
+              "top_pose_score": -9.175,
+              "search_ms": 5676.0387,
+              "runs": 61,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0024927917114677
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 9.649230015115991,
+              "best_returned_pose_rmsd_A": 3.76807455421915,
+              "best_returned_pose_rank": 9,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.466,
+              "top_pose_score": -7.023,
+              "search_ms": 6531.8693,
+              "runs": 60,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0029498986461123
+            }
+          ],
+          "ranking_median_search_ms": 17553.81235
+        },
+        {
+          "method": "matched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.375,
+            "bootstrap95": [
+              0.0,
+              0.8125
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.363767095818191,
+              "best_returned_pose_rmsd_A": 0.363767095818191,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.175,
+              "top_pose_score": -9.175,
+              "search_ms": 4874.8264,
+              "runs": 16,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.049993183772664
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.115345996776695,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 8,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.414,
+              "top_pose_score": -6.867,
+              "search_ms": 6147.8965,
+              "runs": 15,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0016589921336037
+            }
+          ],
+          "ranking_median_search_ms": 15815.04015
+        },
+        {
+          "method": "matched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.4375,
+            "bootstrap95": [
+              0.0,
+              0.875
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 8.557937631228683,
+              "best_returned_pose_rmsd_A": 4.221399412517135,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.8,
+              "top_pose_score": -7.318,
+              "search_ms": 4615.4891,
+              "runs": 4,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0497256596621816
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.083425798189851,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 6,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.401,
+              "top_pose_score": -6.871,
+              "search_ms": 6399.6712,
+              "runs": 4,
+              "finalizer_ms": null,
+              "search_ratio": null,
+              "eval_ratio": 1.0678956346922261
+            }
+          ],
+          "ranking_median_search_ms": 16358.3085
+        },
+        {
+          "method": "wallmatched",
+          "point": 16000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.5625,
+            "bootstrap95": [
+              0.0625,
+              1.0
+            ],
+            "top2_enrichment": 2
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 0.363767095818191,
+              "best_returned_pose_rmsd_A": 0.363767095818191,
+              "best_returned_pose_rank": 1,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -9.175,
+              "top_pose_score": -9.175,
+              "search_ms": 2394.1302,
+              "runs": 28,
+              "finalizer_ms": 88.8001,
+              "search_ratio": 0.9850052016472473,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.087382607900412,
+              "best_returned_pose_rmsd_A": 3.9394742571918044,
+              "best_returned_pose_rank": 8,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.479,
+              "top_pose_score": -6.78,
+              "search_ms": 2445.0073,
+              "runs": 23,
+              "finalizer_ms": 74.0057,
+              "search_ratio": 0.9803175674147744,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 13512.1797
+        },
+        {
+          "method": "wallmatched",
+          "point": 64000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.375,
+            "bootstrap95": [
+              0.0,
+              0.8125
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 8.56609643841976,
+              "best_returned_pose_rmsd_A": 4.221399412517135,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.79,
+              "top_pose_score": -7.284,
+              "search_ms": 2390.6328999999996,
+              "runs": 7,
+              "finalizer_ms": 26.2444,
+              "search_ratio": 0.9835663247257994,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 7.115345996776695,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.414,
+              "top_pose_score": -6.867,
+              "search_ms": 2458.654,
+              "runs": 6,
+              "finalizer_ms": 24.4622,
+              "search_ratio": 0.9857891665168462,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 13507.099849999999
+        },
+        {
+          "method": "wallmatched",
+          "point": 256000,
+          "ranking_complete": true,
+          "ranking": {
+            "auc": 0.4375,
+            "bootstrap95": [
+              0.0,
+              0.875
+            ],
+            "top2_enrichment": 1
+          },
+          "redocking": [
+            {
+              "conformer": "source",
+              "rmsd_A": 8.557937631228683,
+              "best_returned_pose_rmsd_A": 4.44686532635847,
+              "best_returned_pose_rank": 3,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.588,
+              "top_pose_score": -7.318,
+              "search_ms": 2405.9891,
+              "runs": 2,
+              "finalizer_ms": 13.3874,
+              "search_ratio": 0.9898842504917146,
+              "eval_ratio": null
+            },
+            {
+              "conformer": "converged",
+              "rmsd_A": 12.658917859936345,
+              "best_returned_pose_rmsd_A": 3.9395355934815073,
+              "best_returned_pose_rank": 5,
+              "returned_poses": 9,
+              "best_rmsd_pose_score": -6.385,
+              "top_pose_score": -6.699,
+              "search_ms": 3113.0149,
+              "runs": 2,
+              "finalizer_ms": 13.9493,
+              "search_ratio": 1.24815299900902,
+              "eval_ratio": null
+            }
+          ],
+          "ranking_median_search_ms": 13143.5459
+        }
+      ]
+    }
+  ],
+  "e32_score_selected_rmsd_A": {
+    "normal_pose": 0.46571977223433414,
+    "medium_pose": 0.4554153667258056,
+    "wallmatched_pose": 0.4554153667258056,
+    "downloaded_stock_pose": 0.5510120801761065
+  }
+}

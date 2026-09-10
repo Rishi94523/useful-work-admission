@@ -1,0 +1,388 @@
+{
+  "scope": "Real Chrome module worker, one source-conformer FA10 ligand, four tasks per budget. Node verifier same WASM. Native quality results are separate; no native/WASM bit identity assumed. Warm molecular and serialization timings; local IPC/no network DB. Host commitment timing explicitly separate.",
+  "assets": {
+    "wasm_bytes": 548374,
+    "module_bytes": 74483,
+    "receptor_bytes": 181926,
+    "ligand_bytes": 3272
+  },
+  "browser": "152.0.7977.83",
+  "clientInit": {
+    "init_ms": 4841.5,
+    "heap": 576192512
+  },
+  "serverInit": 7051.7299,
+  "seeds": [
+    965727,
+    233940,
+    627484,
+    520912,
+    62756,
+    869144,
+    326155,
+    717165,
+    756624,
+    359873,
+    654127,
+    498921,
+    947608,
+    262679,
+    729335,
+    165990,
+    451224,
+    319079,
+    273855,
+    965061,
+    189411,
+    512415,
+    243437,
+    61189,
+    741321,
+    507585,
+    933655,
+    265894,
+    383777,
+    856968,
+    599262,
+    940910
+  ],
+  "rows": [
+    {
+      "server_heap_bytes": 576192512,
+      "shortcutAttack": null,
+      "cap": 64000,
+      "units": [
+        {
+          "index": 0,
+          "child_seed": 965727,
+          "cap": 64000,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 1,
+          "child_seed": 233940,
+          "cap": 64000,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 2,
+          "child_seed": 627484,
+          "cap": 64000,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 3,
+          "child_seed": 520912,
+          "cap": 64000,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        }
+      ],
+      "runs": [
+        {
+          "ok": true,
+          "total_ms": 878.9,
+          "evals": 64011,
+          "steps": 1246,
+          "ms": 860.3,
+          "minima": 9,
+          "call_ms": 881.8999999985099,
+          "heap_bytes": 576192512,
+          "score": -9.78851053763731
+        },
+        {
+          "ok": true,
+          "total_ms": 816.1,
+          "evals": 64025,
+          "steps": 1165,
+          "ms": 804.9,
+          "minima": 9,
+          "call_ms": 817,
+          "heap_bytes": 576192512,
+          "score": -10.582683811035494
+        },
+        {
+          "ok": true,
+          "total_ms": 1010.4,
+          "evals": 64016,
+          "steps": 779,
+          "ms": 1004.6,
+          "minima": 9,
+          "call_ms": 1011.1999999992549,
+          "heap_bytes": 576192512,
+          "score": -6.933534592668853
+        },
+        {
+          "ok": true,
+          "total_ms": 757.4,
+          "evals": 64010,
+          "steps": 1268,
+          "ms": 748.6,
+          "minima": 9,
+          "call_ms": 758.3999999985099,
+          "heap_bytes": 576192512,
+          "score": -10.214715067852614
+        }
+      ],
+      "commit_ms": 2.442300000002433,
+      "commit_scope": "Commitment currently constructed in host Node after Chrome results; not browser commitment timing.",
+      "science_bytes": 190010,
+      "checks": [
+        {
+          "q": 1,
+          "draws": [
+            0
+          ],
+          "accepted": true,
+          "replay_ms": 923.790100000002,
+          "total_ms": 925.4805000000015
+        },
+        {
+          "q": 2,
+          "draws": [
+            0,
+            3
+          ],
+          "accepted": true,
+          "replay_ms": 1444.7993999999999,
+          "total_ms": 1448.101300000002
+        }
+      ],
+      "single_replay": {
+        "accepted": true,
+        "replay_ms": 681.2917000000016,
+        "total_ms": 682.886599999998
+      }
+    },
+    {
+      "server_heap_bytes": 576192512,
+      "shortcutAttack": {
+        "accepted": false,
+        "reason": "replay",
+        "replay_ms": 13299.388299999991,
+        "total_ms": 13303.934500000003
+      },
+      "cap": 0,
+      "units": [
+        {
+          "index": 0,
+          "child_seed": 965727,
+          "cap": 0,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 1,
+          "child_seed": 233940,
+          "cap": 0,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 2,
+          "child_seed": 627484,
+          "cap": 0,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        },
+        {
+          "index": 3,
+          "child_seed": 520912,
+          "cap": 0,
+          "engine": "2fe707cd5abce960b5a73a7662b63bef7c74f6e626d9e298ef081d2aece85c50",
+          "input": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+          "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+          "center": [
+            2.1616875000000007,
+            -8.645875000000002,
+            -13.3505625
+          ],
+          "size": [
+            30,
+            30,
+            30
+          ],
+          "parent_seed": 104729,
+          "pool": 9,
+          "method": "raw-native-mc-pool"
+        }
+      ],
+      "runs": [
+        {
+          "ok": true,
+          "total_ms": 14188.5,
+          "evals": 1158460,
+          "steps": 21420,
+          "ms": 14122.5,
+          "minima": 9,
+          "call_ms": 14198.199999999255,
+          "heap_bytes": 576192512,
+          "score": -12.238979939134396
+        },
+        {
+          "ok": true,
+          "total_ms": 12909.7,
+          "evals": 1134370,
+          "steps": 21420,
+          "ms": 12854.2,
+          "minima": 9,
+          "call_ms": 12918.10000000149,
+          "heap_bytes": 576192512,
+          "score": -12.145867136282401
+        },
+        {
+          "ok": true,
+          "total_ms": 17429.3,
+          "evals": 1210210,
+          "steps": 21420,
+          "ms": 17355.6,
+          "minima": 9,
+          "call_ms": 17439.599999997765,
+          "heap_bytes": 576192512,
+          "score": -12.251779437955555
+        },
+        {
+          "ok": true,
+          "total_ms": 15398.9,
+          "evals": 1173499,
+          "steps": 21420,
+          "ms": 15323.4,
+          "minima": 9,
+          "call_ms": 15407.89999999851,
+          "heap_bytes": 576192512,
+          "score": -12.273052737517796
+        }
+      ],
+      "commit_ms": 31.781099999992875,
+      "commit_scope": "Commitment currently constructed in host Node after Chrome results; not browser commitment timing.",
+      "science_bytes": 2312122,
+      "checks": [
+        {
+          "q": 1,
+          "draws": [
+            0
+          ],
+          "accepted": true,
+          "replay_ms": 14462.21590000001,
+          "total_ms": 14479.888100000011
+        },
+        {
+          "q": 2,
+          "draws": [
+            2,
+            3
+          ],
+          "accepted": true,
+          "replay_ms": 32253.447900000014,
+          "total_ms": 32296.0034
+        }
+      ],
+      "single_replay": {
+        "accepted": true,
+        "replay_ms": 16525.08249999999,
+        "total_ms": 16546.044500000004
+      }
+    }
+  ]
+}

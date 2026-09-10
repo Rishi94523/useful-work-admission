@@ -1,0 +1,33 @@
+// Real Chrome worker and independent Node replay of unchanged whole MC tasks.
+import {readFile,writeFile} from 'node:fs/promises';
+import {createServer} from 'node:http';
+import {createRequire} from 'node:module';
+import factory from '../tmp/vina-tasks/vina_tasks.mjs';
+import {commit,audit,sample,record,encode,sha} from '../research/whole_run_protocol.mjs';
+const out='docs/evaluation/vina_tasks_2026-09-10/';
+const target=JSON.parse(await readFile('docs/evaluation/adaptive_docking_2026-09-08/science_inputs.json','utf8')).targets.find(t=>t.target==='fa10');
+const ligand=target.ligands.find(l=>l.id==='crystal').source;
+const inputs={receptor:await readFile(target.receptor,'utf8'),ligand:await readFile(ligand.path,'utf8'),center:target.center};
+if(await sha(inputs.receptor)!==target.receptor_sha256||await sha(inputs.ligand)!==ligand.sha256)throw Error('Input hash mismatch');
+const engineHash=JSON.parse(await readFile(out+'build_wasm.json','utf8')).wasm_sha256;
+function initialize(module,inputs){module.FS.mkdir('/tasks');module.FS.writeFile('/receptor.pdbqt',inputs.receptor);module.FS.writeFile('/ligand.pdbqt',inputs.ligand);const t=performance.now();const r=JSON.parse(module.ccall('vt_init','string',['number','number','number'],inputs.center));if(!r.ok)throw Error('Initialization failed');return performance.now()-t;}
+function run(module,index,cap,parentSeed=104729){const t=performance.now(),r=JSON.parse(module.ccall('vt_run','string',['number','number','number','number'],[index,4,cap,parentSeed]));if(!r.ok)throw Error('Task failed');const pool=module.FS.readFile('/tasks/'+index+'.task',{encoding:'utf8'}),trace=module.FS.readFile('/tasks/'+index+'.task.trace',{encoding:'utf8'}).trim().split('\n').map(Number),metrics=JSON.parse(module.FS.readFile('/tasks/'+index+'.task.json',{encoding:'utf8'}));return {...r,...metrics,call_ms:performance.now()-t,heap_bytes:module.ccall('vt_memory','number',[],[]),score:Number(pool.trim().split(/\s+/)[1]),pose:pool,trace};}
+const worker=`import factory from '/vina_tasks.mjs';${initialize.toString()}${run.toString()}let module;self.onmessage=async({data:r})=>{try{if(r.mode==='init'){module=await factory({print:()=>{},printErr:()=>{}});postMessage({init_ms:initialize(module,r.inputs),heap:module.ccall('vt_memory','number',[],[])});}else{postMessage(run(module,r.index,r.cap,r.parent_seed));}}catch(e){postMessage({error:String(e)});}};`;
+const server=createServer(async(req,res)=>{if(req.url==='/'){res.end('<title>Vina native task experiment</title>');return;}if(req.url==='/worker.mjs'){res.setHeader('Content-Type','text/javascript');res.end(worker);return;}if(!['/vina_tasks.mjs','/vina_tasks.wasm'].includes(req.url)){res.writeHead(404).end();return;}res.setHeader('Content-Type',req.url.endsWith('wasm')?'application/wasm':'text/javascript');res.end(await readFile('tmp/vina-tasks'+req.url));});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'C:/Users/rishi/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');let browser;
+try{
+ browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});const page=await browser.newPage();await page.goto('http://127.0.0.1:'+server.address().port);
+ const clientInit=await page.evaluate(async inputs=>{const w=new Worker('/worker.mjs',{type:'module'});window.ask=req=>new Promise((resolve,reject)=>{w.onmessage=e=>resolve(e.data);w.onerror=e=>reject(Error(e.message));w.postMessage(req);});return await ask({mode:'init',inputs});},inputs);if(clientInit.error)throw Error(clientInit.error);
+ const verifier=await factory({print:()=>{},printErr:()=>{}}),serverInit=initialize(verifier,inputs),rows=[];
+ const seeds=JSON.parse(verifier.ccall('vt_seeds','string',['number','number'],[32,104729]));
+ let shortRecords;
+ for(const cap of [64000,0]){
+  const runs=[];for(let index=0;index<4;index++){const r=await page.evaluate(req=>ask(req),{index,cap});if(r.error)throw Error(r.error);runs.push(r);}
+  const units=runs.map((r,i)=>({index:i,child_seed:seeds[i],cap,engine:engineHash,input:ligand.sha256,receptor:target.receptor_sha256,center:target.center,size:[30,30,30],parent_seed:104729,pool:9,method:'raw-native-mc-pool'}));const records=runs.map(record),binding=await sha(encode(units));const t=performance.now(),c=await commit(binding,units,records),commitMs=performance.now()-t;const checks=[];
+  for(const q of [1,2]){const draws=sample(4,q),t=performance.now();const checked=await audit(binding,units,c,draws,draws.map(i=>records[i]),u=>run(verifier,u.index,u.cap,u.parent_seed));checks.push({q,draws,...checked,total_ms:performance.now()-t});if(!checked.accepted)throw Error('Honest replay disagreement');}
+  const one=await commit(binding,[units[0]],[records[0]]),t1=performance.now();const single=await audit(binding,[units[0]],one,[0],[records[0]],u=>run(verifier,u.index,u.cap,u.parent_seed));single.total_ms=performance.now()-t1;if(!single.accepted)throw Error('Single-run replay disagreement');
+  let shortcutAttack=null;if(cap===64000)shortRecords=records;else{const bad=await commit(binding,units,shortRecords),start=performance.now();shortcutAttack=await audit(binding,units,bad,[0],[shortRecords[0]],u=>run(verifier,u.index,u.cap,u.parent_seed));shortcutAttack.total_ms=performance.now()-start;if(shortcutAttack.accepted||shortcutAttack.reason!=='replay')throw Error('Short-run substitution was not rejected by replay');}
+  rows.push({server_heap_bytes:verifier.ccall('vt_memory','number',[],[]),shortcutAttack,cap,units,runs:runs.map(({pose,trace,...r})=>r),commit_ms:commitMs,commit_scope:'Commitment currently constructed in host Node after Chrome results; not browser commitment timing.',science_bytes:encode(records).length,checks,single_replay:single});
+  await writeFile(out+'browser.json',JSON.stringify({scope:'Real Chrome module worker, one source-conformer FA10 ligand, four tasks per budget. Node verifier same WASM. Native quality results are separate; no native/WASM bit identity assumed. Warm molecular and serialization timings; local IPC/no network DB. Host commitment timing explicitly separate.',assets:{wasm_bytes:(await readFile('tmp/vina-tasks/vina_tasks.wasm')).length,module_bytes:(await readFile('tmp/vina-tasks/vina_tasks.mjs')).length,receptor_bytes:Buffer.byteLength(inputs.receptor),ligand_bytes:Buffer.byteLength(inputs.ligand)},browser:browser.version(),clientInit,serverInit,seeds,rows},null,2)+'\n');console.log(cap,checks.map(x=>x.accepted),runs.map(r=>Math.round(r.ms)));
+ }
+}finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}

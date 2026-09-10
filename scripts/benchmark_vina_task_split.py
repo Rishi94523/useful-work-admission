@@ -30,7 +30,7 @@ if __name__=='__main__':
     pose_equal=(prefix/'mono.pdbqt').read_bytes()==(prefix/'split.pdbqt').read_bytes()
     assert all(matches) and pose_equal and mono['score']==merged['score'],'Task decomposition changed outputs'
     row={'target':t['target'],'cap':cap,'runs':4,'pool':9,'input_sha256':digest(ligand),'task_trace_exact':matches,'final_pose_exact':pose_equal,'monolithic':mono,'split_calls':units,'finalizer':merged,'tasks':[json.loads((prefix/'split'/f'{i}.task.json').read_text()) for i in range(4)]}
-    # A separate official binary; identical maps avoid silently changing the grid relation.
+    # A separate official binary, with maps computed from the same receptor/ligand/box.
     dest=prefix/'stock.pdbqt';args=[str(ROOT/'tmp/docking-pilot/native/vina_1.2.7_win.exe'),'--receptor',str(ROOT/t['receptor']),'--maps',str(ROOT/Path(t['maps'][0]['path']).parent/'fa10'),'--ligand',str(ligand),'--cpu','1','--seed','104729','--exhaustiveness','4','--num_modes','9','--energy_range','1000','--max_evals',str(cap),'--out',str(dest)]
     pos=args.index('--maps');del args[pos:pos+2]
     for axis,center in zip('xyz',t['center']):args+=['--center_'+axis,str(center),'--size_'+axis,'30']

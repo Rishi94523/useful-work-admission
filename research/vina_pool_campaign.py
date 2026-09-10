@@ -33,16 +33,24 @@ class VinaPoolCampaign(Campaign):
      db.execute('INSERT INTO pool_attempts VALUES(?,0)',(task,))
     db.execute('INSERT INTO pool_members VALUES(?,?,?)',(pool,task,i))
  def lease(self,pool,owner,jobs=1,ttl=600):
-  if not owner or type(jobs)!=int or not 1<=jobs<=128 or not 0<ttl<=600:raise ValueError('Invalid lease')
+  return self._lease_plan({pool:jobs},owner,ttl)
+ def lease_many(self,pools,owner,runs_per_pool=1,ttl=600):
+  if not pools or len(set(pools))!=len(pools):raise ValueError('Empty or duplicate pool list')
+  return self._lease_plan({pool:runs_per_pool for pool in pools},owner,ttl)
+ def _lease_plan(self,plan,owner,ttl):
+  if not owner or any(type(jobs)!=int or jobs<1 for jobs in plan.values()) or not 1<=sum(plan.values())<=128 or not 0<ttl<=600:raise ValueError('Invalid lease')
   now=self.clock();lease=secrets.token_hex(16)
   with self.transaction() as db:
-   self._expire(db,now)
-   chosen=db.execute("SELECT u.*,p.ordinal FROM pool_members p JOIN units u ON p.task=u.task JOIN pool_attempts a ON a.task=u.task WHERE p.pool=? AND u.state IN ('UNASSIGNED','EXPIRED') AND a.n<3 ORDER BY p.ordinal LIMIT ?",(pool,jobs)).fetchall()
-   if len(chosen)!=jobs:raise LookupError('Insufficient uncompleted units')
-   tasks=[{'task':r['task'],'spec':json.loads(r['specification']),'start':0,'count':1,'estimated_cost':r['cost'],'ordinal':r['ordinal']} for r in chosen]
-   payload={'lease':lease,'campaign':pool,'expires':now+ttl,'tasks':tasks};binding=hashlib.sha256(canonical(payload)).hexdigest();payload['binding']=binding
+   self._expire(db,now);tasks=[];chosen_ids=set()
+   for pool,jobs in plan.items():
+    chosen=db.execute("SELECT u.*,p.ordinal FROM pool_members p JOIN units u ON p.task=u.task JOIN pool_attempts a ON a.task=u.task WHERE p.pool=? AND u.state IN ('UNASSIGNED','EXPIRED') AND a.n<3 ORDER BY p.ordinal LIMIT ?",(pool,jobs)).fetchall()
+    if len(chosen)!=jobs:raise LookupError('Insufficient uncompleted units')
+    for r in chosen:
+     if r['task'] in chosen_ids:raise ValueError('Overlapping scientific pools in bundle')
+     chosen_ids.add(r['task']);tasks.append({'task':r['task'],'spec':json.loads(r['specification']),'start':0,'count':1,'estimated_cost':r['cost'],'ordinal':r['ordinal'],'pool':pool})
+   payload={'lease':lease,'campaign':next(iter(plan)) if len(plan)==1 else 'multi-pool','pools':list(plan),'expires':now+ttl,'tasks':tasks};binding=hashlib.sha256(canonical(payload)).hexdigest();payload['binding']=binding
    db.execute('INSERT INTO leases(id,owner,issued,expires,status,tasks,binding) VALUES(?,?,?,?,?,?,?)',(lease,owner,now,now+ttl,'OPEN',canonical(tasks).decode(),binding))
-   for r in chosen:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,r['task']))
+   for task in tasks:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,task['task']))
   return payload
  def _before_challenge(self,db,tasks):
   for t in tasks:

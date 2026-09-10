@@ -6,7 +6,17 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: adaptive admission and multi-target docking, 9 September
+## Latest update: distributing stock-shaped Vina tasks across users, 10 September
+
+The [completed task-decomposition investigation](VINA_TASK_DECOMPOSITION_2026-09-10.md) establishes that a browser need not complete an entire ligand docking job. All 32 separately executed native tasks in the FA10 E32 control, including raw minima and traces, reproduced the same-build monolithic final result exactly. Preserve the normal retained-minima behavior and original merge/refinement; combining independently normalized best scores is not equivalent.
+
+The 312 aggregate configurations support this scientific decomposition, but do not establish a validated short-visit admission system. On the FA10 source crystal, 143 medium runs reached 0.455 Å versus normal E32 at 0.466 Å with derivative-evaluation budgets within 0.31%. Independent-conformer score-selected RMSDs after 32 normal runs were 8.770/0.471/15.184 Å across FA10/HS90A/TRYB1. Ranking remains weak on some targets. These are small reused panels, not independent population-level validation.
+
+Real Chrome 64k tasks took 0.758–1.011 s warm, versus 12.918–17.440 s for normal FA10 tasks. Molecular search occupied 98.6–99.5% of warm task-call time, but cold map initialization took 4.842 s and allocated WASM heap was about 550 MiB. A one-run audit provided no substantial cost advantage; pooling scientific coverage across users does not confer a per-user multi-run audit guarantee. See [measured tables](VINA_TASK_MEASUREMENTS_2026-09-10.md) and the [security/work-credit model](VINA_TASK_SECURITY_MODEL_2026-09-10.md).
+
+Durable output ingestion, ordered aggregation, later verification and atomic multi-ligand leases are implemented. Thirty-two simulated single-run visitors with real bounded molecular outputs merged exactly; they were not 32 humans or a production deployment. Completed units cannot earn duplicate credit within the trusted identity domain. Keep this decomposition as the scientific reference; validate a scientifically useful independent-input campaign and then measure optimized cold/browser/admission economics. Distributed docking and spot-checking alone are established ideas, so a distinct security contribution and external replication remain necessary. Human feedback and Cloudflare remain deferred; both original research questions are preserved.
+
+## Previous update: adaptive admission and multi-target docking, 9 September
 
 The [adaptive investigation](ADAPTIVE_DOCKING_FINDINGS_2026-09-08.md) implements the missing conventional outer controller: server-side risk, work tiers, abandonment penalties, retry/range limits, issuance budgets and cooldown. Real Chrome/Node/SQLite trials show honest visitors remaining low, valid spam escalating and then cooling down, and partial-work/retry failures increasing cost or terminating admission. It does not solve generic bot detection or Sybil resistance.
 

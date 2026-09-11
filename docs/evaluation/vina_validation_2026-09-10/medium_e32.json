@@ -1,0 +1,1938 @@
+[
+  {
+    "target": "hs90a",
+    "gate_stock_E4": {
+      "top_rmsd_A": 0.3808024422190589,
+      "best_rmsd_A": 0.3808024422190589,
+      "all_rmsd_A": [
+        0.3808024422190589,
+        3.0633253544592236,
+        1.8405498313868554,
+        3.725054014251459,
+        6.982405570106519,
+        3.975066751869481,
+        3.726502119341212,
+        4.850833658436267,
+        5.736375712780833
+      ],
+      "score": -8.331,
+      "redocking_gate": true
+    },
+    "input_sha256": "75ab7bb256d6e3e275cbaa560326d42e6aa827bc8628610515b50d5670334c88",
+    "receptor_sha256": "0e35da4b26866de32e1fab423efa17419805294f24ecedd61871194d871786f5",
+    "normal": {
+      "ms": 133170.1706,
+      "score": -8.255581021968808,
+      "poses": 9
+    },
+    "normal_search_ms": 130806.0034,
+    "normal_evals": 26200182,
+    "normal_quality": {
+      "top_rmsd_A": 0.48353471248899826,
+      "best_rmsd_A": 0.48353471248899826,
+      "all_rmsd_A": [
+        0.48353471248899826,
+        3.1034975430955316,
+        4.9861821111402005,
+        0.8928796875075815,
+        6.7912703156331515,
+        6.832539049550787,
+        6.1536679379788675,
+        4.672353888955369,
+        4.699493198014209
+      ],
+      "score": -8.256,
+      "redocking_gate": true
+    },
+    "normal_pose": "MODEL 1\nREMARK VINA RESULT:    -8.256      0.000      0.000\nREMARK INTER + INTRA:         -10.819\nREMARK INTER:                 -10.427\nREMARK INTRA:                  -0.392\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.550  10.356  23.481  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.477  11.509  23.801  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.844  13.731  24.545  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.228  13.597  24.346  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.957  12.685  24.289  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.736  12.393  23.872  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.843  11.369  23.619  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.273  14.933  25.058  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       5.052  15.918  25.750  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       6.318  10.147  23.150  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.362   9.467  23.878  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       2.209  10.477  24.135  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       1.088  11.063  23.653  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       2.022  10.036  25.388  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       0.202  10.943  24.640  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.789  10.312  25.675  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.142  11.256  24.722  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       0.146  10.019  26.783  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -1.796  10.997  25.840  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.116  10.388  26.804  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.955  11.488  22.758  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -1.909  10.072  28.166  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -1.867  11.908  23.682  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.956  11.290  22.900  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -2.776  12.157  24.016  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 2\nREMARK VINA RESULT:    -8.160      2.218      2.874\nREMARK INTER + INTRA:         -10.698\nREMARK INTER:                 -10.413\nREMARK INTRA:                  -0.285\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.251  10.654  24.039  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.274  11.765  24.141  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.859  14.005  24.658  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.192  13.770  24.280  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.892  13.001  24.606  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.564  12.508  23.832  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.591  11.527  23.783  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.432  15.271  25.153  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       5.232  16.056  26.047  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.930  10.250  23.346  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.025   9.553  23.976  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       1.887  11.139  23.661  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       0.700  10.847  24.243  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       1.716  11.912  22.579  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1      -0.199  11.486  23.498  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.441  12.130  22.503  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.565  11.655  23.635  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.186  12.880  21.625  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -2.216  12.380  22.744  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.489  12.955  21.793  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.536  10.279  25.050  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.279  13.838  20.706  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -2.339  11.037  24.659  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.747  10.461  25.223  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -2.760  11.742  25.230  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 3\nREMARK VINA RESULT:    -7.824      3.927      5.109\nREMARK INTER + INTRA:         -10.274\nREMARK INTER:                 -10.018\nREMARK INTRA:                  -0.256\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       7.397  11.928  23.559  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       6.633  13.080  24.176  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.593  14.132  24.775  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       5.286  15.237  25.296  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       5.259  13.038  24.224  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.676  15.252  25.257  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       7.319  14.161  24.704  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       3.170  14.052  24.817  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       2.451  12.909  24.337  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       8.710  14.140  24.655  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       9.465  14.872  25.643  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       6.542  10.731  23.285  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       6.118  10.257  22.090  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       6.027  10.017  24.297  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       5.350   9.215  22.401  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.318   9.086  23.742  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       4.712   8.267  21.622  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       4.665   8.117  24.345  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       4.027   7.305  22.211  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       4.047   7.282  23.538  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       6.333  10.609  21.179  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       3.212   6.112  24.259  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.696   8.297  20.197  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       5.391   8.937  19.869  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       4.892   7.382  19.843  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 4\nREMARK VINA RESULT:    -7.768      1.125      1.220\nREMARK INTER + INTRA:         -10.203\nREMARK INTER:                  -9.713\nREMARK INTRA:                  -0.490\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       4.095  10.638  23.273  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.853  11.854  23.761  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.898  14.038  24.684  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.301  14.065  24.619  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       4.162  12.928  24.270  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.983  12.961  24.120  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       6.238  11.872  23.711  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.151  15.131  25.215  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       4.750  16.146  26.031  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       6.888  10.746  23.213  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       8.251  10.482  23.609  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       2.911  10.300  24.122  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       1.603  10.555  23.882  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       3.078   9.731  25.325  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       0.974  10.100  24.963  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       1.887   9.600  25.818  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -0.369   9.986  25.276  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       1.557   9.044  26.962  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -0.717   9.459  26.435  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       0.265   9.013  27.209  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       1.201  10.987  23.075  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -0.156   8.371  28.622  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -1.418  10.466  24.439  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.043  11.103  23.765  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -1.845   9.694  23.966  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 5\nREMARK VINA RESULT:    -7.742      4.432      6.760\nREMARK INTER + INTRA:         -10.171\nREMARK INTER:                  -9.753\nREMARK INTRA:                  -0.418\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.809  11.062  23.384  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       2.389  11.164  23.900  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       0.203  12.078  23.791  1.00  0.00     0.119 A \nATOM      4  C   UNL     1      -0.194  11.326  24.910  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       1.493  11.993  23.267  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       0.721  10.479  25.524  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       1.996  10.410  24.994  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      -0.703  12.938  23.106  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1      -1.826  12.440  22.367  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       2.936   9.566  25.579  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       2.591   8.850  26.783  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       4.694  12.167  23.868  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       4.338  13.332  24.461  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       6.019  12.114  23.670  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       5.488  13.976  24.642  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       6.491  13.215  24.162  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       5.795  15.164  25.280  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       7.753  13.577  24.235  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       7.054  15.558  25.336  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       7.961  14.740  24.815  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       3.418  13.637  24.708  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       9.495  15.217  24.880  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.817  16.037  25.839  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       3.929  15.858  25.414  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       4.753  15.878  26.824  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 6\nREMARK VINA RESULT:    -7.677      4.309      6.868\nREMARK INTER + INTRA:         -10.089\nREMARK INTER:                  -9.576\nREMARK INTRA:                  -0.513\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       2.924  11.092  23.463  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       1.542  11.215  24.068  1.00  0.00     0.005 A \nATOM      3  C   UNL     1      -0.013  10.759  25.800  1.00  0.00     0.119 A \nATOM      4  C   UNL     1      -1.021  11.454  25.114  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       1.281  10.645  25.292  1.00  0.00     0.054 A \nATOM      6  C   UNL     1      -0.733  12.042  23.887  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       0.553  11.916  23.396  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      -0.247  10.164  27.075  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       0.287   8.883  27.435  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       0.879  12.497  22.175  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1      -0.177  12.960  21.306  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       3.876  12.139  23.949  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       3.596  13.303  24.582  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       5.191  12.026  23.709  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       4.782  13.885  24.745  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.732  13.089  24.216  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       5.166  15.038  25.404  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       7.011  13.386  24.260  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       6.445  15.368  25.432  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       7.294  14.520  24.863  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       2.700  13.647  24.864  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       8.851  14.919  24.895  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.250  15.942  26.013  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       4.004  16.660  25.360  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       3.426  15.446  26.289  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 7\nREMARK VINA RESULT:    -7.665      4.467      6.284\nREMARK INTER + INTRA:         -10.072\nREMARK INTER:                  -9.541\nREMARK INTRA:                  -0.532\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       7.097  12.825  23.421  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       7.397  13.596  24.689  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       8.869  14.213  26.443  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       7.876  15.015  27.029  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       8.644  13.509  25.260  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.627  15.107  26.425  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       6.420  14.398  25.256  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      10.176  14.108  27.004  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1      11.239  15.000  26.646  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.184  14.473  24.621  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       4.035  14.940  25.359  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       6.856  11.367  23.659  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       7.766  10.368  23.751  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       5.606  10.889  23.736  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       7.034   9.268  23.913  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.731   9.611  23.908  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       7.379   7.952  24.159  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       4.767   8.734  24.085  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       6.424   7.053  24.309  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       5.173   7.496  24.269  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       8.762  10.441  23.708  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       4.007   6.404  24.449  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       8.724   7.484  24.203  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       9.285   8.126  24.726  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       8.749   6.585  24.643  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 8\nREMARK VINA RESULT:    -7.556      2.710      4.522\nREMARK INTER + INTRA:          -9.936\nREMARK INTER:                  -9.401\nREMARK INTRA:                  -0.534\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.214  11.504  24.766  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.048  10.499  24.001  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.354   8.342  23.065  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       5.638   8.691  22.615  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.542   9.246  23.749  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.125   9.970  22.862  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.308  10.851  23.544  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       3.796   7.055  22.812  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       4.127   6.289  21.646  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.760  12.142  23.803  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.179  12.398  23.858  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       1.846  11.695  24.191  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       0.678  11.145  24.600  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       1.669  12.436  23.087  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1      -0.222  11.593  23.727  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.401  12.378  22.827  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.598  11.464  23.665  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.241  12.995  21.860  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -2.255  12.052  22.682  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.540  12.787  21.839  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.526  10.539  25.381  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.338  13.503  20.640  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -2.359  10.674  24.574  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -2.495  11.182  25.425  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -3.248  10.462  24.167  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 9\nREMARK VINA RESULT:    -7.380      3.066      4.459\nREMARK INTER + INTRA:          -9.714\nREMARK INTER:                  -9.056\nREMARK INTRA:                  -0.657\nREMARK UNBOUND:                -0.392\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.255  11.530  24.745  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       3.985  10.330  24.182  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       5.529   9.368  22.660  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       5.273   8.085  23.172  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       4.899  10.504  23.169  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       4.361   7.933  24.210  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       3.743   9.068  24.699  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       6.477   9.584  21.618  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       7.818  10.021  21.877  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       2.829   8.954  25.743  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       2.180   7.687  25.980  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       1.885  11.711  24.172  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       0.722  11.148  24.578  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       1.701  12.455  23.072  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1      -0.182  11.592  23.708  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.433  12.387  22.811  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.556  11.450  23.645  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.215  13.002  21.847  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -2.219  12.036  22.665  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.512  12.783  21.826  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.576  10.537  25.356  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.316  13.497  20.631  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -2.310  10.649  24.550  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.725   9.930  24.927  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -2.656  11.222  25.294  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\n",
+    "historical_E32_pose_exact": true,
+    "medium": {
+      "ms": 144365.3866,
+      "score": -8.231967226591236,
+      "poses": 9
+    },
+    "medium_runs": 103,
+    "medium_search_ms": 141373.2261,
+    "medium_evals": 26370575,
+    "medium_quality": {
+      "top_rmsd_A": 0.3390778939739632,
+      "best_rmsd_A": 0.3390778939739632,
+      "all_rmsd_A": [
+        0.3390778939739632,
+        3.1034975430955316,
+        2.5001047614413716,
+        4.9861821111402005,
+        0.9183762350425392,
+        6.783206978199243,
+        6.832539049550787,
+        6.1536679379788675,
+        4.57235503274347
+      ],
+      "score": -8.232,
+      "redocking_gate": true
+    },
+    "medium_pose": "MODEL 1\nREMARK VINA RESULT:    -8.232      0.000      0.000\nREMARK INTER + INTRA:         -10.795\nREMARK INTER:                 -10.398\nREMARK INTRA:                  -0.397\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.510  10.367  23.405  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.460  11.492  23.756  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.872  13.691  24.543  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.254  13.527  24.356  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.964  12.671  24.259  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.739  12.320  23.865  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.825  11.322  23.585  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.325  14.897  25.072  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       5.133  15.886  25.722  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       6.275  10.098  23.099  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.570  10.020  22.466  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       2.195  10.463  24.112  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       1.056  11.065  23.693  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       2.054   9.979  25.354  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       0.208  10.910  24.707  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.833  10.243  25.697  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.133  11.218  24.850  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       0.231   9.910  26.817  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -1.745  10.919  25.981  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.030  10.278  26.897  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.890  11.522  22.819  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -1.772   9.912  28.276  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -1.895  11.906  23.862  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -2.286  12.736  24.259  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -1.302  12.151  23.095  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 2\nREMARK VINA RESULT:    -8.155      2.305      2.954\nREMARK INTER + INTRA:         -10.698\nREMARK INTER:                 -10.413\nREMARK INTRA:                  -0.285\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.251  10.654  24.039  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.274  11.765  24.141  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.859  14.005  24.658  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.192  13.770  24.280  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.892  13.001  24.606  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.564  12.508  23.832  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.591  11.527  23.783  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.432  15.271  25.153  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       5.232  16.056  26.047  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.930  10.250  23.346  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.025   9.553  23.976  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       1.887  11.139  23.661  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       0.700  10.847  24.243  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       1.716  11.912  22.579  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1      -0.199  11.486  23.498  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.441  12.130  22.503  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.565  11.655  23.635  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.186  12.880  21.625  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -2.216  12.380  22.744  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.489  12.955  21.793  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.536  10.279  25.050  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.279  13.838  20.706  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -2.339  11.037  24.659  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.747  10.461  25.223  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -2.760  11.742  25.230  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 3\nREMARK VINA RESULT:    -7.893      1.746      2.371\nREMARK INTER + INTRA:         -10.366\nREMARK INTER:                 -10.016\nREMARK INTRA:                  -0.351\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       4.178  10.475  23.432  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       5.183  11.561  23.751  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       5.706  13.742  24.522  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       7.074  13.524  24.290  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       4.750  12.759  24.269  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       7.495  12.299  23.784  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       6.533  11.338  23.536  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       5.224  14.968  25.068  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       3.858  15.149  25.461  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       6.919  10.097  23.036  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.599  10.026  21.765  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       2.762  10.887  23.688  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       1.965  10.554  24.731  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       2.095  11.624  22.788  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       0.799  11.133  24.453  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.906  11.780  23.276  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -0.378  11.241  25.172  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.081  12.478  22.759  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -1.389  11.913  24.653  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.181  12.497  23.479  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       2.199  10.000  25.529  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.411  13.315  22.845  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -0.594  10.613  26.432  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.574  10.594  26.632  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -0.241   9.678  26.403  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 4\nREMARK VINA RESULT:    -7.820      3.917      5.115\nREMARK INTER + INTRA:         -10.274\nREMARK INTER:                 -10.018\nREMARK INTRA:                  -0.256\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       7.397  11.928  23.559  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       6.633  13.080  24.176  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.593  14.132  24.775  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       5.286  15.237  25.296  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       5.259  13.038  24.224  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.676  15.252  25.257  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       7.319  14.161  24.704  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       3.170  14.052  24.817  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       2.451  12.909  24.337  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       8.710  14.140  24.655  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       9.465  14.872  25.643  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       6.542  10.731  23.285  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       6.118  10.257  22.090  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       6.027  10.017  24.297  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       5.350   9.215  22.401  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.318   9.086  23.742  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       4.712   8.267  21.622  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       4.665   8.117  24.345  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       4.027   7.305  22.211  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       4.047   7.282  23.538  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       6.333  10.609  21.179  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       3.212   6.112  24.259  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.696   8.297  20.197  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       5.391   8.937  19.869  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       4.892   7.382  19.843  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 5\nREMARK VINA RESULT:    -7.750      1.112      1.186\nREMARK INTER + INTRA:         -10.185\nREMARK INTER:                  -9.683\nREMARK INTRA:                  -0.502\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       4.131  10.617  23.241  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.912  11.819  23.729  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.998  14.011  24.629  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       6.402  14.002  24.586  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       4.241  12.916  24.216  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       7.063  12.875  24.111  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       6.297  11.800  23.701  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.271  15.128  25.136  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       4.848  16.069  26.052  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       6.926  10.653  23.226  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       8.275  10.360  23.646  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       2.954  10.288  24.104  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       1.643  10.537  23.871  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       3.131   9.735  25.313  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       1.023  10.096  24.963  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       1.944   9.608  25.817  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -0.317   9.984  25.287  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       1.623   9.067  26.971  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -0.655   9.471  26.455  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       0.333   9.037  27.228  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       1.235  10.958  23.061  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -0.075   8.413  28.652  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -1.373  10.450  24.452  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -0.994  11.017  23.720  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -1.852   9.667  24.053  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 6\nREMARK VINA RESULT:    -7.737      4.428      6.791\nREMARK INTER + INTRA:         -10.169\nREMARK INTER:                  -9.750\nREMARK INTRA:                  -0.419\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.787  11.094  23.423  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       2.374  11.163  23.960  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       0.166  12.027  23.887  1.00  0.00     0.119 A \nATOM      4  C   UNL     1      -0.196  11.267  25.011  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       1.449  11.972  23.343  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       0.747  10.439  25.609  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       2.014  10.400  25.059  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      -0.770  12.868  23.217  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1      -1.820  12.346  22.393  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       2.982   9.576  25.628  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       2.604   8.659  26.676  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       4.658  12.210  23.906  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       4.288  13.372  24.494  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       5.985  12.170  23.712  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       5.431  14.029  24.677  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       6.443  13.278  24.202  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       5.723  15.223  25.312  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       7.701  13.654  24.278  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       6.978  15.630  25.370  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       7.895  14.820  24.855  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       3.364  13.669  24.737  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       9.423  15.314  24.924  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.733  16.086  25.865  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       4.966  17.037  25.657  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       3.841  15.868  25.468  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 7\nREMARK VINA RESULT:    -7.673      4.311      6.845\nREMARK INTER + INTRA:         -10.089\nREMARK INTER:                  -9.576\nREMARK INTRA:                  -0.513\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       2.924  11.092  23.463  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       1.542  11.215  24.068  1.00  0.00     0.005 A \nATOM      3  C   UNL     1      -0.013  10.759  25.800  1.00  0.00     0.119 A \nATOM      4  C   UNL     1      -1.021  11.454  25.114  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       1.281  10.645  25.292  1.00  0.00     0.054 A \nATOM      6  C   UNL     1      -0.733  12.042  23.887  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       0.553  11.916  23.396  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      -0.247  10.164  27.075  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       0.287   8.883  27.435  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       0.879  12.497  22.175  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1      -0.177  12.960  21.306  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       3.876  12.139  23.949  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       3.596  13.303  24.582  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       5.191  12.026  23.709  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       4.782  13.885  24.745  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.732  13.089  24.216  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       5.166  15.038  25.404  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       7.011  13.386  24.260  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       6.445  15.368  25.432  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       7.294  14.520  24.863  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       2.700  13.647  24.864  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       8.851  14.919  24.895  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       4.250  15.942  26.013  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       4.004  16.660  25.360  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       3.426  15.446  26.289  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 8\nREMARK VINA RESULT:    -7.660      4.472      6.273\nREMARK INTER + INTRA:         -10.072\nREMARK INTER:                  -9.541\nREMARK INTRA:                  -0.532\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       7.097  12.825  23.421  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       7.397  13.596  24.689  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       8.869  14.213  26.443  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       7.876  15.015  27.029  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       8.644  13.509  25.260  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.627  15.107  26.425  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       6.420  14.398  25.256  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1      10.176  14.108  27.004  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1      11.239  15.000  26.646  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.184  14.473  24.621  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       4.035  14.940  25.359  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       6.856  11.367  23.659  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       7.766  10.368  23.751  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       5.606  10.889  23.736  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1       7.034   9.268  23.913  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       5.731   9.611  23.908  1.00  0.00     0.186 A \nATOM     17  C   UNL     1       7.379   7.952  24.159  1.00  0.00     0.156 A \nATOM     18  N   UNL     1       4.767   8.734  24.085  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1       6.424   7.053  24.309  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1       5.173   7.496  24.269  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       8.762  10.441  23.708  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1       4.007   6.404  24.449  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1       8.724   7.484  24.203  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1       9.285   8.126  24.726  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1       8.749   6.585  24.643  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\nMODEL 9\nREMARK VINA RESULT:    -7.598      2.671      4.445\nREMARK INTER + INTRA:          -9.993\nREMARK INTER:                  -9.419\nREMARK INTRA:                  -0.575\nREMARK UNBOUND:                -0.397\nREMARK SMILES COc1ccc(OC)c(Cc2nc3nc(F)nc(N)c3[nH]2)c1\nREMARK SMILES IDX 10 1 9 2 3 3 4 4 22 5 5 6 6 7 2 8 1 9 7 10 8 11 11 12 21 13\nREMARK SMILES IDX 12 14 20 15 13 16 18 17 14 18 17 19 15 20 16 22 19 23\nREMARK H PARENT 21 21 19 24 19 25\nROOT\nATOM      1  C   UNL     1       3.284  11.465  24.737  1.00  0.00     0.115 C \nENDROOT\nBRANCH   1   2\nATOM      2  C   UNL     1       4.162  10.573  23.887  1.00  0.00     0.005 A \nATOM      3  C   UNL     1       4.562   8.528  22.753  1.00  0.00     0.119 A \nATOM      4  C   UNL     1       5.831   8.972  22.346  1.00  0.00     0.050 A \nATOM      5  C   UNL     1       3.710   9.329  23.514  1.00  0.00     0.054 A \nATOM      6  C   UNL     1       6.262  10.241  22.716  1.00  0.00     0.050 A \nATOM      7  C   UNL     1       5.407  11.019  23.473  1.00  0.00     0.122 A \nBRANCH   3   8\nATOM      8  O   UNL     1       4.059   7.248  22.376  1.00  0.00    -0.497 OA\nATOM      9  C   UNL     1       2.860   6.698  22.938  1.00  0.00     0.278 C \nENDBRANCH   3   8\nBRANCH   7  10\nATOM     10  O   UNL     1       5.803  12.298  23.855  1.00  0.00    -0.496 OA\nATOM     11  C   UNL     1       7.208  12.622  23.895  1.00  0.00     0.278 C \nENDBRANCH   7  10\nENDBRANCH   1   2\nBRANCH   1  12\nATOM     12  C   UNL     1       1.910  11.651  24.175  1.00  0.00     0.113 A \nATOM     13  N   UNL     1       0.747  11.097  24.594  1.00  0.00    -0.337 N \nATOM     14  N   UNL     1       1.720  12.390  23.073  1.00  0.00    -0.213 NA\nATOM     15  C   UNL     1      -0.162  11.542  23.730  1.00  0.00     0.128 A \nATOM     16  C   UNL     1       0.451  12.328  22.824  1.00  0.00     0.186 A \nATOM     17  C   UNL     1      -1.537  11.408  23.680  1.00  0.00     0.156 A \nATOM     18  N   UNL     1      -0.202  12.942  21.862  1.00  0.00    -0.180 NA\nATOM     19  N   UNL     1      -2.205  11.993  22.702  1.00  0.00    -0.183 NA\nATOM     20  C   UNL     1      -1.501  12.731  21.853  1.00  0.00     0.312 A \nATOM     21  H   UNL     1       0.605  10.491  25.377  1.00  0.00     0.168 HD\nATOM     22  F   UNL     1      -2.311  13.443  20.662  1.00  0.00    -0.161 F \nBRANCH  17  23\nATOM     23  N   UNL     1      -2.288  10.616  24.596  1.00  0.00    -0.382 N \nATOM     24  H   UNL     1      -1.732   9.842  24.901  1.00  0.00     0.158 HD\nATOM     25  H   UNL     1      -2.545  11.174  25.385  1.00  0.00     0.158 HD\nENDBRANCH  17  23\nENDBRANCH   1  12\nTORSDOF 5\nENDMDL\n",
+    "closest_time_runs": 96,
+    "closest_time_ratio": 1.0047494517365556,
+    "closest_time_quality": {
+      "top_rmsd_A": 0.3390778939739632,
+      "best_rmsd_A": 0.3390778939739632,
+      "all_rmsd_A": [
+        0.3390778939739632,
+        3.1034975430955316,
+        2.5001047614413716,
+        4.9861821111402005,
+        6.793318609286093,
+        0.9183762350425392,
+        6.832539049550787,
+        6.1536679379788675,
+        4.57235503274347
+      ],
+      "score": -8.232,
+      "redocking_gate": true
+    },
+    "normal_units": [
+      {
+        "ms": 2509.6585,
+        "evals": 804181,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3981.8337,
+        "evals": 774207,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3624.5887,
+        "evals": 763079,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4145.3619,
+        "evals": 907049,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3401.3447,
+        "evals": 728458,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3703.8953,
+        "evals": 776283,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4101.8049,
+        "evals": 819493,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3751.1415,
+        "evals": 727010,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4221.8436,
+        "evals": 849213,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3721.7632,
+        "evals": 760906,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4108.7172,
+        "evals": 792626,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3801.0422,
+        "evals": 830103,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4172.8048,
+        "evals": 795041,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4350.5326,
+        "evals": 865662,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4331.8604,
+        "evals": 778142,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4471.0673,
+        "evals": 833129,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3585.8861,
+        "evals": 769316,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 5479.3775,
+        "evals": 1099597,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3693.6868,
+        "evals": 763136,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4242.5876,
+        "evals": 892936,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4248.6126,
+        "evals": 818377,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 3940.5008,
+        "evals": 788106,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4326.2215,
+        "evals": 746788,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 5099.0184,
+        "evals": 828842,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4698.2595,
+        "evals": 807126,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4058.9872,
+        "evals": 833034,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4543.3485,
+        "evals": 849342,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4042.0639,
+        "evals": 808969,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4198.5192,
+        "evals": 831880,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4027.7879,
+        "evals": 832029,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4020.7705,
+        "evals": 860120,
+        "steps": 19425,
+        "minima": 9
+      },
+      {
+        "ms": 4201.1149,
+        "evals": 866002,
+        "steps": 19425,
+        "minima": 9
+      }
+    ],
+    "medium_units": [
+      {
+        "ms": 1179.526,
+        "evals": 256001,
+        "steps": 6804,
+        "minima": 9
+      },
+      {
+        "ms": 1377.7929,
+        "evals": 256005,
+        "steps": 5880,
+        "minima": 9
+      },
+      {
+        "ms": 1218.8075,
+        "evals": 256010,
+        "steps": 6726,
+        "minima": 9
+      },
+      {
+        "ms": 1184.6277,
+        "evals": 256122,
+        "steps": 4135,
+        "minima": 9
+      },
+      {
+        "ms": 1198.2961,
+        "evals": 256006,
+        "steps": 6886,
+        "minima": 9
+      },
+      {
+        "ms": 1158.1829,
+        "evals": 256026,
+        "steps": 5951,
+        "minima": 9
+      },
+      {
+        "ms": 1240.0317,
+        "evals": 256010,
+        "steps": 6227,
+        "minima": 9
+      },
+      {
+        "ms": 1271.0621,
+        "evals": 256010,
+        "steps": 6886,
+        "minima": 9
+      },
+      {
+        "ms": 1359.8968,
+        "evals": 256014,
+        "steps": 5501,
+        "minima": 9
+      },
+      {
+        "ms": 1458.4749,
+        "evals": 256014,
+        "steps": 6542,
+        "minima": 9
+      },
+      {
+        "ms": 1403.1078,
+        "evals": 256023,
+        "steps": 6725,
+        "minima": 9
+      },
+      {
+        "ms": 1437.1169,
+        "evals": 256013,
+        "steps": 6433,
+        "minima": 9
+      },
+      {
+        "ms": 1563.6381,
+        "evals": 256039,
+        "steps": 5883,
+        "minima": 9
+      },
+      {
+        "ms": 1588.7437,
+        "evals": 256023,
+        "steps": 6354,
+        "minima": 9
+      },
+      {
+        "ms": 1378.7554,
+        "evals": 256014,
+        "steps": 6323,
+        "minima": 9
+      },
+      {
+        "ms": 1662.554,
+        "evals": 256006,
+        "steps": 5965,
+        "minima": 9
+      },
+      {
+        "ms": 1682.1927,
+        "evals": 256007,
+        "steps": 6508,
+        "minima": 9
+      },
+      {
+        "ms": 1471.3423,
+        "evals": 256115,
+        "steps": 4105,
+        "minima": 9
+      },
+      {
+        "ms": 1734.1724,
+        "evals": 256133,
+        "steps": 6560,
+        "minima": 9
+      },
+      {
+        "ms": 1545.4697,
+        "evals": 256026,
+        "steps": 6029,
+        "minima": 9
+      },
+      {
+        "ms": 1541.5841,
+        "evals": 256003,
+        "steps": 5568,
+        "minima": 9
+      },
+      {
+        "ms": 1562.6347,
+        "evals": 256021,
+        "steps": 6097,
+        "minima": 9
+      },
+      {
+        "ms": 1533.7038,
+        "evals": 256040,
+        "steps": 6886,
+        "minima": 9
+      },
+      {
+        "ms": 1460.6712,
+        "evals": 256007,
+        "steps": 5653,
+        "minima": 9
+      },
+      {
+        "ms": 1509.5677,
+        "evals": 256009,
+        "steps": 5743,
+        "minima": 9
+      },
+      {
+        "ms": 1226.8709,
+        "evals": 256005,
+        "steps": 5325,
+        "minima": 9
+      },
+      {
+        "ms": 1292.7686,
+        "evals": 256020,
+        "steps": 5976,
+        "minima": 9
+      },
+      {
+        "ms": 1906.8309,
+        "evals": 256009,
+        "steps": 5706,
+        "minima": 9
+      },
+      {
+        "ms": 1630.1288,
+        "evals": 256008,
+        "steps": 6650,
+        "minima": 9
+      },
+      {
+        "ms": 1426.4493,
+        "evals": 256032,
+        "steps": 6004,
+        "minima": 9
+      },
+      {
+        "ms": 1518.8575,
+        "evals": 256075,
+        "steps": 6022,
+        "minima": 9
+      },
+      {
+        "ms": 1349.6423,
+        "evals": 256062,
+        "steps": 5773,
+        "minima": 9
+      },
+      {
+        "ms": 1296.3217,
+        "evals": 256004,
+        "steps": 6670,
+        "minima": 9
+      },
+      {
+        "ms": 1252.8,
+        "evals": 256026,
+        "steps": 5430,
+        "minima": 9
+      },
+      {
+        "ms": 1244.1822,
+        "evals": 256025,
+        "steps": 5851,
+        "minima": 9
+      },
+      {
+        "ms": 1291.8365,
+        "evals": 256006,
+        "steps": 5736,
+        "minima": 9
+      },
+      {
+        "ms": 1288.9566,
+        "evals": 256018,
+        "steps": 6819,
+        "minima": 9
+      },
+      {
+        "ms": 1357.5516,
+        "evals": 256006,
+        "steps": 5987,
+        "minima": 9
+      },
+      {
+        "ms": 1373.4426,
+        "evals": 256007,
+        "steps": 6754,
+        "minima": 9
+      },
+      {
+        "ms": 1409.6906,
+        "evals": 256020,
+        "steps": 6861,
+        "minima": 9
+      },
+      {
+        "ms": 1375.3619,
+        "evals": 256023,
+        "steps": 6560,
+        "minima": 9
+      },
+      {
+        "ms": 1417.695,
+        "evals": 256024,
+        "steps": 6814,
+        "minima": 9
+      },
+      {
+        "ms": 1297.2535,
+        "evals": 256014,
+        "steps": 6010,
+        "minima": 9
+      },
+      {
+        "ms": 1240.0582,
+        "evals": 256002,
+        "steps": 6401,
+        "minima": 9
+      },
+      {
+        "ms": 1318.0639,
+        "evals": 256023,
+        "steps": 6878,
+        "minima": 9
+      },
+      {
+        "ms": 1456.7514,
+        "evals": 256022,
+        "steps": 6900,
+        "minima": 9
+      },
+      {
+        "ms": 1400.9541,
+        "evals": 256025,
+        "steps": 6203,
+        "minima": 9
+      },
+      {
+        "ms": 1236.6567,
+        "evals": 256004,
+        "steps": 6813,
+        "minima": 9
+      },
+      {
+        "ms": 1254.334,
+        "evals": 256057,
+        "steps": 4121,
+        "minima": 9
+      },
+      {
+        "ms": 1244.6879,
+        "evals": 256026,
+        "steps": 5397,
+        "minima": 9
+      },
+      {
+        "ms": 1163.4212,
+        "evals": 256013,
+        "steps": 6444,
+        "minima": 9
+      },
+      {
+        "ms": 1202.4971,
+        "evals": 256009,
+        "steps": 6695,
+        "minima": 9
+      },
+      {
+        "ms": 1442.8214,
+        "evals": 256013,
+        "steps": 6869,
+        "minima": 9
+      },
+      {
+        "ms": 1180.8513,
+        "evals": 256045,
+        "steps": 5371,
+        "minima": 9
+      },
+      {
+        "ms": 1209.879,
+        "evals": 256030,
+        "steps": 6453,
+        "minima": 9
+      },
+      {
+        "ms": 1562.2242,
+        "evals": 256022,
+        "steps": 6345,
+        "minima": 9
+      },
+      {
+        "ms": 1386.0021,
+        "evals": 256029,
+        "steps": 6618,
+        "minima": 9
+      },
+      {
+        "ms": 1171.9245,
+        "evals": 256025,
+        "steps": 6234,
+        "minima": 9
+      },
+      {
+        "ms": 1425.5652,
+        "evals": 256064,
+        "steps": 6551,
+        "minima": 9
+      },
+      {
+        "ms": 1281.6674,
+        "evals": 256005,
+        "steps": 6910,
+        "minima": 9
+      },
+      {
+        "ms": 1217.4765,
+        "evals": 256007,
+        "steps": 6782,
+        "minima": 9
+      },
+      {
+        "ms": 1355.0857,
+        "evals": 256005,
+        "steps": 6685,
+        "minima": 9
+      },
+      {
+        "ms": 1467.6052,
+        "evals": 256008,
+        "steps": 6649,
+        "minima": 9
+      },
+      {
+        "ms": 1400.6749,
+        "evals": 256007,
+        "steps": 6866,
+        "minima": 9
+      },
+      {
+        "ms": 1362.9295,
+        "evals": 256024,
+        "steps": 5988,
+        "minima": 9
+      },
+      {
+        "ms": 1292.411,
+        "evals": 256047,
+        "steps": 5724,
+        "minima": 9
+      },
+      {
+        "ms": 1496.9821,
+        "evals": 256025,
+        "steps": 6460,
+        "minima": 9
+      },
+      {
+        "ms": 1511.0467,
+        "evals": 256040,
+        "steps": 6208,
+        "minima": 9
+      },
+      {
+        "ms": 1346.0044,
+        "evals": 256020,
+        "steps": 5806,
+        "minima": 9
+      },
+      {
+        "ms": 1284.4601,
+        "evals": 256029,
+        "steps": 6846,
+        "minima": 9
+      },
+      {
+        "ms": 1524.9378,
+        "evals": 256008,
+        "steps": 6450,
+        "minima": 9
+      },
+      {
+        "ms": 1607.149,
+        "evals": 256025,
+        "steps": 6351,
+        "minima": 9
+      },
+      {
+        "ms": 1176.5032,
+        "evals": 256160,
+        "steps": 5932,
+        "minima": 9
+      },
+      {
+        "ms": 1459.1152,
+        "evals": 256004,
+        "steps": 6796,
+        "minima": 9
+      },
+      {
+        "ms": 1508.7804,
+        "evals": 256008,
+        "steps": 6604,
+        "minima": 9
+      },
+      {
+        "ms": 1249.9705,
+        "evals": 256018,
+        "steps": 5980,
+        "minima": 9
+      },
+      {
+        "ms": 1385.3112,
+        "evals": 256033,
+        "steps": 6851,
+        "minima": 9
+      },
+      {
+        "ms": 1273.1979,
+        "evals": 256013,
+        "steps": 5901,
+        "minima": 9
+      },
+      {
+        "ms": 1211.6038,
+        "evals": 256026,
+        "steps": 6837,
+        "minima": 9
+      },
+      {
+        "ms": 1397.2651,
+        "evals": 256030,
+        "steps": 6796,
+        "minima": 9
+      },
+      {
+        "ms": 1222.8021,
+        "evals": 256006,
+        "steps": 5577,
+        "minima": 9
+      },
+      {
+        "ms": 1384.9818,
+        "evals": 256026,
+        "steps": 5848,
+        "minima": 9
+      },
+      {
+        "ms": 1262.8276,
+        "evals": 256021,
+        "steps": 6378,
+        "minima": 9
+      },
+      {
+        "ms": 1508.6206,
+        "evals": 256001,
+        "steps": 6501,
+        "minima": 9
+      },
+      {
+        "ms": 1412.1398,
+        "evals": 256027,
+        "steps": 6854,
+        "minima": 9
+      },
+      {
+        "ms": 1512.6836,
+        "evals": 256021,
+        "steps": 6791,
+        "minima": 9
+      },
+      {
+        "ms": 1146.5539,
+        "evals": 256014,
+        "steps": 6522,
+        "minima": 9
+      },
+      {
+        "ms": 1341.5697,
+        "evals": 256033,
+        "steps": 6803,
+        "minima": 9
+      },
+      {
+        "ms": 1183.7716,
+        "evals": 256003,
+        "steps": 6822,
+        "minima": 9
+      },
+      {
+        "ms": 1171.1454,
+        "evals": 256025,
+        "steps": 5527,
+        "minima": 9
+      },
+      {
+        "ms": 1254.8542,
+        "evals": 256021,
+        "steps": 6641,
+        "minima": 9
+      },
+      {
+        "ms": 1314.3525,
+        "evals": 256025,
+        "steps": 5858,
+        "minima": 9
+      },
+      {
+        "ms": 1198.5433,
+        "evals": 256051,
+        "steps": 5763,
+        "minima": 9
+      },
+      {
+        "ms": 1213.0012,
+        "evals": 256016,
+        "steps": 6160,
+        "minima": 9
+      },
+      {
+        "ms": 1339.9348,
+        "evals": 256021,
+        "steps": 5992,
+        "minima": 9
+      },
+      {
+        "ms": 1574.0147,
+        "evals": 256030,
+        "steps": 6251,
+        "minima": 9
+      },
+      {
+        "ms": 1553.5153,
+        "evals": 256093,
+        "steps": 5820,
+        "minima": 9
+      },
+      {
+        "ms": 1395.4998,
+        "evals": 256014,
+        "steps": 5980,
+        "minima": 9
+      },
+      {
+        "ms": 1387.6561,
+        "evals": 256031,
+        "steps": 6569,
+        "minima": 9
+      },
+      {
+        "ms": 1540.1742,
+        "evals": 256020,
+        "steps": 6607,
+        "minima": 9
+      },
+      {
+        "ms": 1366.4599,
+        "evals": 256008,
+        "steps": 6093,
+        "minima": 9
+      },
+      {
+        "ms": 1289.963,
+        "evals": 256008,
+        "steps": 6822,
+        "minima": 9
+      },
+      {
+        "ms": 1412.6976,
+        "evals": 256028,
+        "steps": 6297,
+        "minima": 9
+      }
+    ],
+    "timing_scope": "Same sequential single-thread native worker. Other validation processes may be running; wall-time ratios are descriptive, not an isolated speedup claim."
+  },
+  {
+    "target": "tryb1",
+    "gate_stock_E4": {
+      "top_rmsd_A": 0.2525033130018751,
+      "best_rmsd_A": 0.2525033130018751,
+      "all_rmsd_A": [
+        0.2525033130018751,
+        8.521175934558109,
+        13.166602600460815,
+        11.608987816144204,
+        3.476190028664229,
+        5.094147067581957,
+        11.636608830622567,
+        9.780077750595456,
+        5.285563913587214
+      ],
+      "score": -9.378,
+      "redocking_gate": true
+    },
+    "input_sha256": "89e24190fc72e1e61544badb60f9a766b3924cf2094b5a3509b84328190b3111",
+    "receptor_sha256": "2184abb1b37d25c3a9d2741a6a0cd545679116463e92e4cb56db3ec6482aedde",
+    "normal": {
+      "ms": 142555.2303,
+      "score": -9.229736922420798,
+      "poses": 9
+    },
+    "normal_search_ms": 140222.6986,
+    "normal_evals": 31328201,
+    "normal_quality": {
+      "top_rmsd_A": 0.3729708691449893,
+      "best_rmsd_A": 0.3729708691449893,
+      "all_rmsd_A": [
+        0.3729708691449893,
+        9.55895700176219,
+        2.6980894094782086,
+        2.276515708101035,
+        8.579736545623511,
+        15.51986126028392,
+        12.499104272522278,
+        13.150581835621747,
+        10.595850962305228
+      ],
+      "score": -9.23,
+      "redocking_gate": true
+    },
+    "normal_pose": "MODEL 1\nREMARK VINA RESULT:    -9.230      0.000      0.000\nREMARK INTER + INTRA:         -11.440\nREMARK INTER:                 -11.118\nREMARK INTRA:                  -0.322\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.816  77.859  83.851  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.258  78.414  85.098  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.164  77.837  82.993  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.612  79.507  83.513  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.705  77.479  85.055  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      26.127  79.685  83.739  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      26.203  77.706  85.290  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.646  79.695  85.904  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      20.782  77.558  82.804  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.621  78.689  85.280  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.592  78.392  84.197  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.687  77.782  83.227  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.951  78.797  84.732  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.771  78.443  84.159  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      28.051  78.379  82.269  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      22.380  79.234  86.410  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.333  76.418  83.506  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      29.285  76.065  82.656  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.757  74.613  82.474  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      30.627  71.925  82.190  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      31.399  72.979  81.646  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      29.419  72.209  82.891  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      30.974  74.325  81.781  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      28.993  73.562  83.028  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.338  76.967  81.463  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      20.714  77.912  80.427  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      21.057  77.414  79.631  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      19.915  78.452  80.163  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.427  78.520  80.774  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 2\nREMARK VINA RESULT:    -7.761      6.109      9.540\nREMARK INTER + INTRA:          -9.671\nREMARK INTER:                  -9.423\nREMARK INTRA:                  -0.248\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      26.181  74.582  94.588  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      26.370  73.421  93.767  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      26.123  76.043  92.560  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      27.355  75.893  89.819  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      25.018  74.887  89.684  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      27.316  76.065  88.288  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      25.024  75.035  88.158  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      27.060  73.342  90.121  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      26.043  75.895  93.973  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      26.450  73.572  92.375  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      26.324  74.919  91.764  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      25.441  77.368  87.236  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      26.445  74.711  90.267  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      25.949  76.104  87.773  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      26.211  78.246  87.027  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      26.625  72.610  91.282  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      23.991  77.565  86.774  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      23.700  77.028  85.599  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      22.484  77.450  84.758  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      20.261  78.274  83.194  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      20.065  77.837  84.526  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      21.573  78.313  82.638  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      21.168  77.422  85.315  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      22.681  77.898  83.433  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      25.842  77.151  94.824  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      25.194  76.741  96.056  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      25.869  76.707  96.793  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      24.477  77.397  96.291  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      24.788  75.835  95.934  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 3\nREMARK VINA RESULT:    -7.730      1.932      2.458\nREMARK INTER + INTRA:          -9.634\nREMARK INTER:                  -9.300\nREMARK INTRA:                  -0.333\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.869  77.244  83.667  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.251  77.411  85.040  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      21.975  78.361  82.913  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      23.785  80.456  84.090  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.720  78.169  84.719  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      25.173  81.052  84.396  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      26.078  78.798  85.053  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.104  79.391  86.346  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      20.748  77.711  82.604  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.460  78.054  85.341  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.338  78.539  84.246  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.198  80.147  83.212  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.543  79.161  84.922  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.234  80.051  84.310  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      27.229  81.145  82.570  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      22.128  78.366  86.608  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.283  79.095  82.948  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.867  79.177  81.763  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.642  78.015  81.122  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      31.116  75.877  79.971  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.590  76.900  79.144  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      30.917  75.923  81.381  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      29.852  77.971  79.709  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.177  77.001  81.948  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.365  77.547  81.131  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      21.192  76.487  80.583  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.627  75.877  80.027  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      21.910  76.886  80.013  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.608  75.969  81.330  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 4\nREMARK VINA RESULT:    -7.580      2.292      2.552\nREMARK INTER + INTRA:          -9.453\nREMARK INTER:                  -9.425\nREMARK INTRA:                  -0.029\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.932  77.944  83.376  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.143  78.458  84.699  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.398  77.692  83.049  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.822  79.118  84.117  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.382  77.097  85.606  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      26.261  79.150  84.669  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      25.808  77.178  86.165  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.380  79.408  86.244  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      21.070  77.547  82.559  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.453  78.601  85.178  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.604  78.207  84.326  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.706  77.102  84.476  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.846  78.480  85.150  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.676  77.852  85.197  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      28.325  77.658  83.630  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      21.996  79.073  86.455  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.143  75.683  84.864  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.542  75.545  86.119  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.405  74.368  86.604  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      31.031  72.229  87.523  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.733  72.349  86.144  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      30.526  73.184  88.451  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      29.922  73.413  85.675  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      29.712  74.255  87.978  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.875  76.997  81.143  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      20.326  78.069  80.333  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.362  77.810  79.368  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      19.376  78.235  80.599  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      20.862  78.901  80.475  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 5\nREMARK VINA RESULT:    -7.199      7.357      8.846\nREMARK INTER + INTRA:          -8.994\nREMARK INTER:                  -8.678\nREMARK INTRA:                  -0.316\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      23.959  80.288  88.065  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      24.919  79.800  87.117  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      24.158  78.181  89.396  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.813  75.321  88.728  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      26.973  76.475  89.436  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      25.501  73.971  89.011  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      27.641  75.116  89.672  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      26.333  76.374  86.920  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      23.593  79.474  89.216  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      25.472  78.524  87.297  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      25.076  77.699  88.466  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      26.479  73.532  91.285  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      25.863  76.409  88.353  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.616  74.106  89.945  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      25.577  72.790  91.495  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      26.461  77.756  86.534  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      27.530  73.708  92.389  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.455  72.762  92.436  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.324  72.493  93.676  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      30.934  71.948  95.951  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      29.633  72.482  96.117  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      31.434  71.672  94.646  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      28.821  72.759  94.988  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.617  71.949  93.511  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      22.571  79.969  90.243  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      21.354  80.291  89.522  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.766  79.483  89.481  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      20.872  81.030  89.994  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.583  80.583  88.593  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 6\nREMARK VINA RESULT:    -7.098     11.498     15.474\nREMARK INTER + INTRA:          -8.873\nREMARK INTER:                  -8.553\nREMARK INTRA:                  -0.320\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      23.073  81.226  96.045  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      23.434  80.840  94.711  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.751  83.592  95.305  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      23.951  85.305  93.142  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      21.804  84.280  92.230  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      23.862  86.364  92.025  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      21.764  85.323  91.106  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      24.074  83.084  91.825  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      22.717  82.608  96.332  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      23.469  81.813  93.702  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      23.119  83.222  94.014  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      21.786  87.766  91.810  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.250  83.984  92.711  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      22.499  86.519  91.522  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      22.402  88.686  92.238  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      23.779  81.747  92.271  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      20.317  88.002  91.437  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      20.119  88.490  90.222  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      18.820  89.193  89.797  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      16.393  90.447  89.020  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      17.507  90.458  88.145  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      16.483  89.799  90.285  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      18.723  89.836  88.524  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      17.705  89.171  90.664  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      22.329  83.048  97.746  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      21.659  81.928  98.381  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      21.536  81.192  97.714  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      22.214  81.597  99.144  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      20.766  82.223  98.721  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 7\nREMARK VINA RESULT:    -7.030      8.325     12.462\nREMARK INTER + INTRA:          -8.791\nREMARK INTER:                  -8.383\nREMARK INTRA:                  -0.408\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      34.343  75.130  71.107  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      33.159  74.341  70.919  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      33.126  76.635  72.690  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      30.260  77.496  72.995  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      30.643  75.493  74.524  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      29.013  77.836  73.836  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      29.376  75.835  75.317  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      29.734  75.120  72.118  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      34.322  76.272  72.010  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      31.982  74.703  71.590  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      31.972  75.880  72.494  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      29.246  78.169  76.317  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      30.564  75.969  73.049  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      29.081  77.263  75.178  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      29.092  79.332  76.143  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      30.638  74.116  71.621  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      29.446  77.683  77.758  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      30.685  77.334  78.065  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      31.037  76.438  79.264  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      31.680  74.741  81.448  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.649  75.703  81.579  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      32.390  74.614  80.220  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      30.320  76.555  80.495  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      32.058  75.471  79.129  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      35.570  77.131  72.228  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      36.159  76.728  73.491  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      37.127  76.979  73.503  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      35.686  77.190  74.242  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      36.070  75.738  73.600  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 8\nREMARK VINA RESULT:    -6.962      8.958     13.121\nREMARK INTER + INTRA:          -8.708\nREMARK INTER:                  -8.393\nREMARK INTRA:                  -0.315\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      39.031  77.899  90.448  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      37.985  77.663  91.402  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      38.205  76.013  89.031  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      36.753  73.437  89.589  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      35.015  75.204  88.998  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      35.697  72.361  89.266  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      33.974  74.112  88.722  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      35.636  74.792  91.487  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      39.125  77.075  89.252  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      37.081  76.615  91.181  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      37.200  75.772  89.965  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      34.599  72.344  87.005  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      36.073  74.762  90.044  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      34.656  72.863  88.373  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      35.242  71.384  86.735  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      35.923  76.129  91.938  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      33.628  72.875  85.942  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      32.415  72.344  85.977  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      31.440  72.391  84.789  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      29.604  72.451  82.623  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.913  71.947  82.427  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      29.201  72.919  83.907  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      31.838  71.913  83.502  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.131  72.883  84.987  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      40.231  77.303  88.218  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      39.607  77.306  86.908  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      38.888  76.611  86.880  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      39.209  78.205  86.731  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      40.295  77.103  86.211  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 9\nREMARK VINA RESULT:    -6.953      7.248     10.731\nREMARK INTER + INTRA:          -8.698\nREMARK INTER:                  -8.384\nREMARK INTRA:                  -0.314\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      29.525  75.293  82.141  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      30.710  75.667  81.423  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      30.902  74.082  83.841  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      33.557  72.668  83.781  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      33.965  75.067  84.537  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      34.926  72.298  84.385  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      35.339  74.676  85.093  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      34.167  74.459  82.019  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      29.632  74.509  83.364  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      31.960  75.243  81.896  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      32.051  74.430  83.135  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      35.389  72.797  86.805  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      33.527  74.165  83.352  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      35.350  73.247  85.412  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      35.299  71.635  87.029  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      33.327  75.458  81.412  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      35.705  73.729  87.982  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      36.853  73.486  88.596  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      37.170  73.981  90.016  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      37.716  74.928  92.638  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      38.723  74.979  91.643  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      36.425  74.413  92.324  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      38.461  74.508  90.332  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      36.162  73.942  91.005  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      28.385  74.094  84.150  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      27.480  75.229  84.158  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      27.819  75.921  84.795  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      27.427  75.620  83.239  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      26.571  74.928  84.445  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\n",
+    "historical_E32_pose_exact": true,
+    "medium": {
+      "ms": 147120.2877,
+      "score": -9.374568457349035,
+      "poses": 9
+    },
+    "medium_runs": 123,
+    "medium_search_ms": 144320.02430000002,
+    "medium_evals": 31492111,
+    "medium_quality": {
+      "top_rmsd_A": 0.3688706777762077,
+      "best_rmsd_A": 0.3688706777762077,
+      "all_rmsd_A": [
+        0.3688706777762077,
+        1.7502623979102272,
+        1.526098053609522,
+        9.583682155301592,
+        1.6791275894161408,
+        15.631987969692638,
+        8.539895254717031,
+        13.188168234619065,
+        10.595850962305228
+      ],
+      "score": -9.375,
+      "redocking_gate": true
+    },
+    "medium_pose": "MODEL 1\nREMARK VINA RESULT:    -9.375      0.000      0.000\nREMARK INTER + INTRA:         -11.615\nREMARK INTER:                 -11.293\nREMARK INTRA:                  -0.322\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.681  77.685  83.601  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.051  78.199  84.888  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.069  77.734  82.861  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.458  79.421  83.564  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.511  77.338  85.031  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      25.956  79.615  83.871  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      25.991  77.580  85.349  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.372  79.503  85.909  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      20.703  77.440  82.592  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.398  78.489  85.148  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.426  78.249  84.104  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.574  77.758  83.367  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.750  78.655  84.720  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.601  78.368  84.276  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      27.973  78.397  82.451  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      22.091  79.002  86.334  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.229  76.395  83.627  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      29.183  76.061  82.772  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.666  74.616  82.570  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      30.557  71.938  82.249  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      31.297  73.003  81.678  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      29.373  72.206  82.993  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      30.860  74.343  81.832  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      28.936  73.554  83.149  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.336  76.894  81.210  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      20.787  77.861  80.228  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.589  78.786  80.555  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      21.772  77.761  80.089  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      20.311  77.705  79.362  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 2\nREMARK VINA RESULT:    -7.927      1.682      1.948\nREMARK INTER + INTRA:          -9.871\nREMARK INTER:                 -10.026\nREMARK INTRA:                   0.155\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.698  77.874  83.661  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.100  78.398  84.935  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.089  77.656  82.962  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.625  79.124  83.644  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.449  77.105  85.189  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      26.130  79.180  83.970  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      25.941  77.210  85.523  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.520  79.404  85.965  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      20.704  77.489  82.681  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.466  78.563  85.207  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.479  78.182  84.191  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.561  77.153  83.564  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.828  78.478  84.815  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.641  77.892  84.432  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      28.035  77.713  82.632  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      22.190  79.051  86.385  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.074  75.743  83.886  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.404  75.543  85.153  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.318  74.396  85.615  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      31.041  72.312  86.484  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.561  72.324  85.151  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      30.671  73.349  87.388  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      29.700  73.360  84.708  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      29.806  74.391  86.940  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.304  76.929  81.314  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      20.678  77.912  80.315  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.140  77.766  79.484  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      20.501  78.831  80.669  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.651  77.819  80.103  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 3\nREMARK VINA RESULT:    -7.909      0.994      1.609\nREMARK INTER + INTRA:          -9.850\nREMARK INTER:                  -9.528\nREMARK INTRA:                  -0.321\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      19.920  77.116  83.850  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      20.265  77.536  85.178  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.175  77.801  83.015  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.180  79.889  83.835  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      24.802  77.706  84.995  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      25.617  80.380  84.097  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      26.213  78.238  85.275  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      23.285  79.426  86.217  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      20.891  77.239  82.772  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      21.531  78.091  85.413  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      22.504  78.225  84.300  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      27.561  79.019  83.267  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.748  78.843  84.905  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.550  79.273  84.295  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      27.739  79.843  82.431  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      22.181  78.597  86.626  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      28.519  77.821  83.304  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      29.330  77.720  82.263  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      30.047  76.416  81.876  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      31.358  74.016  81.111  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      30.366  73.989  82.122  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      31.692  75.242  80.467  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      29.707  75.182  82.512  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      31.027  76.441  80.858  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      20.549  76.800  81.345  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      20.625  77.977  80.500  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      21.515  78.002  80.042  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      19.899  77.941  79.813  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      20.515  78.798  81.060  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 4\nREMARK VINA RESULT:    -7.831      6.096      9.543\nREMARK INTER + INTRA:          -9.756\nREMARK INTER:                  -9.449\nREMARK INTRA:                  -0.307\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      26.239  74.617  94.656  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      26.421  73.434  93.864  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      26.195  76.028  92.592  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      27.431  75.800  89.859  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      25.086  74.808  89.744  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      27.395  75.935  88.323  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      25.096  74.919  88.215  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      27.117  73.260  90.223  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      26.112  75.915  94.008  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      26.504  73.550  92.469  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      26.390  74.882  91.825  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      25.531  77.225  87.236  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      26.511  74.637  90.334  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.030  75.971  87.806  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      26.308  78.092  87.007  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      26.674  72.560  91.401  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      24.084  77.421  86.767  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      23.842  77.039  85.522  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      22.626  77.520  84.714  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      20.354  78.364  83.233  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      21.630  78.338  82.618  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      20.205  77.957  84.590  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      22.771  77.919  83.349  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      21.352  77.535  85.324  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      25.919  77.193  94.828  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      25.240  76.822  96.056  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      25.865  76.304  96.640  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      24.944  77.648  96.535  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      24.442  76.259  95.839  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 5\nREMARK VINA RESULT:    -7.394      1.371      2.012\nREMARK INTER + INTRA:          -9.229\nREMARK INTER:                  -8.826\nREMARK INTRA:                  -0.403\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      21.251  78.323  84.661  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      21.941  78.947  85.753  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      23.322  78.416  83.262  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      25.703  80.251  83.144  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      26.301  78.288  84.655  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      27.212  80.530  82.994  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      27.792  78.614  84.518  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      25.328  80.462  85.694  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      21.957  78.046  83.417  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      23.285  79.312  85.596  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      23.986  79.038  84.316  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      28.730  78.710  82.157  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      25.403  79.544  84.499  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      28.021  79.345  83.269  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      28.812  79.295  81.128  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      24.254  79.941  86.499  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      29.516  77.399  82.297  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.794  76.297  82.161  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.252  74.922  82.673  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      30.121  72.372  83.573  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      28.747  72.711  83.628  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      31.069  73.302  83.057  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      28.303  73.982  83.182  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.621  74.579  82.607  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      21.246  77.383  82.235  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      19.926  76.986  82.689  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      19.789  77.299  83.629  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      19.232  77.396  82.097  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      19.847  75.990  82.654  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 6\nREMARK VINA RESULT:    -7.218     11.666     15.610\nREMARK INTER + INTRA:          -9.017\nREMARK INTER:                  -8.685\nREMARK INTRA:                  -0.332\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      23.216  81.733  96.399  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      23.529  81.212  95.099  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      22.908  84.022  95.439  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.066  85.491  93.084  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      21.876  84.422  92.340  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      23.959  86.436  91.870  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      21.817  85.350  91.121  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      24.114  83.149  91.989  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      22.890  83.144  96.559  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      23.547  82.081  93.999  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      23.229  83.519  94.181  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      21.900  87.849  91.580  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      23.331  84.147  92.805  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      22.584  86.567  91.395  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      22.543  88.795  91.896  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      23.812  81.868  92.573  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      20.424  88.074  91.228  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      20.208  88.610  90.037  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      18.892  89.307  89.652  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      16.439  90.549  88.942  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      17.586  90.735  88.133  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      16.509  89.731  90.107  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      18.816  90.120  88.479  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      17.745  89.112  90.453  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      22.554  83.728  97.934  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      21.622  82.818  98.574  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      22.128  82.159  99.131  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      20.998  83.338  99.158  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.097  82.332  97.876  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 7\nREMARK VINA RESULT:    -7.193      7.231      8.798\nREMARK INTER + INTRA:          -8.987\nREMARK INTER:                  -8.669\nREMARK INTRA:                  -0.318\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      23.931  80.187  87.739  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      24.847  79.606  86.801  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      24.087  78.159  89.194  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      24.619  75.241  88.690  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      26.838  76.353  89.272  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      25.264  73.886  89.040  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      27.462  74.986  89.576  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      26.128  76.123  86.783  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      23.566  79.460  88.948  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      25.357  78.323  87.046  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      24.962  77.587  88.274  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      26.285  73.550  91.312  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      25.698  76.263  88.222  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      26.408  74.035  89.936  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      25.362  72.858  91.590  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      26.296  77.472  86.309  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      27.371  73.753  92.377  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      28.258  72.774  92.465  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      29.147  72.550  93.699  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      30.788  72.085  95.971  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      29.587  72.824  96.105  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      31.171  71.565  94.701  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      28.761  73.062  94.977  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.339  71.803  93.568  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      22.590  80.055  89.966  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      21.410  80.483  89.237  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      20.650  79.867  89.442  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      21.168  81.414  89.511  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      21.600  80.464  88.255  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 8\nREMARK VINA RESULT:    -7.023      9.007     13.259\nREMARK INTER + INTRA:          -8.782\nREMARK INTER:                  -8.460\nREMARK INTRA:                  -0.322\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      38.991  77.914  90.560  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      37.916  77.653  91.474  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      38.249  76.023  89.101  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      36.825  73.419  89.591  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      35.077  75.159  88.950  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      35.800  72.327  89.223  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      34.067  74.051  88.630  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      35.617  74.740  91.457  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      39.142  77.099  89.362  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      37.039  76.590  91.215  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      37.217  75.758  89.998  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      34.783  72.307  86.924  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      36.105  74.728  90.030  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      34.782  72.817  88.297  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      35.452  71.360  86.672  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      35.864  76.078  91.926  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      33.841  72.828  85.831  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      32.643  72.265  85.810  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      31.715  72.305  84.585  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      29.976  72.336  82.339  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      31.379  72.329  82.147  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      29.433  72.315  83.656  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      32.256  72.315  83.262  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      30.315  72.299  84.776  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      40.280  77.355  88.370  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      39.696  77.401  87.043  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      39.180  76.561  86.876  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      39.083  78.188  86.975  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      40.423  77.486  86.361  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\nMODEL 9\nREMARK VINA RESULT:    -6.953      7.273     10.788\nREMARK INTER + INTRA:          -8.698\nREMARK INTER:                  -8.384\nREMARK INTRA:                  -0.314\nREMARK UNBOUND:                -0.322\nREMARK SMILES [NH3+]Cc1ccc2c(c1)C1(CCN(C(=O)/C=C/c3ccccc3)CC1)CO2\nREMARK SMILES IDX 4 1 5 2 8 3 10 4 24 5 11 6 23 7 25 8 3 9 6 10 7 11 13 12\nREMARK SMILES IDX 9 13 12 14 14 15 26 16 15 17 16 18 17 19 20 20 19 21 21 22\nREMARK SMILES IDX 18 23 22 24 2 25 1 26\nREMARK H PARENT 1 27 1 28 1 29\nROOT\nATOM      1  C   UNL     1      29.525  75.293  82.141  1.00  0.00     0.013 A \nATOM      2  C   UNL     1      30.710  75.667  81.423  1.00  0.00     0.047 A \nATOM      3  C   UNL     1      30.902  74.082  83.841  1.00  0.00     0.017 A \nATOM      4  C   UNL     1      33.557  72.668  83.781  1.00  0.00     0.037 C \nATOM      5  C   UNL     1      33.965  75.067  84.537  1.00  0.00     0.037 C \nATOM      6  C   UNL     1      34.926  72.298  84.385  1.00  0.00     0.121 C \nATOM      7  C   UNL     1      35.339  74.676  85.093  1.00  0.00     0.121 C \nATOM      8  C   UNL     1      34.167  74.459  82.019  1.00  0.00     0.241 C \nATOM      9  C   UNL     1      29.632  74.509  83.364  1.00  0.00     0.007 A \nATOM     10  C   UNL     1      31.960  75.243  81.896  1.00  0.00     0.123 A \nATOM     11  C   UNL     1      32.051  74.430  83.135  1.00  0.00     0.004 A \nATOM     12  C   UNL     1      35.389  72.797  86.805  1.00  0.00     0.246 C \nATOM     13  C   UNL     1      33.527  74.165  83.352  1.00  0.00     0.036 C \nATOM     14  N   UNL     1      35.350  73.247  85.412  1.00  0.00    -0.339 N \nATOM     15  O   UNL     1      35.299  71.635  87.029  1.00  0.00    -0.270 OA\nATOM     16  O   UNL     1      33.327  75.458  81.412  1.00  0.00    -0.492 OA\nENDROOT\nBRANCH  12  17\nATOM     17  C   UNL     1      35.705  73.729  87.982  1.00  0.00     0.072 C \nATOM     18  C   UNL     1      36.853  73.486  88.596  1.00  0.00     0.014 C \nBRANCH  18  19\nATOM     19  C   UNL     1      37.170  73.981  90.016  1.00  0.00    -0.025 A \nATOM     20  C   UNL     1      37.716  74.928  92.638  1.00  0.00     0.000 A \nATOM     21  C   UNL     1      38.723  74.979  91.643  1.00  0.00     0.001 A \nATOM     22  C   UNL     1      36.425  74.413  92.324  1.00  0.00     0.001 A \nATOM     23  C   UNL     1      38.461  74.508  90.332  1.00  0.00     0.008 A \nATOM     24  C   UNL     1      36.162  73.942  91.005  1.00  0.00     0.008 A \nENDBRANCH  18  19\nENDBRANCH  12  17\nBRANCH   9  25\nATOM     25  C   UNL     1      28.385  74.094  84.150  1.00  0.00     0.295 C \nBRANCH  25  26\nATOM     26  N   UNL     1      27.480  75.229  84.158  1.00  0.00    -0.354 N \nATOM     27  H   UNL     1      27.819  75.921  84.795  1.00  0.00     0.344 HD\nATOM     28  H   UNL     1      27.427  75.620  83.239  1.00  0.00     0.344 HD\nATOM     29  H   UNL     1      26.571  74.928  84.445  1.00  0.00     0.344 HD\nENDBRANCH  25  26\nENDBRANCH   9  25\nTORSDOF 4\nENDMDL\n",
+    "closest_time_runs": 119,
+    "closest_time_ratio": 0.9962352471798742,
+    "closest_time_quality": {
+      "top_rmsd_A": 0.3688706777762077,
+      "best_rmsd_A": 0.3688706777762077,
+      "all_rmsd_A": [
+        0.3688706777762077,
+        1.7502623979102272,
+        1.526098053609522,
+        9.583682155301592,
+        1.6791275894161408,
+        15.631987969692638,
+        8.539895254717031,
+        13.188168234619065,
+        10.595850962305228
+      ],
+      "score": -9.375,
+      "redocking_gate": true
+    },
+    "normal_units": [
+      {
+        "ms": 3246.9821,
+        "evals": 975613,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4582.1839,
+        "evals": 989974,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4826.808,
+        "evals": 958608,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4550.5247,
+        "evals": 971418,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4164.3639,
+        "evals": 956137,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4721.0068,
+        "evals": 979133,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4384.5363,
+        "evals": 967669,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4244.7052,
+        "evals": 985559,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4598.5548,
+        "evals": 996193,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4473.5203,
+        "evals": 978071,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4552.3928,
+        "evals": 977383,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4632.1221,
+        "evals": 959121,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4726.2967,
+        "evals": 968477,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4415.9657,
+        "evals": 986545,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4299.7527,
+        "evals": 980062,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4342.8631,
+        "evals": 1006564,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4320.4025,
+        "evals": 998548,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4476.9017,
+        "evals": 986309,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4636.698,
+        "evals": 1003590,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 3874.4284,
+        "evals": 968359,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4209.7199,
+        "evals": 999122,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4358.6503,
+        "evals": 968626,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4522.842,
+        "evals": 1002913,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4710.3189,
+        "evals": 966383,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4388.5773,
+        "evals": 957802,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4364.4499,
+        "evals": 983245,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4081.1598,
+        "evals": 979788,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 3764.1117,
+        "evals": 975214,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4362.6492,
+        "evals": 979348,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4228.3215,
+        "evals": 955155,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4421.424,
+        "evals": 982720,
+        "steps": 18795,
+        "minima": 9
+      },
+      {
+        "ms": 4739.4644,
+        "evals": 984552,
+        "steps": 18795,
+        "minima": 9
+      }
+    ],
+    "medium_units": [
+      {
+        "ms": 1120.7345,
+        "evals": 256043,
+        "steps": 4841,
+        "minima": 9
+      },
+      {
+        "ms": 1187.8477,
+        "evals": 256062,
+        "steps": 4589,
+        "minima": 9
+      },
+      {
+        "ms": 1262.2451,
+        "evals": 256007,
+        "steps": 4990,
+        "minima": 9
+      },
+      {
+        "ms": 1212.7525,
+        "evals": 256014,
+        "steps": 4885,
+        "minima": 9
+      },
+      {
+        "ms": 1127.9868,
+        "evals": 256002,
+        "steps": 5020,
+        "minima": 9
+      },
+      {
+        "ms": 902.1937,
+        "evals": 256005,
+        "steps": 4953,
+        "minima": 9
+      },
+      {
+        "ms": 1292.4817,
+        "evals": 256008,
+        "steps": 4685,
+        "minima": 9
+      },
+      {
+        "ms": 1170.1945,
+        "evals": 256020,
+        "steps": 4926,
+        "minima": 9
+      },
+      {
+        "ms": 1216.8594,
+        "evals": 256020,
+        "steps": 4597,
+        "minima": 9
+      },
+      {
+        "ms": 1110.4813,
+        "evals": 256040,
+        "steps": 4979,
+        "minima": 9
+      },
+      {
+        "ms": 1331.7111,
+        "evals": 256047,
+        "steps": 5034,
+        "minima": 9
+      },
+      {
+        "ms": 1175.1067,
+        "evals": 256004,
+        "steps": 5090,
+        "minima": 9
+      },
+      {
+        "ms": 1243.7909,
+        "evals": 256021,
+        "steps": 4866,
+        "minima": 9
+      },
+      {
+        "ms": 1280.6501,
+        "evals": 256001,
+        "steps": 4611,
+        "minima": 9
+      },
+      {
+        "ms": 1323.8802,
+        "evals": 256020,
+        "steps": 4642,
+        "minima": 9
+      },
+      {
+        "ms": 1131.0125,
+        "evals": 256023,
+        "steps": 4908,
+        "minima": 9
+      },
+      {
+        "ms": 1298.37,
+        "evals": 256033,
+        "steps": 4721,
+        "minima": 9
+      },
+      {
+        "ms": 1100.4972,
+        "evals": 256032,
+        "steps": 4561,
+        "minima": 9
+      },
+      {
+        "ms": 1211.9396,
+        "evals": 256048,
+        "steps": 4559,
+        "minima": 9
+      },
+      {
+        "ms": 1250.6945,
+        "evals": 256022,
+        "steps": 4927,
+        "minima": 9
+      },
+      {
+        "ms": 1214.2199,
+        "evals": 256125,
+        "steps": 5134,
+        "minima": 9
+      },
+      {
+        "ms": 1081.3502,
+        "evals": 256017,
+        "steps": 4843,
+        "minima": 9
+      },
+      {
+        "ms": 1168.0593,
+        "evals": 256013,
+        "steps": 4847,
+        "minima": 9
+      },
+      {
+        "ms": 1275.9909,
+        "evals": 256022,
+        "steps": 5170,
+        "minima": 9
+      },
+      {
+        "ms": 1312.3666,
+        "evals": 256052,
+        "steps": 5198,
+        "minima": 9
+      },
+      {
+        "ms": 1246.7359,
+        "evals": 256020,
+        "steps": 4685,
+        "minima": 9
+      },
+      {
+        "ms": 1249.8195,
+        "evals": 256030,
+        "steps": 4542,
+        "minima": 9
+      },
+      {
+        "ms": 1162.275,
+        "evals": 256025,
+        "steps": 4758,
+        "minima": 9
+      },
+      {
+        "ms": 1281.4553,
+        "evals": 256005,
+        "steps": 4662,
+        "minima": 9
+      },
+      {
+        "ms": 1098.7799,
+        "evals": 256017,
+        "steps": 5066,
+        "minima": 9
+      },
+      {
+        "ms": 1151.8635,
+        "evals": 256017,
+        "steps": 4778,
+        "minima": 9
+      },
+      {
+        "ms": 1030.5931,
+        "evals": 256009,
+        "steps": 4922,
+        "minima": 9
+      },
+      {
+        "ms": 1226.7469,
+        "evals": 256028,
+        "steps": 5002,
+        "minima": 9
+      },
+      {
+        "ms": 1118.9811,
+        "evals": 256029,
+        "steps": 4959,
+        "minima": 9
+      },
+      {
+        "ms": 1155.7286,
+        "evals": 256043,
+        "steps": 4845,
+        "minima": 9
+      },
+      {
+        "ms": 1106.5943,
+        "evals": 256020,
+        "steps": 4890,
+        "minima": 9
+      },
+      {
+        "ms": 1270.1341,
+        "evals": 256027,
+        "steps": 4945,
+        "minima": 9
+      },
+      {
+        "ms": 1001.3599,
+        "evals": 256018,
+        "steps": 4808,
+        "minima": 9
+      },
+      {
+        "ms": 1095.7959,
+        "evals": 256015,
+        "steps": 5083,
+        "minima": 9
+      },
+      {
+        "ms": 1239.7094,
+        "evals": 256014,
+        "steps": 4896,
+        "minima": 9
+      },
+      {
+        "ms": 1234.583,
+        "evals": 256015,
+        "steps": 4785,
+        "minima": 9
+      },
+      {
+        "ms": 1223.1789,
+        "evals": 256029,
+        "steps": 4732,
+        "minima": 9
+      },
+      {
+        "ms": 1187.8255,
+        "evals": 256027,
+        "steps": 4787,
+        "minima": 9
+      },
+      {
+        "ms": 1083.051,
+        "evals": 256014,
+        "steps": 4854,
+        "minima": 9
+      },
+      {
+        "ms": 1084.2113,
+        "evals": 256044,
+        "steps": 4872,
+        "minima": 9
+      },
+      {
+        "ms": 1204.08,
+        "evals": 256092,
+        "steps": 4810,
+        "minima": 9
+      },
+      {
+        "ms": 967.7683,
+        "evals": 256001,
+        "steps": 4963,
+        "minima": 9
+      },
+      {
+        "ms": 1057.2366,
+        "evals": 256015,
+        "steps": 5152,
+        "minima": 9
+      },
+      {
+        "ms": 992.3046,
+        "evals": 256014,
+        "steps": 4990,
+        "minima": 9
+      },
+      {
+        "ms": 1180.2483,
+        "evals": 256031,
+        "steps": 4855,
+        "minima": 9
+      },
+      {
+        "ms": 1129.8612,
+        "evals": 256027,
+        "steps": 5062,
+        "minima": 9
+      },
+      {
+        "ms": 1289.9228,
+        "evals": 256058,
+        "steps": 5104,
+        "minima": 9
+      },
+      {
+        "ms": 1209.6829,
+        "evals": 256083,
+        "steps": 4805,
+        "minima": 9
+      },
+      {
+        "ms": 1298.8702,
+        "evals": 256011,
+        "steps": 4893,
+        "minima": 9
+      },
+      {
+        "ms": 1426.6419,
+        "evals": 256076,
+        "steps": 4788,
+        "minima": 9
+      },
+      {
+        "ms": 1331.9762,
+        "evals": 256028,
+        "steps": 4780,
+        "minima": 9
+      },
+      {
+        "ms": 1116.2274,
+        "evals": 256050,
+        "steps": 4906,
+        "minima": 9
+      },
+      {
+        "ms": 1225.1414,
+        "evals": 256043,
+        "steps": 4574,
+        "minima": 9
+      },
+      {
+        "ms": 1233.1248,
+        "evals": 256044,
+        "steps": 4821,
+        "minima": 9
+      },
+      {
+        "ms": 1123.8754,
+        "evals": 256026,
+        "steps": 5023,
+        "minima": 9
+      },
+      {
+        "ms": 1188.8029,
+        "evals": 256006,
+        "steps": 4841,
+        "minima": 9
+      },
+      {
+        "ms": 1271.8472,
+        "evals": 256027,
+        "steps": 4992,
+        "minima": 9
+      },
+      {
+        "ms": 1361.48,
+        "evals": 256012,
+        "steps": 4820,
+        "minima": 9
+      },
+      {
+        "ms": 1177.1765,
+        "evals": 256017,
+        "steps": 4875,
+        "minima": 9
+      },
+      {
+        "ms": 1181.9109,
+        "evals": 256021,
+        "steps": 5038,
+        "minima": 9
+      },
+      {
+        "ms": 969.8938,
+        "evals": 256032,
+        "steps": 4595,
+        "minima": 9
+      },
+      {
+        "ms": 1159.2062,
+        "evals": 256073,
+        "steps": 4845,
+        "minima": 9
+      },
+      {
+        "ms": 1123.5464,
+        "evals": 256035,
+        "steps": 5059,
+        "minima": 9
+      },
+      {
+        "ms": 1025.3401,
+        "evals": 256017,
+        "steps": 5051,
+        "minima": 9
+      },
+      {
+        "ms": 1209.3836,
+        "evals": 256059,
+        "steps": 5006,
+        "minima": 9
+      },
+      {
+        "ms": 1157.1657,
+        "evals": 256022,
+        "steps": 5047,
+        "minima": 9
+      },
+      {
+        "ms": 1164.149,
+        "evals": 256046,
+        "steps": 4901,
+        "minima": 9
+      },
+      {
+        "ms": 1009.9325,
+        "evals": 256034,
+        "steps": 5050,
+        "minima": 9
+      },
+      {
+        "ms": 1230.5731,
+        "evals": 256049,
+        "steps": 4840,
+        "minima": 9
+      },
+      {
+        "ms": 1292.0929,
+        "evals": 256041,
+        "steps": 4997,
+        "minima": 9
+      },
+      {
+        "ms": 1345.9147,
+        "evals": 256004,
+        "steps": 4930,
+        "minima": 9
+      },
+      {
+        "ms": 1030.959,
+        "evals": 256031,
+        "steps": 4823,
+        "minima": 9
+      },
+      {
+        "ms": 1236.7262,
+        "evals": 256037,
+        "steps": 4847,
+        "minima": 9
+      },
+      {
+        "ms": 986.3622,
+        "evals": 256008,
+        "steps": 4486,
+        "minima": 9
+      },
+      {
+        "ms": 1193.1395,
+        "evals": 256079,
+        "steps": 4772,
+        "minima": 9
+      },
+      {
+        "ms": 1115.774,
+        "evals": 256057,
+        "steps": 5000,
+        "minima": 9
+      },
+      {
+        "ms": 1129.1353,
+        "evals": 256098,
+        "steps": 4791,
+        "minima": 9
+      },
+      {
+        "ms": 1260.1461,
+        "evals": 256034,
+        "steps": 4940,
+        "minima": 9
+      },
+      {
+        "ms": 1394.2569,
+        "evals": 256022,
+        "steps": 5064,
+        "minima": 9
+      },
+      {
+        "ms": 1350.8428,
+        "evals": 256030,
+        "steps": 5020,
+        "minima": 9
+      },
+      {
+        "ms": 1254.7336,
+        "evals": 256034,
+        "steps": 4859,
+        "minima": 9
+      },
+      {
+        "ms": 1244.3352,
+        "evals": 256034,
+        "steps": 5041,
+        "minima": 9
+      },
+      {
+        "ms": 1048.2804,
+        "evals": 256096,
+        "steps": 4958,
+        "minima": 9
+      },
+      {
+        "ms": 1062.1969,
+        "evals": 256003,
+        "steps": 5005,
+        "minima": 9
+      },
+      {
+        "ms": 1155.6052,
+        "evals": 256028,
+        "steps": 4921,
+        "minima": 9
+      },
+      {
+        "ms": 1100.1612,
+        "evals": 256020,
+        "steps": 4859,
+        "minima": 9
+      },
+      {
+        "ms": 1053.1485,
+        "evals": 256042,
+        "steps": 4484,
+        "minima": 9
+      },
+      {
+        "ms": 1232.1491,
+        "evals": 256050,
+        "steps": 4791,
+        "minima": 9
+      },
+      {
+        "ms": 1044.3637,
+        "evals": 256014,
+        "steps": 4858,
+        "minima": 9
+      },
+      {
+        "ms": 991.06,
+        "evals": 256020,
+        "steps": 4982,
+        "minima": 9
+      },
+      {
+        "ms": 1154.3063,
+        "evals": 256042,
+        "steps": 4884,
+        "minima": 9
+      },
+      {
+        "ms": 1131.5455,
+        "evals": 256025,
+        "steps": 4947,
+        "minima": 9
+      },
+      {
+        "ms": 1331.6803,
+        "evals": 256025,
+        "steps": 5021,
+        "minima": 9
+      },
+      {
+        "ms": 977.7812,
+        "evals": 256022,
+        "steps": 4846,
+        "minima": 9
+      },
+      {
+        "ms": 1012.3508,
+        "evals": 256030,
+        "steps": 5034,
+        "minima": 9
+      },
+      {
+        "ms": 1032.1614,
+        "evals": 256037,
+        "steps": 4773,
+        "minima": 9
+      },
+      {
+        "ms": 1171.9216,
+        "evals": 256003,
+        "steps": 4821,
+        "minima": 9
+      },
+      {
+        "ms": 1168.6369,
+        "evals": 256040,
+        "steps": 4933,
+        "minima": 9
+      },
+      {
+        "ms": 1209.6278,
+        "evals": 256054,
+        "steps": 5004,
+        "minima": 9
+      },
+      {
+        "ms": 1366.3194,
+        "evals": 256064,
+        "steps": 5166,
+        "minima": 9
+      },
+      {
+        "ms": 1192.407,
+        "evals": 256020,
+        "steps": 4941,
+        "minima": 9
+      },
+      {
+        "ms": 1247.6567,
+        "evals": 256043,
+        "steps": 5104,
+        "minima": 9
+      },
+      {
+        "ms": 1024.4902,
+        "evals": 256018,
+        "steps": 4370,
+        "minima": 9
+      },
+      {
+        "ms": 1307.5543,
+        "evals": 256002,
+        "steps": 5079,
+        "minima": 9
+      },
+      {
+        "ms": 1188.7926,
+        "evals": 256027,
+        "steps": 4975,
+        "minima": 9
+      },
+      {
+        "ms": 1274.8666,
+        "evals": 256127,
+        "steps": 4807,
+        "minima": 9
+      },
+      {
+        "ms": 1092.7678,
+        "evals": 256108,
+        "steps": 4749,
+        "minima": 9
+      },
+      {
+        "ms": 1036.0328,
+        "evals": 256020,
+        "steps": 4899,
+        "minima": 9
+      },
+      {
+        "ms": 1163.1785,
+        "evals": 256084,
+        "steps": 4838,
+        "minima": 9
+      },
+      {
+        "ms": 1206.6259,
+        "evals": 256036,
+        "steps": 4869,
+        "minima": 9
+      },
+      {
+        "ms": 1119.5017,
+        "evals": 256043,
+        "steps": 4804,
+        "minima": 9
+      },
+      {
+        "ms": 1113.0779,
+        "evals": 256043,
+        "steps": 4940,
+        "minima": 9
+      },
+      {
+        "ms": 1244.1977,
+        "evals": 256008,
+        "steps": 5008,
+        "minima": 9
+      },
+      {
+        "ms": 1135.7216,
+        "evals": 256005,
+        "steps": 4975,
+        "minima": 9
+      },
+      {
+        "ms": 1123.5983,
+        "evals": 256082,
+        "steps": 5069,
+        "minima": 9
+      },
+      {
+        "ms": 973.7295,
+        "evals": 256057,
+        "steps": 4757,
+        "minima": 9
+      },
+      {
+        "ms": 1262.3708,
+        "evals": 256050,
+        "steps": 4733,
+        "minima": 9
+      },
+      {
+        "ms": 1265.5309,
+        "evals": 256018,
+        "steps": 4999,
+        "minima": 9
+      }
+    ],
+    "timing_scope": "Same sequential single-thread native worker. Other validation processes may be running; wall-time ratios are descriptive, not an isolated speedup claim."
+  }
+]

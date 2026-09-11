@@ -14,10 +14,12 @@ for(const t of targets){
    if(!JSON.parse(m.ccall('vt_run','string',['number','number','number','number'],[i,4,64000,104729])).ok)throw Error('run');
    tasks.push({pool:hash(m.FS.readFile('/tasks/'+i+'.task')),trace:hash(m.FS.readFile('/tasks/'+i+'.task.trace'))});
   }
+  if(!JSON.parse(m.ccall('vt_run','string',['number','number','number','number'],[127,128,64000,104729])).ok)throw Error('late-index run');
+  tasks.push({index:127,n:128,pool:hash(m.FS.readFile('/tasks/127.task')),trace:hash(m.FS.readFile('/tasks/127.task.trace'))});
   if(!JSON.parse(m.ccall('vt_finalize','string',['number'],[4])).ok)throw Error('finalize');
   byVariant.push({variant,tasks,final_pose_sha256:hash(m.FS.readFile('/final.pdbqt')),wasm_sha256:hash(await readFile('tmp/vina-resources/'+variant+'/vina_tasks.wasm'))});
  }
  const [a,...others]=byVariant,exact=others.every(b=>JSON.stringify(a.tasks)===JSON.stringify(b.tasks)&&a.final_pose_sha256===b.final_pose_sha256);
  results.push({target:t.target,exact,byVariant});if(!exact)throw Error('Regression '+t.target);
- await writeFile('docs/evaluation/vina_resources_2026-09-10/equivalence.json',JSON.stringify({scope:'Node same WASM runtime. Original full raw pools and explicit-receptor finalization. Three source-conformer targets, four64k tasks each. Chrome raw task checks are separately recorded. Not proof of all possible chemical inputs.',results},null,2)+'\n');console.log(t.target,'exact pools, traces, finalization');
+ await writeFile('docs/evaluation/vina_resources_2026-09-10/equivalence.json',JSON.stringify({scope:'Node same WASM runtime. Original full raw pools and explicit-receptor finalization. Three source-conformer targets, four64k tasks each plus index127 of128; original finalizer uses first four pools. Chrome raw task checks are separately recorded. Not proof of all possible chemical inputs.',results},null,2)+'\n');console.log(t.target,'exact pools, traces, finalization');
 }

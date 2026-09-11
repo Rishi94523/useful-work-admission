@@ -48,8 +48,8 @@ The selected-task allocation experiment addresses this separately.
 
 The subsequent FA10 selected-task build stays at **51.2 MiB maximum observed
 post-run heap**, including the N=128 call, with **133.1 MiB peak renderer working
-set**. Its five raw outputs/traces match the original. All three storage variants
-also pass the three-target original-finalizer regression. Startup remains 3.13 s
+set**. Its five raw outputs/traces match the original. The baseline, compact and
+selected-task builds pass the three-target original-finalizer regression. Startup remains 3.13 s
 in this additional measurement; the memory win does not solve cold-start delay.
 
 Working set comes from Windows `GetProcessMemoryInfo`, including its OS lifetime
@@ -150,6 +150,15 @@ scientific work; repair must not accidentally mint a second usable credit or
 reissue an actually verified completed unit. This integration remains a concrete
 engineering requirement, not an implemented feature of this report.
 
+An actual original-merger experiment on TRYB1 illustrates the distinction.
+Replacing every one of 32 normal unit outputs with the same previously computed
+16k output worsened top-pose RMSD from 0.373 to 15.671 Angstrom. A complete replay
+of a selected substituted unit rejected it. A separate one-unit forged-energy
+attack did **not** worsen this target's final top pose; this negative result is
+retained. Thus the test demonstrates possible contamination of unaudited
+aggregates, not a failure of the complete-run verification relation. See
+`provisional_poisoning.json` and `scripts/test_vina_provisional_poisoning.py`.
+
 ## Evidence and reproduction
 
 - `scripts/build_vina_resource_probe.py`: isolated baseline/moves/compact builds.
@@ -168,3 +177,8 @@ engineering requirement, not an implemented feature of this report.
   serial ligand screening against a receptor is a supported scientific workflow.
 - [DUD-E](https://dude.docking.org/): established active/decoy benchmark source.
   Our small subsets are not equivalent to reproducing its full target benchmark.
+- [Webina](https://github.com/durrantlab/webina) and its
+  [2020 paper](https://academic.oup.com/bioinformatics/article/36/16/4513/5860016):
+  browser-side Vina is established prior work. This project's browser port and
+  table-storage optimizations must not be presented as the core novel scientific
+  or security contribution.

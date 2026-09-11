@@ -1,0 +1,19 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "AMD Ryzen 7 7435HS",
+  "logical_processors": 16,
+  "physical_ram_bytes": 25439199232,
+  "node": "v24.4.0",
+  "python": "3.14.4",
+  "compiler": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r1) 14.2.0",
+  "reference_commit": "3b564dd2496bd21e743591e55efaa3daf1c154ae",
+  "scripts_sha256": {
+    "scripts/build_vina_resource_probe.py": "5ae10b8aaf3ddb8e38648d51f6ffe7e1149e9adfb1d77db7770d8fc186ee50fb",
+    "scripts/benchmark_vina_resources.mjs": "bfac94df9e2d5d693933d9ea62a2d566152b543f75b80c5bfb2b71777fe9aa73",
+    "scripts/validate_vina_stock_controls.py": "7633ef42e0ef19dfa1ce1a1dd575fec7362752dac7e2f88d0e5e9c91a1bc1b4b",
+    "scripts/benchmark_vina_validated_multitarget.py": "1f5e187979115d15c8b9d328575e91535fdb762aea26ce26426fd63c641ab57f",
+    "scripts/benchmark_vina_tutorial.py": "80bc87cc33c98b9a7a9962fd12aad4a4c781227498961937295e72e6661b6fb7",
+    "scripts/benchmark_vina_matched_ranking.py": "218e3f56322b9b8c697aa110b19279495de4a3972eecc523bbf1761dc577806d"
+  },
+  "timing_scope": "Local research measurements. Some experiments run concurrently. No phone or participant results, no isolated speedup claim."
+}

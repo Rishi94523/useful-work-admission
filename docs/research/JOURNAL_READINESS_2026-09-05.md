@@ -6,7 +6,19 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: distributing stock-shaped Vina tasks across users, 10 September
+## Latest update: completed validation, compact browser build, and deferred admission, 11 September
+
+The [completed validation report](VINA_VALIDATION_DECISION_2026-09-11.md) covers all 12 successful stock E32 redocking controls across four targets. Many medium runs preserved source-conformer redocking on all four targets at evaluation budgets within 0.7%. The new matched-ranking pilot preserved FA10 AUC (0.938) but reduced TRYB1 from 0.625 to 0.438, so screening equivalence remains unproven.
+
+The architecture is frozen. The [resource and admission investigation](VINA_RESOURCES_AND_ADMISSION_2026-09-10.md) identifies interaction-table duplication, not grid maps, as the main memory problem. An isolated storage-only WASM build reduces FA10 from a 549.5 MiB allocated heap to a maximum observed 51.2 MiB and from 608.5 to 133.1 MiB peak renderer working set. Three-target pool/trace and original-finalizer regressions pass. Cold setup still takes about 3 seconds on this desktop; ordinary-phone performance is not measured. These are individual measurements, not device-population confidence intervals.
+
+Fresh matched-budget E32 comparisons on HS90A and TRYB1 now preserve source-crystal redocking quality with many medium runs: 0.339 and 0.369 Angstrom versus normal E32 at 0.484 and 0.373. The official 1iep stock control also succeeds. Full ranking-panel reanalysis remains inconclusive or poor: FA10 AUC 0.844, TRYB1 AUC 0.734 with wide intervals, and HS90A AUC bounded between 0.219 and 0.344 including its timeout. Strong redocking does not establish virtual-screening enrichment or independently prepared conformer quality.
+
+Deferred low-risk auditing is a reputation-conditioned policy, not per-admission proof of work. At 5% auditing it offers approximately 20:1 client/replay compute but permits consumed access before detection; cheap identity resets defeat per-identity exposure caps. New identities must not inherit trusted deferred eligibility simply because their initial risk score is zero. Higher-risk bundles retain the original whole-run auditing guarantee. Late scientific quarantine/revocation and real trusted-identity integration remain unimplemented; production deployment is not claimed.
+
+**Decision:** closer to a defensible research architecture, not a journal-ready demonstrated system. The missing result is a joint multi-target experiment showing preserved screening/redocking quality at matched compute, acceptable real-device cold/warm costs, and a precisely scoped measured admission-security benefit under identity churn, delayed audits and scientific-output repair. Browser Vina, independent runs, reputation and spot-checking are established ideas; their combination still needs a demonstrated contribution and comparison with simpler admission baselines.
+
+## Previous update: distributing stock-shaped Vina tasks across users, 10 September
 
 The [completed task-decomposition investigation](VINA_TASK_DECOMPOSITION_2026-09-10.md) establishes that a browser need not complete an entire ligand docking job. All 32 separately executed native tasks in the FA10 E32 control, including raw minima and traces, reproduced the same-build monolithic final result exactly. Preserve the normal retained-minima behavior and original merge/refinement; combining independently normalized best scores is not equivalent.
 

@@ -1,0 +1,59 @@
+{
+  "completed_stock_controls": 12,
+  "all_stock_redocking_gates_passed": true,
+  "stock_RMSD_ranges": {
+    "1iep": [
+      0.35779659781138956,
+      0.3801674239993087
+    ],
+    "fa10": [
+      0.5268008696367156,
+      0.5510120801761065
+    ],
+    "hs90a": [
+      0.6718057078433534,
+      0.7084122772407708
+    ],
+    "tryb1": [
+      0.23088458655287633,
+      0.29613549393686445
+    ]
+  },
+  "matched_ranking": [
+    {
+      "target": "fa10",
+      "normal_E8_auc": 0.9375,
+      "medium_auc": 0.9375,
+      "delta": 0.0,
+      "paired_compound_bootstrap95_delta": [
+        0.0,
+        0.0
+      ],
+      "evaluation_ratio_range": [
+        1.0005747375578724,
+        1.0143336431372894
+      ],
+      "scope": "Fixed prior4+4 subset, one parent seed, paired resampling within active/decoy classes. Descriptive pilot interval, not a population or multi-seed noninferiority test."
+    },
+    {
+      "target": "tryb1",
+      "normal_E8_auc": 0.625,
+      "medium_auc": 0.4375,
+      "delta": -0.1875,
+      "paired_compound_bootstrap95_delta": [
+        -0.5,
+        0.0
+      ],
+      "evaluation_ratio_range": [
+        1.0014029617235798,
+        1.0276880525719214
+      ],
+      "scope": "Fixed prior4+4 subset, one parent seed, paired resampling within active/decoy classes. Descriptive pilot interval, not a population or multi-seed noninferiority test."
+    }
+  ],
+  "historical_ranking_archive": {
+    "path": "historical_stock_ranking.jsonl.gz",
+    "uncompressed_sha256": "e7ceace623ce122e362cc889525e87f5376273eb614caab782d3c70ee954792b"
+  },
+  "scope": "New stock controls, new medium-run redocking/ranking, and explicitly labeled historical controls. No new architecture or production deployment."
+}

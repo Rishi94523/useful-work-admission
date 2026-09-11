@@ -1,5 +1,5 @@
 {
-  "scope": "Node same WASM runtime. Original full raw pools and explicit-receptor finalization. Three source-conformer targets, four64k tasks each. Chrome raw task checks are separately recorded. Not proof of all possible chemical inputs.",
+  "scope": "Node same WASM runtime. Original full raw pools and explicit-receptor finalization. Three source-conformer targets, four64k tasks each plus index127 of128; original finalizer uses first four pools. Chrome raw task checks are separately recorded. Not proof of all possible chemical inputs.",
   "results": [
     {
       "target": "fa10",
@@ -23,6 +23,12 @@
             {
               "pool": "3d6eac042fb9161b270671ae0be1b5b06ebcc5fdd3a9ce1d55427c3d65355c1d",
               "trace": "ba2ce0a5270b624b631d24ea155e5f23023895e444303f5ae72a446368f53a08"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "3a56312c0c74dd5ff82ed2dff8b2fe8c7cb25b39f991b99fbcef016b56acc63c",
+              "trace": "6cb2d33295de6f78f260c27cca47b01d9d8d8589afb1a0e3d31d0b4a7afb041d"
             }
           ],
           "final_pose_sha256": "45241af7c03f2d53d32ce1bc6df992d900c0a4212064b39051bac5dc0640c9d7",
@@ -46,6 +52,12 @@
             {
               "pool": "3d6eac042fb9161b270671ae0be1b5b06ebcc5fdd3a9ce1d55427c3d65355c1d",
               "trace": "ba2ce0a5270b624b631d24ea155e5f23023895e444303f5ae72a446368f53a08"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "3a56312c0c74dd5ff82ed2dff8b2fe8c7cb25b39f991b99fbcef016b56acc63c",
+              "trace": "6cb2d33295de6f78f260c27cca47b01d9d8d8589afb1a0e3d31d0b4a7afb041d"
             }
           ],
           "final_pose_sha256": "45241af7c03f2d53d32ce1bc6df992d900c0a4212064b39051bac5dc0640c9d7",
@@ -69,6 +81,12 @@
             {
               "pool": "3d6eac042fb9161b270671ae0be1b5b06ebcc5fdd3a9ce1d55427c3d65355c1d",
               "trace": "ba2ce0a5270b624b631d24ea155e5f23023895e444303f5ae72a446368f53a08"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "3a56312c0c74dd5ff82ed2dff8b2fe8c7cb25b39f991b99fbcef016b56acc63c",
+              "trace": "6cb2d33295de6f78f260c27cca47b01d9d8d8589afb1a0e3d31d0b4a7afb041d"
             }
           ],
           "final_pose_sha256": "45241af7c03f2d53d32ce1bc6df992d900c0a4212064b39051bac5dc0640c9d7",
@@ -98,6 +116,12 @@
             {
               "pool": "40da148d169fbcf1ea6214b11a2ee0a60b5e0a2bab4c70cb8d4182f60f0d2fa8",
               "trace": "b9ed19bfa3a331de5f0b723dee93db2823b3e534ed2aab69276eb9e6acf56935"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "5567c3f2ac524c0a5ff56bb319ed5a46cde2170105ea80f40ad884b5e5bffc2f",
+              "trace": "721487744f1de116d38c2a7eed40a8811b25131d8697b9479cc169fbf289bd9f"
             }
           ],
           "final_pose_sha256": "7d024def6f85916f96c697e8007f07ee18a14aa35bea532753961e70e1d78411",
@@ -121,6 +145,12 @@
             {
               "pool": "40da148d169fbcf1ea6214b11a2ee0a60b5e0a2bab4c70cb8d4182f60f0d2fa8",
               "trace": "b9ed19bfa3a331de5f0b723dee93db2823b3e534ed2aab69276eb9e6acf56935"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "5567c3f2ac524c0a5ff56bb319ed5a46cde2170105ea80f40ad884b5e5bffc2f",
+              "trace": "721487744f1de116d38c2a7eed40a8811b25131d8697b9479cc169fbf289bd9f"
             }
           ],
           "final_pose_sha256": "7d024def6f85916f96c697e8007f07ee18a14aa35bea532753961e70e1d78411",
@@ -144,6 +174,12 @@
             {
               "pool": "40da148d169fbcf1ea6214b11a2ee0a60b5e0a2bab4c70cb8d4182f60f0d2fa8",
               "trace": "b9ed19bfa3a331de5f0b723dee93db2823b3e534ed2aab69276eb9e6acf56935"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "5567c3f2ac524c0a5ff56bb319ed5a46cde2170105ea80f40ad884b5e5bffc2f",
+              "trace": "721487744f1de116d38c2a7eed40a8811b25131d8697b9479cc169fbf289bd9f"
             }
           ],
           "final_pose_sha256": "7d024def6f85916f96c697e8007f07ee18a14aa35bea532753961e70e1d78411",
@@ -173,6 +209,12 @@
             {
               "pool": "e6932e393b151462d2755cfca0781ec5558ba63a5a84d081f402fb6caec6db30",
               "trace": "78b16f77bdcaac5c15e54c25b90e2e68c9610eab4925078e18a4ed7398b12067"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "a5d17842f872607dedd305c67f034c2deb3a9af11ed739e38c55b035923e3737",
+              "trace": "06ef495a9c8563ff6efd7bf4e455a32249ea0eecfdca70f25c083337d4ff4997"
             }
           ],
           "final_pose_sha256": "0c3abead5fab22c5b93c56b61811752626a974dea427cb6b06b7bbd36e76da35",
@@ -196,6 +238,12 @@
             {
               "pool": "e6932e393b151462d2755cfca0781ec5558ba63a5a84d081f402fb6caec6db30",
               "trace": "78b16f77bdcaac5c15e54c25b90e2e68c9610eab4925078e18a4ed7398b12067"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "a5d17842f872607dedd305c67f034c2deb3a9af11ed739e38c55b035923e3737",
+              "trace": "06ef495a9c8563ff6efd7bf4e455a32249ea0eecfdca70f25c083337d4ff4997"
             }
           ],
           "final_pose_sha256": "0c3abead5fab22c5b93c56b61811752626a974dea427cb6b06b7bbd36e76da35",
@@ -219,6 +267,12 @@
             {
               "pool": "e6932e393b151462d2755cfca0781ec5558ba63a5a84d081f402fb6caec6db30",
               "trace": "78b16f77bdcaac5c15e54c25b90e2e68c9610eab4925078e18a4ed7398b12067"
+            },
+            {
+              "index": 127,
+              "n": 128,
+              "pool": "a5d17842f872607dedd305c67f034c2deb3a9af11ed739e38c55b035923e3737",
+              "trace": "06ef495a9c8563ff6efd7bf4e455a32249ea0eecfdca70f25c083337d4ff4997"
             }
           ],
           "final_pose_sha256": "0c3abead5fab22c5b93c56b61811752626a974dea427cb6b06b7bbd36e76da35",

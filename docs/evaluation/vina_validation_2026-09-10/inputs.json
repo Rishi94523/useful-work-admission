@@ -1,0 +1,108 @@
+[
+  {
+    "target": "1iep",
+    "receptor": "F:\\Projects\\antigravity\\Capstone\\tmp\\vina-validation\\1iep\\1iep_receptor.pdbqt",
+    "ligand": "F:\\Projects\\antigravity\\Capstone\\tmp\\vina-validation\\1iep\\1iep_ligand.pdbqt",
+    "sdf": "F:\\Projects\\antigravity\\Capstone\\tmp\\vina-validation\\1iep\\1iep_ligand.sdf",
+    "center": [
+      15.19,
+      53.903,
+      16.917
+    ],
+    "size": [
+      20.0,
+      20.0,
+      20.0
+    ],
+    "sources": [
+      {
+        "name": "1iep_receptor.pdbqt",
+        "url": "https://raw.githubusercontent.com/ccsb-scripps/AutoDock-Vina/v1.2.7/example/basic_docking/solution/1iep_receptor.pdbqt",
+        "sha256": "f13cf3b36f61d87c3b58983e0b8ecf1c3456a685eb86dfe9ccfb139c7bdc2586"
+      },
+      {
+        "name": "1iep_ligand.pdbqt",
+        "url": "https://raw.githubusercontent.com/ccsb-scripps/AutoDock-Vina/v1.2.7/example/basic_docking/solution/1iep_ligand.pdbqt",
+        "sha256": "15fb35648d8c18c70317842f3a0631b73a19429c710a037ab07310084d579bb8"
+      },
+      {
+        "name": "1iep_ligand.sdf",
+        "url": "https://raw.githubusercontent.com/ccsb-scripps/AutoDock-Vina/v1.2.7/example/basic_docking/solution/1iep_ligand.sdf",
+        "sha256": "051b8742c32adc05c07fb486a4e7c9327f84e131cee33ac4e6a568d07553eb38"
+      },
+      {
+        "name": "1iep_receptor.box.txt",
+        "url": "https://raw.githubusercontent.com/ccsb-scripps/AutoDock-Vina/v1.2.7/example/basic_docking/solution/1iep_receptor.box.txt",
+        "sha256": "3dff08200b5b9c2ca0932c832c9dffc5823b39caec6c92f76be5f7c5ea49d8de"
+      }
+    ],
+    "hashes": {
+      "receptor": "f13cf3b36f61d87c3b58983e0b8ecf1c3456a685eb86dfe9ccfb139c7bdc2586",
+      "ligand": "15fb35648d8c18c70317842f3a0631b73a19429c710a037ab07310084d579bb8",
+      "sdf": "051b8742c32adc05c07fb486a4e7c9327f84e131cee33ac4e6a568d07553eb38"
+    }
+  },
+  {
+    "target": "fa10",
+    "receptor": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\fa10\\receptor.pdbqt",
+    "ligand": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\fa10\\ligands\\crystal_source.pdbqt",
+    "sdf": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\fa10\\ligands\\crystal_source.sdf",
+    "center": [
+      2.1616875000000007,
+      -8.645875000000002,
+      -13.3505625
+    ],
+    "size": [
+      30,
+      30,
+      30
+    ],
+    "hashes": {
+      "receptor": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+      "ligand": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+      "sdf": "3a544588de4cdbdcf587e296dbc5e35990f0db362af1da0f29742860ed036c1c"
+    }
+  },
+  {
+    "target": "hs90a",
+    "receptor": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\hs90a\\receptor.pdbqt",
+    "ligand": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\hs90a\\ligands\\crystal_source.pdbqt",
+    "sdf": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\hs90a\\ligands\\crystal_source.sdf",
+    "center": [
+      2.6995909090909085,
+      11.453863636363634,
+      24.8025
+    ],
+    "size": [
+      30,
+      30,
+      30
+    ],
+    "hashes": {
+      "receptor": "0e35da4b26866de32e1fab423efa17419805294f24ecedd61871194d871786f5",
+      "ligand": "75ab7bb256d6e3e275cbaa560326d42e6aa827bc8628610515b50d5670334c88",
+      "sdf": "f71cc6b51ae25871cc88ebebc735309714690b40bceda702e72e511ca0811993"
+    }
+  },
+  {
+    "target": "tryb1",
+    "receptor": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\tryb1\\receptor.pdbqt",
+    "ligand": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\tryb1\\ligands\\crystal_source.pdbqt",
+    "sdf": "F:\\Projects\\antigravity\\Capstone\\tmp\\adaptive-docking\\tryb1\\ligands\\crystal_source.sdf",
+    "center": [
+      25.381076923076918,
+      76.91234615384616,
+      83.61373076923077
+    ],
+    "size": [
+      30,
+      30,
+      30
+    ],
+    "hashes": {
+      "receptor": "2184abb1b37d25c3a9d2741a6a0cd545679116463e92e4cb56db3ec6482aedde",
+      "ligand": "89e24190fc72e1e61544badb60f9a766b3924cf2094b5a3509b84328190b3111",
+      "sdf": "aab87e2b7c9d6d4777366b1c2927d4c17bbe5f39b4e0195b87fb649021d4c22b"
+    }
+  }
+]

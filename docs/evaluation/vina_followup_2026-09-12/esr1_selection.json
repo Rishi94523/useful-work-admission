@@ -1,0 +1,603 @@
+{
+  "sources": [
+    {
+      "url": "https://dude.docking.org/targets/esr1/actives_final.sdf.gz",
+      "sha256": "acd28d86dc485afc05b748b7cd229523f73514366499b6d140c77b81fecb735d",
+      "bytes": 474366
+    },
+    {
+      "url": "https://dude.docking.org/targets/esr1/decoys_final.sdf.gz",
+      "sha256": "de7c74313a3247dc264f69c8b8c1ddec6fbfdec1553cc72f6bd0aeb4dc276331",
+      "bytes": 14939459
+    },
+    {
+      "url": "https://dude.docking.org/targets/esr1/crystal_ligand.mol2",
+      "sha256": "a8c29180f6491837370861abff88e417c8707346574fe8a245e40ac04cf8d4fa",
+      "bytes": 6314
+    },
+    {
+      "url": "https://dude.docking.org/targets/esr1/receptor.pdb",
+      "sha256": "900a04e0aa62ec66fade6fcdaaa600315ed983d7cbaf6e950445c9d52dc1e275",
+      "bytes": 114581
+    }
+  ],
+  "excluded_previous_smiles": [],
+  "selected": [
+    {
+      "id": "active_00580",
+      "label": "active",
+      "smiles": "C[C@]12CC[C@H]3c4ccc(O)cc4[C@H](O)[C@@H](Sc4ccc(Br)cc4)[C@@H]3[C@H]1CC[C@@H]2O",
+      "selection_hash": "00018686f8950d0f87b8359f9adf0b9d20e0fb1dd1fc9cb3351c1b063bce6831"
+    },
+    {
+      "id": "active_00385",
+      "label": "active",
+      "smiles": "Oc1cccc([C@H]2Sc3cc(O)ccc3O[C@H]2c2ccc(OCC[NH+]3CCOCC3)cc2)c1",
+      "selection_hash": "007d5dd473422c60bfad47d1b9fe29fc61ef6a885cee8526d4e3ba5e8e21a304"
+    },
+    {
+      "id": "active_00103",
+      "label": "active",
+      "smiles": "CCCC[C@]12CCC(=O)C(c3ccccc3)=C1c1ccc(O)cc1C2",
+      "selection_hash": "0091c53927ef2479c8a6139dde6c2fd508496eae4862df20ead06209de3e4266"
+    },
+    {
+      "id": "active_00315",
+      "label": "active",
+      "smiles": "Oc1cccc([C@@H]2CCc3cc(O)ccc3N2Cc2ccc(OCC[NH+]3CCCCC3)cc2)c1",
+      "selection_hash": "00ce0d25b31e7ff5b89432dcfda87147df31078752f3d6af33ccbab2678c36fc"
+    },
+    {
+      "id": "active_00535",
+      "label": "active",
+      "smiles": "O=C(c1ccccc1)N1Cc2cc(O)ccc2[C@@H](c2ccc(O)cc2)C1",
+      "selection_hash": "00ce9fb9e2f9b8f69889543ca0d2fe280e09be55e5c6e0086282490f6744dc2e"
+    },
+    {
+      "id": "active_00083",
+      "label": "active",
+      "smiles": "CCCC[C@@]12CCC(=O)C(c3ccco3)=C1c1ccc3n[nH]nc3c1C2",
+      "selection_hash": "00ed00ae34996df4ec4966638348696cbf5b920733329d045336de4a954cedea"
+    },
+    {
+      "id": "active_00349",
+      "label": "active",
+      "smiles": "Oc1ccc2c(c1)OC[C@H](c1ccccc1)[C@@H]2c1ccc(SCC[NH+]2CCCC2)cc1",
+      "selection_hash": "00f5b9c3642ed8f2105e15ba1e16401cae0818db045f3c8e8ca811c32edccd04"
+    },
+    {
+      "id": "active_00589",
+      "label": "active",
+      "smiles": "Oc1ccc([C@H]2Sc3cc(O)ccc3O[C@H]2c2ccc(OCCN3CCSCC3)cc2)cc1",
+      "selection_hash": "00fd3d2a3c7231c3efe3b391843e060636266eb5355d146f74fa13463104a380"
+    },
+    {
+      "id": "active_00442",
+      "label": "active",
+      "smiles": "Oc1ccc2c(c1)sc1c3cc(O)ccc3n(Cc3ccc(OCC[NH+]4CCOCC4)cc3)c21",
+      "selection_hash": "01b7fda0a3bb77f4e2db0a171b4b89ca14544fe990370f684fbee9d8fb1d5e3a"
+    },
+    {
+      "id": "active_00350",
+      "label": "active",
+      "smiles": "CC[C@H](c1ccccc1)[C@H](c1ccc(O)cc1)c1ccc(OCC[N@H+](C)CCO/N=C/c2ccc(O)c(C(N)=O)c2)cc1",
+      "selection_hash": "01b8e091488aa96160387e38e8d9f9b861e433f98a91dfbf7ff6989c53767bd6"
+    },
+    {
+      "id": "active_00259",
+      "label": "active",
+      "smiles": "C[C@]12CC[C@@H]3c4cc(Cl)c(O)cc4CC[C@H]3[C@@H]1CCCC2=O",
+      "selection_hash": "029e07d7ee3bbb62a1a3247324e654212f4ba21f9c45898b29643f6d4b8850fc"
+    },
+    {
+      "id": "active_00375",
+      "label": "active",
+      "smiles": "C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21C",
+      "selection_hash": "02c6bb18051c36da5ab121b8d9a6d466fe6dd683ab083befe969e10fe2926094"
+    },
+    {
+      "id": "active_00415",
+      "label": "active",
+      "smiles": "C[C@@]1(c2ccc(OCC[NH+]3CCCCCC3)cc2)c2ccc(O)cc2CCN1c1ccccc1",
+      "selection_hash": "02caf3c26792d7e7fdbfb892f626da65901531f5dbdae9ce61bb63261ed57b74"
+    },
+    {
+      "id": "active_00194",
+      "label": "active",
+      "smiles": "Oc1ccc([C@H]2Sc3cc(O)ccc3O[C@H]2c2ccc(OCC[N@H+]3C[C@H]4CC[C@H]4C3)cc2)cc1",
+      "selection_hash": "036eb0cd9c174bbfb29fb4062d18df3a44d5a82439c77e83d565f6ba0ccb03c6"
+    },
+    {
+      "id": "active_00611",
+      "label": "active",
+      "smiles": "O=S1(=O)CCC(c2ccc3cc(O)ccc3c2Oc2ccc(OCC[NH+]3CCCCC3)cc2)CC1",
+      "selection_hash": "038508127433c9d4b01166341a914e52ee9c33a5804774d1abaabd263bc4bee3"
+    },
+    {
+      "id": "active_00000",
+      "label": "active",
+      "smiles": "Oc1ccc2c(c1)sc1cc3ccc(O)cc3c(-c3ccc([C@@H](O)CC[NH+]4CCCCC4)cc3)c12",
+      "selection_hash": "04fd6b64283918f3bb580f761da7a1b4289451e9f6654509904a3d8adab7549e"
+    },
+    {
+      "id": "active_00084",
+      "label": "active",
+      "smiles": "CCCC[C@@]12CCC(=O)C(c3ccco3)=C1c1ccc3[nH]nnc3c1C2",
+      "selection_hash": "0530b7aef7193456f67d82600ab1ca6340726f992b60628d90a6e0ee039f9528"
+    },
+    {
+      "id": "active_00395",
+      "label": "active",
+      "smiles": "C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1CC[C@@]2(O)C#CCCCCC#Cc1cccc2c(=O)cc(-c3ccccc3)oc12",
+      "selection_hash": "0581bb27f1b2d37d1831aa4e3106f1a62c3d6cf71d6988d1f0a6044b6ca41509"
+    },
+    {
+      "id": "active_00334",
+      "label": "active",
+      "smiles": "C[C@]1(c2ccc(OCC[NH+]3CCCCC3)cc2)c2ccc(O)cc2CCN1c1cccc(O)c1",
+      "selection_hash": "05b7820090a080071b25f05f88248421660cfa41825ff4fb30e8f6094621650e"
+    },
+    {
+      "id": "active_00027",
+      "label": "active",
+      "smiles": "COc1ccccc1Cc1c(C(=O)c2ccccc2Cl)oc2cc(O)ccc12",
+      "selection_hash": "065cbd5f00d24d02ed99b70aadeaa8980ed93468472f6ba1aa415d307abd3ce8"
+    },
+    {
+      "id": "active_00462",
+      "label": "active",
+      "smiles": "CN(CCCc1ccc(Cl)cc1)c1nc(N2CCN(Cc3cccnc3)CC2)nc(NCCc2ccc(O)cc2)[nH+]1",
+      "selection_hash": "06d11e1dcd13e129c16e647c70a89a9a65818d4dd20bde26872bc82530d10f1e"
+    },
+    {
+      "id": "active_00379",
+      "label": "active",
+      "smiles": "C[C@]1(c2ccc(OCC[NH+]3CCCC3)cc2)c2ccc(O)cc2CCN1c1cccc(O)c1",
+      "selection_hash": "0710c7b9e71d279e643f87cd920ae36b9069df4f1d62e88e6ea59273c4354d05"
+    },
+    {
+      "id": "active_00397",
+      "label": "active",
+      "smiles": "CCCC[C@@]12CCC(=O)C(CC)=C1c1ccc3n[nH]nc3c1C2",
+      "selection_hash": "0715eedf0b67b43fc8b86a9aec2b4acd9508c82e1d0f3c1f549ffd9884b4adc4"
+    },
+    {
+      "id": "active_00563",
+      "label": "active",
+      "smiles": "CC(C)[NH+]1CCN(c2ccc([C@@H]3c4ccc(O)cc4CCN3c3cccc(O)c3)cc2)CC1",
+      "selection_hash": "0793ac157f2e84e47bdbf7e7d793161241332aea40b74d1a87f4c10b50bc549c"
+    },
+    {
+      "id": "active_00212",
+      "label": "active",
+      "smiles": "O=C1CC[C@@]2(CCC3CC3)Cc3c(ccc4[nH]ncc34)C2=C1Br",
+      "selection_hash": "08031d74c32792c4f4cb8c503f536828ae42d5ca54cb3f5df9d4a3d0986d977b"
+    },
+    {
+      "id": "active_00549",
+      "label": "active",
+      "smiles": "O=C1CC[C@@]2(Cc3ccccc3)Cc3cc(O)ccc3C2=C1c1ccc(O)cc1",
+      "selection_hash": "0820d31aaf51a6102732100a806c86fe5a44ac786ee0b8667425ea08b72944cf"
+    },
+    {
+      "id": "active_00092",
+      "label": "active",
+      "smiles": "C#CCN1C=N[C@@H](c2ccc(O)cc2Cl)[C@@H]1c1ccc(O)cc1Cl",
+      "selection_hash": "0859aa8652a28aa899c96167e889199aae2e8e275ec53c33735f7400a0aa8721"
+    },
+    {
+      "id": "active_00575",
+      "label": "active",
+      "smiles": "C[C@]12CC[C@H]3c4ccc(O)cc4[C@@H](O)[C@@H](Sc4ccc(Br)cc4)[C@@H]3[C@@H]1CC[C@@H]2O",
+      "selection_hash": "08af55e47a3b78de93fda3ed440c58e0d738b2db5a70bb5a27fd99ff18114d67"
+    },
+    {
+      "id": "active_00621",
+      "label": "active",
+      "smiles": "CCCC[C@@H]1C(c2ccc(O)cc2)=c2ccc3n2[C@H]1C=CC=3",
+      "selection_hash": "08ce271da13e37add42d684a7cae7f64bf87d25397dd414fcd03f17c113772af"
+    },
+    {
+      "id": "active_00516",
+      "label": "active",
+      "smiles": "C[C@@]12CC[C@@H]3c4ccc(O)cc4CC[C@@H]3[C@@H]1CCC2=O",
+      "selection_hash": "08d905a1a54ee4884f80c6dc2ade7e26724940c11ea595e8f4100b40067271ef"
+    },
+    {
+      "id": "active_00109",
+      "label": "active",
+      "smiles": "O=S(=O)(c1cccc2ccccc12)N1CCc2cc(O)ccc2[C@@H]1c1ccc(OCC[NH+]2CCCC2)cc1",
+      "selection_hash": "095676fac86110c57677deae7b5699f6aab5e055ac3246c2ba0ca7a4c7f027aa"
+    },
+    {
+      "id": "active_00384",
+      "label": "active",
+      "smiles": "Oc1cccc([C@H]2Sc3cc(O)ccc3O[C@H]2c2ccc(OCCN3CCOCC3)cc2)c1",
+      "selection_hash": "09ba66e0539c47c373917ac26a38d03ce5972c6c14045f571723f6dd77e743cd"
+    },
+    {
+      "id": "decoy_01178",
+      "label": "decoy",
+      "smiles": "Cc1ccc(CNC(=O)Nc2ccc3c(c2)N(C)C(=O)CS3)cc1",
+      "selection_hash": "00047e2d417fb7decfdf5a4817f4a13aa510f21bac07b7ace5857fac44e3f83e"
+    },
+    {
+      "id": "decoy_00859",
+      "label": "decoy",
+      "smiles": "C[C@@H]1CC(C)(C)Cc2c1sc1[nH]c(=S)n(-c3ccccc3)c(=O)c21",
+      "selection_hash": "0011361e2c2d2b5b28fcb61ef7c67927fe04ba88968f9bfc39d016e976c1d460"
+    },
+    {
+      "id": "decoy_00664",
+      "label": "decoy",
+      "smiles": "O=C1N[C@H]2CCCC[C@H]2[NH2+][C@@H]1CC(=O)N1CCN(C(c2ccccc2)c2ccccc2)CC1",
+      "selection_hash": "001ddba49a21535de3d7d32ce5f2044eef6d501e9b792d0f034f58b93a5850cd"
+    },
+    {
+      "id": "decoy_01374",
+      "label": "decoy",
+      "smiles": "CC(C)n1ncc2cc(C(=O)Nc3cccc4c3CCCC4)cnc21",
+      "selection_hash": "00218e3db29d4ac8c1101031dbcab19c0eca789a79210f834c754433a8626776"
+    },
+    {
+      "id": "decoy_01461",
+      "label": "decoy",
+      "smiles": "Cc1csc2ncnc(N/N=C/c3ccccc3Cl)c12",
+      "selection_hash": "00261bc146602a41646067d30471721e5fc43feb20988a01af14d7eaaab7fe78"
+    },
+    {
+      "id": "decoy_01689",
+      "label": "decoy",
+      "smiles": "COCCC[N@@H+](Cc1nc2scc(-c3ccccc3)c2c(=O)[nH]1)C[C@@H](O)COc1ccccc1C",
+      "selection_hash": "0059cb33f2b2554c76e550f1dc214a00def1f391f25094e67eda7620e48c08c2"
+    },
+    {
+      "id": "decoy_01131",
+      "label": "decoy",
+      "smiles": "C=CCS[C@]1(Br)NC(C)(C)C[C@@]2(C)OCCN21",
+      "selection_hash": "009d487e5da1ff881ae7388292258979e3ccb6f76edb56958a59894c3fe4da69"
+    },
+    {
+      "id": "decoy_01183",
+      "label": "decoy",
+      "smiles": "Cc1cc2cc(NC(=O)/C=C/c3c(C)nn(C)c3Cl)ccc2[nH]1",
+      "selection_hash": "009eb90df91f9730a239241de154021f0d2889e57650247efe1d048b8194e39e"
+    },
+    {
+      "id": "decoy_01723",
+      "label": "decoy",
+      "smiles": "CCOC(=O)C1=C(C[N@H+](C)Cc2ccccc2N2CCCCC2)NC(=O)N[C@H]1c1ccco1",
+      "selection_hash": "00d2e1f695bd0aa73aa56f051fb439932ab5c50e9fa0751c42c2731bf6062e45"
+    },
+    {
+      "id": "decoy_01819",
+      "label": "decoy",
+      "smiles": "COc1ccc(CC[NH2+][C@@H]2CCc3c(sc4ncn(Cc5ccccc5)c(=O)c34)C2)cc1OC",
+      "selection_hash": "01800e17bc3a59e55a84071f770c714f7df3b1f05f4676ef17d23d0c22636b12"
+    },
+    {
+      "id": "decoy_00171",
+      "label": "decoy",
+      "smiles": "CC[C@@H](NC(=O)[C@H]1CCC[N@@H+](Cc2nc(-c3ccc(Cl)cc3)no2)C1)c1ccc(C)cc1",
+      "selection_hash": "0186c2b7e12283dcdb007c1849364d6ad1226ff8102f6b2a21aa05eb26a8441b"
+    },
+    {
+      "id": "decoy_01847",
+      "label": "decoy",
+      "smiles": "O=C(NCCSCc1c(F)cccc1Cl)[C@@H]1CCC[N@H+](Cc2nc(-c3ccccc3)no2)C1",
+      "selection_hash": "01de901bbc1c2dc0cbe965f6e91c2985fcc54ec1e3b792111f8eb19d46e95d63"
+    },
+    {
+      "id": "decoy_01658",
+      "label": "decoy",
+      "smiles": "COc1ccc(-c2cs/c(=N\\C(=S)NC(=O)c3ccccc3C)[nH]2)cc1Br",
+      "selection_hash": "022d34553063a6769d403eafe013f6c6dc99700ec6e5816a54fb5a0f062e04e1"
+    },
+    {
+      "id": "decoy_01988",
+      "label": "decoy",
+      "smiles": "CCNC(=O)N1CCN(CC2=C(C(=O)OCC)[C@H](c3cccc(Oc4ccccc4)c3)NC(=O)N2CC)CC1",
+      "selection_hash": "0234345a70bd82c65d20935ae4cfe48c1aecc9e48f2caddf7cc22638f5cf156f"
+    },
+    {
+      "id": "decoy_00728",
+      "label": "decoy",
+      "smiles": "Cc1ccc(CNC(=O)N[C@H](C)c2ccc(Cl)s2)s1",
+      "selection_hash": "02365deaeb735f892ac185f623448bcdb9beb8c32ea8bb9434dccd1f8efb307e"
+    },
+    {
+      "id": "decoy_00041",
+      "label": "decoy",
+      "smiles": "CC[C@H]1CO[C@@H](C)CN1[C@@H]1CCCC[C@@H]1N",
+      "selection_hash": "02b6cd00ca62340e110c955434d71e789465de375366081d8db3ca30d808dec9"
+    },
+    {
+      "id": "decoy_00787",
+      "label": "decoy",
+      "smiles": "CC[C@H](Oc1ccccc1Cl)C(=O)NCc1ccc(C[N@@H+]2CCC[C@H](C)C2)cc1",
+      "selection_hash": "02e3464ea34642e85a8c0e33ad4032059a923409c67f07ebfd7918b129852380"
+    },
+    {
+      "id": "decoy_01153",
+      "label": "decoy",
+      "smiles": "Brc1ccc(CNc2ncc(Br)cn2)cc1",
+      "selection_hash": "02f0c8e071107fec0790d62af4f199fed01bbb1992f3e4253ded5dcc2cedde0c"
+    },
+    {
+      "id": "decoy_00803",
+      "label": "decoy",
+      "smiles": "Cc1c(NC(=O)C[NH2+][C@H](c2ccccc2)c2cccs2)c(=O)n(-c2ccccc2)n1C",
+      "selection_hash": "03216b93bf4cbad4ac1b58a103e94001893d836f52570fba38cb95129650c406"
+    },
+    {
+      "id": "decoy_01134",
+      "label": "decoy",
+      "smiles": "O=C1COc2ccc([C@@H](Br)c3c(F)cccc3F)cc2N1",
+      "selection_hash": "03257381e4a06f250cc0b7114a3db95ffe2369a338239c935f8bdfd4b09ea17a"
+    },
+    {
+      "id": "decoy_00459",
+      "label": "decoy",
+      "smiles": "O=C(C[N@H+]1CC[C@H](n2c(=O)[nH]c3ccccc32)CC1)N[C@H]1CCc2ccccc2[C@H]1Cc1cccnc1",
+      "selection_hash": "033232307cafd8a58905cb53de5fe0671d01daa137ee97d47fdfa43c8a952117"
+    },
+    {
+      "id": "decoy_01715",
+      "label": "decoy",
+      "smiles": "CCCCc1cc(C[C@H]2C[NH2+]CC[C@H]2CC(=O)N2CCC(n3c(=O)[nH]c4ccccc43)CC2)no1",
+      "selection_hash": "036da96ff4a04e8fb7dc95f1b3b41331503a05dff985e3c4ba1715deb28cd9c0"
+    },
+    {
+      "id": "decoy_00615",
+      "label": "decoy",
+      "smiles": "CCOc1ccccc1NC(=O)N[C@@H](CC)c1c(-n2cccc2)sc2c1CC[N@@H+](CC)C2",
+      "selection_hash": "037524d83072eefc5f251bf52667f1e49303d1362c4e1e26029e4a9607b23505"
+    },
+    {
+      "id": "decoy_00930",
+      "label": "decoy",
+      "smiles": "Cc1ncc(CNc2c(Cl)cc(Cl)c3nsnc23)s1",
+      "selection_hash": "037bc1378c747482f8c6895caff8b895d10a941e87baac0c3ac53579ce7e740f"
+    },
+    {
+      "id": "decoy_00173",
+      "label": "decoy",
+      "smiles": "CC(C)C[C@@H](NC(=O)[C@@H]1CCC[N@H+](Cc2nc(-c3ccccc3Cl)no2)C1)c1ccccc1",
+      "selection_hash": "0398018c3eb7f776992bdbc496f874c9bd9c7acf3838afd995396bbb7e0faff0"
+    },
+    {
+      "id": "decoy_00355",
+      "label": "decoy",
+      "smiles": "C[N@@H+](CC(=O)Nc1cccc(I)c1)Cc1ccccc1N1CCOCC1",
+      "selection_hash": "03ba6009d476ae31dde26ad1ec8eca9c13f1a19c90e8a91419d64ee04ed7394d"
+    },
+    {
+      "id": "decoy_00505",
+      "label": "decoy",
+      "smiles": "O=C1CCCc2cc(S(=O)(=O)NC[C@H]3CC[N@H+](Cc4ccccc4Cl)CC3)ccc2N1",
+      "selection_hash": "03d0178c14d19794fce662168eb3b7e9430532e73fd8475c2664b45ef9a0af81"
+    },
+    {
+      "id": "decoy_01064",
+      "label": "decoy",
+      "smiles": "O=C(NC(=S)N1CCCCC1)c1cc(Cl)cc(Cl)c1",
+      "selection_hash": "03d5777070615bc54618be3b9cbeaf92891fad1a04892668f45e7c64fc0a5b43"
+    },
+    {
+      "id": "decoy_00156",
+      "label": "decoy",
+      "smiles": "CC[C@]1([C@H]2CC[N@H+](Cc3cccc(F)c3F)CC2)NC(=O)N(CCc2ccc(OC)cc2)C1=O",
+      "selection_hash": "03dcea0448ebcc35c12e76756e53d124d570df3e845c73f9fcd468642d0022fa"
+    },
+    {
+      "id": "decoy_01404",
+      "label": "decoy",
+      "smiles": "Cc1nc2nc(C(c3ccccc3)c3ccccc3)nn2c([O-])c1C",
+      "selection_hash": "04176f5fc020f0cde3c3459cb9060748db101527c14561504dd26e3eeb11cd9a"
+    },
+    {
+      "id": "decoy_01697",
+      "label": "decoy",
+      "smiles": "CC(C)[C@H](NC(=O)OCc1ccccc1)C(=O)NC[C@H](C)[N@@H+]1CCc2sccc2C1",
+      "selection_hash": "042074da4c4023b71e07db266dc61931c071ccb92829fb718a7950a46c8d4bb1"
+    },
+    {
+      "id": "decoy_00469",
+      "label": "decoy",
+      "smiles": "Cc1onc(-c2c(Cl)cccc2Cl)c1C(=O)N1C[C@H](C(=O)N[C@@H]2CCCC[C@@H]2C)C2(CC[NH2+]CC2)C1",
+      "selection_hash": "043609bb340a5b56b0629f59e0a17fe629d2fb14a4d9b21a662f0b951fee89e3"
+    },
+    {
+      "id": "decoy_01459",
+      "label": "decoy",
+      "smiles": "Clc1ccc2nc(CSc3nc4ccccc4[nH]3)cn2c1",
+      "selection_hash": "043d5d7554ebcc02ee55969a191d1315ca40a902ce9eac04a3d01322e7e24bb1"
+    },
+    {
+      "id": "decoy_00854",
+      "label": "decoy",
+      "smiles": "O=C(Nc1ccccc1C1=NCCc2ccccc21)C1CCCCC1",
+      "selection_hash": "04588f33cb09eae69f370e816c23865f020615a52960b48a07e2c1d3660777a5"
+    },
+    {
+      "id": "decoy_01757",
+      "label": "decoy",
+      "smiles": "CC[C@@]1(C)NC(=O)N(CC(=O)NC[C@@H](C2=c3ccccc3=[NH+]C2)c2ccc(OC)cc2)C1=O",
+      "selection_hash": "049322376d1ab0c6988414421492899f1f05351c7536921e87e77510c4490fa3"
+    },
+    {
+      "id": "decoy_00831",
+      "label": "decoy",
+      "smiles": "Cc1ccsc1C(=O)N1C[C@@H](C(=O)NC[C@H](C)Oc2ccccc2Cl)C2(CC[NH2+]CC2)C1",
+      "selection_hash": "0495554b0be34dfdd1a55fc648703bad3d437696a834555426b791d0ff043241"
+    },
+    {
+      "id": "decoy_01556",
+      "label": "decoy",
+      "smiles": "CC(C)(C)[NH2+]C[C@H](Cc1cccc(Cl)c1)Cc1cscn1",
+      "selection_hash": "049d5d3ba96d0b3f211af2aba6d4ec90e70946a88713455a3890736c6e84f397"
+    },
+    {
+      "id": "decoy_00530",
+      "label": "decoy",
+      "smiles": "C[C@H](Cc1ccccc1F)NC(=O)[C@H]1CN(C(=O)c2ccc(Cl)c(Cl)c2)CC12CC[NH2+]CC2",
+      "selection_hash": "04a446c42dd2abf82f5cf0988c925cee17624c350787f3b2d3322b60befba4b2"
+    },
+    {
+      "id": "decoy_01978",
+      "label": "decoy",
+      "smiles": "COc1ccc(NC(=O)N(CCC(C)C)CC(=O)Nc2cc(C(C)(C)C)nn2-c2ccccc2C)c(OC)c1",
+      "selection_hash": "04b34e9348c556838270a27ecd30f0e413b7d6c10d68c5905a6b68aecb8b7eb3"
+    },
+    {
+      "id": "decoy_00467",
+      "label": "decoy",
+      "smiles": "O=C(NCc1ccc(Cl)c(Cl)c1)[C@H]1CN(C(=O)COc2cccc(Cl)c2)CC12CC[NH2+]CC2",
+      "selection_hash": "04c680bbd90cc7f7eaa4256f25de9668e5965194541a6a56fa180ecf2396115b"
+    },
+    {
+      "id": "decoy_01219",
+      "label": "decoy",
+      "smiles": "Cc1ccc(CN(C)C(=O)c2ccc3c(c2)NC(=O)CCS3)cc1",
+      "selection_hash": "04e2a2f534a9648906d1731b35e3deecaba61f2c7bf4190ca9d20f088213ce54"
+    },
+    {
+      "id": "decoy_00003",
+      "label": "decoy",
+      "smiles": "NC(=S)c1cccnc1N1CCCCC1",
+      "selection_hash": "052f283ba8d9cab3df312e91d397a461e622e02893ea5d41231c144401381c75"
+    },
+    {
+      "id": "decoy_00562",
+      "label": "decoy",
+      "smiles": "Cc1ccc(NC(=O)c2c(C(=O)Nc3cc(Cl)cc(Cl)c3)sc3nc(C)cc(=O)n23)cc1",
+      "selection_hash": "05711a54056b480a601160d4f8588bd13cc349eb6a69751ceb65115fc58b5316"
+    },
+    {
+      "id": "decoy_01665",
+      "label": "decoy",
+      "smiles": "CCOc1ccccc1C[N@@H+]1CCNC(=O)[C@H]1CC(=O)NCCc1ccccc1Cl",
+      "selection_hash": "0578ffc70fc0e53e6eac92f988169d6b89fd298f23986d4a1a716d8c74c45ad3"
+    },
+    {
+      "id": "decoy_00583",
+      "label": "decoy",
+      "smiles": "C[C@@H](NC(=O)COC(=O)c1ccc(NC(=O)c2cccs2)cc1)c1ccc(Br)cc1",
+      "selection_hash": "05c28caf1d2c1967f4e02173cd26f1d83bc566b7d973042fc5be7ede04a204b7"
+    },
+    {
+      "id": "decoy_01877",
+      "label": "decoy",
+      "smiles": "CCCCC/C=C/C(=O)N(c1cccc(Cl)c1)[C@@H](C(=O)NC(C)(C)CC(C)(C)C)c1ccc2c(c1)OCO2",
+      "selection_hash": "05fbd679d9ef599c23dcef23b7657a344fdae9abfc59851c545e8b6bbe23ee95"
+    },
+    {
+      "id": "decoy_01614",
+      "label": "decoy",
+      "smiles": "C[C@H](Oc1ccc(Cl)cc1Cl)C(=O)Nc1ccc(Cl)c(C(=O)NC2CCCCC2)c1",
+      "selection_hash": "0644e0d8b6b2c9986ede19c251b4bd02a0d8396f7918bae1627d3c875ba7c2c0"
+    },
+    {
+      "id": "decoy_00144",
+      "label": "decoy",
+      "smiles": "CN[C@H]1C(=O)N(Cc2cc(Br)cs2)c2c(F)cc(C)cc21",
+      "selection_hash": "065edda56502ac33812a7c7e03998dbc2466112c71202afcb5987105dcc794ee"
+    },
+    {
+      "id": "decoy_01852",
+      "label": "decoy",
+      "smiles": "CC[NH+](CC)[C@H](CNC(=O)c1ccc(S(=O)(=O)c2ccc(Br)cc2)o1)c1ccccc1",
+      "selection_hash": "066eaf7c550bb0c9f497d70dc3afd885f55071a9e91eef8aa0d91d7ca40fbe9d"
+    },
+    {
+      "id": "decoy_00675",
+      "label": "decoy",
+      "smiles": "Cc1ccc(-c2csc3nc(C[N@H+](Cc4ccco4)C[C@@H](O)C(C)C)[nH]c(=O)c23)c(C)c1",
+      "selection_hash": "06790b9ca8ce3fb851ebbc7ebc704d8f7f6568a1b2c8d50f1a52fa569e667187"
+    },
+    {
+      "id": "decoy_01709",
+      "label": "decoy",
+      "smiles": "C[C@H](C(=O)NCC[NH+]1CCOCC1)[C@@H]1CC[C@@]2(C)Cc3sc(NC(=O)CC(C)(C)C)nc3[C@@H](C)[C@@H]2[C@H]1O",
+      "selection_hash": "06b13631dcf8de116adc60e09ff83955087c0649c322ed6930bd5a2ea7884969"
+    },
+    {
+      "id": "decoy_00143",
+      "label": "decoy",
+      "smiles": "CCN[C@H]1C(=O)N(Cc2cc(Br)cs2)c2cc(F)ccc21",
+      "selection_hash": "06c1448f286231f898965ccb54efe712b0acfe38b4587cf42008533c47b7d627"
+    },
+    {
+      "id": "decoy_00471",
+      "label": "decoy",
+      "smiles": "CCc1ccc(C(=O)N2C[C@H](C(=O)N[C@@H](C)c3ccc(Br)cc3)C3(CC[NH2+]CC3)C2)cc1",
+      "selection_hash": "06c16362c2173f487b6716ee9fb3f74b480bd4b10b58518fb9ea9714cae9710f"
+    },
+    {
+      "id": "decoy_01549",
+      "label": "decoy",
+      "smiles": "CC(C)CCC[C@H](C)[NH2+][C@H](c1cccs1)c1ccc(Cl)s1",
+      "selection_hash": "06e8c528f28384d2f83cb57cb68a8751416a13c2462e6f461a7eff8ff3ddffea"
+    },
+    {
+      "id": "decoy_01759",
+      "label": "decoy",
+      "smiles": "CC[NH+](CC)CCCN(C(=O)c1ccc(-c2ccccc2)[nH]1)[C@H](C(=O)NC1CCCCC1)c1cccs1",
+      "selection_hash": "071efa0c3302efd991e5bf14469eac387cbed5f0871398d87a2258118598e3f4"
+    },
+    {
+      "id": "decoy_01876",
+      "label": "decoy",
+      "smiles": "CC[C@H](C(=O)Nc1ccc(-n2nc(OCC(C)C)nc2-c2ccc(C(F)(F)F)cc2)cc1)c1ccccc1",
+      "selection_hash": "075bb454c396c4fdb81b55c923bc32c9767ad291a6e6564eddbe138de896e7b1"
+    },
+    {
+      "id": "decoy_01916",
+      "label": "decoy",
+      "smiles": "COc1ccc(C(OC[C@@H](O)C[N@@H+](C)Cc2cc(Br)ccc2OC)c2ccc(OC)cc2)cc1",
+      "selection_hash": "0798677febf61267af122a8daa44f2267c66a53145d96383e1912c8e768f6bf5"
+    },
+    {
+      "id": "decoy_01730",
+      "label": "decoy",
+      "smiles": "CC(C)[C@H](NS(=O)(=O)c1c[nH+]ccc1N[C@H](CO)Cc1ccccc1)C(=O)N1CCC(CCF)CC1",
+      "selection_hash": "079b453b03534cfddc7b123dcb3198ac44a50e7e01a524a055d35dd37c028517"
+    },
+    {
+      "id": "decoy_00481",
+      "label": "decoy",
+      "smiles": "Cc1ccc(C)c(CCNC(=O)[C@@H]2CN(C(=O)c3cccnc3Sc3ccccc3)CC23CC[NH2+]CC3)c1",
+      "selection_hash": "07e6db525bdcc99f852d5f96d5914c80bcb58d59edb782fb340afa8bbd30ebd3"
+    },
+    {
+      "id": "decoy_01245",
+      "label": "decoy",
+      "smiles": "C[C@@H]1CCC[C@H](C)[C@@]12NC(=O)N(CCCBr)C2=O",
+      "selection_hash": "0816afe4ed20975b56ad79097622e1295c013022a3fecbedd7b9a11bac95590d"
+    },
+    {
+      "id": "decoy_01719",
+      "label": "decoy",
+      "smiles": "C[C@H](C(=O)Nc1cccc([N+](=O)[O-])c1)[N@H+](C)CC(=O)Nc1ccc(Cl)c(C(F)(F)F)c1",
+      "selection_hash": "081c8ce83b78063829a47c8da17a466966e6a823d77f06ee5ae715c4da0a4c91"
+    },
+    {
+      "id": "decoy_00474",
+      "label": "decoy",
+      "smiles": "O=C(NC1CCCCCCC1)[C@H]1CN(C(=O)c2cccnc2Oc2ccccc2)CC12CC[NH2+]CC2",
+      "selection_hash": "082f16e771f14bbd32350f7af038737df712c3d2d2a6c2c58d125f56c11b9d21"
+    },
+    {
+      "id": "decoy_00290",
+      "label": "decoy",
+      "smiles": "C[C@@H]1CCc2c(C(=O)NC3(CO)CCCCC3)csc2C1",
+      "selection_hash": "084ced93742cf26586e41ecd5426ef6fa7671ead07e7dd5007ffeda4f70d9a90"
+    },
+    {
+      "id": "decoy_01467",
+      "label": "decoy",
+      "smiles": "Cc1ccc2nc(CNc3ccc(Cl)cc3C)cc(=O)n2c1",
+      "selection_hash": "0853cdccaf1b2a6394d50e96d5494a3a6685bdb43b42e0576ed52e6f85d05d67"
+    }
+  ]
+}

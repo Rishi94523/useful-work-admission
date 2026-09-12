@@ -12,9 +12,9 @@ The architecture remains frozen. The [preselected follow-up plan](VINA_FOLLOWUP_
 
 The [one-run policy comparison](VINA_ADMISSION_POLICY_2026-09-12.md) favors unpredictable immediate replay for a fraction of explicitly trusted visits, with mandatory sampled bundles for higher risk. Fresh identities and zero-work submissions still pass a 5% immediate audit policy 95% of the time; deferred access permits the first request even if subsequently caught. This is a fundamental limitation of an unconditional anonymous one-run work claim. With up to three cached bundle retries, the fresh-assignment expected-work bound is weakened; at N=4, q=1 and one computed run, attacker cost is about 1.73 runs per successful admission.
 
-The physical-device page is available for the user's iPhone 15. The local desktop Chrome control matched all six raw outputs, with 3.023 s initialization, 0.317–0.385 s warm calls and 42.7 MiB allocated WASM memory. These are one headless run on real desktop hardware, not phone measurements or a new optimization speedup. The previous OS working-set measurements remain distinct from heap allocation.
+The [first physical iPhone 15 result](VINA_IPHONE_15_2026-09-12.md) now matches all six raw pose pools and traces exactly. Warm 64k calls took 0.498–0.553s, but initialization took 9.641s and the full trial 15.476s. Allocated WASM memory stayed at 42.7MiB; phone resident memory was not measured. This supports short-unit execution on the phone but exposes cold startup as a practical blocker. The ranking experiment uses 256k units, which have not yet been measured on this phone.
 
-**Current decision:** ranking and phone evidence are incomplete. Even if those pass, trusted one-run eligibility, audit backpressure and late scientific quarantine still need integration and adversarial evaluation. It would be premature to call evidence scale the only remaining blocker.
+**Current decision:** ranking evidence remains incomplete; phone warm execution is encouraging but cold-start admission is not within budget. Trusted one-run eligibility, audit backpressure and late scientific quarantine still need integration and adversarial evaluation. Evidence scale is not the only remaining blocker.
 
 ## Latest update: completed validation, compact browser build, and deferred admission, 11 September
 

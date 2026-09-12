@@ -1,0 +1,47 @@
+{
+  "devices": [
+    {
+      "source": "device_1789185990203-16da6a2f.json",
+      "device_model": "Ryzen 7 7435HS - local automated Chrome",
+      "reported_os": "Windows - automated headless control",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "wasm_matches_reference": true,
+      "complete": true,
+      "exact_output_matches": 6,
+      "factory_instantiation_ms": 13.400000000372529,
+      "initialization_ms": 3022.9000000003725,
+      "run_count": 6,
+      "run_min_ms": 317.29999999981374,
+      "run_max_ms": 385.20000000018626,
+      "run_median_ms": 361.5,
+      "run_sum_ms": 2151.2999999998137,
+      "total_elapsed_ms": 5221.0999999996275,
+      "task_call_fraction": 0.41203960851161003,
+      "max_allocated_wasm_mib": 42.6875,
+      "hidden_events": 0,
+      "max_frame_gap_ms": 183.39999999999998
+    },
+    {
+      "source": "device_1789187835146-faaec61d.json",
+      "device_model": "iPhone 15",
+      "reported_os": "26.5.2",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Mobile/15E148 Safari/604.1",
+      "wasm_matches_reference": true,
+      "complete": true,
+      "exact_output_matches": 6,
+      "factory_instantiation_ms": 1579,
+      "initialization_ms": 9641,
+      "run_count": 6,
+      "run_min_ms": 498,
+      "run_max_ms": 553,
+      "run_median_ms": 531.5,
+      "run_sum_ms": 3176.000000000002,
+      "total_elapsed_ms": 15476,
+      "task_call_fraction": 0.20522098733522887,
+      "max_allocated_wasm_mib": 42.6875,
+      "hidden_events": 0,
+      "max_frame_gap_ms": 35
+    }
+  ],
+  "scope": "One desktop headless control and user-operated phone reports. No device-population estimate. Six 64k FA10 crystal-input units, not the 256k ranking workload. Factory timing excludes static import; heap is not resident memory; task-call fraction excludes reusable initialization. OS/device labels are reported, not attested."
+}

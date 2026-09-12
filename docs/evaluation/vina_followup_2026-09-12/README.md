@@ -89,5 +89,8 @@ The `module_ms` field measures factory instantiation after the static module
 import; it excludes some asset loading/compilation. Total elapsed time includes
 more startup work and all six calls, but does not separate every network phase.
 `heap` is allocated WASM linear memory, not peak resident memory. Frame gaps in
-headless Chrome are diagnostic, not a real-user responsiveness study. Safari
-output and speed are unmeasured until an actual phone report is received.
+headless Chrome are diagnostic, not a real-user responsiveness study. The actual iPhone 15 report is now device_1789187835146-faaec61d.json: all six
+outputs match, with 9.641s initialization and 0.498–0.553s calls. Run
+python scripts/analyze_vina_devices.py to independently check hashes and
+regenerate device_summary.json. See docs/research/VINA_IPHONE_15_2026-09-12.md
+for interpretation and limitations.

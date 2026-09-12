@@ -1,0 +1,43 @@
+{
+  "targets": [
+    {
+      "target": "fa10",
+      "selected": 96,
+      "actives": 32,
+      "decoys": 64,
+      "all_prepared_conformers_marked_3d": true,
+      "all_hashes_match": true,
+      "all_selected_graphs_preserved": true,
+      "previous_compound_overlap": 0
+    },
+    {
+      "target": "tryb1",
+      "selected": 96,
+      "actives": 32,
+      "decoys": 64,
+      "all_prepared_conformers_marked_3d": true,
+      "all_hashes_match": true,
+      "all_selected_graphs_preserved": true,
+      "previous_compound_overlap": 0
+    },
+    {
+      "target": "esr1",
+      "selected": 96,
+      "actives": 32,
+      "decoys": 64,
+      "all_prepared_conformers_marked_3d": true,
+      "all_hashes_match": true,
+      "all_selected_graphs_preserved": true,
+      "previous_compound_overlap": 0
+    }
+  ],
+  "python": "3.14.4",
+  "rdkit": "2025.09.6",
+  "meeko": "0.7.1",
+  "binaries": {
+    "tmp/docking-pilot/native/vina_1.2.7_win.exe": "e0c4b2715e0c1a74f6e92d0f3be0328ac97542eafbc111e6b1efad897a73cce5",
+    "tmp/vina-tasks/vina_tasks.exe": "b17ff528a3419bf0fca50e576773efcb418e758981b3afbb449566864e395a45",
+    "tmp/vina-resources/compact_single/vina_tasks.wasm": "3d62b6b9accd602aef25bb54cbe916fc926ef78055c15b957a50f912967592af"
+  },
+  "limitations": "Graph/coordinate and hash checks do not establish chemically optimal protonation, receptor preparation or benchmark generalization."
+}

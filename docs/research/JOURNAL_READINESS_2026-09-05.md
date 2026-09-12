@@ -6,6 +6,16 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
+## Current follow-up: ranking experiment running, 12 September
+
+The architecture remains frozen. The [preselected follow-up plan](VINA_FOLLOWUP_PLAN_2026-09-12.md) expands ranking to 32 actives and 64 decoys on each of FA10, TRYB1 and ESR1, excluding prior-panel compounds. All 288 prepared inputs passed hash, graph-preservation and 3D checks. Official stock E8 gating is running before any primary matched medium-run comparison; no completed enrichment or noninferiority result is claimed yet. A separate three-seed diagnostic retains the original TRYB1 4+4 inputs.
+
+The [one-run policy comparison](VINA_ADMISSION_POLICY_2026-09-12.md) favors unpredictable immediate replay for a fraction of explicitly trusted visits, with mandatory sampled bundles for higher risk. Fresh identities and zero-work submissions still pass a 5% immediate audit policy 95% of the time; deferred access permits the first request even if subsequently caught. This is a fundamental limitation of an unconditional anonymous one-run work claim. With up to three cached bundle retries, the fresh-assignment expected-work bound is weakened; at N=4, q=1 and one computed run, attacker cost is about 1.73 runs per successful admission.
+
+The physical-device page is available for the user's iPhone 15. The local desktop Chrome control matched all six raw outputs, with 3.023 s initialization, 0.317–0.385 s warm calls and 42.7 MiB allocated WASM memory. These are one headless run on real desktop hardware, not phone measurements or a new optimization speedup. The previous OS working-set measurements remain distinct from heap allocation.
+
+**Current decision:** ranking and phone evidence are incomplete. Even if those pass, trusted one-run eligibility, audit backpressure and late scientific quarantine still need integration and adversarial evaluation. It would be premature to call evidence scale the only remaining blocker.
+
 ## Latest update: completed validation, compact browser build, and deferred admission, 11 September
 
 The [completed validation report](VINA_VALIDATION_DECISION_2026-09-11.md) covers all 12 successful stock E32 redocking controls across four targets. Many medium runs preserved source-conformer redocking on all four targets at evaluation budgets within 0.7%. The new matched-ranking pilot preserved FA10 AUC (0.938) but reduced TRYB1 from 0.625 to 0.438, so screening equivalence remains unproven.

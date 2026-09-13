@@ -6,7 +6,11 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: prepared-state phone results received, 13 September
+## Latest update: HTTPS iPhone prepared-state follow-up — 2026-09-13
+
+Both power-mode uploads passed all eight raw-pool/trace comparisons with the frozen reference, using native WebCrypto and verified IndexedDB hits. Time to a cached 256k result is 1.389 s normally / 2.559 s in Low Power Mode; worker reuse is 0.964 / 2.026 s. Cold forced-download restoration remains 15.263 / 17.211 s through the temporary tunnel, with asset acquisition dominating. This supports repeat-contribution feasibility on one iPhone, not a near-one-second cold-start claim, production CDN performance, or device-population evidence. See [the measured report](VINA_PREPARED_HTTPS_2026-09-13.md). Multi-target ranking qualification and adversarial integration of low-risk admission remain separate outstanding requirements.
+
+## Previous update: prepared-state phone results received, 13 September
 
 Both iPhone15 power-mode trials pass all eight raw-output comparisons and confirm explicit-cache hits. The [phone result report](VINA_PREPARED_IPHONE_RESULTS_2026-09-13.md) shows restore itself drops to159ms versus5.336s map computation with Low Power Mode off, but forced-download first-result time is9.703s versus6.806s for the cached-input compute control. Same-worker reuse is0.955s; fresh-worker IndexedDB restoration is2.244s. With Low Power Mode on, those paths take15.448s,12.282s,2.022s and5.347s respectively. These are single ordered trials, not a population or causal power-mode estimate.
 

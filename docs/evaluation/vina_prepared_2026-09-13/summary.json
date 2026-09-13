@@ -784,6 +784,370 @@
         }
       ],
       "error": null
+    },
+    {
+      "source": "device_1789322869662-3a3d228b.json",
+      "device": "iPhone 15",
+      "transport_experiment": "https-tunnel-v1",
+      "secure_context": true,
+      "protocol": "https:",
+      "cache_policy": "indexeddb-v1",
+      "low_power_mode_reported": false,
+      "hidden_events": 0,
+      "complete": true,
+      "artifact_hash_matches": true,
+      "wasm_hash_matches": true,
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/6112b5ab3fec5c3cbc539d6db2b07b6f0a18bebe8a3871614b6849ad43d3dd3e/prepared.bin",
+              "content_encoding": "gzip",
+              "content_length": "14671512",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 12757,
+          "hash_ms": 42,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 211,
+          "factory_ms": 23,
+          "fs_copy_ms": 4,
+          "init_or_restore_ms": 171,
+          "run_ms": 941.0000000000018,
+          "result": {
+            "ok": true,
+            "total_ms": 941,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 15263,
+          "exact": true,
+          "artifact_transfer_bytes": 0,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 963.9999999999982,
+          "result": {
+            "ok": true,
+            "total_ms": 964,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 964,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "cached_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "artifact_cache_read_ms": 52,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 56,
+          "hash_ms": 14,
+          "factory_ms": 7,
+          "fs_copy_ms": 3,
+          "init_or_restore_ms": 165,
+          "run_ms": 956.0000000000002,
+          "result": {
+            "ok": true,
+            "total_ms": 956,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 1389.0000000000036,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": true,
+          "heap_mib": 42.6875
+        },
+        {
+          "mode": "compute",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 9,
+          "hash_ms": 2,
+          "factory_ms": 15,
+          "fs_copy_ms": 0,
+          "init_or_restore_ms": 5272,
+          "run_ms": 1031,
+          "result": {
+            "ok": true,
+            "total_ms": 1031,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 6813.999999999996,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        }
+      ],
+      "error": null
+    },
+    {
+      "source": "device_1789322937347-75e0342b.json",
+      "device": "iPhone 15",
+      "transport_experiment": "https-tunnel-v1",
+      "secure_context": true,
+      "protocol": "https:",
+      "cache_policy": "indexeddb-v1",
+      "low_power_mode_reported": true,
+      "hidden_events": 0,
+      "complete": true,
+      "artifact_hash_matches": true,
+      "wasm_hash_matches": true,
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/6112b5ab3fec5c3cbc539d6db2b07b6f0a18bebe8a3871614b6849ad43d3dd3e/prepared.bin",
+              "content_encoding": "gzip",
+              "content_length": "14671512",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 13420,
+          "hash_ms": 40,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 372,
+          "factory_ms": 17,
+          "fs_copy_ms": 7,
+          "init_or_restore_ms": 311,
+          "run_ms": 2017,
+          "result": {
+            "ok": true,
+            "total_ms": 2017,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 17211,
+          "exact": true,
+          "artifact_transfer_bytes": 0,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 2024,
+          "result": {
+            "ok": true,
+            "total_ms": 2024,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2026,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "cached_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "artifact_cache_read_ms": 47,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 50.99999999999997,
+          "hash_ms": 27,
+          "factory_ms": 13,
+          "fs_copy_ms": 5,
+          "init_or_restore_ms": 315,
+          "run_ms": 1970,
+          "result": {
+            "ok": true,
+            "total_ms": 1969,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 2559.0000000000036,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": true,
+          "heap_mib": 42.6875
+        },
+        {
+          "mode": "compute",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 11.999999999999886,
+          "hash_ms": 3,
+          "factory_ms": 20,
+          "fs_copy_ms": 1,
+          "init_or_restore_ms": 9691,
+          "run_ms": 2022,
+          "result": {
+            "ok": true,
+            "total_ms": 2022,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 12582.999999999996,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        }
+      ],
+      "error": null
     }
   ],
   "scope": "Browser timing is first-result wall time including download/decode, integrity checking, factory, input copying, restore/compute and one actual256k unit. Cold forces WASM/input/artifact reload; JS module cache is not explicitly cleared. Ordered single-trial modes use different seed indices; not device-population statistics. Localhost secure context uses WebCrypto; LAN HTTP uses tested JS SHA fallback. Browser transfer timing absence is not automatically a cache hit. IndexedDB hits are explicitly recorded. True WAN cold performance and physical phone results depend on received reports."

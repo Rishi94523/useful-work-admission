@@ -1,5 +1,7 @@
 # Prepared-state iPhone results: power mode comparison
 
+Update: the subsequent [HTTPS iPhone experiment](VINA_PREPARED_HTTPS_2026-09-13.md) is complete. Native hashing reduces cached total time to 1.389 s normally / 2.559 s in Low Power Mode. Forced-download startup through the temporary tunnel remains 15.263 / 17.211 s. The measurements below are the earlier LAN HTTP trials, retained as the comparison baseline.
+
 Both user-operated iPhone15 trials completed without hidden-tab events. All
 eight raw pools and traces independently match the compute reference; artifact
 and WASM hashes match the pinned manifest. Both cached-restoration trials

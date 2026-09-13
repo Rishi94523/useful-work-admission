@@ -1,4 +1,6 @@
 {
+  "require_webcrypto": true,
+  "transport_experiment": "https-tunnel-v1",
   "cache_policy": "indexeddb-v1",
   "module_url": "/assets/09e8fe1ff58f20b515d91d698fb4c1cbb50baae1066976936c7a1833eed6ff1d/vina_tasks.mjs",
   "wasm_url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",

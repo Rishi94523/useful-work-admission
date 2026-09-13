@@ -71,6 +71,9 @@
     {
       "source": "device_1789320348248-4355328c.json",
       "device": "Ryzen 7 7435HS - Chrome LAN HTTP prepared",
+      "transport_experiment": null,
+      "secure_context": null,
+      "protocol": null,
       "cache_policy": "http-only-v1",
       "low_power_mode_reported": false,
       "hidden_events": 0,
@@ -171,6 +174,9 @@
     {
       "source": "device_1789320575879-4ca021d3.json",
       "device": "Ryzen 7 7435HS - Chrome LAN HTTP IndexedDB",
+      "transport_experiment": null,
+      "secure_context": null,
+      "protocol": null,
       "cache_policy": "indexeddb-v1",
       "low_power_mode_reported": false,
       "hidden_events": 0,
@@ -276,6 +282,9 @@
     {
       "source": "device_1789320670671-fc219fe8.json",
       "device": "Ryzen 7 7435HS - localhost WebCrypto IndexedDB",
+      "transport_experiment": null,
+      "secure_context": null,
+      "protocol": null,
       "cache_policy": "indexeddb-v1",
       "low_power_mode_reported": false,
       "hidden_events": 0,
@@ -381,6 +390,9 @@
     {
       "source": "device_1789321525293-37be510a.json",
       "device": "iPhone 15",
+      "transport_experiment": null,
+      "secure_context": null,
+      "protocol": null,
       "cache_policy": "indexeddb-v1",
       "low_power_mode_reported": true,
       "hidden_events": 0,
@@ -486,6 +498,9 @@
     {
       "source": "device_1789321574131-14f79825.json",
       "device": "iPhone 15",
+      "transport_experiment": null,
+      "secure_context": null,
+      "protocol": null,
       "cache_policy": "indexeddb-v1",
       "low_power_mode_reported": false,
       "hidden_events": 0,
@@ -579,6 +594,188 @@
           },
           "heap": 53739520,
           "end_to_end_ms": 6806,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        }
+      ],
+      "error": null
+    },
+    {
+      "source": "device_1789322412706-a2f5fe14.json",
+      "device": "Ryzen 7 7435HS - HTTPS tunnel WebCrypto IndexedDB",
+      "transport_experiment": "https-tunnel-v1",
+      "secure_context": true,
+      "protocol": "https:",
+      "cache_policy": "indexeddb-v1",
+      "low_power_mode_reported": false,
+      "hidden_events": 0,
+      "complete": true,
+      "artifact_hash_matches": true,
+      "wasm_hash_matches": true,
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/6112b5ab3fec5c3cbc539d6db2b07b6f0a18bebe8a3871614b6849ad43d3dd3e/prepared.bin",
+              "content_encoding": "gzip",
+              "content_length": "14671512",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 4924.79999999702,
+          "hash_ms": 38.70000000298023,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 112.29999999701977,
+          "factory_ms": 9.700000002980232,
+          "fs_copy_ms": 9.899999998509884,
+          "init_or_restore_ms": 616.8999999985099,
+          "run_ms": 3087.39999999851,
+          "result": {
+            "ok": true,
+            "total_ms": 3086.7,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 9448.90000000596,
+          "exact": true,
+          "artifact_transfer_bytes": 14671812,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 3421.89999999851,
+          "result": {
+            "ok": true,
+            "total_ms": 3421.7,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3424.89999999851,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "cached_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "artifact_cache_read_ms": 66.69999999552965,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 73.29999999701977,
+          "hash_ms": 34.399999998509884,
+          "factory_ms": 11.800000004470348,
+          "fs_copy_ms": 6.699999995529652,
+          "init_or_restore_ms": 779.2000000029802,
+          "run_ms": 3127.39999999851,
+          "result": {
+            "ok": true,
+            "total_ms": 3126.7,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 4175.5999999940395,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": true,
+          "heap_mib": 42.6875
+        },
+        {
+          "mode": "compute",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3/vina_tasks.wasm",
+              "content_encoding": "gzip",
+              "content_length": "196194",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae/receptor.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "40672",
+              "cf_cache_status": "DYNAMIC"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c/ligand.pdbqt",
+              "content_encoding": "gzip",
+              "content_length": "922",
+              "cf_cache_status": "DYNAMIC"
+            }
+          ],
+          "assets_ms": 13.799999997019768,
+          "hash_ms": 1.4000000059604645,
+          "factory_ms": 10.699999995529652,
+          "fs_copy_ms": 0.6000000014901161,
+          "init_or_restore_ms": 7596.39999999851,
+          "run_ms": 3694.39999999851,
+          "result": {
+            "ok": true,
+            "total_ms": 3693.8,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 11458.10000000149,
           "exact": true,
           "artifact_transfer_bytes": null,
           "http_artifact_cache_hit": false,

@@ -2,12 +2,12 @@
 const {chromium}=require('C:/Users/rishi/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const fs=require('fs');
 (async()=>{
- const secure=process.argv.includes('--secure'),urls=JSON.parse(fs.readFileSync('tmp/vina-prepared-idb-url.json'));
+ const https=process.argv.includes('--https'),secure=https||process.argv.includes('--secure'),urls=JSON.parse(fs.readFileSync('tmp/vina-prepared-idb-url.json'));
  const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
  try{
   const page=await browser.newPage();page.on('pageerror',e=>console.log('PAGE_ERROR',String(e)));
-  await page.goto(secure?urls.local:urls.urls[0]);
-  await page.locator('#model').fill('Ryzen 7 7435HS - '+(secure?'localhost WebCrypto':'LAN HTTP')+' IndexedDB');
+  await page.goto(https?JSON.parse(fs.readFileSync('tmp/vina-prepared-https-url.json')).url:secure?urls.local:urls.urls[0]);
+  await page.locator('#model').fill('Ryzen 7 7435HS - '+(https?'HTTPS tunnel WebCrypto':secure?'localhost WebCrypto':'LAN HTTP')+' IndexedDB');
   await page.locator('#os').fill('Windows headless control');await page.locator('#start').click();
   await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Saved.'),null,{timeout:180000});
   console.log(await page.locator('#status').innerText());

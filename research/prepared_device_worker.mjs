@@ -5,11 +5,12 @@ async function artifactStore(operation,key,value){
  try{return await new Promise((resolve,reject)=>{const tx=db.transaction('artifacts',operation==='get'?'readonly':'readwrite'),store=tx.objectStore('artifacts');const r=operation==='get'?store.get(key):store.put(value,key);let result;r.onsuccess=()=>{result=r.result};tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
 }
 onmessage=async({data})=>{try{
- const {manifest,mode,index}=data,metrics={mode,index};
+ const {manifest,mode,index}=data,metrics={mode,index,secure_context:globalThis.isSecureContext===true,hash_backend:globalThis.crypto?.subtle?'webcrypto':'javascript-sha256'};
+ if(manifest.require_webcrypto&&metrics.hash_backend!=='webcrypto')throw Error('This test requires HTTPS and native WebCrypto');
  if(mode!=='reuse'){
   const start=performance.now();const {default:factory}=await import(manifest.module_url);
   const cache=mode==='cold_restore'?'reload':'force-cache';
-  const get=async url=>{const r=await fetch(url,{cache});if(!r.ok)throw Error('Asset '+r.status);return new Uint8Array(await r.arrayBuffer());};
+  const get=async url=>{const r=await fetch(url,{cache});if(!r.ok)throw Error('Asset '+r.status);(metrics.responses??=[]).push({url,content_encoding:r.headers.get('content-encoding'),content_length:r.headers.get('content-length'),cf_cache_status:r.headers.get('cf-cache-status')});return new Uint8Array(await r.arrayBuffer());};
   const getArtifact=async()=>{
    if(mode==='compute')return null;
    if(mode==='cached_restore'&&manifest.cache_policy==='indexeddb-v1'){

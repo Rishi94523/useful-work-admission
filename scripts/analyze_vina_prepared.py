@@ -14,7 +14,7 @@ for path in sorted(OUT.glob('device_[0-9]*.json')):
   x['http_artifact_cache_hit']=resource is not None and resource['transferSize']==0 and resource['decodedBodySize']>0
   x['indexeddb_hit']=run.get('artifact_cache_source')=='indexeddb'
   x['heap_mib']=run['heap']/2**20;runs.append(x)
- rows.append(dict(source=path.name,device=r['device_model'],cache_policy=r.get('cache_policy','http-only-v1'),
+ rows.append(dict(source=path.name,device=r['device_model'],transport_experiment=r.get('transport_experiment'),secure_context=r.get('secure_context'),protocol=r.get('protocol'),cache_policy=r.get('cache_policy','http-only-v1'),
   low_power_mode_reported=r.get('low_power_mode_reported'),hidden_events=r['hidden_events'],
   complete=len(runs)==4 and sorted(x['index'] for x in runs)==list(range(4)) and not r.get('error') and not r.get('stopped'),
   artifact_hash_matches=r['artifact_sha256']==fa['artifact']['sha256'],wasm_hash_matches=r['wasm_sha256']==build['wasm_sha256'],runs=runs,error=r.get('error')))

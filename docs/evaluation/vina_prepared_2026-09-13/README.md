@@ -50,3 +50,8 @@ this desktop. Storage write/read failures remain visible. Different seed indices
 and ordered single trials limit causal timing comparisons. See
 `docs/research/VINA_PREPARED_RESTORATION_2026-09-13.md` for conclusions and pending
 physical-phone evidence.
+
+Physical iPhone results are now received for both reported power modes. All
+eight outputs match and both explicit-cache reads hit. See
+`docs/research/VINA_PREPARED_IPHONE_RESULTS_2026-09-13.md` for the measured cold
+latency failure and successful restoration/reuse results.

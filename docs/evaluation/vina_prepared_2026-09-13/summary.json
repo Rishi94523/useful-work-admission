@@ -377,6 +377,216 @@
         }
       ],
       "error": null
+    },
+    {
+      "source": "device_1789321525293-37be510a.json",
+      "device": "iPhone 15",
+      "cache_policy": "indexeddb-v1",
+      "low_power_mode_reported": true,
+      "hidden_events": 0,
+      "complete": true,
+      "artifact_hash_matches": true,
+      "wasm_hash_matches": true,
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "artifact_cache_source": "http",
+          "assets_ms": 9719.000000000002,
+          "hash_ms": 2957.999999999998,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 339,
+          "factory_ms": 27,
+          "fs_copy_ms": 2,
+          "init_or_restore_ms": 317,
+          "run_ms": 2011,
+          "result": {
+            "ok": true,
+            "total_ms": 2010,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 15447.999999999996,
+          "exact": true,
+          "artifact_transfer_bytes": 0,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "run_ms": 2018.9999999999982,
+          "result": {
+            "ok": true,
+            "total_ms": 2019,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2022,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "cached_restore",
+          "index": 2,
+          "artifact_cache_read_ms": 46,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 48.99999999999999,
+          "hash_ms": 2912,
+          "factory_ms": 17,
+          "fs_copy_ms": 2,
+          "init_or_restore_ms": 314,
+          "run_ms": 1992,
+          "result": {
+            "ok": true,
+            "total_ms": 1992,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 5347,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": true,
+          "heap_mib": 42.6875
+        },
+        {
+          "mode": "compute",
+          "index": 3,
+          "assets_ms": 11,
+          "hash_ms": 370,
+          "factory_ms": 12,
+          "fs_copy_ms": 0,
+          "init_or_restore_ms": 9604,
+          "run_ms": 2024.0000000000018,
+          "result": {
+            "ok": true,
+            "total_ms": 2023,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 12282,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        }
+      ],
+      "error": null
+    },
+    {
+      "source": "device_1789321574131-14f79825.json",
+      "device": "iPhone 15",
+      "cache_policy": "indexeddb-v1",
+      "low_power_mode_reported": false,
+      "hidden_events": 0,
+      "complete": true,
+      "artifact_hash_matches": true,
+      "wasm_hash_matches": true,
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "artifact_cache_source": "http",
+          "assets_ms": 7291,
+          "hash_ms": 1042,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 174,
+          "factory_ms": 7,
+          "fs_copy_ms": 2.000000000001819,
+          "init_or_restore_ms": 158.99999999999818,
+          "run_ms": 934,
+          "result": {
+            "ok": true,
+            "total_ms": 933,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 9703,
+          "exact": true,
+          "artifact_transfer_bytes": 0,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "run_ms": 953.0000000000018,
+          "result": {
+            "ok": true,
+            "total_ms": 953,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 955.0000000000036,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        },
+        {
+          "mode": "cached_restore",
+          "index": 2,
+          "artifact_cache_read_ms": 23,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 25,
+          "hash_ms": 1011,
+          "factory_ms": 7,
+          "fs_copy_ms": 1,
+          "init_or_restore_ms": 168,
+          "run_ms": 950,
+          "result": {
+            "ok": true,
+            "total_ms": 950,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 2243.9999999999964,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": true,
+          "heap_mib": 42.6875
+        },
+        {
+          "mode": "compute",
+          "index": 3,
+          "assets_ms": 7,
+          "hash_ms": 202,
+          "factory_ms": 6,
+          "fs_copy_ms": 0,
+          "init_or_restore_ms": 5336,
+          "run_ms": 1027,
+          "result": {
+            "ok": true,
+            "total_ms": 1027,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 6806,
+          "exact": true,
+          "artifact_transfer_bytes": null,
+          "http_artifact_cache_hit": false,
+          "indexeddb_hit": false,
+          "heap_mib": 51.25
+        }
+      ],
+      "error": null
     }
   ],
   "scope": "Browser timing is first-result wall time including download/decode, integrity checking, factory, input copying, restore/compute and one actual256k unit. Cold forces WASM/input/artifact reload; JS module cache is not explicitly cleared. Ordered single-trial modes use different seed indices; not device-population statistics. Localhost secure context uses WebCrypto; LAN HTTP uses tested JS SHA fallback. Browser transfer timing absence is not automatically a cache hit. IndexedDB hits are explicitly recorded. True WAN cold performance and physical phone results depend on received reports."

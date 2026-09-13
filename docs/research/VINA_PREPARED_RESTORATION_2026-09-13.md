@@ -1,5 +1,10 @@
 # Lossless prepared-state restoration checkpoint
 
+Update: both physical-phone trials have now completed. See
+[Vina prepared iPhone results](VINA_PREPARED_IPHONE_RESULTS_2026-09-13.md). The
+checkpoint timings below retain the original desktop evidence; phone cold
+restoration did not meet the near1s goal.
+
 The isolated restoration path passes exact scientific regression checks against
 the existing compute-path WASM. It preserves binary64 grid samples and initialized
 scoring tables, restores grid geometry using the original initialization formula,

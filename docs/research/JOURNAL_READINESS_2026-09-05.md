@@ -6,7 +6,13 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: lossless prepared-state prototype, 13 September
+## Latest update: prepared-state phone results received, 13 September
+
+Both iPhone15 power-mode trials pass all eight raw-output comparisons and confirm explicit-cache hits. The [phone result report](VINA_PREPARED_IPHONE_RESULTS_2026-09-13.md) shows restore itself drops to159ms versus5.336s map computation with Low Power Mode off, but forced-download first-result time is9.703s versus6.806s for the cached-input compute control. Same-worker reuse is0.955s; fresh-worker IndexedDB restoration is2.244s. With Low Power Mode on, those paths take15.448s,12.282s,2.022s and5.347s respectively. These are single ordered trials, not a population or causal power-mode estimate.
+
+**Decision:** lossless restoration preserves tested science and solves most initialization CPU cost, but the true cold near1s goal fails. Artifact transfer and JavaScript integrity hashing dominate the remaining delay. HTTPS/native hashing is the next device experiment; no phone speedup from it is yet measured. Ranking coverage and trusted-tier/quarantine integration remain outstanding. The scientific architecture is unchanged.
+
+## Previous update: lossless prepared-state prototype, 13 September
 
 The [prepared-state restoration checkpoint](VINA_PREPARED_RESTORATION_2026-09-13.md) preserves exact raw pools, traces and final aggregates on three targets across reference compute, new compute and restored paths. The scientific reference remains unchanged. FA10 prepared state is27.7MB raw,14.7MB gzip. Desktop browser first-result latency falls from4.62s with computation to2.34s with forced download/restore; explicit IndexedDB fixes the observed large-artifact HTTP cache miss. A localhost WebCrypto control reaches1.89s cold and1.64s cached versus1.40s worker reuse. These are laptop-local measurements, not phone/WAN proof. The cache-enabled physical-phone test is ready; its result is pending. Download size remains a real constraint on the true cold goal.
 

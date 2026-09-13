@@ -6,7 +6,13 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Current follow-up: ranking experiment running, 12 September
+## Latest update: completed ranking and 256k phone test, 13 September
+
+The [completed larger ranking report](VINA_RANKING_FOLLOWUP_2026-09-13.md) retains all 288 stock jobs: FA10 AUC 0.628 and TRYB1 0.636 failed the frozen strong-baseline gate; ESR1 0.826 passed. On ESR1, the three-seed average medium-minus-normal AUC difference is -0.0109, paired95% [-0.0288,+0.0049], meeting the predeclared average noninferiority margin at 1.3–1.5% extra evaluations. This is one qualifying target, not multi-target preservation. The old TRYB1 drop recurs in two of three seeds on a weak, tiny panel; its cause remains unresolved.
+
+The actual 256k phone test is now available, with two batches in one worker and explicit fresh-start/continued-run timing. Desktop control passed 6/6 exact outputs; physical iPhone results are pending. No additional64k mobile test was run. The scientific architecture and admission policy remain unchanged. A second stock-qualified target, practical phone startup/warm behavior, and trusted-tier/quarantine integration remain required.
+
+## Previous follow-up: ranking experiment running, 12 September
 
 The architecture remains frozen. The [preselected follow-up plan](VINA_FOLLOWUP_PLAN_2026-09-12.md) expands ranking to 32 actives and 64 decoys on each of FA10, TRYB1 and ESR1, excluding prior-panel compounds. All 288 prepared inputs passed hash, graph-preservation and 3D checks. Official stock E8 gating is running before any primary matched medium-run comparison; no completed enrichment or noninferiority result is claimed yet. A separate three-seed diagnostic retains the original TRYB1 4+4 inputs.
 

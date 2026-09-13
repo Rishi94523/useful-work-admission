@@ -1,0 +1,38 @@
+[
+  {
+    "target": "fa10",
+    "complete": true,
+    "auc": 0.627685546875,
+    "bootstrap95": [
+      0.50731201171875,
+      0.7451171875
+    ],
+    "ef10": 1.5,
+    "passed": false,
+    "failed_ids": []
+  },
+  {
+    "target": "tryb1",
+    "complete": true,
+    "auc": 0.636474609375,
+    "bootstrap95": [
+      0.514154052734375,
+      0.7517211914062498
+    ],
+    "ef10": 2.7,
+    "passed": false,
+    "failed_ids": []
+  },
+  {
+    "target": "esr1",
+    "complete": true,
+    "auc": 0.826171875,
+    "bootstrap95": [
+      0.7333984375,
+      0.90576171875
+    ],
+    "ef10": 2.7,
+    "passed": true,
+    "failed_ids": []
+  }
+]

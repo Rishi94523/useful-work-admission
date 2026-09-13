@@ -1,0 +1,30 @@
+{
+  "cap": 256000,
+  "devices": [
+    {
+      "source": "device_1789302544303-33114cc2.json",
+      "device_model": "Ryzen 7 7435HS - local automated Chrome 256k",
+      "reported_os": "Windows - headless control",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "wasm_matches_reference": true,
+      "complete": true,
+      "exact_output_matches": 6,
+      "factory_instantiation_ms": 12.5,
+      "initialization_ms": 3036.9000000059605,
+      "run_count": 6,
+      "run_min_ms": 1288.2999999970198,
+      "run_max_ms": 1531.1000000014901,
+      "run_median_ms": 1401.0,
+      "run_sum_ms": 8406.69999999553,
+      "total_elapsed_ms": 13493.69999999553,
+      "task_call_fraction": 0.6230092561712736,
+      "max_allocated_wasm_mib": 51.25,
+      "hidden_events": 0,
+      "max_frame_gap_ms": 166.70000000000002,
+      "init_count": 1,
+      "cold_first_result_ms": 4459.69999999553,
+      "reused_batch_median_ms": 1424.8999999985099
+    }
+  ],
+  "scope": "Desktop headless control and user-operated phone reports. No device-population estimate. Six FA10 crystal-input units. Medium test: two batches in one worker, separated by two seconds; cold means a fresh worker, not a rebooted browser or device. Factory timing excludes static import; heap is not resident memory; task-call fraction excludes reusable initialization and includes the medium test pause in its denominator. OS/device labels are reported, not attested."
+}

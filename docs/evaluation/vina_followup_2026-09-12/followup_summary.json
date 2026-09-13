@@ -1,0 +1,185 @@
+{
+  "scope": "Incomplete snapshots cannot establish noninferiority. Compound-resampled paired bootstrap preserves all three seeds together; seed variation is reported separately. New source conformers differ from the old MMFF panel.",
+  "stock_progress": [
+    {
+      "target": "fa10",
+      "completed": 96,
+      "expected": 96,
+      "failures": 0
+    },
+    {
+      "target": "tryb1",
+      "completed": 96,
+      "expected": 96,
+      "failures": 0
+    },
+    {
+      "target": "esr1",
+      "completed": 96,
+      "expected": 96,
+      "failures": 0
+    }
+  ],
+  "stock_gates": [
+    {
+      "target": "fa10",
+      "complete": true,
+      "auc": 0.627685546875,
+      "bootstrap95": [
+        0.50731201171875,
+        0.7451171875
+      ],
+      "ef10": 1.5,
+      "passed": false,
+      "failed_ids": []
+    },
+    {
+      "target": "tryb1",
+      "complete": true,
+      "auc": 0.636474609375,
+      "bootstrap95": [
+        0.514154052734375,
+        0.7517211914062498
+      ],
+      "ef10": 2.7,
+      "passed": false,
+      "failed_ids": []
+    },
+    {
+      "target": "esr1",
+      "complete": true,
+      "auc": 0.826171875,
+      "bootstrap95": [
+        0.7333984375,
+        0.90576171875
+      ],
+      "ef10": 2.7,
+      "passed": true,
+      "failed_ids": []
+    }
+  ],
+  "large_matched": [
+    {
+      "target": "esr1",
+      "complete": true,
+      "compound_count": 96,
+      "paired_rows": 288,
+      "per_seed": [
+        {
+          "seed": 104729,
+          "normal_auc": 0.83544921875,
+          "medium_auc": 0.806640625,
+          "normal_ef10": 2.7,
+          "medium_ef10": 2.7,
+          "evaluation_ratio": 1.0146700846940886,
+          "search_time_ratio": 1.0097574653739192
+        },
+        {
+          "seed": 130363,
+          "normal_auc": 0.814453125,
+          "medium_auc": 0.81494140625,
+          "normal_ef10": 2.7,
+          "medium_ef10": 2.7,
+          "evaluation_ratio": 1.01411770578778,
+          "search_time_ratio": 1.0160360076888595
+        },
+        {
+          "seed": 155921,
+          "normal_auc": 0.81201171875,
+          "medium_auc": 0.8076171875,
+          "normal_ef10": 2.7,
+          "medium_ef10": 2.7,
+          "evaluation_ratio": 1.01297575968953,
+          "search_time_ratio": 1.0125512485690131
+        }
+      ],
+      "mean_seed_auc_difference": -0.010904947916666666,
+      "mean_difference_bootstrap95": [
+        -0.02880859375,
+        0.0048868815104166075
+      ],
+      "noninferiority_margin": -0.05,
+      "noninferiority_established": true,
+      "meaningful_inferiority_supported": false,
+      "per_seed_difference_bootstrap95": [
+        [
+          -0.06103515625,
+          -0.00390625
+        ],
+        [
+          -0.02001953125,
+          0.021984863281249822
+        ],
+        [
+          -0.03564453125,
+          0.0283203125
+        ]
+      ]
+    }
+  ],
+  "old_tryb1_diagnostic": [
+    {
+      "target": "tryb1",
+      "complete": true,
+      "compound_count": 8,
+      "paired_rows": 24,
+      "per_seed": [
+        {
+          "seed": 104729,
+          "normal_auc": 0.625,
+          "medium_auc": 0.4375,
+          "normal_ef10": 2.0,
+          "medium_ef10": 2.0,
+          "evaluation_ratio": 1.0108701720866025,
+          "search_time_ratio": 0.9502122656022185
+        },
+        {
+          "seed": 130363,
+          "normal_auc": 0.375,
+          "medium_auc": 0.375,
+          "normal_ef10": 2.0,
+          "medium_ef10": 2.0,
+          "evaluation_ratio": 1.0146389373930529,
+          "search_time_ratio": 1.124090389090114
+        },
+        {
+          "seed": 155921,
+          "normal_auc": 0.5625,
+          "medium_auc": 0.375,
+          "normal_ef10": 2.0,
+          "medium_ef10": 2.0,
+          "evaluation_ratio": 1.0132612773179999,
+          "search_time_ratio": 1.1257817164502297
+        }
+      ],
+      "mean_seed_auc_difference": -0.125,
+      "mean_difference_bootstrap95": [
+        -0.375,
+        0.08333333333333333
+      ],
+      "noninferiority_margin": -0.05,
+      "noninferiority_established": false,
+      "meaningful_inferiority_supported": false,
+      "per_seed_difference_bootstrap95": [
+        [
+          -0.5,
+          0.0
+        ],
+        [
+          -0.5,
+          0.5625
+        ],
+        [
+          -0.5625,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Stock gating and comparison on the same selected compounds characterize a conditional cohort, not an unbiased all-target generalization.",
+    "Only three seeds: bootstrap intervals condition on these seeds and do not capture all search-seed uncertainty.",
+    "Concurrent timings are not isolated throughput or browser timings.",
+    "DUD-E active/decoy enrichment does not establish prospective screening utility."
+  ]
+}

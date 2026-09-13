@@ -1,0 +1,40 @@
+{
+  "wasm_sha256": "3d62b6b9accd602aef25bb54cbe916fc926ef78055c15b957a50f912967592af",
+  "receptor_sha256": "2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae",
+  "ligand_sha256": "7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c",
+  "expected": [
+    {
+      "index": 0,
+      "pool": "19b7a2e7bc1c0e3702cec321770abdf5aaa7a657abc5797153d3701f18f9b1fb",
+      "trace": "44f5a62da313837623a2114cca1e544c3b888a47f333493adae6db7d06a19623"
+    },
+    {
+      "index": 1,
+      "pool": "2f97ff0087a2c8f2c415c4f512ab1a50bdb3adccfd9c770504c0f505af13e1e9",
+      "trace": "c7c80f0cbca17eeca06e8b2c8148d71a18300a8a55397f9c15ecee9ea201aeb5"
+    },
+    {
+      "index": 2,
+      "pool": "4d426a7eb98b2670f4dbe7e5f9a5c7992f0d2c1a270bf0320326ea215ea5a83f",
+      "trace": "b0d244cc92517ac673ddcae2c3e65ac1be0db23a82d02cd8573a7d024edd2065"
+    },
+    {
+      "index": 3,
+      "pool": "0e857199906e9f39f0e26488112513552ac66d9b7351562aa99e38e82b6eeeda",
+      "trace": "3fe31d9b71dcab3ef5ce4cee31f94c2289665f591c7471cb96afda57229c9a81"
+    },
+    {
+      "index": 4,
+      "pool": "b3d2606c5a2fdc085a6386280767d91cd47089566130e1f947084dd78fcafc74",
+      "trace": "12ea2a5da5d657752a0e061e7bbff6b19eec9ca7adfe09fb2a35a8912b27a135"
+    },
+    {
+      "index": 5,
+      "pool": "92f4be322b296b9782e2e16c74f4bd9b1918bd8bc2e287fbe1004459ba84dccc",
+      "trace": "27459b8dee54f02e2202fe1dc1a774703bcb33503184d2bd63c2b1487d0eaff3"
+    }
+  ],
+  "cap": 256000,
+  "runs": 6,
+  "scope": "Node reference for same-WASM Safari/Chrome comparison. Six256k seeded tasks. Allocated linear memory is not process resident memory."
+}

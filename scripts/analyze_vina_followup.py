@@ -1,5 +1,5 @@
 """Paired compound bootstrap; repeated seeds are not independent compounds."""
-import json, math
+import json, math, gzip
 from pathlib import Path
 import numpy as np
 
@@ -9,7 +9,10 @@ SEEDS=[104729,130363,155921]
 
 def read(name):
     p=BASE/name
-    return [json.loads(x) for x in p.read_text().splitlines()] if p.exists() else []
+    if p.exists(): text=p.read_text()
+    elif Path(str(p)+'.gz').exists(): text=gzip.decompress(Path(str(p)+'.gz').read_bytes()).decode()
+    else: return []
+    return [json.loads(x) for x in text.splitlines()]
 
 def auc(a,d): return float(((a[:,None]<d)+.5*(a[:,None]==d)).mean())
 

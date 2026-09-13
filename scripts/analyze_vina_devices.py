@@ -1,8 +1,8 @@
 """Independently hash uploaded pools/traces; summarize measured device runs."""
-import hashlib,json,statistics
+import hashlib,json,statistics,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'docs/evaluation/vina_followup_2026-09-12'
+OUT=ROOT/('docs/evaluation/vina_mobile_256k_2026-09-13' if '--medium' in sys.argv else 'docs/evaluation/vina_followup_2026-09-12')
 reference=json.loads((OUT/'device_reference.json').read_text())
 rows=[]
 for path in sorted(OUT.glob('device_[0-9]*.json')):
@@ -21,7 +21,9 @@ for path in sorted(OUT.glob('device_[0-9]*.json')):
         run_median_ms=statistics.median(calls) if calls else None,run_sum_ms=sum(calls),
         total_elapsed_ms=report['elapsed_ms'],task_call_fraction=sum(calls)/report['elapsed_ms'],
         max_allocated_wasm_mib=max([r['heap'] for r in runs]+[report.get('init',{}).get('heap',0)])/2**20,
-        hidden_events=report['hidden_events'],max_frame_gap_ms=max(report['frame_gap_ms'],default=None)))
-result=dict(devices=rows,scope='One desktop headless control and user-operated phone reports. No device-population estimate. Six 64k FA10 crystal-input units, not the 256k ranking workload. Factory timing excludes static import; heap is not resident memory; task-call fraction excludes reusable initialization. OS/device labels are reported, not attested.')
+        hidden_events=report['hidden_events'],max_frame_gap_ms=max(report['frame_gap_ms'],default=None),
+        init_count=report.get('init_count'),cold_first_result_ms=runs[0].get('result_received_ms') if runs else None,
+        reused_batch_median_ms=statistics.median([r['call_ms'] for r in runs if r.get('batch')==1]) if any(r.get('batch')==1 for r in runs) else None))
+result=dict(cap=reference.get('cap',64000),devices=rows,scope='Desktop headless control and user-operated phone reports. No device-population estimate. Six FA10 crystal-input units. Medium test: two batches in one worker, separated by two seconds; cold means a fresh worker, not a rebooted browser or device. Factory timing excludes static import; heap is not resident memory; task-call fraction excludes reusable initialization and includes the medium test pause in its denominator. OS/device labels are reported, not attested.')
 (OUT/'device_summary.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result,indent=2))

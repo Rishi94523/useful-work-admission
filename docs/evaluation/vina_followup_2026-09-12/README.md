@@ -1,7 +1,9 @@
 # Frozen Vina follow-up, 12 September 2026
 
-This directory separates completed controls/models from an ongoing ranking
-campaign. Absence of a gate or paired result is not a successful result.
+The ranking campaign completed on 13 September: 288 stock results, 288 ESR1
+paired results, and 24 old TRYB1 diagnostic rows. Only ESR1 passed the stock
+gate. Completed JSONL archives and their hashes are committed; the analyzer
+reads `.jsonl.gz` if the uncompressed local file is absent.
 
 Protocol: `docs/research/VINA_FOLLOWUP_PLAN_2026-09-12.md`, committed as
 `269364263c9d390690fd602d4cca2f40d09f79b8` before new ranking outcomes.

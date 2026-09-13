@@ -24,6 +24,30 @@
       "init_count": 1,
       "cold_first_result_ms": 4459.69999999553,
       "reused_batch_median_ms": 1424.8999999985099
+    },
+    {
+      "source": "device_1789303164242-d149f892.json",
+      "device_model": "iPhone 15",
+      "reported_os": "26.5.2",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Mobile/15E148 Safari/604.1",
+      "wasm_matches_reference": true,
+      "complete": true,
+      "exact_output_matches": 6,
+      "factory_instantiation_ms": 66,
+      "initialization_ms": 5149,
+      "run_count": 6,
+      "run_min_ms": 1009.0000000000018,
+      "run_max_ms": 1035,
+      "run_median_ms": 1026.5,
+      "run_sum_ms": 6149.000000000002,
+      "total_elapsed_ms": 13454,
+      "task_call_fraction": 0.4570387988702246,
+      "max_allocated_wasm_mib": 51.25,
+      "hidden_events": 0,
+      "max_frame_gap_ms": 24,
+      "init_count": 1,
+      "cold_first_result_ms": 6316,
+      "reused_batch_median_ms": 1026.9999999999982
     }
   ],
   "scope": "Desktop headless control and user-operated phone reports. No device-population estimate. Six FA10 crystal-input units. Medium test: two batches in one worker, separated by two seconds; cold means a fresh worker, not a rebooted browser or device. Factory timing excludes static import; heap is not resident memory; task-call fraction excludes reusable initialization and includes the medium test pause in its denominator. OS/device labels are reported, not attested."

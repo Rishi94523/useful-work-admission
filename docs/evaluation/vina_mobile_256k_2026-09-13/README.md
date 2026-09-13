@@ -32,4 +32,9 @@ The first completed desktop control, `device_1789302544303-33114cc2.json`, match
 6/6 outputs with exactly one initialization. Calls took 1.288â€“1.531s; first result
 arrived at 4.460s, initialization took 3.037s and maximum allocated WASM memory
 was 51.25MiB. It is headless Chrome on the existing Ryzen host, not a phone
-measurement. Physical phone results are pending collection.
+measurement. The physical iPhone report `device_1789303164242-d149f892.json` also matched
+6/6 outputs, with one initialization: 5.149s initialization, 6.316s to first
+result, 1.009–1.035s calls and 1.027s reused-batch median. Maximum allocated
+WASM memory was51.25MiB. Low Power Mode was not recorded programmatically; the
+user suggests it was off for this trial. See the startup analysis in
+`docs/research/VINA_STARTUP_AND_BACKGROUND_UX_2026-09-13.md`.

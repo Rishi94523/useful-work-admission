@@ -72,8 +72,8 @@ experiment, retain these failures, and avoid tuning on the same ranking labels.
 
 The 256k physical-phone test is the current priority. Its new page measures
 fresh-worker startup, then two batches within the same worker; desktop control
-has passed 6/6 exact raw-output comparisons. Phone results must be received
-before reporting phone latency. No further 64k device test was performed.
+has passed 6/6 exact raw-output comparisons. The subsequently received iPhone result also passed6/6 matches, with
+5.149s initialization and1.009–1.035s calls; see the startup/background report. No further 64k device test was performed.
 
 Low-risk admission remains governed by the completed policy analysis: sparse
 auditing is conditional on trusted eligibility and bounded exposure, while risky

@@ -1,0 +1,140 @@
+{
+  "environment": "Node, local files, no HTTP; one measured initialization; not a phone phase profile",
+  "factory_ms": 9.055400000000002,
+  "init_ms": 2908.7716,
+  "phases": {
+    "engine_ms": 0.7866999999999962,
+    "receptor_ms": 96.04200000000002,
+    "ligand_and_pair_tables_ms": 112.85999999999999,
+    "maps_and_scoring_setup_ms": 2697.679,
+    "save_initial_ms": 0.19000000000005457
+  },
+  "profile": [
+    {
+      "phase": "before_engine",
+      "heap_bytes": 17956864,
+      "live_bytes": 208,
+      "free_bytes": 4304,
+      "time_ms": 40.3823
+    },
+    {
+      "phase": "after_engine",
+      "heap_bytes": 17956864,
+      "live_bytes": 11184,
+      "free_bytes": 1520,
+      "time_ms": 41.169
+    },
+    {
+      "phase": "after_receptor",
+      "heap_bytes": 17956864,
+      "live_bytes": 553864,
+      "free_bytes": 294424,
+      "time_ms": 137.211
+    },
+    {
+      "phase": "table_before_store",
+      "heap_bytes": 17956864,
+      "live_bytes": 14511400,
+      "free_bytes": 267384,
+      "time_ms": 249.97
+    },
+    {
+      "phase": "table_after_store",
+      "heap_bytes": 17956864,
+      "live_bytes": 14511528,
+      "free_bytes": 267256,
+      "time_ms": 250.003
+    },
+    {
+      "phase": "ligand_store_before",
+      "heap_bytes": 17956864,
+      "live_bytes": 14403464,
+      "free_bytes": 375320,
+      "time_ms": 250.029
+    },
+    {
+      "phase": "ligand_store_after",
+      "heap_bytes": 17956864,
+      "live_bytes": 14403592,
+      "free_bytes": 375192,
+      "time_ms": 250.05
+    },
+    {
+      "phase": "after_ligand",
+      "heap_bytes": 17956864,
+      "live_bytes": 14400392,
+      "free_bytes": 378392,
+      "time_ms": 250.071
+    },
+    {
+      "phase": "table_before_store",
+      "heap_bytes": 17956864,
+      "live_bytes": 14417456,
+      "free_bytes": 361328,
+      "time_ms": 250.545
+    },
+    {
+      "phase": "table_after_store",
+      "heap_bytes": 17956864,
+      "live_bytes": 14417680,
+      "free_bytes": 361104,
+      "time_ms": 250.588
+    },
+    {
+      "phase": "type_store_before",
+      "heap_bytes": 17956864,
+      "live_bytes": 14417800,
+      "free_bytes": 360984,
+      "time_ms": 250.61
+    },
+    {
+      "phase": "type_store_after",
+      "heap_bytes": 17956864,
+      "live_bytes": 14417920,
+      "free_bytes": 360864,
+      "time_ms": 250.631
+    },
+    {
+      "phase": "grid_store_before",
+      "heap_bytes": 44761088,
+      "live_bytes": 42632880,
+      "free_bytes": 633584,
+      "time_ms": 2947.68
+    },
+    {
+      "phase": "grid_store_after",
+      "heap_bytes": 44761088,
+      "live_bytes": 42628392,
+      "free_bytes": 638072,
+      "time_ms": 2947.72
+    },
+    {
+      "phase": "after_maps",
+      "heap_bytes": 44761088,
+      "live_bytes": 42628472,
+      "free_bytes": 637992,
+      "time_ms": 2947.75
+    },
+    {
+      "phase": "after_save",
+      "heap_bytes": 44761088,
+      "live_bytes": 42916128,
+      "free_bytes": 493696,
+      "time_ms": 2947.94
+    },
+    {
+      "phase": "snapshot",
+      "heap_bytes": 44761088,
+      "live_bytes": 42916280,
+      "free_bytes": 493544,
+      "time_ms": 2948.16
+    }
+  ],
+  "wasm_sha256": "3d62b6b9accd602aef25bb54cbe916fc926ef78055c15b957a50f912967592af",
+  "asset_bytes": {
+    "wasm": 561113,
+    "receptor": 181926,
+    "ligand": 3272
+  },
+  "scope": "Maps phase includes grid population, lazy scoring tables and explicit-receptor non_cache setup. No molecular search performed. No new 64k test."
+}

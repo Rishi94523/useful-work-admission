@@ -1,0 +1,20 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prepared Vina state test</title>
+<style>body{font:18px system-ui;max-width:720px;margin:30px auto;padding:20px;background:#f5f7f6;color:#193a30}input,button{font:inherit;padding:12px;margin:6px}label{display:block}pre{white-space:pre-wrap}button{background:#17694f;color:white;border:0;border-radius:6px}</style>
+<h1>Prepared Vina state test</h1><p>Four actual 256k contributions: a forced-download cold restore, a reused worker, a fresh worker using cached assets (explicit storage when enabled), and normal computation of the maps as a control. Keep this tab visible. The first download may be substantial; use Wi-Fi. Stop whenever you need to.</p>
+<label>Device <input id="model" value="iPhone 15"></label><label>OS version <input id="os"></label><label><input id="power" type="checkbox">Low Power Mode is enabled</label>
+<button id="start">Start test</button><button id="stop" disabled>Stop</button><pre id="status">Ready.</pre>
+<script>
+const key=new URL(location.href).searchParams.get('key'),status=document.querySelector('#status');let worker,report,stopped=false,saved=false,hidden=0;
+document.addEventListener('visibilitychange',()=>{if(report&&document.hidden)hidden++});
+async function save(){if(saved)return;saved=true;worker?.terminate();document.querySelector('#stop').disabled=true;report.hidden_events=hidden;try{const r=await fetch('/results?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(report)});if(!r.ok)throw Error(r.status);const a=await r.json();status.textContent+='\nSaved. Exact matches: '+a.matches+'/'+a.runs;}catch(e){status.textContent+='\nUpload failed: '+e;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report)],{type:'application/json'}));a.download='prepared-result.json';a.textContent='Download results';document.body.append(a);}}
+document.querySelector('#stop').onclick=()=>{stopped=true;report.stopped=true;status.textContent+='\nStopped.';save()};
+document.querySelector('#start').onclick=async()=>{document.querySelector('#start').disabled=true;document.querySelector('#stop').disabled=false;report={device_model:document.querySelector('#model').value,os_version:document.querySelector('#os').value,low_power_mode_reported:document.querySelector('#power').checked,user_agent:navigator.userAgent,runs:[]};try{
+ const coldStart=performance.now();const manifest=await(await fetch('/manifest?key='+key)).json();report.cache_policy=manifest.cache_policy;report.artifact_sha256=manifest.artifact_sha256;report.wasm_sha256=manifest.wasm_sha256;
+ const modes=['cold_restore','reuse','cached_restore','compute'];
+ for(let i=0;i<modes.length;i++){if(stopped)return;const mode=modes[i],start=i===0?coldStart:performance.now();status.textContent+='\nRunning '+mode+'…';if(mode!=='reuse'){worker?.terminate();worker=new Worker('/worker.mjs',{type:'module'});}
+ const result=await new Promise((resolve,reject)=>{worker.onmessage=e=>e.data.error?reject(Error(e.data.error)):resolve(e.data);worker.onerror=e=>reject(Error(e.message));worker.postMessage({mode,index:i,manifest})});if(stopped)return;result.end_to_end_ms=performance.now()-start;report.runs.push(result);status.textContent+=' '+Math.round(result.end_to_end_ms)+' ms to result; run '+Math.round(result.run_ms)+' ms';
+ }
+ await save();
+}catch(e){report.error=String(e);status.textContent+='\n'+e;await save()}};
+</script>

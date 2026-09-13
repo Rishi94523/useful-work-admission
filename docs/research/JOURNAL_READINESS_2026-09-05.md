@@ -6,7 +6,11 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: completed ranking and 256k phone test, 13 September
+## Latest update: lossless prepared-state prototype, 13 September
+
+The [prepared-state restoration checkpoint](VINA_PREPARED_RESTORATION_2026-09-13.md) preserves exact raw pools, traces and final aggregates on three targets across reference compute, new compute and restored paths. The scientific reference remains unchanged. FA10 prepared state is27.7MB raw,14.7MB gzip. Desktop browser first-result latency falls from4.62s with computation to2.34s with forced download/restore; explicit IndexedDB fixes the observed large-artifact HTTP cache miss. A localhost WebCrypto control reaches1.89s cold and1.64s cached versus1.40s worker reuse. These are laptop-local measurements, not phone/WAN proof. The cache-enabled physical-phone test is ready; its result is pending. Download size remains a real constraint on the true cold goal.
+
+## Previous update: completed ranking and 256k phone test, 13 September
 
 The [completed larger ranking report](VINA_RANKING_FOLLOWUP_2026-09-13.md) retains all 288 stock jobs: FA10 AUC 0.628 and TRYB1 0.636 failed the frozen strong-baseline gate; ESR1 0.826 passed. On ESR1, the three-seed average medium-minus-normal AUC difference is -0.0109, paired95% [-0.0288,+0.0049], meeting the predeclared average noninferiority margin at 1.3–1.5% extra evaluations. This is one qualifying target, not multi-target preservation. The old TRYB1 drop recurs in two of three seeds on a weak, tiny panel; its cause remains unresolved.
 

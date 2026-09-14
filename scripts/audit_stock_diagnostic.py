@@ -7,7 +7,8 @@ from rdkit import Chem,rdBase
 def atoms(path):
  return [{'residue':l[17:27].strip(),'name':l[12:16].strip(),'type':l[77:].strip(),'charge':float(l[70:76]),'xyz':np.array([float(l[i:i+8]) for i in [30,38,46]])} for l in path.read_text().splitlines() if l.startswith(('ATOM','HETATM'))]
 def main():
- cfg=json.loads((ROOT/'benchmarks/vina_stock_diagnostic.json').read_text());out=ROOT/cfg['output_directory'];inputs=json.loads((out/'inputs.json').read_text());reports=[]
+ cfg=json.loads((ROOT/'benchmarks/vina_stock_diagnostic.json').read_text());out=ROOT/cfg['output_directory'];input_path=out/'inputs.json';inputs=json.loads(input_path.read_text());reports=[];failures=[]
+ assert [t['target'] for t in inputs['targets']]==cfg['targets'],'Preparation incomplete'
  for t in inputs['targets']:
   selected=json.loads((out/(t['target']+'_split.json')).read_text());dev={l['parent'] for l in selected['development']};held={l['parent'] for l in selected['heldout']};assert not dev&held
   crystal=Chem.RemoveHs(Chem.SDMolSupplier(str((ROOT/t['crystal']['path']).with_suffix('.sdf')))[0]);xyz=crystal.GetConformer().GetPositions();receptors={};atom_sets={}
@@ -21,11 +22,13 @@ def main():
   for split,ligands in t['splits'].items():
    torsions=[];charges=collections.Counter();box_oversize=collections.Counter()
    for l in ligands:
-    p=ROOT/l['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==l['sha256'];m=Chem.SDMolSupplier(str(p.with_suffix('.sdf')),removeHs=False)[0];assert Chem.MolToSmiles(Chem.RemoveHs(m))==l['smiles'];assert np.isfinite(m.GetConformer().GetPositions()).all();charges[str(Chem.GetFormalCharge(m))]+=1
+    p=ROOT/l['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==l['sha256'];m=Chem.SDMolSupplier(str(p.with_suffix('.sdf')),removeHs=False)[0];roundtrip=Chem.MolToSmiles(Chem.RemoveHs(m))
+    if roundtrip!=l['smiles']:failures.append({'target':t['target'],'split':split,'id':l['id'],'error':'Prepared SDF stereochemical graph differs after serialization','recorded_smiles':l['smiles'],'roundtrip_smiles':roundtrip})
+    assert np.isfinite(m.GetConformer().GetPositions()).all();charges[str(Chem.GetFormalCharge(m))]+=1
     torsions.append(int(next(s.split()[1] for s in p.read_text().splitlines() if s.startswith('TORSDOF'))))
     span=np.ptp(Chem.RemoveHs(m).GetConformer().GetPositions(),axis=0)
     for key,box in t['boxes'].items():box_oversize[key]+=int(any(span>box['size']))
    ligand_states[split]={'count':len(ligands),'formal_charge_counts':dict(charges),'torsdof_min_median_max':[min(torsions),float(np.median(torsions)),max(torsions)],'supplied_axis_span_exceeds_box':dict(box_oversize)}
   reports.append({'target':t['target'],'parent_overlap':len(dev&held),'receptors':receptors,'legacy_to_revised_max_heavy_coordinate_change_A':coordinate_change,'heavy_atom_type_changes':type_changes,'ligand_states':ligand_states,'note':'Axis span is an input diagnostic, not an orientation-invariant fit test. No molecular states or boxes changed by this audit.'})
- (out/'chemical_state_audit.json').write_text(json.dumps({'rdkit_version':rdBase.rdkitVersion,'targets':reports},indent=2)+'\n');print(json.dumps(reports,indent=2))
+ (out/'chemical_state_audit.json').write_text(json.dumps({'rdkit_version':rdBase.rdkitVersion,'inputs_sha256':hashlib.sha256(input_path.read_bytes()).hexdigest(),'targets':reports,'input_validation_failures':failures},indent=2)+'\n');print(json.dumps({'targets':reports,'input_validation_failures':failures},indent=2))
 if __name__=='__main__':main()

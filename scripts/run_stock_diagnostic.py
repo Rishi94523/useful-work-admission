@@ -29,7 +29,9 @@ def main():
  protocol=ROOT/'benchmarks/vina_stock_diagnostic.json';cfg=json.loads(protocol.read_text());out=ROOT/cfg['output_directory'];inputs=out/'inputs.json';data=json.loads(inputs.read_text());exe=ROOT/'tmp/docking-pilot/native/vina_1.2.7_win.exe'
  assert data['protocol_sha256']==digest(protocol) and data['stock_sha256']==digest(exe)
  assert [t['target'] for t in data['targets']]==cfg['targets'],'Preparation incomplete'
- freeze(out/'execution_manifest.json',{'protocol':digest(protocol),'inputs':digest(inputs),'executable':digest(exe),'runner':digest(Path(__file__))})
+ audit_path=out/'chemical_state_audit.json';audit=json.loads(audit_path.read_text());assert audit['inputs_sha256']==digest(inputs)
+ invalid={(f['target'],f['split'],f['id']) for f in audit['input_validation_failures']}
+ freeze(out/'execution_manifest.json',{'protocol':digest(protocol),'inputs':digest(inputs),'chemical_audit':digest(audit_path),'executable':digest(exe),'runner':digest(Path(__file__))})
  def key(r):return (r['target'],r['config'],r['split'],r['id'],r['seed'])
  path=out/'stock_jobs.jsonl';rows=[json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
  assert len({key(r) for r in rows})==len(rows)
@@ -51,7 +53,7 @@ def main():
  def phase(jobs):
   done={key(r) for r in rows}
   with ThreadPoolExecutor(max_workers=cfg['workers']) as pool:
-   futures=[pool.submit(run,t,c,s,l,seed) for t,c,s,l,seed in jobs if (t['target'],c['id'],s,l.get('id','crystal'),seed) not in done]
+   futures=[pool.submit(run,t,c,s,l,seed) for t,c,s,l,seed in jobs if (t['target'],c['id'],s,l.get('id','crystal'),seed) not in done and (t['target'],s,l.get('id','crystal')) not in invalid]
    for future in as_completed(futures):
     r=future.result()
     with path.open('a') as f:f.write(json.dumps(r)+'\n');f.flush();os.fsync(f.fileno())
@@ -67,13 +69,13 @@ def main():
    passed=bool(complete and redock and m['auc']>=.75 and m['ef10']>=1.5);development.append({'target':t['target'],'config':c['id'],**m,'complete':complete,'redocking_pass':redock,'eligible':passed,'crystal_top_rmsd_A':[r.get('top_rmsd_A') for r in sorted(cr,key=lambda r:r['seed'])]})
    if passed:eligible.append((-m['auc'],c['exhaustiveness'],index,c))
   chosen=min(eligible)[-1] if eligible else None;selected.append({'target':t['target'],'configuration':chosen})
- freeze(out/'development_decision.json',{'development':development,'selected':selected,'protocol_sha256':digest(protocol),'inputs_sha256':digest(inputs)})
+ freeze(out/'development_decision.json',{'development':development,'selected':selected,'protocol_sha256':digest(protocol),'inputs_sha256':digest(inputs),'input_validation_failures':audit['input_validation_failures']})
  print('FROZEN SELECTION',selected,flush=True)
  phase([(t,s['configuration'],'heldout',l,cfg['heldout_seed']) for t in data['targets'] for s in selected if s['target']==t['target'] and s['configuration'] for l in t['splits']['heldout']])
  results=[]
  for s in selected:
   if not s['configuration']:results.append({'target':s['target'],'passed':False,'reason':'No development configuration qualified; heldout not docked'});continue
   t=next(t for t in data['targets'] if t['target']==s['target']);rs=[r for r in rows if r['target']==s['target'] and r['split']=='heldout'];m=metrics(rs,cfg['heldout_gate']['bootstrap_resamples']);complete=len(rs)==96 and all(r['ok'] for r in rs) and not any(f['split']=='heldout' for f in t['failures']);passed=bool(complete and m['auc']>=.75 and m['bootstrap95'][0]>.60 and m['ef10']>=1.5)
-  results.append({'target':s['target'],'config':s['configuration']['id'],**m,'complete':complete,'passed':passed})
+  results.append({'target':s['target'],'config':s['configuration']['id'],**m,'complete':complete,'passed':passed,'input_validation_failures':[f for f in audit['input_validation_failures'] if f['target']==s['target']]})
  freeze(out/'heldout_results.json',results);print('COMPLETE',results,flush=True)
 if __name__=='__main__':main()

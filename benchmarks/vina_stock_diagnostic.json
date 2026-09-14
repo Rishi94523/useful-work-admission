@@ -1,0 +1,27 @@
+{
+  "version": "stock-diagnostic-2026-09-14-v1",
+  "targets": ["dyr", "akt1", "pparg"],
+  "old_panels": "Preserve all prior results. Exclude normalized molecular parents in all previously selected panels for each target and the crystal ligand.",
+  "split": {"development_actives": 8, "development_decoys": 16, "heldout_actives": 32, "heldout_decoys": 64, "candidate_limit_per_class": 4000, "development_salt": "stock-diagnostic-dev-v1:", "heldout_salt": "stock-diagnostic-heldout-v1:", "parent_key": "RDKit Cleanup, Uncharger, canonical tautomer, remove stereochemistry; used only for split exclusion, never to alter docking molecules"},
+  "eligibility": "Same supplied DUD-E conformers, one fragment, 12-55 heavy atoms, supported elements, finite 3D coordinates. Retain preparation failures; no replacement or optional stopping.",
+  "receptor_audit": "Inventory residues including cofactors encoded as ATOM; check heavy coordinates, nearest-heavy polar-H attachments, donor/acceptor typing and binding-site proximity. Source-state preparation maps generic HIS to HID/HIE/HIP from source polar-H attachments before the existing Meeko recipe; preserve explicit residue states and cofactors. Never optimize a residue state using evaluation scores.",
+  "configurations": [
+    {"id": "legacy_e8", "receptor": "legacy", "box": "legacy30", "exhaustiveness": 8},
+    {"id": "source_e8", "receptor": "source_state", "box": "legacy30", "exhaustiveness": 8},
+    {"id": "source_site_e8", "receptor": "source_state", "box": "crystal_site", "exhaustiveness": 8},
+    {"id": "source_site_e32", "receptor": "source_state", "box": "crystal_site", "exhaustiveness": 32}
+  ],
+  "crystal_site_box": "Center at heavy-atom crystal bounding-box midpoint; each side max(20 A, crystal span + 12 A). This defines a local-site diagnostic, not universal cavity coverage. No evaluation-ligand coordinates used.",
+  "development_seed": 104729,
+  "redocking_seeds": [104729, 130363, 155921],
+  "redocking_gate": "At least 2/3 seeds have top-ranked symmetry-corrected heavy-atom RMSD <= 2 A, without alignment. Require unchanged ligand graph and all jobs complete.",
+  "selection_rule": "After all development and crystal jobs finish, retain configurations with complete development results, development AUC >= 0.75, EF10 >= 1.5 and the redocking gate. Choose highest development AUC; exact ties choose lower exhaustiveness then protocol order. If none qualify, do not inspect heldout scores for that target. Record the chosen configuration hash before heldout docking.",
+  "heldout_seed": 271828,
+  "heldout_gate": {"complete_compounds": 96, "auc_min": 0.75, "auc_95_lower_exclusive_min": 0.60, "ef10_min": 1.5, "bootstrap_resamples": 5000, "bootstrap_seed": 104729},
+  "ef10_ties": "Fractional occupancy at the score cutoff, independent of job completion order.",
+  "timeout_seconds": 3600,
+  "workers": 4,
+  "output_directory": "local-research/stock-diagnostic-2026-09-14",
+  "limitations": "Small development set may overfit; only fresh heldout results support qualification. No guarantee of obtaining 2-3 successes. No failed target replacement, retrospective threshold changes, or distributed-run comparisons in this diagnostic.",
+  "sources": ["https://autodock-vina.readthedocs.io/en/latest/faq.html", "https://autodock-vina.readthedocs.io/en/stable/docking_basic.html", "https://dude.docking.org/targets"]
+}

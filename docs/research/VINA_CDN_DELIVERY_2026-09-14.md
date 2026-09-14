@@ -1,6 +1,30 @@
 # Cold prepared-state delivery: static edge experiment
 
-The unchanged FA10 scientific artifact is now hosted on Cloudflare infrastructure. The local computer and quick tunnel are no longer in the asset or result-upload path. Physical iPhone CDN measurements are pending. The default Brotli desktop trial reached the first 256k result in 3.309 s from Start, with a new browser context and an already warm edge cache; this is not a phone result or a population estimate.
+The unchanged FA10 scientific artifact is now hosted on Cloudflare infrastructure. The local computer and quick tunnel are no longer in the asset or result-upload path. Three physical iPhone 15 CDN sessions now demonstrate a few-second first contribution under the tested connection and warm-edge conditions. Browser cache was empty at each session's start, as confirmed by the user; this is distinct from the CDN edge cache.
+
+## Physical iPhone results received
+
+All three sessions used ordinary Brotli quality 9. There is no phone gzip/shuffle comparison. All 12 raw pools and traces independently match the frozen reference, and all three reported original-finalization digests match. All artifact/engine hashes match, all reports are complete, and no hidden-tab events were recorded.
+
+| Measurement | Normal power, trial 1 | Normal power, trial 2 | Low Power Mode |
+|---|---:|---:|---:|
+| Cold result from Start | 2.512 s | 2.458 s | 3.814 s |
+| Cold navigation-to-result, excluding form dwell | 3.996 s | 3.282 s | 4.710 s |
+| Existing-worker result | 0.959 s | 0.943 s | 2.034 s |
+| After page navigation, HTTP-only restore | 3.054 s | 2.323 s | 3.574 s |
+| Persistent-cache restore, separate worker | 1.270 s | 1.299 s | 2.928 s |
+| Cold asset acquisition | 1.235 s | 1.174 s | 1.288 s |
+| Cold integrity hashes | 22 ms | 25 ms | 37 ms |
+| Cold restore | 160 ms | 162 ms | 321 ms |
+| Cold molecular run | 946 ms | 930 ms | 2029 ms |
+
+Trial 1 is `device_57a384a8-4cac-4a22-86d2-ad6fdf032380.json`; trial 2 is `device_0703803a-38bb-4f5c-92a8-15ea2d7c9814.json`; Low Power Mode is `device_c865ec6c-6e8f-4040-b68b-8eca4d928614.json`. All three have `prior_visit_marker=false`. Trial 1's fresh-cache checkbox is false, but the user subsequently confirmed every session was uncached. That clarification is recorded in `phone_session_confirmation.json`; the original report is preserved without rewriting its fields.
+
+All cold artifact requests report `CF-Cache-Status: HIT` and `X-Delivery-Cache: HIT`, with ages of 884, 2902 and 2066 seconds respectively at the MAA edge. These are browser-cold, edge-warm trials. HTTP-only restoration on the second page re-fetches the artifact: its CF-Ray and Age change, and acquisition remains about 1.1–1.6 s. Safari's resource byte counts are zero, which does not establish a browser-cache hit. Explicit IndexedDB reads do avoid the artifact request. The persistent-cache row occurs after the HTTP-only control on that second page; it is not itself a measured navigation-first persistent-cache policy or evidence of survival after Safari closes.
+
+Start-to-result includes manifest retrieval, worker startup, download/decode, hashing, cache write, restoration and a 256k run. The adjusted navigation figure adds page startup and subtracts the measured pause at the form (9.683, 8.321 and 48.105 s). It is a sum of observed phases, not an uninterrupted auto-start navigation experiment: the pause can affect connection state and caching of page resources. The scientific artifact itself is not requested until Start. Report both timing definitions, rather than labelling 2.46 s as full navigation latency.
+
+**Decision:** a few-second cold contribution is demonstrated on this iPhone 15 and connection, without changing the scientific workload. The earlier 15–17 s tunnel bottleneck is no longer present in this delivery path. Normal-power repeat workers remain around one second, and persistent restoration around 1.3 s. The 11.23 MB transfer remains substantial; three sessions on one phone with a warm edge do not establish performance on slower links, cold edges, other devices, or reliable background operation under OS suspension. Keep this architecture and prioritize the outstanding multi-target ranking and low-risk admission evidence rather than redesigning molecular computation. A navigation-first persistent-cache policy and longer-lived session reuse are implementation follow-ups, not reasons to repeat the codec search now.
 
 ## Artifact and delivery
 
@@ -46,7 +70,7 @@ Use the new site in a fresh Safari session with no prior data/cache for this ori
 
 Select ordinary Brotli 9 and the actual power setting. Keep the page visible. The first page measures a cold restoration and existing-worker contribution; an automatic full navigation then measures HTTP-only restoration and a separate persistent-cache restoration. The page checks all pool/trace signatures and the original aggregate before saving. It records navigation, Start-to-result, and navigation-to-result excluding time spent reading the form; do not conflate them. Initial controls preceded addition of the last timing field and retain their original Start-based scope.
 
-The user must operate the physical phone. A few-second cold result on iPhone is **not yet demonstrated**. A second test after clearing this origin's site data, preferably with the other power setting, can check the result's sensitivity. Cross-session persistence after closing Safari and OS eviction remain separate longer-term tests; the automatic second navigation only demonstrates persistence across page/worker replacement.
+The three physical-phone measurements above complete this initial protocol. Cross-session persistence after closing Safari and OS eviction remain separate longer-term tests; the automatic second navigation only demonstrates persistence across page/worker replacement.
 
 ## Reproduction
 
@@ -55,4 +79,4 @@ The user must operate the physical phone. A few-second cold result on iPhone is 
 - `node scripts/benchmark_vina_cdn.cjs` tests three codecs in fresh Chrome contexts, using the local secret file under ignored `tmp/vina-cdn`.
 - `python scripts/analyze_vina_cdn.py --pull` retrieves KV reports and independently hashes raw outputs, checks completeness and finalization against the reference. Failed uploads/trials remain visible.
 
-The few-second target is plausible from the desktop result, but the required next evidence is the physical phone on this hosted path. The larger ranking and low-risk admission integration requirements remain unchanged.
+The few-second target is now observed on the physical phone under the stated conditions. The larger ranking and low-risk admission integration requirements remain unchanged.

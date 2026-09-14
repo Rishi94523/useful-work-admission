@@ -6,7 +6,11 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: static CDN delivery ready, 14 September
+## Latest update: iPhone CDN cold-delivery results, 14 September
+
+Three ordinary-Brotli iPhone 15 sessions, all browser-uncached per user confirmation, pass all 12 pools/traces and three original finalizations. Normal-power cold results take 2.458–2.512 s from Start, or 3.282–3.996 s including measured page startup and excluding form dwell. Low Power Mode takes 3.814 / 4.710 s respectively. Existing-worker results are 0.943–0.959 s normally; persistent restoration is 1.270–1.299 s. All initial artifact requests hit a warm CDN edge. This establishes a few-second first contribution on one phone/connection, not cold-edge or population performance. See [the report and timing limitations](VINA_CDN_DELIVERY_2026-09-14.md). Ranking across more qualified targets and adversarial low-risk admission integration remain the main blockers; no molecular architecture pivot is indicated.
+
+## Previous update: static CDN delivery ready, 14 September
 
 The [CDN delivery experiment](VINA_CDN_DELIVERY_2026-09-14.md) preserves the artifact hash across six lossless compression variants. Hosted ordinary Brotli is 11.23 MB versus 14.67 MB gzip. Three fresh-context desktop trials pass all 12 pools/traces and three original finalizations; ordinary Brotli reaches 3.309 s from Start with a warm edge cache. The physical iPhone CDN cold/second-visit test is ready but not yet measured. HTTP-only caching re-fetched the artifact in the desktop control; verified IndexedDB remains necessary. No few-second phone claim is established.
 

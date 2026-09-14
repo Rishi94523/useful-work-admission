@@ -1,0 +1,11 @@
+{
+  "source": "User follow-up in this task on 2026-09-14",
+  "statement": "they all are sessions without browser cache...also i only did br9",
+  "applies_to": [
+    "0703803a-38bb-4f5c-92a8-15ea2d7c9814",
+    "57a384a8-4cac-4a22-86d2-ad6fdf032380",
+    "c865ec6c-6e8f-4040-b68b-8eca4d928614"
+  ],
+  "browser_cache_empty_user_confirmed": true,
+  "note": "Retain original upload fields. One trial has cold_state_user_reported=false because its checkbox was not selected; this subsequent confirmation applies to all three. All uploads have prior_visit_marker=false. This is user-reported browser state, not independent inspection of Safari cache. CDN edge cache was warm."
+}

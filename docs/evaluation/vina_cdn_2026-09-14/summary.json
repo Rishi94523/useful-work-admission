@@ -35,6 +35,7 @@
       ],
       "hidden_events": 0,
       "error": null,
+      "browser_cache_empty_confirmed_in_followup": false,
       "source": "desktop_identity-br9.json",
       "runs": [
         {
@@ -301,6 +302,7 @@
       ],
       "hidden_events": 0,
       "error": null,
+      "browser_cache_empty_confirmed_in_followup": false,
       "source": "desktop_identity-gzip9.json",
       "runs": [
         {
@@ -567,6 +569,7 @@
       ],
       "hidden_events": 0,
       "error": null,
+      "browser_cache_empty_confirmed_in_followup": false,
       "source": "desktop_shuffle8-br9.json",
       "runs": [
         {
@@ -801,6 +804,285 @@
       "wasm_exact": true
     },
     {
+      "id": "0703803a-38bb-4f5c-92a8-15ea2d7c9814",
+      "device_model": "iPhone 15",
+      "low_power_mode_reported": false,
+      "variant": "identity-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 829.0000000000001,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 9145,
+          "page_ready_ms": 824.0000000000001,
+          "user_dwell_ms": 8321
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 356,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 353,
+          "page_ready_ms": 352,
+          "user_dwell_ms": 0
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "browser_cache_empty_confirmed_in_followup": true,
+      "source": "device_0703803a-38bb-4f5c-92a8-15ea2d7c9814.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad3c2e1a68802b-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad3c2e1a67802b-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad3c2e1a69802b-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "2902",
+              "cf_ray": "a3ad3c2e1a6a802b-MAA"
+            }
+          ],
+          "assets_ms": 1174.0000000000002,
+          "hash_ms": 24.999999999999773,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 18,
+          "factory_ms": 8,
+          "fs_copy_ms": 3,
+          "init_or_restore_ms": 162,
+          "run_ms": 930,
+          "result": {
+            "ok": true,
+            "total_ms": 930,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2458,
+          "navigation_to_result_ms": 11603,
+          "navigation_to_result_excluding_user_dwell_ms": 3282,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1091,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 942,
+          "result": {
+            "ok": true,
+            "total_ms": 942,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 943,
+          "navigation_to_result_ms": 12546,
+          "navigation_to_result_excluding_user_dwell_ms": 4225,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "2906",
+              "cf_ray": "a3ad3c452b7b802b-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad3c451b79802b-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad3c451b78802b-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad3c452b7a802b-MAA"
+            }
+          ],
+          "assets_ms": 1074.0000000000002,
+          "hash_ms": 18.999999999999773,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 16,
+          "factory_ms": 7,
+          "fs_copy_ms": 2,
+          "init_or_restore_ms": 160,
+          "run_ms": 926,
+          "result": {
+            "ok": true,
+            "total_ms": 925,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 2323,
+          "navigation_to_result_ms": 2676,
+          "navigation_to_result_excluding_user_dwell_ms": 2676,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1050,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_read_ms": 15,
+          "artifact_cache_source": "indexeddb",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad3c534c52802b-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad3c534c53802b-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad3c534c51802b-MAA"
+            }
+          ],
+          "assets_ms": 74.00000000000003,
+          "hash_ms": 15.999999999999972,
+          "factory_ms": 7,
+          "fs_copy_ms": 1,
+          "init_or_restore_ms": 165,
+          "run_ms": 966,
+          "result": {
+            "ok": true,
+            "total_ms": 966,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 1299,
+          "navigation_to_result_ms": 3975,
+          "navigation_to_result_excluding_user_dwell_ms": 3975,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
       "id": "0dbb49ac-be68-462f-9cf5-4b718cca45b6",
       "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
       "low_power_mode_reported": false,
@@ -835,6 +1117,7 @@
       ],
       "hidden_events": 0,
       "error": "Error: Error: Asset integrity mismatch",
+      "browser_cache_empty_confirmed_in_followup": false,
       "source": "device_0dbb49ac-be68-462f-9cf5-4b718cca45b6.json",
       "runs": [
         {
@@ -936,6 +1219,285 @@
       "wasm_exact": true
     },
     {
+      "id": "57a384a8-4cac-4a22-86d2-ad6fdf032380",
+      "device_model": "iPhone 15",
+      "low_power_mode_reported": false,
+      "variant": "identity-br9",
+      "cold_state_user_reported": false,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 1494,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 11167,
+          "page_ready_ms": 1484,
+          "user_dwell_ms": 9683
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 673,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 670,
+          "page_ready_ms": 669,
+          "user_dwell_ms": 0
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "browser_cache_empty_confirmed_in_followup": true,
+      "source": "device_57a384a8-4cac-4a22-86d2-ad6fdf032380.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad0ae58f817c1e-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad0ae58f827c1e-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad0ae58f837c1e-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "884",
+              "cf_ray": "a3ad0ae58f847c1e-MAA"
+            }
+          ],
+          "assets_ms": 1235,
+          "hash_ms": 22,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 15,
+          "factory_ms": 13,
+          "fs_copy_ms": 3,
+          "init_or_restore_ms": 160.00000000000023,
+          "run_ms": 945.9999999999998,
+          "result": {
+            "ok": true,
+            "total_ms": 945,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2512,
+          "navigation_to_result_ms": 13679,
+          "navigation_to_result_excluding_user_dwell_ms": 3996,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1183,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 957,
+          "result": {
+            "ok": true,
+            "total_ms": 957,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 959.0000000000018,
+          "navigation_to_result_ms": 14639.000000000002,
+          "navigation_to_result_excluding_user_dwell_ms": 4956.000000000002,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad0b00cb2c7c1e-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad0b00cb2b7c1e-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "888",
+              "cf_ray": "a3ad0b00cb2e7c1e-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad0b00cb2d7c1e-MAA"
+            }
+          ],
+          "assets_ms": 1556,
+          "hash_ms": 19,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 15.000000000000227,
+          "factory_ms": 6.999999999999773,
+          "fs_copy_ms": 2,
+          "init_or_restore_ms": 158,
+          "run_ms": 943,
+          "result": {
+            "ok": true,
+            "total_ms": 943,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 3054,
+          "navigation_to_result_ms": 3724,
+          "navigation_to_result_excluding_user_dwell_ms": 3724,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1525,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_read_ms": 14,
+          "artifact_cache_source": "indexeddb",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad0b11fd897c1e-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad0b11fd877c1e-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad0b11fd887c1e-MAA"
+            }
+          ],
+          "assets_ms": 66,
+          "hash_ms": 14,
+          "factory_ms": 6.000000000000028,
+          "fs_copy_ms": 1.9999999999999716,
+          "init_or_restore_ms": 161,
+          "run_ms": 962.0000000000002,
+          "result": {
+            "ok": true,
+            "total_ms": 962,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 1270,
+          "navigation_to_result_ms": 4995,
+          "navigation_to_result_excluding_user_dwell_ms": 4995,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
       "id": "77e5983c-adaa-4955-9c36-e50a2a0982f7",
       "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
       "low_power_mode_reported": false,
@@ -958,10 +1520,290 @@
       ],
       "hidden_events": 0,
       "error": "Error: Error: Asset integrity mismatch",
+      "browser_cache_empty_confirmed_in_followup": false,
       "source": "device_77e5983c-adaa-4955-9c36-e50a2a0982f7.json",
       "runs": [],
       "complete": false,
       "final_exact": false,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
+      "id": "c865ec6c-6e8f-4040-b68b-8eca4d928614",
+      "device_model": "iPhone 15",
+      "low_power_mode_reported": true,
+      "variant": "identity-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 906,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 49001,
+          "page_ready_ms": 896,
+          "user_dwell_ms": 48105
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 361,
+              "transferSize": 2887,
+              "encodedBodySize": 2587,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 357,
+          "page_ready_ms": 357,
+          "user_dwell_ms": 0
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "browser_cache_empty_confirmed_in_followup": true,
+      "source": "device_c865ec6c-6e8f-4040-b68b-8eca4d928614.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad27c2793af399-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad27c27939f399-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad27c27938f399-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "2066",
+              "cf_ray": "a3ad27c2793bf399-MAA"
+            }
+          ],
+          "assets_ms": 1288,
+          "hash_ms": 37,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 31,
+          "factory_ms": 15,
+          "fs_copy_ms": 6,
+          "init_or_restore_ms": 321,
+          "run_ms": 2029,
+          "result": {
+            "ok": true,
+            "total_ms": 2028,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3814,
+          "navigation_to_result_ms": 52815,
+          "navigation_to_result_excluding_user_dwell_ms": 4710,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1233,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 2032,
+          "result": {
+            "ok": true,
+            "total_ms": 2031,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2034.0000000000073,
+          "navigation_to_result_ms": 54849.00000000001,
+          "navigation_to_result_excluding_user_dwell_ms": 6744.000000000007,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad27e91e99f399-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad27e92e9af399-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad27e91e98f399-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "2072",
+              "cf_ray": "a3ad27e92e9bf399-MAA"
+            }
+          ],
+          "assets_ms": 1135,
+          "hash_ms": 28,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 23,
+          "factory_ms": 13,
+          "fs_copy_ms": 5.000000000000227,
+          "init_or_restore_ms": 316.9999999999998,
+          "run_ms": 1972,
+          "result": {
+            "ok": true,
+            "total_ms": 1971,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 3574,
+          "navigation_to_result_ms": 3931,
+          "navigation_to_result_excluding_user_dwell_ms": 3931,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1112,
+              "transferSize": 0,
+              "encodedBodySize": 0,
+              "decodedBodySize": 0
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_read_ms": 26,
+          "artifact_cache_source": "indexeddb",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3ad28003a01f399-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3ad28003a02f399-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3ad28002a00f399-MAA"
+            }
+          ],
+          "assets_ms": 329,
+          "hash_ms": 34,
+          "factory_ms": 13.000000000000114,
+          "fs_copy_ms": 4,
+          "init_or_restore_ms": 310.9999999999999,
+          "run_ms": 2039,
+          "result": {
+            "ok": true,
+            "total_ms": 2038,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2928,
+          "navigation_to_result_ms": 6860,
+          "navigation_to_result_excluding_user_dwell_ms": 6860,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
       "artifact_exact": true,
       "wasm_exact": true
     }

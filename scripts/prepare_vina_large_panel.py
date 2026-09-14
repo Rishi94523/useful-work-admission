@@ -1,11 +1,13 @@
 """Outcome-blind selection, original DUD-E conformers, explicit preparation failures."""
-import gzip,hashlib,json,os,shutil,subprocess,sys,urllib.request
+import argparse,gzip,hashlib,json,os,shutil,subprocess,sys,urllib.request
 from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'tmp/docking-audit/deps'))
 from rdkit import Chem
 from meeko import MoleculePreparation,PDBQTWriterLegacy
-BASE=ROOT/'tmp/vina-followup';OUT=ROOT/'docs/evaluation/vina_followup_2026-09-12';OUT.mkdir(parents=True,exist_ok=True)
+parser=argparse.ArgumentParser();parser.add_argument('--protocol');args=parser.parse_args()
+protocol=json.loads(Path(args.protocol).read_text()) if args.protocol else None
+BASE=ROOT/('tmp/vina-extension' if protocol else 'tmp/vina-followup');OUT=ROOT/(protocol['output_directory'] if protocol else 'docs/evaluation/vina_followup_2026-09-12');OUT.mkdir(parents=True,exist_ok=True)
 old=json.loads((ROOT/'docs/evaluation/adaptive_docking_2026-09-08/science_inputs.json').read_text())['targets']
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def write(m,p):
@@ -13,7 +15,7 @@ def write(m,p):
  if not ok:raise ValueError(error)
  p.write_text(text,encoding='utf-8',newline='\n');w=Chem.SDWriter(str(p.with_suffix('.sdf')));w.write(m);w.close()
 rows=[]
-for target in ['fa10','tryb1','esr1']:
+for target in (protocol['targets'] if protocol else ['fa10','tryb1','esr1']):
  folder=BASE/target;folder.mkdir(parents=True,exist_ok=True);(folder/'ligands').mkdir(exist_ok=True);sources=[]
  for name in ['actives_final.sdf.gz','decoys_final.sdf.gz','crystal_ligand.mol2','receptor.pdb']:
   p=folder/name;url='https://dude.docking.org/targets/'+target+'/'+name
@@ -33,7 +35,7 @@ for target in ['fa10','tryb1','esr1']:
     if m is None:continue
     smi=Chem.MolToSmiles(Chem.RemoveHs(m))
     if smi in seen or smi in exclude or '.' in smi or not 12<=m.GetNumHeavyAtoms()<=55 or any(a.GetAtomicNum() not in [1,6,7,8,9,15,16,17,35,53] for a in m.GetAtoms()) or not m.GetNumConformers() or not np.isfinite(m.GetConformer().GetPositions()).all():continue
-    seen.add(smi);key=hashlib.sha256(('vina-followup-2026-09-12:'+smi).encode()).hexdigest();candidates.append((key,ordinal,smi,m))
+    seen.add(smi);key=hashlib.sha256(((protocol['selection_salt'] if protocol else 'vina-followup-2026-09-12:')+smi).encode()).hexdigest();candidates.append((key,ordinal,smi,m))
     if len(candidates)>=2000:break
   assert len(candidates)>=count,(target,label,len(candidates))
   for key,ordinal,smi,m in sorted(candidates,key=lambda x:x[0])[:count]:selected.append({'id':f'{label}_{ordinal:05d}','label':label,'smiles':smi,'selection_hash':key,'mol':m})

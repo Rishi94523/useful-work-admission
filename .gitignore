@@ -106,3 +106,8 @@ models/llm-*/
 /tmp/pdfs/portal_form1/
 /tmp/pdfs/signed_form1/
 /tmp/render_patent_qa.py
+
+# Local experiment notebooks and generated evidence are not publication artifacts
+/local-research/
+/docs/evaluation/
+/docs/research/

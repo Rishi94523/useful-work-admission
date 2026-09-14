@@ -1,0 +1,18 @@
+{
+  "protocol_version": "ranking-extension-2026-09-14-v1",
+  "declared_before_new_docking": true,
+  "targets": ["dhfr", "akt1", "pparg"],
+  "rationale": "Predeclared DUD-E extension spanning an enzyme, kinase and nuclear receptor. No local ranking outcomes used to select these targets. Prior ESR1 success and FA10/TRYB1 failures remain in the overall evidence; this extension does not replace them.",
+  "selection_salt": "vina-extension-2026-09-14:",
+  "actives": 32,
+  "decoys": 64,
+  "candidate_limit_per_class": 2000,
+  "selection": "SHA256 ordering of canonical isomeric SMILES among first 2000 unique eligible source molecules; 12-55 heavy atoms, one component, supported elements, finite supplied 3D coordinates. Retain preparation failures; no replacement.",
+  "preparation": "Same supplied-DUD-E-conformer/Meeko preparation recipe as previous panel; frozen 30 A crystal-centered box. Record all input hashes. No target-specific retuning after stock outcomes.",
+  "stock": {"engine": "official AutoDock Vina 1.2.7", "exhaustiveness": 8, "cpu": 1, "seed": 104729, "timeout_seconds": 900},
+  "stock_gate": {"complete_compounds": 96, "auc_min": 0.75, "auc_95_lower_exclusive_min": 0.60, "ef10_min": 1.5},
+  "comparison": {"parent_seeds": [104729, 130363, 155921], "unit_max_evals": 256000, "matching": "ceil(normal E8 evaluation count / 256000) independent units per ligand; disclose eval and time ratios", "finalizer": "unchanged original Vina merge/finalization", "auc_noninferiority_margin": -0.05, "bootstrap": "paired stratified compound resampling across seeds; 5000 samples; report each seed and target, not only pooled results"},
+  "scope": "Conditional preservation on stock-qualified targets; small active/decoy panel, not full-library screening or universal target quality. Retain failed gates and missing jobs. No optional stopping within a preselected panel.",
+  "sources": ["https://dude.docking.org/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC9632257/"],
+  "output_directory": "local-research/ranking-extension-2026-09-14"
+}

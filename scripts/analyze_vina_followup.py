@@ -1,10 +1,12 @@
 """Paired compound bootstrap; repeated seeds are not independent compounds."""
-import json, math, gzip
+import argparse, json, math, gzip
 from pathlib import Path
 import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]
-BASE=ROOT/'docs/evaluation/vina_followup_2026-09-12'
+parser=argparse.ArgumentParser();parser.add_argument('--protocol');args=parser.parse_args()
+protocol=json.loads(Path(args.protocol).read_text()) if args.protocol else None
+BASE=ROOT/(protocol['output_directory'] if protocol else 'docs/evaluation/vina_followup_2026-09-12')
 SEEDS=[104729,130363,155921]
 
 def read(name):
@@ -60,7 +62,7 @@ def analyze(rows,expected):
 stock=read('large_stock.jsonl')
 result=dict(scope='Incomplete snapshots cannot establish noninferiority. Compound-resampled paired bootstrap preserves all three seeds together; seed variation is reported separately. New source conformers differ from the old MMFF panel.',
     stock_progress=[dict(target=t,completed=sum(r['target']==t for r in stock),expected=96,
-        failures=sum(r['target']==t and not r['ok'] for r in stock)) for t in ['fa10','tryb1','esr1']],
+        failures=sum(r['target']==t and not r['ok'] for r in stock)) for t in (protocol['targets'] if protocol else ['fa10','tryb1','esr1'])],
     stock_gates=json.loads((BASE/'large_stock_gates.json').read_text()) if (BASE/'large_stock_gates.json').exists() else None,
     large_matched=analyze(read('large_matched.jsonl'),96),
     old_tryb1_diagnostic=analyze(read('tryb1_old_seed_diagnostic.jsonl'),8),

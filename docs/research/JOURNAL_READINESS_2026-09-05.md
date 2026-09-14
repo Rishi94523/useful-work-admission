@@ -6,7 +6,11 @@
 
 This question guides the protocol and evaluation. Qwen and human-feedback retraining are optional extensions under the current scope.
 
-## Latest update: HTTPS iPhone prepared-state follow-up — 2026-09-13
+## Latest update: static CDN delivery ready, 14 September
+
+The [CDN delivery experiment](VINA_CDN_DELIVERY_2026-09-14.md) preserves the artifact hash across six lossless compression variants. Hosted ordinary Brotli is 11.23 MB versus 14.67 MB gzip. Three fresh-context desktop trials pass all 12 pools/traces and three original finalizations; ordinary Brotli reaches 3.309 s from Start with a warm edge cache. The physical iPhone CDN cold/second-visit test is ready but not yet measured. HTTP-only caching re-fetched the artifact in the desktop control; verified IndexedDB remains necessary. No few-second phone claim is established.
+
+## Previous update: HTTPS iPhone prepared-state follow-up — 2026-09-13
 
 Both power-mode uploads passed all eight raw-pool/trace comparisons with the frozen reference, using native WebCrypto and verified IndexedDB hits. Time to a cached 256k result is 1.389 s normally / 2.559 s in Low Power Mode; worker reuse is 0.964 / 2.026 s. Cold forced-download restoration remains 15.263 / 17.211 s through the temporary tunnel, with asset acquisition dominating. This supports repeat-contribution feasibility on one iPhone, not a near-one-second cold-start claim, production CDN performance, or device-population evidence. See [the measured report](VINA_PREPARED_HTTPS_2026-09-13.md). Multi-target ranking qualification and adversarial integration of low-risk admission remain separate outstanding requirements.
 

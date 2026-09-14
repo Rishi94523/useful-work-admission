@@ -1,0 +1,970 @@
+{
+  "rows": [
+    {
+      "id": "cf5998d7-af98-4c47-ac22-228f3ba0c94f",
+      "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
+      "low_power_mode_reported": false,
+      "variant": "identity-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 100.90000000037253,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 244.90000000037253
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 50.899999998509884,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 47.69999999925494
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "source": "desktop_identity-br9.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf8339c24f599-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf8339c23f599-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf8339c25f599-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "118",
+              "cf_ray": "a3acf8339c26f599-MAA"
+            }
+          ],
+          "assets_ms": 1113.2000000011176,
+          "hash_ms": 19.199999999254942,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 63.40000000037253,
+          "factory_ms": 7,
+          "fs_copy_ms": 4.699999999254942,
+          "init_or_restore_ms": 283.59999999962747,
+          "run_ms": 1700.199999999255,
+          "result": {
+            "ok": true,
+            "total_ms": 1699.7,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3309.2999999988824,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1071.7999999988824,
+              "transferSize": 11232416,
+              "encodedBodySize": 11232116,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 2693.60000000149,
+          "result": {
+            "ok": true,
+            "total_ms": 2693.6,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2694.800000000745,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf8339c23f599-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf8339c24f599-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf8339c25f599-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": "124",
+              "cf_ray": "a3acf8591fc9f599-MAA"
+            }
+          ],
+          "assets_ms": 1092.7000000011176,
+          "hash_ms": 32.59999999962747,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 117.59999999962747,
+          "factory_ms": 10.900000000372529,
+          "fs_copy_ms": 6.200000001117587,
+          "init_or_restore_ms": 561.5999999996275,
+          "run_ms": 2632.5,
+          "result": {
+            "ok": true,
+            "total_ms": 2632,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 4531.300000000745,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1071.5,
+              "transferSize": 11232416,
+              "encodedBodySize": 11232116,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf8339c23f599-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf8339c24f599-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf8339c25f599-MAA"
+            }
+          ],
+          "artifact_cache_read_ms": 56.09999999962747,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 62.59999999962747,
+          "hash_ms": 32,
+          "factory_ms": 11.099999999627471,
+          "fs_copy_ms": 5.5,
+          "init_or_restore_ms": 559.5,
+          "run_ms": 2681.0999999996275,
+          "result": {
+            "ok": true,
+            "total_ms": 2680.7,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3410.5,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
+      "id": "3c5dbe4b-15ea-4081-8036-85d59fa04f17",
+      "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
+      "low_power_mode_reported": false,
+      "variant": "identity-gzip9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 77.19999999925494,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 185.19999999925494
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 43.5,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 40
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "source": "desktop_identity-gzip9.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf89229ccfe6e-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf89229cbfe6e-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf89229cdfe6e-MAA"
+            },
+            {
+              "url": "/delivery/82dfaeae07e386efe70c2905dd59ebffe1b58151e49c18dac23a423dfa70a581.gz",
+              "content_encoding": "gzip",
+              "content_length": null,
+              "cf_cache_status": "MISS",
+              "delivery_cache": "MISS",
+              "etag": "\"300fdc822fe845abfa609b9a578526d1\"",
+              "age": null,
+              "cf_ray": "a3acf89229cffe6e-MAA"
+            }
+          ],
+          "assets_ms": 3737.5999999996275,
+          "hash_ms": 33.09999999962747,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 107.30000000074506,
+          "factory_ms": 12.199999999254942,
+          "fs_copy_ms": 6.600000001490116,
+          "init_or_restore_ms": 557.5,
+          "run_ms": 2642.5999999996275,
+          "result": {
+            "ok": true,
+            "total_ms": 2642.1,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 7175.5,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/82dfaeae07e386efe70c2905dd59ebffe1b58151e49c18dac23a423dfa70a581.gz",
+              "duration": 3692.7999999988824,
+              "transferSize": 14671812,
+              "encodedBodySize": 14671512,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 2555.199999999255,
+          "result": {
+            "ok": true,
+            "total_ms": 2555,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2556.5,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf89229cbfe6e-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf89229cdfe6e-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf89229ccfe6e-MAA"
+            },
+            {
+              "url": "/delivery/82dfaeae07e386efe70c2905dd59ebffe1b58151e49c18dac23a423dfa70a581.gz",
+              "content_encoding": "gzip",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"300fdc822fe845abfa609b9a578526d1\"",
+              "age": "7",
+              "cf_ray": "a3acf8cf28f9fe6e-MAA"
+            }
+          ],
+          "assets_ms": 1516.5999999996275,
+          "hash_ms": 33.600000001490116,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 116.19999999925494,
+          "factory_ms": 10.300000000745058,
+          "fs_copy_ms": 7.699999999254942,
+          "init_or_restore_ms": 545.1999999992549,
+          "run_ms": 2612.300000000745,
+          "result": {
+            "ok": true,
+            "total_ms": 2611.7,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 4917.199999999255,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/82dfaeae07e386efe70c2905dd59ebffe1b58151e49c18dac23a423dfa70a581.gz",
+              "duration": 1495,
+              "transferSize": 14671812,
+              "encodedBodySize": 14671512,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf89229cbfe6e-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf89229cdfe6e-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf89229ccfe6e-MAA"
+            }
+          ],
+          "artifact_cache_read_ms": 56.90000000037253,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 64.29999999888241,
+          "hash_ms": 32.90000000037253,
+          "factory_ms": 11.400000000372529,
+          "fs_copy_ms": 6.099999999627471,
+          "init_or_restore_ms": 579.1999999992549,
+          "run_ms": 3039,
+          "result": {
+            "ok": true,
+            "total_ms": 3038.4,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3790.4000000003725,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
+      "id": "69b15837-2919-41e1-a8ee-ad926927b2cf",
+      "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
+      "low_power_mode_reported": false,
+      "variant": "shuffle8-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 68,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 180.7000000011176
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 43.90000000037253,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 40.29999999888241
+        }
+      ],
+      "hidden_events": 0,
+      "error": null,
+      "source": "desktop_shuffle8-br9.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd22127-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd12127-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf90d1cd02127-MAA"
+            },
+            {
+              "url": "/delivery/07be054849492c63330765cf16f8aecb9a670e71dab6f56832cf342289095dae.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "MISS",
+              "delivery_cache": "MISS",
+              "etag": "\"d474c66f51d3e545141c099f527dcc4d\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd32127-MAA"
+            }
+          ],
+          "unshuffle_ms": 41.20000000111759,
+          "assets_ms": 2279.9000000003725,
+          "hash_ms": 19.199999999254942,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 104.30000000074506,
+          "factory_ms": 8.5,
+          "fs_copy_ms": 5.900000000372529,
+          "init_or_restore_ms": 306.5,
+          "run_ms": 3187.5999999996275,
+          "result": {
+            "ok": true,
+            "total_ms": 3187.1,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 5988.89999999851,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/07be054849492c63330765cf16f8aecb9a670e71dab6f56832cf342289095dae.br",
+              "duration": 2188,
+              "transferSize": 11581828,
+              "encodedBodySize": 11581528,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 3075.39999999851,
+          "result": {
+            "ok": true,
+            "total_ms": 3075.2,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3077,
+          "exact": true,
+          "resources": []
+        },
+        {
+          "mode": "http_restore",
+          "index": 2,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf90d1cd02127-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd12127-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd22127-MAA"
+            },
+            {
+              "url": "/delivery/07be054849492c63330765cf16f8aecb9a670e71dab6f56832cf342289095dae.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "HIT",
+              "etag": "W/\"d474c66f51d3e545141c099f527dcc4d\"",
+              "age": "7",
+              "cf_ray": "a3acf945eb6b2127-MAA"
+            }
+          ],
+          "unshuffle_ms": 103.5,
+          "assets_ms": 1233.800000000745,
+          "hash_ms": 35.30000000074506,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 117,
+          "factory_ms": 11,
+          "fs_copy_ms": 7.399999998509884,
+          "init_or_restore_ms": 554.4000000003725,
+          "run_ms": 2740.5,
+          "result": {
+            "ok": true,
+            "total_ms": 2739.9,
+            "evals": 256026,
+            "steps": 3720
+          },
+          "heap": 44761088,
+          "end_to_end_ms": 4782.10000000149,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/07be054849492c63330765cf16f8aecb9a670e71dab6f56832cf342289095dae.br",
+              "duration": 1104.2999999988824,
+              "transferSize": 11581828,
+              "encodedBodySize": 11581528,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "cached_restore",
+          "index": 3,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "responses": [
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf90d1cd02127-MAA"
+            },
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd12127-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf90d2cd22127-MAA"
+            }
+          ],
+          "artifact_cache_read_ms": 54.29999999888241,
+          "artifact_cache_source": "indexeddb",
+          "assets_ms": 61.09999999962747,
+          "hash_ms": 32.20000000111759,
+          "factory_ms": 10.799999998882413,
+          "fs_copy_ms": 5.699999999254942,
+          "init_or_restore_ms": 574.6999999992549,
+          "run_ms": 2836.800000000745,
+          "result": {
+            "ok": true,
+            "total_ms": 2836.1,
+            "evals": 256002,
+            "steps": 5101
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 3576,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": true,
+      "final_exact": true,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
+      "id": "0dbb49ac-be68-462f-9cf5-4b718cca45b6",
+      "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
+      "low_power_mode_reported": false,
+      "variant": "identity-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 354.09999999962747,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 511.40000000037253
+        },
+        {
+          "second": true,
+          "navigation": [
+            {
+              "duration": 45.29999999888241,
+              "transferSize": 2803,
+              "encodedBodySize": 2503,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 41.399999998509884
+        }
+      ],
+      "hidden_events": 0,
+      "error": "Error: Error: Asset integrity mismatch",
+      "source": "device_0dbb49ac-be68-462f-9cf5-4b718cca45b6.json",
+      "runs": [
+        {
+          "mode": "cold_restore",
+          "index": 0,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "artifact_cache_source": "http",
+          "responses": [
+            {
+              "url": "/assets/2784678680a6566ca4e8395fc938f25d06409e21d5ef8334dfa59ab887fdb6ae.pdbqt",
+              "content_encoding": null,
+              "content_length": "181926",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"5180285a33766c25b28410830b96b6da\"",
+              "age": null,
+              "cf_ray": "a3acf54d5f5c1ed1-MAA"
+            },
+            {
+              "url": "/assets/12726267cd75f4c461031e7f0efd71996cfdcbd9d16b188bedb129c73003aad3.wasm",
+              "content_encoding": "zstd",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "W/\"f9dd87cf8bc89ab4884de9aa04e0645a\"",
+              "age": null,
+              "cf_ray": "a3acf54d4f5a1ed1-MAA"
+            },
+            {
+              "url": "/assets/7facd6d21101eb0a01e7f88c381f3f2888706f904fbe2e1d8fc8296d72a27f7c.pdbqt",
+              "content_encoding": null,
+              "content_length": "3272",
+              "cf_cache_status": "HIT",
+              "delivery_cache": null,
+              "etag": "\"429e752e8831e19f6197a09d68a0e15b\"",
+              "age": null,
+              "cf_ray": "a3acf54d5f5b1ed1-MAA"
+            },
+            {
+              "url": "/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "content_encoding": "br",
+              "content_length": null,
+              "cf_cache_status": "HIT",
+              "delivery_cache": "MISS",
+              "etag": "\"8375268a281b509600cbbdd6918f04b1\"",
+              "age": null,
+              "cf_ray": "a3acf54d5f5d1ed1-MAA"
+            }
+          ],
+          "assets_ms": 1436.2999999988824,
+          "hash_ms": 18.5,
+          "artifact_cache_written": true,
+          "artifact_cache_write_ms": 97.30000000074506,
+          "factory_ms": 7.299999998882413,
+          "fs_copy_ms": 4,
+          "init_or_restore_ms": 286,
+          "run_ms": 2680,
+          "result": {
+            "ok": true,
+            "total_ms": 2679.7,
+            "evals": 256010,
+            "steps": 4673
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 5099.0999999996275,
+          "exact": true,
+          "resources": [
+            {
+              "name": "https://vina-cdn-benchmark.kelgis.workers.dev/delivery/bc515ffd588789f8dcd3c6e8be57138f3d0fb24154bfc124f7cad6e29c373dbd.br",
+              "duration": 1394.300000000745,
+              "transferSize": 11232416,
+              "encodedBodySize": 11232116,
+              "decodedBodySize": 27746024
+            }
+          ]
+        },
+        {
+          "mode": "reuse",
+          "index": 1,
+          "secure_context": true,
+          "hash_backend": "webcrypto",
+          "run_ms": 2650.7000000011176,
+          "result": {
+            "ok": true,
+            "total_ms": 2650.6,
+            "evals": 256081,
+            "steps": 4899
+          },
+          "heap": 53739520,
+          "end_to_end_ms": 2652,
+          "exact": true,
+          "resources": []
+        }
+      ],
+      "complete": false,
+      "final_exact": false,
+      "artifact_exact": true,
+      "wasm_exact": true
+    },
+    {
+      "id": "77e5983c-adaa-4955-9c36-e50a2a0982f7",
+      "device_model": "Ryzen 7 7435HS Chrome fresh-context CDN",
+      "low_power_mode_reported": false,
+      "variant": "identity-br9",
+      "cold_state_user_reported": true,
+      "prior_visit_marker": false,
+      "visits": [
+        {
+          "second": false,
+          "navigation": [
+            {
+              "duration": 411.30000000074506,
+              "transferSize": 2804,
+              "encodedBodySize": 2504,
+              "type": "navigate"
+            }
+          ],
+          "contribution_start_ms": 560.2000000011176
+        }
+      ],
+      "hidden_events": 0,
+      "error": "Error: Error: Asset integrity mismatch",
+      "source": "device_77e5983c-adaa-4955-9c36-e50a2a0982f7.json",
+      "runs": [],
+      "complete": false,
+      "final_exact": false,
+      "artifact_exact": true,
+      "wasm_exact": true
+    }
+  ],
+  "scope": "Cold browser state is user-reported on iPhone and new isolated contexts on desktop; no query cache busting. Contribution timer excludes user dwell and initial document navigation, which is recorded separately. CDN edge state is independent of browser coldness. Client finalization digest is checked against the precomputed reference; not an admission security proof."
+}

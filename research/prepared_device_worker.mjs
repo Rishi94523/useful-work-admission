@@ -5,18 +5,25 @@ async function artifactStore(operation,key,value){
  try{return await new Promise((resolve,reject)=>{const tx=db.transaction('artifacts',operation==='get'?'readonly':'readwrite'),store=tx.objectStore('artifacts');const r=operation==='get'?store.get(key):store.put(value,key);let result;r.onsuccess=()=>{result=r.result};tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}finally{db.close();}
 }
 onmessage=async({data})=>{try{
+ if(data.mode==='finalize'){
+  if(!engine)throw Error('Missing finalization engine');
+  for(const r of data.runs)engine.FS.writeFile('/tasks/'+r.index+'.task',r.pool);
+  const t=performance.now();if(!JSON.parse(engine.ccall('vt_finalize','string',['number'],[4])).ok)throw Error('Finalization failed');
+  postMessage({final_pose_sha256:await sha256(engine.FS.readFile('/final.pdbqt')),finalize_ms:performance.now()-t});return;
+ }
  const {manifest,mode,index}=data,metrics={mode,index,secure_context:globalThis.isSecureContext===true,hash_backend:globalThis.crypto?.subtle?'webcrypto':'javascript-sha256'};
  if(manifest.require_webcrypto&&metrics.hash_backend!=='webcrypto')throw Error('This test requires HTTPS and native WebCrypto');
  if(mode!=='reuse'){
   const start=performance.now();const {default:factory}=await import(manifest.module_url);
-  const cache=mode==='cold_restore'?'reload':'force-cache';
-  const get=async url=>{const r=await fetch(url,{cache});if(!r.ok)throw Error('Asset '+r.status);(metrics.responses??=[]).push({url,content_encoding:r.headers.get('content-encoding'),content_length:r.headers.get('content-length'),cf_cache_status:r.headers.get('cf-cache-status')});return new Uint8Array(await r.arrayBuffer());};
+  const cache=manifest.cdn?'default':mode==='cold_restore'?'reload':'force-cache';
+  const get=async url=>{const r=await fetch(url,{cache});if(!r.ok)throw Error('Asset '+r.status);(metrics.responses??=[]).push({url,content_encoding:r.headers.get('content-encoding'),content_length:r.headers.get('content-length'),cf_cache_status:r.headers.get('cf-cache-status'),delivery_cache:r.headers.get('x-delivery-cache'),etag:r.headers.get('etag'),age:r.headers.get('age'),cf_ray:r.headers.get('cf-ray')});return new Uint8Array(await r.arrayBuffer());};
   const getArtifact=async()=>{
    if(mode==='compute')return null;
    if(mode==='cached_restore'&&manifest.cache_policy==='indexeddb-v1'){
     const t=performance.now();try{const cached=await artifactStore('get',manifest.artifact_sha256);metrics.artifact_cache_read_ms=performance.now()-t;if(cached){metrics.artifact_cache_source='indexeddb';return new Uint8Array(cached);}}catch(e){metrics.artifact_cache_error=String(e);}
    }
-   metrics.artifact_cache_source='http';return get(manifest.artifact_url);
+   metrics.artifact_cache_source='http';const bytes=await get(manifest.artifact_url);
+   if(manifest.artifact_transform==='shuffle8'){const t=performance.now(),n=Math.floor(bytes.length/8),decoded=new Uint8Array(bytes.length);for(let j=0;j<8;j++)for(let i=0;i<n;i++)decoded[i*8+j]=bytes[j*n+i];decoded.set(bytes.subarray(n*8),n*8);metrics.unshuffle_ms=performance.now()-t;return decoded;}return bytes;
   };
   const [wasm,receptor,ligand,artifact]=await Promise.all([get(manifest.wasm_url),get(manifest.receptor_url),get(manifest.ligand_url),getArtifact()]);
   metrics.assets_ms=performance.now()-start;const hs=performance.now();

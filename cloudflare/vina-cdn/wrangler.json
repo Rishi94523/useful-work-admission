@@ -1,0 +1,7 @@
+{
+  "name": "vina-cdn-benchmark",
+  "main": "../../research/cdn_collector.mjs",
+  "compatibility_date": "2026-09-13",
+  "assets": {"directory": "../../tmp/vina-cdn/public", "binding": "ASSETS"},
+  "kv_namespaces": [{"binding": "RESULTS", "id": "0e88d0177dde4a31b21c844ff36bbbfd"}]
+}

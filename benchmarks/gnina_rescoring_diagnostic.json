@@ -1,0 +1,15 @@
+{
+  "role": "Separate post hoc scoring diagnostic; never changes stock qualification or search",
+  "engine": "GNINA 1.3.3 official CUDA 12.8 static release",
+  "models": "Version-pinned default ensemble; no model selection using evaluation labels",
+  "flags": ["--score_only", "--cnn_scoring", "rescore", "--scoring", "vina", "--cpu", "1", "--seed", "104729", "--device", "0"],
+  "primary": "Compare original Vina score to CNNaffinity on the identical Vina-selected top pose of the identical Vina-selected best supplied state",
+  "secondary": ["CNNscore on that same fixed pose", "Maximum CNNaffinity over the same complete stock pose pool and supplied states; this also changes pose selection"],
+  "datasets": ["Preserved DYR/AKT1/PPARG 96-compound ranking-extension baseline", "Frozen five-target published-protocol campaign as complete compound states become available"],
+  "metrics": {"auc": "Higher CNN outputs are better; lower original Vina score is better", "ef10": "Ceil(0.1*N) with fractional ties", "bootstrap": "5000 paired stratified compound resamples, seed 104729"},
+  "integrity": "Hash source poses and receptors; require one output per input pose and one-to-one heavy-atom coordinate agreement within 0.002 A without alignment; all required states must succeed",
+  "input_packaging": "GNINA native PDBQT requires separate pose files without MODEL/ENDMDL wrappers or empty/NUL-only padding lines. Preserve all atom records and archived original files; native PDBQT output avoids the observed SDF conversion crash.",
+  "cost": "Per-state subprocess wall time includes WSL launch, model loading, scoring all saved poses and output; report per complete compound and per pose. Record GPU utilization, total device memory, process CPU time and peak RSS where available. These are not isolated kernel timings.",
+  "interpretation": "An improvement on fixed poses supports a scoring contribution, not proof that pose generation is adequate. No improvement does not prove search is the cause. Training overlap and retrospective DUD-E bias limit causal and prospective claims. Failed baseline targets remain failed.",
+  "execution": "Wait for CPU throughput sweep to finish before GPU scoring"
+}

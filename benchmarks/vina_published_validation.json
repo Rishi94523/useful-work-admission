@@ -1,0 +1,30 @@
+{
+  "version": "published-vina-validation-2026-09-15-v1",
+  "targets": ["wee1", "pur2", "fa7", "tgfr1", "kif11"],
+  "selection_basis": "Fixed before local docking from Eberhardt et al. 2021 Table S2, specifically the Vina scoring function. Strong reported enrichment and coverage of kinase, enzyme, protease and motor-protein targets. No replacement based on local outcomes.",
+  "published_results": {
+    "wee1": {"auc": 0.95, "ef10": 8.63},
+    "pur2": {"auc": 0.93, "ef10": 7.83},
+    "fa7": {"auc": 0.91, "ef10": 7.13},
+    "tgfr1": {"auc": 0.90, "ef10": 6.41},
+    "kif11": {"auc": 0.87, "ef10": 6.58}
+  },
+  "source": {"paper": "https://doi.org/10.1021/acs.jcim.1c00203", "supplement": "https://doi.org/10.1021/acs.jcim.1c00203.s001", "supplement_file": "https://ndownloader.figshare.com/files/28881903", "dataset": "https://dude.docking.org/targets/"},
+  "negative_results_frozen": ["dyr", "akt1", "pparg"],
+  "preserve_other_results": ["esr1", "fa10", "tryb1"],
+  "preparation": {
+    "receptor": "Published REDUCE hydrogen optimization with Asn/Gln/His flips, then ADFRsuite 1.0 prepare_receptor defaults; retain cofactors and ions, discard crystallographic waters. Record exact commands, versions and hashes. No Meeko substitution without explicitly declaring a protocol deviation before docking.",
+    "ligands": "Original DUD-E MOL2 conformers converted by ADFRsuite prepare_ligand defaults. All supplied states for a selected source compound ID are retained; no state selection by local score before docking.",
+    "box_size_A": [22, 22, 22],
+    "box_center": "Arithmetic centroid of the crystal ligand heavy atoms; source specifies centered on crystal ligand but not the precise centering convention. Record this interpretation explicitly.",
+    "unsupported_inputs": "Preserve failed preparations and unsupported atom types; no replacement. Verify crystal heavy-coordinate mapping for RMSD and selected-state counts before execution."
+  },
+  "panel": {"actives": 32, "decoys": 64, "salt": "published-vina-validation-2026-09-15:", "selection": "SHA256 ordering of target:label:source compound ID over the entire published source library, without inspecting docking outcomes. Group all supplied molecular states by original compound ID. Compound score is minimum over ALL completed supplied states; failure of any required state makes the compound incomplete. Exclude crystal compound if its source ID matches. Retain selection before preparation. No target-specific tuning or development search.", "scope": "A predeclared 96-compound reproduction panel, not a claimed reproduction of full-library published AUC. Preserve the full source library for later scaling."},
+  "stock": {"engine": "official AutoDock Vina 1.2.7", "published_engine": "AutoDock Vina 1.2.0", "exhaustiveness": 32, "cpu": 1, "seed": 104729, "num_modes": 9, "timeout_seconds": 3600, "workers": 4},
+  "stock_gate": {"complete_compounds": 96, "auc_min": 0.75, "auc_95_lower_exclusive_min": 0.60, "ef10_min": 1.5, "bootstrap_resamples": 5000, "bootstrap_seed": 104729, "ties": "Fractional occupancy at EF10 cutoff"},
+  "redocking": {"seeds": [104729, 130363, 155921], "maximum_top_symmetry_rmsd_A": 2.0, "minimum_passes": 2, "role": "Additional scientific qualification required before distributed comparison, same as preceding diagnostic; no alignment."},
+  "comparison": {"only_stock_and_redocking_passers": true, "parent_seeds": [104729, 130363, 155921], "stock_exhaustiveness": 32, "unit_max_evals": 256000, "matching": "For each supplied ligand state, ceil(normal E32 evaluation count / 256000) independent medium units, same receptor/22 A box, original finalizer. Aggregate molecular states identically. Report evaluation and wall-time ratios.", "auc_noninferiority_margin": -0.05, "bootstrap": "Paired stratified compound resampling across seeds, 5000 resamples, per-target and per-seed reporting", "compatibility": "Verify harness box settings and official-stock equivalence before launch; never compare a 30 A instrumented workload to the 22 A stock reference."},
+  "output_directory": "local-research/published-vina-validation-2026-09-15",
+  "known_deviations": ["Local panel has 32 actives and 64 decoys instead of the full source library", "Official stock 1.2.7 is used instead of published 1.2.0; record this version difference", "Fixed seed and heavy-atom centroid are explicit reproducibility choices where the paper omits exact values", "Nine modes retained for redocking inspection; only top score used for screening"],
+  "claim_limits": "Published numbers are external selection evidence, not reproduced results. Success on selected DUD-E targets establishes conditional screening preservation, not universal enrichment or prospective biological efficacy. Failure remains a failure; no guarantee of 2-3 additional qualifying targets."
+}

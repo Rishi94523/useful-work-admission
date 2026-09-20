@@ -70,11 +70,17 @@ temp/
 *.sqlite
 *.sqlite3
 
-# ML Models (large files)
-models/**/*.bin
-models/**/*.onnx
-models/**/*.h5
-!models/**/.gitkeep
+# Archived inference artifacts and local environments must not re-enter the repo
+/server/
+/packages/
+/demo/
+/docker/
+/models/
+/data/mnist/
+/data/cifar10/
+/data/journal-workloads/
+/plans/
+/cloudflare/api-gateway/
 
 # Secrets
 *.pem
@@ -83,18 +89,6 @@ credentials.json
 secrets.json
 nul
 server/nul
-
-# Raw Hugging Face LLM weights (large; fetched via scripts/fetch_hf_llm.py)
-models/hf/*/
-
-# Derived LLM pipeline models (regenerate with scripts/import_hf_llm.py)
-models/llm-*/
-
-# Reproducible CIFAR download cache (archive provenance stays with the model)
-data/cifar10/
-
-# Downloaded journal research checkpoints/images; checksums and fetch script tracked
-data/journal-workloads/
 
 # Patent filing material lives OUTSIDE this repository, in a sibling directory.
 # Git cannot stage what is not in the working tree, so no path rule is relied on.

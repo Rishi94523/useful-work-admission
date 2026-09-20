@@ -22,8 +22,9 @@ rather than corrupting a shared model.
 
 The workload is scientific computation, not ML inference. An earlier MNIST-based
 demonstrator explored the same admission question with distributed inference;
-that phase is retained in this repository's git history and is not part of the
-current system.
+that phase is retained in git history and the local sibling
+`../legacy-capstone/cleanup-2026-09-20/` archive. Its inference server, widget,
+SDK, models and training tools are not part of the current system.
 
 ## Design
 
@@ -82,9 +83,8 @@ benchmarks/          predeclared protocol definitions, hash-pinned
 scripts/             campaign runners, verification gates, analysis
 research/native/     instrumented Vina drivers and task transport
 research/            campaign and admission-policy modules
-packages/widget/     browser widget
-packages/sdk/        integration SDK
-server/              coordination API
+research/tests/      scheduler, admission and validation tests
+cloudflare/vina-cdn/ prepared-state static delivery configuration
 ```
 
 Working reports, generated evidence and raw device logs are kept locally and are
@@ -112,34 +112,21 @@ build and runner hashes, and refuses to continue if a manifest would change.
 
 ## Development
 
-Prerequisites: Node.js 18+, Python 3.11+, Redis 7+. PostgreSQL is supported by
-configuration; local development defaults to SQLite.
+Run commands from the repository root with Python 3.11+ and Node.js 18+.
+The current implementation is a research prototype; the archived inference
+API and its npm workspace are not a docking deployment entry point.
+
+Lightweight scheduler, admission and analysis checks (no docking campaign):
 
 ```bash
-npm install
+python -m unittest research.tests.test_pool_admission research.tests.test_vina_pool_campaign research.tests.test_published_matched research.tests.test_publication_guard
 ```
 
-```bash
-cd server && python -m venv .venv && .venv\Scripts\activate && pip install -r requirements.txt
-```
-
-```bash
-cd server && .venv\Scripts\python -m uvicorn app.main:app --port 8000
-```
-
-```bash
-npm run dev --workspace=packages/widget
-```
-
-Tests:
-
-```bash
-npm test
-```
-
-```bash
-cd server && .venv\Scripts\pytest
-```
+Molecular builds and experiments require the dependencies and pinned inputs
+specified by their benchmark protocols. Browser automation also requires
+Playwright; several experiment scripts still reference a local installation
+and need path configuration on another machine. Optional proof experiments
+have their own npm package under `research/docking-zk/`.
 
 ## License
 

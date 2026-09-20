@@ -45,9 +45,9 @@ a CDN.
 
 ## What is not established
 
-- **The matched-compute comparison has not run.** 2,073 paired state jobs are
-  queued behind panel-level concordance between this toolchain and the official
-  binary. Qualified stock inputs do not establish distributed-run quality.
+- **The matched-compute comparison is running.** The campaign contains 2,073
+  paired state jobs; its final ranking analysis is still pending. Qualified
+  stock inputs do not establish distributed-run quality.
 - **Admission security** is analysed but not demonstrated end to end. A one-run
   trusted tier is not an unconditional proof of work by anonymous users; at 0.1
   audit probability, zero-work trusted requests can pass unaudited.
@@ -64,11 +64,14 @@ The project is not submission-ready.
 benchmarks/          predeclared protocol definitions with hashes
 scripts/             campaign runners, verification gates, analysis
 research/native/     instrumented Vina drivers and task transport
-packages/            browser widget and SDK
-server/              coordination API
+research/            browser workers, campaign and admission modules
+research/tests/      scheduler, admission and validation tests
+cloudflare/vina-cdn/ prepared-state static delivery configuration
 ```
 
 Working reports, generated evidence and raw device logs are kept locally and
-are not tracked. The MNIST and CIFAR phases were moved out of this repository;
+are not tracked. The remaining inference stack, datasets, models and historical setup documents
+are archived locally in `../legacy-capstone/cleanup-2026-09-20/`.
+The MNIST and CIFAR phases were moved out of this repository;
 the committed history retains the earlier pipeline as a record of the project's
 development.

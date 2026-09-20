@@ -90,22 +90,16 @@ models/hf/*/
 # Derived LLM pipeline models (regenerate with scripts/import_hf_llm.py)
 models/llm-*/
 
-# Private patent filing materials and personally identifying records
-/patent/
-/patent-private-records/
-/docs/research/INDIA_PROVISIONAL_SELF_FILING.md
-/docs/research/PATENT_DISCLOSURE_DRAFT.md
-/docs/research/PRODUCT_PAPER_PATENT_SCOPE.md
-/docs/research/PROVISIONAL_SPECIFICATION_WORKING_DRAFT.md
-/scripts/build_india_patent_packet.py
-/scripts/prepare_patent_drawings_upload.py
-/scripts/prepare_signed_form1_upload.py
-/scripts/validate_india_patent_packet.py
-/tmp/patent_deps/
-/tmp/patent_qa/
-/tmp/pdfs/portal_form1/
-/tmp/pdfs/signed_form1/
-/tmp/render_patent_qa.py
+# Reproducible CIFAR download cache (archive provenance stays with the model)
+data/cifar10/
+
+# Downloaded journal research checkpoints/images; checksums and fetch script tracked
+data/journal-workloads/
+
+# Patent filing material lives OUTSIDE this repository, in a sibling directory.
+# Git cannot stage what is not in the working tree, so no path rule is relied on.
+# Content-level enforcement is scripts/check_publication.py, which blocks any
+# staged path naming patent or identity documents wherever it appears.
 
 # Local experiment notebooks and generated evidence are not publication artifacts
 /local-research/

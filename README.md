@@ -1,203 +1,144 @@
-# PoUW CAPTCHA
+# Auditable Useful Work for Browser Admission
 
-**Proof-of-Useful-Work CAPTCHA System**
+A browser admission system in which the work a visitor performs is **real
+scientific computation** rather than an artificial puzzle. A visitor's browser
+executes a bounded unit of AutoDock Vina molecular docking; the server verifies
+that unit far more cheaply than producing it; and the scientific results are
+aggregated across contributors into usable virtual-screening output.
 
-PoUW CAPTCHA replaces traditional puzzle CAPTCHAs with useful browser-side ML
-computation. A user contributes a verified segment of inference work, the
-server checks that work cheaply, and the completed distributed inference can
-feed a human-verified golden dataset.
+The research question is whether anonymous browsers can contribute useful work
+that is verified cheaply, within a bounded access delay, even when some
+contributors submit malicious results or disappear.
 
-The product remains centered on compact label-producing models and selective
-human auditing. Transformer/LLM execution is an optional stress-test
-embodiment, not the default CAPTCHA workload. See
-[Product, Paper, and Patent Scope](docs/research/PRODUCT_PAPER_PATENT_SCOPE.md)
-for the authoritative distinction. The working Indian filing packet is in
-[the provisional self-filing guide](docs/research/INDIA_PROVISIONAL_SELF_FILING.md);
-it is an engineering draft, not a filed application or legal opinion.
+See [STATUS.md](STATUS.md) for what is currently established and what is not.
 
-## Current Implementation
+## Why docking
 
-- Browser widget computes assigned shards of a real trained model.
-- Backend coordinates distributed inference runs across CAPTCHA sessions.
-- Server verifies computation with commitment hashes, secret projection checks,
-  and occasional spot audits.
-- Human verification can confirm completed labels into the golden dataset.
-- The checked-in model is `mnist-tiny`, a dense MNIST classifier.
+A useful-work admission scheme needs a workload that is genuinely wanted by
+someone, expensive to produce, cheap to check, and safe to hand to an untrusted
+client. Molecular docking fits: each ligand state is an independent search, the
+result is verifiable by replay, and a wrong answer degrades a screening campaign
+rather than corrupting a shared model.
 
-## Model
+The workload is scientific computation, not ML inference. An earlier MNIST-based
+demonstrator explored the same admission question with distributed inference;
+that phase is retained in this repository's git history and is not part of the
+current system.
 
-The current model lives in `models/mnist-tiny/`:
+## Design
+
+**Independent units.** A browser need not complete an entire ligand docking job.
+Vina's exhaustiveness-32 search decomposes into 32 independently executable
+tasks whose merged result reproduces the monolithic run exactly, including raw
+minima and search traces.
+
+**Post-commit challenge.** A client commits to its output; the server may then
+demand a complete replay of any assigned unit. Honest clients always pass.
+Replay costs the server one unit, not the whole campaign.
+
+**One-use credits.** Completed units cannot earn duplicate credit within the
+trusted identity domain. Historical precomputation is accepted as one-use
+scientific credit rather than misclassified as fresh CPU work.
+
+**Prepared-state delivery.** Grid map computation dominates cold start, so
+browsers restore a losslessly serialised prepared state from a CDN and verify it
+against a hash, instead of recomputing maps.
+
+**Risk-tiered admission.** Server-side risk scoring, work tiers, abandonment
+penalties, retry limits and cooldown. This is an admission-cost mechanism, not a
+general bot-detection or Sybil-resistance solution.
+
+## Verification and its limits
+
+Verification rests on exact replay of independent units and on sampled whole-run
+audits, not on a cryptographic proof of effort. Two limits are load-bearing and
+stated up front:
+
+- Sampled auditing bounds an attacker's expected cost; it does not prove that
+  every admitted request performed work. At a 0.1 audit probability, zero-work
+  requests in a trusted tier can pass unaudited.
+- Cheap identity resets defeat per-identity exposure caps. New identities must
+  not inherit trusted eligibility merely because their initial risk score is
+  zero.
+
+## Scientific validation
+
+Five DUD-E targets were selected from published Vina results *before* any local
+docking, with the protocol, panel-selection rule, gates and known deviations
+frozen in [`benchmarks/vina_published_validation.json`](benchmarks/vina_published_validation.json).
+All 706 stock jobs completed and all five targets passed their predeclared
+ranking and redocking gates. Preserved negative results are not removed.
+
+Build equivalence is gated separately: the instrumented split driver must be
+coordinate-identical to an uninstrumented reference built from the same sources
+with the same compiler, and agreement with the official prebuilt binary is
+established at panel level rather than by trajectory comparison. Cross-toolchain
+trajectory equality is unattainable for a Monte Carlo search and is not required.
+
+## Layout
 
 ```text
-models/mnist-tiny/
-├── manifest.json
-└── weights.npz
+benchmarks/          predeclared protocol definitions, hash-pinned
+scripts/             campaign runners, verification gates, analysis
+research/native/     instrumented Vina drivers and task transport
+research/            campaign and admission-policy modules
+packages/widget/     browser widget
+packages/sdk/        integration SDK
+server/              coordination API
 ```
 
-`mnist-tiny` is a dense `784 -> 128 -> 64 -> 10` classifier trained on MNIST.
-The manifest pins real SHA-256 checksums for each layer and a model checksum
-derived from those layer checksums.
+Working reports, generated evidence and raw device logs are kept locally and are
+not tracked.
 
-## Runtime Flow
+## Reproducing the validation
 
-1. Browser calls `POST /api/v1/captcha/init`.
-2. Server risk-scores the session and claims the next pipeline segment.
-3. Server returns the assigned dense layer shard(s), input activation, labels,
-   checksums, and timing expectation.
-4. Browser verifies shard checksums and runs the assigned layer segment.
-5. Browser submits pre-activation vectors, output commitments, proof hash, and
-   timing to `POST /api/v1/captcha/submit`.
-6. Server verifies the proof without routinely recomputing the segment.
-7. The pipeline stores the verified activation for the next solver, or derives
-   the final prediction if the model is complete.
-8. Optional human verification contributes to the golden dataset.
-9. Server issues a signed CAPTCHA token.
+Requires a C++17 compiler, Boost, and the upstream Vina sources and official
+binary staged under `tmp/` (see the protocol file for the pinned hashes).
 
-## Project Structure
-
-```text
-packages/
-├── widget/          # Browser CAPTCHA widget and dense shard executor
-└── sdk/             # Vanilla/React/Vue integration helpers
-server/
-├── app/api/         # FastAPI CAPTCHA, verification, and dashboard endpoints
-├── app/core/        # Risk scoring, task assignment, distributed pipeline
-├── app/ml/          # Model store and proof verifier
-├── app/models/      # SQLAlchemy models
-├── app/schemas/     # Pydantic request/response schemas
-└── app/services/    # Golden dataset and reputation services
-models/
-└── mnist-tiny/      # Current trained model and manifest
-scripts/            # Training, seeding, retraining, and E2E client scripts
-demo/frontend/      # Static demo frontend
-docs/               # Architecture and workflow docs
+```bash
+python scripts/build_vina_reference.py
 ```
 
-## Quick Start
+```bash
+python scripts/verify_build_equivalence.py
+```
 
-### Prerequisites
+```bash
+python scripts/verify_panel_concordance.py
+```
 
-- Node.js 18+
-- Python 3.11+
-- Redis 7+
+Every runner writes a frozen execution manifest recording protocol, input,
+build and runner hashes, and refuses to continue if a manifest would change.
 
-PostgreSQL is supported through configuration, but local development defaults
-to SQLite.
+## Development
 
-### Install
+Prerequisites: Node.js 18+, Python 3.11+, Redis 7+. PostgreSQL is supported by
+configuration; local development defaults to SQLite.
 
 ```bash
 npm install
-
-cd server
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
 ```
-
-### Seed Data
 
 ```bash
-cd server
-.venv\Scripts\python ..\scripts\seed_data.py --count 200
+cd server && python -m venv .venv && .venv\Scripts\activate && pip install -r requirements.txt
 ```
-
-### Run Backend
 
 ```bash
-cd server
-.venv\Scripts\python -m uvicorn app.main:app --port 8000
+cd server && .venv\Scripts\python -m uvicorn app.main:app --port 8000
 ```
-
-Useful local endpoints:
-
-- API: `http://localhost:8000`
-- Docs: `http://localhost:8000/docs`
-- Demo: `http://localhost:8000/demo`
-- Dashboard: `http://localhost:8000/dashboard`
-- Pipeline runs: `http://localhost:8000/api/v1/pipeline/runs`
-
-### Run Widget Dev Server
 
 ```bash
 npm run dev --workspace=packages/widget
 ```
 
-### Simulate Solvers
-
-```bash
-cd server
-.venv\Scripts\python ..\scripts\e2e_client.py --solves 12
-```
-
-The E2E client behaves like the browser shard engine: it verifies checksums,
-computes assigned dense layer segments, submits pre-activation proofs, and
-answers verification prompts.
-
-## API
-
-### Initialize CAPTCHA
-
-```http
-POST /api/v1/captcha/init
-```
-
-### Submit Computation Proof
-
-```http
-POST /api/v1/captcha/submit
-```
-
-### Submit Human Verification
-
-```http
-POST /api/v1/captcha/verify
-```
-
-### Validate Token
-
-```http
-GET /api/v1/captcha/validate/{token}
-```
-
-## Browser Integration
-
-```html
-<script src="/path/to/pouw-captcha.umd.js"></script>
-<div id="captcha-container"></div>
-<script>
-  const captcha = new PoUWCaptcha({
-    siteKey: 'pk_demo_1234567890',
-    apiUrl: 'http://localhost:8000/api/v1',
-    container: '#captcha-container',
-    onSuccess: (token) => {
-      console.log('CAPTCHA solved:', token);
-    },
-  });
-</script>
-```
-
-## Verification Model
-
-The server validates submitted work in three layers:
-
-- Commitment hashes bind each submitted pre-activation vector to the task,
-  sample, and model segment.
-- Secret projection checks verify dense layer equations at `O(input + output)`
-  cost per projection instead of recomputing the client-side `O(input *
-  output)` matrix multiply.
-- Probabilistic spot audits occasionally recompute the segment to catch
-  implementation drift and bound adaptive attacks.
-
-See [docs/CORE_WORKFLOW.md](docs/CORE_WORKFLOW.md) for the full design.
-
-## Tests
+Tests:
 
 ```bash
 npm test
+```
 
-cd server
-.venv\Scripts\pytest
+```bash
+cd server && .venv\Scripts\pytest
 ```
 
 ## License

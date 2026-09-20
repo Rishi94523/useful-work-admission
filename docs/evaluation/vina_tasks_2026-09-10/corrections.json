@@ -1,9 +1,0 @@
-{
-  "browser_timer": "The initial normal single-run total timer included a later shortcut-attack replay. Preserved as browser_superseded_timer.json; browser.json is the complete corrected rerun and drives final tables. Other first-run measurements are historical only.",
-  "ingestion": "Repeated after the atomic multi-pool lease API was added. ingestion.json is the current real single-pool replay integration; multi-pool atomicity/alias checks are unit-tested.",
-  "tests": {
-    "suite": "vina_pool_campaign, adaptive_admission, whole_run_campaign, docking_campaign",
-    "passed": 22
-  },
-  "dimensions": "Read-only reaggregation of existing measured unit times; not new parallel timings."
-}

@@ -10,7 +10,12 @@ def check(path,data):
  p=path.lower();issues=[]
  if any(x in p for x in ('patent','private-record','aadhaar','aadhar','pan_card','pancard','passport','filing_packet')):issues.append('private-material-path')
  if p.startswith(('docs/evaluation/','docs/research/','tmp/','temp/','local-research/')):issues.append('local-report-or-generated-evidence')
- if PurePosixPath(p).suffix=='.md' and p not in ('readme.md','contributing.md','security.md'):issues.append('unreviewed-markdown')
+ # Markdown is publishable when it is deliberately placed: a root-level file, a
+ # README at any depth, or a curated note under docs/. Working notes live under
+ # the generated-evidence prefixes above and are still blocked there.
+ if PurePosixPath(p).suffix=='.md':
+  name=PurePosixPath(p).name
+  if not ('/' not in p or name=='readme.md' or p.startswith('docs/')):issues.append('unreviewed-markdown')
  if PurePosixPath(p).suffix in ('.pdf','.docx','.xlsx','.png','.jpg','.jpeg','.zip','.gz','.bin','.wasm'):issues.append('binary-needs-explicit-publication-review')
  if PurePosixPath(p).name.startswith('.env') and not p.endswith('.example'):issues.append('environment-file')
  for name,pattern in [('possible-pan',rb'(?<![A-Za-z0-9])[A-Z]{5}[0-9]{4}[A-Z](?![A-Za-z0-9])'),('private-key',rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),('possible-aadhaar',rb'(?<![0-9A-Za-z])[2-9][0-9]{3} [0-9]{4} [0-9]{4}(?![0-9A-Za-z])')]:

@@ -7,9 +7,9 @@ from run_stock_diagnostic import metrics,auc
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE=ROOT/'local-research/published-vina-validation-2026-09-15'
-OUT=ROOT/'local-research/published-matched-2026-09-20'
-WORK=ROOT/'tmp/vina-published/matched'
-EXE=ROOT/'tmp/vina-published/vina_published_tasks.exe'
+OUT=ROOT/'local-research/published-matched-2026-09-20-spacing0375'
+WORK=ROOT/'tmp/vina-published/matched_spacing0375'
+EXE=ROOT/'tmp/vina-published/vina_published_tasks_spacing0375.exe'
 
 def digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def save(p,x):

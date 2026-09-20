@@ -6,7 +6,7 @@ std::string split_folder;std::vector<double> split_trace;
 int main(int argc,char** argv){
  if(argc!=10)return 2;
  try{
-  Vina v("vina",1,104729,0,false);v.set_receptor(argv[1]);v.set_ligand_from_file(argv[3]);v.compute_vina_maps(std::stod(argv[4]),std::stod(argv[5]),std::stod(argv[6]),std::stod(argv[7]),std::stod(argv[8]),std::stod(argv[9]));v.save_initial();
+  Vina v("vina",1,104729,0,false);v.set_receptor(argv[1]);v.set_ligand_from_file(argv[3]);v.compute_vina_maps(std::stod(argv[4]),std::stod(argv[5]),std::stod(argv[6]),std::stod(argv[7]),std::stod(argv[8]),std::stod(argv[9]),0.375);v.save_initial();
   std::cout<<"READY"<<std::endl;
   std::string line;while(std::getline(std::cin,line)){
    if(line=="QUIT")break;

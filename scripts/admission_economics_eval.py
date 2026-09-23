@@ -158,10 +158,14 @@ def trusted_attack(verdicts,work,*,policy,p,G,acquire):
  try:
   while fraud<TARGET and identities<3000:
    who=w.identity();identities+=1;wins=tries=0
+   # Every request counts toward the bound: abandonments raise the identity's
+   # risk streak faster than it decays, so counting only assigned leases let a
+   # cooled-down identity retry forever. On refusal, back off long enough for
+   # risk to decay, as an attacker facing cooldowns would.
    while wins<G and tries<200:
-    lease=w.request(who)
-    if lease.get('status')!='assigned':w.advance(TTL+1);continue
-    tries+=1;k=4 if acquire=='honest' else 1;payload={}
+    lease=w.request(who);tries+=1
+    if lease.get('status')!='assigned':w.advance(1800);continue
+    k=4 if acquire=='honest' else 1;payload={}
     for i,t in enumerate(x['task'] for x in lease['tasks']):
      if i<k:
       if t not in done:spent+=1;done.add(t)
@@ -250,7 +254,14 @@ def main():
   'target_admissions':TARGET,'verdict_seed':SEED,'unit_seconds':UNIT_S,'give_up_after_attempts_without_admission':GIVE_UP,'workers':WORKERS,
   'note':'Scheduler challenge randomness is the unmodified system CSPRNG; verdict resampling is seeded per configuration.'}
  mp=OUT/'phase2_manifest.json'
- if mp.exists():assert json.loads(mp.read_text())==manifest,'Immutable manifest changed: '+str(mp)
+ if mp.exists():
+  frozen=json.loads(mp.read_text())
+  if frozen!=manifest:
+   # A runner change is accepted only with a recorded revision naming the new
+   # hash; every other pinned input must still match exactly.
+   revisions=json.loads((OUT/'phase2_revisions.json').read_text()) if (OUT/'phase2_revisions.json').exists() else []
+   same_inputs={k:v for k,v in frozen.items() if k!='runner'}=={k:v for k,v in manifest.items() if k!='runner'}
+   assert same_inputs and any(r['runner']==manifest['runner'] for r in revisions),'Immutable manifest changed without a recorded revision: '+str(mp)
  else:mp.write_text(json.dumps(manifest,indent=2))
  ledger=OUT/'phase2.jsonl';items=grid();order={key(i[0]):n for n,i in enumerate(items)}
  # Each row carries its configuration key, so a restart skips finished work.

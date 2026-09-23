@@ -188,3 +188,65 @@ P5 and P6, if they hold, mean that energy falsification and single-unit
 corruption of the unaudited kind are neutralized by the aggregation itself, a
 property puzzle-based admission has no analogue for. If either fails, the
 failure is reported with its magnitude.
+
+## Amendment 2 — phase 2 admission economics, 23 September 2026
+
+Recorded after phase 1 and before phase 2 was run or smoke-tested.
+
+**Method.** Attackers drive the committed `PoolAdmission` scheduler under a
+simulated clock. Audit verdicts are resampled from phase-1 replay records for
+the kind of payload audited, not assumed. Headline metric: the attacker
+discount factor, honest-unit work per successful admission divided by an honest
+client's work per admission in the same tier. A hashcash puzzle has a factor of
+1.0 by construction.
+
+**Mapping to the grid above.** The scheduler has two tiers. The trusted tier
+leases one unit and audits it with probability `p`; the protocol's `q` grid
+{0.02, 0.05, 0.1, 0.25} is applied there. The bundle tier, used for any identity
+without a trust grant, leases four units and always replays `q` of them; draws
+of 1, 2 and 4 are evaluated. The deployed attempt cap per task is 3, not 4, so
+the retry grid is realised as {1, 3, 16}; caps other than 3 and seed
+invalidation run through a test-only subclass and are reported as
+counterfactuals. E2's reference figure of about 1.73 corresponds to the bundle
+tier with one draw.
+
+**Structural facts the predictions rest on.** `commit()` reveals whether and
+which units will be replayed before any output is uploaded. A computed result
+remains valid if its task is leased again after expiry. Fresh identities are
+free and always receive the bundle tier.
+
+**Predictions (discount factor unless stated).**
+
+- Q1. Deployed bundle tier, one draw, attacker computes k of 4 and abandons
+  when a fabricated unit is drawn: k=1 about 0.43 (E2's 1.73 units per
+  admission), k=2 about 0.57, k=3 about 0.76, k=4 exactly 1.0, k=0 never
+  admitted. Each k=1 admission leaves three unreplayed fabricated units in
+  provisional storage.
+- Q2. Always submitting instead of abandoning gives the same factor, because a
+  rejected identity costs nothing to replace.
+- Q3. Seed invalidation after a failed or abandoned attempt, or an attempt cap
+  of 1, restores a factor of 1.0 for every k. A cap of 16 lowers k=1 to about
+  0.25.
+- Q4. Two draws: k=2 about 1.19, k=3 about 0.86. Four draws: 1.0 at a verifier
+  cost of all four units.
+- Q5. Reduced-budget units under pool-only commitment: about 0.51 at 64k and
+  0.60 at 128k evaluations. Under pool-and-trace commitment: never admitted.
+- Q6. Trusted tier, fabricated units, trust granted after G honest admitted
+  bundles (an assumed trusted-service policy; the scheduler leaves grants to an
+  external service). Immediate policy with abandonment on selection: the
+  attacker is never quarantined, factor about 0.5 at G=1 and p=0.1, and every
+  admission retains one unreplayed fabricated unit. Deferred policy: first
+  selection is detected after access is consumed, expected admissions per
+  identity about (1-(1-p)^10)/p, factor about 4G p/(1-(1-p)^10), below 1.0 at
+  G=1 for p up to 0.1.
+- Q7. Cheap trust acquisition by the Q1 attack is exploratory: abandonments
+  raise the identity's risk score, which may disqualify it from the trusted
+  tier. No number is predicted.
+- Q8. Disappearing workers holding leases without returning refuse honest
+  arrivals at roughly D/16 for D holders, at zero attacker work.
+
+**Falsification.** If any deployed configuration has a factor below 1.0, then
+as deployed, cheating in that configuration is cheaper than honest work, which a
+puzzle does not permit, and the paper must say so. Q1 and Q6 predict exactly
+that. The evaluation then measures which of the counterfactual controls in Q3
+and Q4 restore a factor of 1.0, and at what verifier cost.

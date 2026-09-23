@@ -401,3 +401,35 @@ them would confirm a construction, not measure anything.
   altered trace byte or truncated trace is rejected.
 - H2. Median payload across all 4,397 corpus medium units falls from about
   167 KB to about 18 KB, a reduction near 90%.
+
+## Amendment 8 — v2 driver, rescoring before merge, 23 September 2026
+
+Recorded after v2 was built and before any check was run.
+
+**Change.** v2 recomputes each minimum read from a submitted pool, energy and
+heavy-atom coordinates, from its conformation before merging, using the same
+calls the Monte Carlo search used when it saved the minimum. Client-reported
+energies and coordinates no longer influence selection. Only `parallel_mc.cpp`
+differs from v1, and only in the server finalization path. v1 is unchanged and
+remains the historical baseline for every earlier result.
+
+**Predictions.**
+
+- V1. G1 on v2: the instrumented reference CLI built from v2 objects is
+  coordinate-identical to the unpatched reference on every retained pose of all
+  five crystal targets.
+- V2. G2 on v2: the v2 driver's normal run is coordinate-identical to the same
+  reference, and single-unit replay and re-finalization are byte-exact.
+- V3. Honest pools: v2 finalization of all 33 corpus pools is byte-identical to
+  v1's, because rescoring repeats the computation that produced each stored
+  energy.
+- V4. Merge hijack closed: repeating I-c on v2, no job improves by more than
+  0.12 kcal/mol, the median change is zero at every fraction, and propagated
+  ROC-AUC change lies within +/-0.01 on every target at f up to 0.25.
+- V5. Coordinate-only tampering (I-a) has no effect at all on v2, since stored
+  coordinates are discarded.
+- V6. Rescoring adds under 100 ms per ligand state to server finalization,
+  under 0.05% of the client work it finalizes.
+
+If V3 fails, v2 changes honest science and cannot replace v1 without a new
+matched campaign. If V4 fails, rescoring does not close the hijack.

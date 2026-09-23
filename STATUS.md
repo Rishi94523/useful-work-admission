@@ -106,14 +106,66 @@ five orders of magnitude above a hash check at q = 0.1. The unit has half the
 latency variance and a far shorter tail, because its evaluation budget is
 bounded while a puzzle solve is geometric.
 
+**Admission economics on the real scheduler — phase 2 complete.** Attackers
+drove the committed `PoolAdmission` scheduler under a simulated clock, with every
+audit verdict resampled from phase-1 replay records. 118 configurations; 110 ran
+to completion and 8 were stopped at 5.9 hours with their measured counts
+recorded. The metric is the attacker discount factor: attacker work per
+admission divided by honest work per admission in the same tier. A proof-of-work
+puzzle is 1.0 by construction; below 1.0, cheating is cheaper than honesty.
+
+| Configuration | Predicted | Measured |
+| --- | --- | --- |
+| Deployed bundle tier, attacker computes 1/2/3/4 of 4 units | 0.43 / 0.57 / 0.76 / 1.0 | **0.46 / 0.57 / 0.76 / 1.00** |
+| Same, always submitting instead of walking away | as above | 0.42 |
+| Reseed a unit after any failed or abandoned attempt | 1.0 | 0.98–1.08 |
+| Attempt cap 1 / cap 16, one unit computed | 1.0 / 0.25 | 0.98 / 0.25 |
+| Two audit draws, 2 or 3 units computed | 1.19 / 0.86 | 1.19 / 0.85 |
+| Reduced-budget units, pool-only commitment, 64k / 128k | 0.51 / 0.60 | 0.54 / 0.60 |
+| Reduced-budget units, pool and trace commitment | never admitted | never admitted |
+| Trusted tier, trust after 1 honest bundle, p = 0.1, immediate / deferred | ~0.5 / ~0.61 | 0.60 / 0.63 |
+| Disappearing workers, 4 / 8 / 12 / 16 lease holders | refusals ≈ D/16 | **0% / 0% / 0% / 81%** |
+
+Every prediction but the last held. Capacity exhaustion is a threshold, not a
+proportional effect: holders cost nothing until they occupy all 16 leases, then
+honest service collapses.
+
+Two structural causes explain every sub-1.0 factor, and both are fixable:
+
+- **Cached reuse (bundle tier).** An abandoned or failed unit returns to the
+  pool with the same seed, so an attacker who computed one of four units reuses
+  that answer across up to three attempts until the audit draw lands on it. The
+  remaining fabricated units are then stored unreplayed, three per admission at
+  one computed unit. Reseeding on retry restores 1.0 at unchanged verifier cost.
+  Walking away is not needed: submitting and being rejected costs the same,
+  because a fresh identity is free in this tier.
+- **Early audit reveal (trusted tier).** `commit()` tells the client whether and
+  which unit will be replayed before any output is uploaded. The pool path
+  uploads every output anyway, so the reveal buys nothing, but it lets a trusted
+  identity abandon when selected and never be quarantined.
+
+Trust thresholds are a measured defence. Requiring three admitted honest bundles
+before trust raises the trusted-tier factor to 1.3–4.0 at every audit rate
+tested. Acquiring trust cheaply through cached reuse costs 5–15 times honest
+work at three bundles. At ten bundles it earned trust about 720 times per
+configuration, from roughly 7,450 bundle admissions, and never produced a single
+trusted admission: the abandonments left every identity above the trusted-tier
+risk limit after the strategy's fixed 30-minute backoff. A more patient
+attacker might do better; this bounds a 30-minute-backoff attacker only.
+
+Verifier cost in the bundle tier is one replayed unit per four-unit admission at
+one draw, 25% of client work. Identities cost zero in this simulation; the
+break-even identity cost for each attack is not yet computed.
+
 ## What is not established
 
-- **Admission economics under measured verdicts.** Retry grinding, identity
-  reset, disappearing workers and collusion (A4–A7) still run on modelled
-  molecular verdicts. They now need re-running with the phase-1 detection
-  rates. A one-run trusted tier is not an unconditional proof of work by
-  anonymous users; at 0.1 audit probability, zero-work trusted requests can pass
-  unaudited.
+- **The two fixes are not implemented.** Reseeding and removing the early reveal
+  are measured only as counterfactuals. A one-run trusted tier is not an
+  unconditional proof of work by anonymous users.
+- **Scientific integrity is separate from admission cost.** Even at a factor of
+  1.0, an attacker who computes one unit of four and is admitted leaves three
+  unreplayed fabricated units in storage. Their effect on screening results and
+  the cost of repair are not measured.
 - **Scientific quarantine and repair** after late detection is not implemented.
 - **Timing is native.** Browser and phone comparisons of unit against puzzle
   remain to be measured.

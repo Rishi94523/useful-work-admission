@@ -157,10 +157,29 @@ Verifier cost in the bundle tier is one replayed unit per four-unit admission at
 one draw, 25% of client work. Identities cost zero in this simulation; the
 break-even identity cost for each attack is not yet computed.
 
+**Reseed on retry — implemented and verified.** A unit re-issued after expiry
+or a failed audit now carries a fresh server-drawn seed, so an earlier answer is
+worthless. Rerun on the committed scheduler with no counterfactual code, against
+predictions recorded beforehand (protocol amendment 3):
+
+| Deployed bundle tier, one draw | Before | After | Predicted |
+| --- | ---: | ---: | --- |
+| Attacker computes 1 of 4 units | 0.46 | **0.96** | 0.95–1.10 |
+| Attacker computes 2 of 4 units | 0.57 | **1.03** | 0.95–1.10 |
+| Attacker computes 3 of 4 units | 0.76 | **1.00** | 0.95–1.10 |
+| Honest client | 1.00 | 1.00 | 1.0 |
+| Reduced-budget units, pool-only, 64k / 128k | 0.54 / 0.60 | 1.39 / 1.12 | ~1.25 / ~1.10 |
+
+Cheating in the bundle tier no longer costs less than honest work, and verifier
+cost is unchanged at one replayed unit per admission. The 64k figure ran about
+two standard errors above its prediction; the direction held. Fabricated units
+retained per admission are unchanged at 3, 2 and 1, as predicted: reseeding fixes
+what cheating costs, not what an admitted cheat leaves in storage.
+
 ## What is not established
 
-- **The two fixes are not implemented.** Reseeding and removing the early reveal
-  are measured only as counterfactuals. A one-run trusted tier is not an
+- **The trusted-tier fix is not implemented.** Removing the early audit reveal
+  is measured only as a counterfactual. A one-run trusted tier is not an
   unconditional proof of work by anonymous users.
 - **Scientific integrity is separate from admission cost.** Even at a factor of
   1.0, an attacker who computes one unit of four and is admitted leaves three

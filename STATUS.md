@@ -176,10 +176,28 @@ two standard errors above its prediction; the direction held. Fabricated units
 retained per admission are unchanged at 3, 2 and 1, as predicted: reseeding fixes
 what cheating costs, not what an admitted cheat leaves in storage.
 
+**Audit reveal removed — implemented and verified.** `commit()` now returns
+only the challenge identifier; the trusted verifier reads the draw through a
+server-side accessor. Rerun on the committed scheduler against amendment 4:
+
+| Immediate policy, trust after 1 bundle | p = 0.02 | 0.05 | 0.10 | 0.25 |
+| --- | ---: | ---: | ---: | ---: |
+| Factor with reveal | 0.44 | 0.48 | 0.60 | 1.19 |
+| Factor without reveal | 0.44 | 0.55 | 0.65 | 1.40 |
+| Predicted, (1-p)(1-(1-p)^10)/p admissions per identity | 0.45 | 0.53 | 0.68 | 1.41 |
+| Identities quarantined (none before) | 4 | 18 | 34 | 99 |
+
+Cheating trusted identities are now caught and quarantined; before, abandoning
+on selection meant none ever were. As predicted, this alone leaves the factor
+below 1.0 at one honest bundle for audit rates up to 10%. With trust after three
+bundles it is 1.36–4.04 at every rate. Deferred policy and the bundle tier are
+unchanged within noise.
+
 ## What is not established
 
-- **The trusted-tier fix is not implemented.** Removing the early audit reveal
-  is measured only as a counterfactual. A one-run trusted tier is not an
+- **The trust threshold is not enforced.** Three admitted bundles before trust
+  restores a factor of at least 1.0, but `grant_trust` accepts any identity and
+  leaves the threshold to an external service. A one-run trusted tier is not an
   unconditional proof of work by anonymous users.
 - **Scientific integrity is separate from admission cost.** Even at a factor of
   1.0, an attacker who computes one unit of four and is admitted leaves three

@@ -193,7 +193,7 @@ below 1.0 at one honest bundle for audit rates up to 10%. With trust after three
 bundles it is 1.36–4.04 at every rate. Deferred policy and the bundle tier are
 unchanged within noise.
 
-**Trust threshold � enforced.** `grant_trust` now refuses an identity until it
+**Trust threshold � enforced.** `grant_trust` now refuses an identity until it
 has three bundle-tier admissions that were replayed and accepted (amendment 5);
 bypassing it requires an explicit `trust_bundles=0`. On the real scheduler at
 p = 0.1, an attacker planning trust after one bundle obtained no trusted
@@ -205,20 +205,56 @@ configuration measured costs an attacker at least as much as honest work.
 
 **Identity cost.** The simulation prices a fresh identity at zero. For the
 original design to reach parity on identity cost alone, each fresh identity
-would have had to cost the attacker 0.5�3.3 honest units in the bundle tier
+would have had to cost the attacker 0.5�3.3 honest units in the bundle tier
 (the upper end for an attacker reusing one identity across walk-aways) and
-2.4�5.1 units in the trusted tier with trust after one bundle, one unit being
+2.4�5.1 units in the trusted tier with trust after one bundle, one unit being
 about 1.5 s of CPU. After the fixes, parity holds with identities free, so it
 no longer rests on any assumption about identity cost. This is the precise
 difference from proof-of-work, whose per-admission cost never depended on
 identity.
 
+**Scientific integrity — phase 6.** The original finalizer was run over pools
+from the 33 corpus jobs with units replaced or altered, against amendment 6.
+The untouched baseline reproduced the campaign's recorded score in 33 of 33
+jobs.
+
+| Experiment | Predicted | Measured |
+| --- | --- | --- |
+| I-d unit with the wrong atom count | rejected on read | rejected 33/33 ✓ |
+| I-a stored coordinates moved 2 Å, conformation untouched | change ≤ 0.12 kcal/mol | −0.10 to +0.02 ✓ |
+| I-a conformation moved 2 Å, coordinates untouched | like phase-1 A8c | −0.42 to +1.37 ✗ |
+| I-b duplicated units, f = 0.05 → 0.75 | no gain > 0.12; losses grow with f; median 0 at small f | best gain −0.10; jobs worse 2 → 12; median 0 throughout ✓ |
+| I-c duplicated units claiming −20 kcal/mol | same as I-b | **22 of 33 jobs worse at f = 0.05, by up to 2.6 kcal/mol** ✗ |
+| I-e ROC-AUC change from I-b, f ≤ 0.25 | within ±0.01 | within ±0.004; within ±0.009 at f = 0.75 ✓ |
+
+**No false positives were observed.** Every final score is an energy the
+finalizer recomputed for a physically valid conformation; no falsified value
+reached any output, and no gain exceeded 0.42 kcal/mol, a genuine minimum
+reached from a displaced start. Honest duplication, the cheapest fabrication
+that parses, costs only lost search effort and leaves screening results
+unchanged within ±0.004 AUC at up to a quarter of units fabricated.
+
+**Falsified energies hijack the merge.** The value is laundered, but the merge
+still ranks and clusters minima by the energies clients report, and keeps only
+a bounded set for refinement. Fabricated minima claiming −20 kcal/mol displace
+honest minima from that set, so the best pose is lost before refinement ever
+sees it. Five per cent of units suffice. Propagated onto the campaign
+(exploratory, not predeclared), ROC-AUC falls by up to 0.034 on average at
+f = 0.10, with 95% intervals excluding zero on several targets. The effect does
+not grow with f: once fabricated minima dominate the retained set, more of them
+do no further harm.
+
+The remedy is to rescore every submitted minimum from its conformation before
+merging, so no client-reported energy influences selection. That costs about
+nine energy evaluations per unit against 256,000 for the search. It changes the
+frozen driver's merge path and is not implemented.
+
 ## What is not established
 
-- **Scientific integrity is separate from admission cost.** At parity, an
-  admitted bundle that computed one unit of four still leaves three unreplayed
-  fabricated units, and an unaudited trusted admission leaves one. Their effect
-  on screening results and the cost of repair are not measured.
+- **Merge rescoring.** Until submitted minima are rescored before merging, an
+  admitted attacker controlling about 5% of a state's units can hide its best
+  pose. This is omission, not falsification, but it measurably degrades
+  screening.
 - **A one-run trusted tier** is not an unconditional proof of work by anonymous
   users: an unaudited trusted admission is still granted on the identity's
   history, not on the unit.

@@ -3,8 +3,14 @@
 Trusted registration/verifier API, not an Internet endpoint or risk classifier.
 The existing campaign transaction, commitment and challenge machinery is reused.
 """
-import hashlib,json,secrets
+import hashlib,json,secrets,sqlite3
 from research.docking_campaign import Campaign,canonical
+
+# Seeds at or above the floor are reserved for server reseeding and cannot be
+# registered, so a reseeded unit never collides with a registered one. The
+# ceiling keeps seeds inside the driver's signed 32-bit range.
+RESEED_FLOOR=2**30
+RESEED_CEIL=2**31-1
 
 class VinaPoolCampaign(Campaign):
  def __init__(self,path,clock=None):
@@ -13,9 +19,10 @@ class VinaPoolCampaign(Campaign):
   with self.transaction() as db:
    db.executescript('''CREATE TABLE IF NOT EXISTS pool_members(pool TEXT,task TEXT,ordinal INTEGER,PRIMARY KEY(pool,ordinal));
     CREATE TABLE IF NOT EXISTS pool_outputs(task TEXT PRIMARY KEY,payload BLOB NOT NULL,digest TEXT NOT NULL,verified INTEGER NOT NULL);
-    CREATE TABLE IF NOT EXISTS pool_attempts(task TEXT PRIMARY KEY,n INTEGER NOT NULL DEFAULT 0);''')
+    CREATE TABLE IF NOT EXISTS pool_attempts(task TEXT PRIMARY KEY,n INTEGER NOT NULL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS pool_reseeds(task TEXT NOT NULL,at REAL NOT NULL,old_seed INTEGER NOT NULL,new_seed INTEGER NOT NULL,family TEXT NOT NULL,PRIMARY KEY(family,new_seed));''')
  def register_pool(self,pool,spec,seeds,cost=1):
-  if not seeds or len(seeds)>1024 or len(set(seeds))!=len(seeds) or any(type(s)!=int or s<0 for s in seeds):raise ValueError('Invalid or duplicate child seeds')
+  if not seeds or len(seeds)>1024 or len(set(seeds))!=len(seeds) or any(type(s)!=int or s<0 or s>=RESEED_FLOOR for s in seeds):raise ValueError('Invalid, duplicate or reserved child seeds')
   with self.transaction() as db:
    if db.execute('SELECT 1 FROM pool_members WHERE pool=?',(pool,)).fetchone():raise ValueError('Pool already registered')
    for i,seed in enumerate(seeds):
@@ -47,7 +54,10 @@ class VinaPoolCampaign(Campaign):
     if len(chosen)!=jobs:raise LookupError('Insufficient uncompleted units')
     for r in chosen:
      if r['task'] in chosen_ids:raise ValueError('Overlapping scientific pools in bundle')
-     chosen_ids.add(r['task']);tasks.append({'task':r['task'],'spec':json.loads(r['specification']),'start':0,'count':1,'estimated_cost':r['cost'],'ordinal':r['ordinal'],'pool':pool})
+     # A unit that expired or failed an audit is re-issued with a fresh seed, so
+     # a result computed for an earlier attempt is worthless on this one.
+     spec=self._reseed(db,r,now) if r['state']=='EXPIRED' else json.loads(r['specification'])
+     chosen_ids.add(r['task']);tasks.append({'task':r['task'],'spec':spec,'start':0,'count':1,'estimated_cost':r['cost'],'ordinal':r['ordinal'],'pool':pool})
    payload={'lease':lease,'campaign':next(iter(plan)) if len(plan)==1 else 'multi-pool','pools':list(plan),'expires':now+ttl,'tasks':tasks};binding=hashlib.sha256(canonical(payload)).hexdigest();payload['binding']=binding
    db.execute('INSERT INTO leases(id,owner,issued,expires,status,tasks,binding) VALUES(?,?,?,?,?,?,?)',(lease,owner,now,now+ttl,'OPEN',canonical(tasks).decode(),binding))
    for task in tasks:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,task['task']))
@@ -55,6 +65,22 @@ class VinaPoolCampaign(Campaign):
  def _before_challenge(self,db,tasks):
   for t in tasks:
     if db.execute('UPDATE pool_attempts SET n=n+1 WHERE task=? AND n<3',(t['task'],)).rowcount!=1:raise ValueError('Attempt cap')
+ def _reseed(self,db,row,now):
+  """Give a re-issued unit a fresh server-drawn seed and record the change.
+
+  The task identifier is unchanged: it names the scientific slot, while the
+  specification carries the seed actually searched. Reseeds are unique within a
+  scientific family, which is the specification without its seed.
+  """
+  spec=json.loads(row['specification']);params=spec['search_parameters'];old=params['child_seed']
+  family=hashlib.sha256(canonical({**spec,'search_parameters':{k:v for k,v in params.items() if k!='child_seed'}})).hexdigest()
+  while True:
+   new=RESEED_FLOOR+secrets.randbelow(RESEED_CEIL-RESEED_FLOOR)
+   try:db.execute('INSERT INTO pool_reseeds VALUES(?,?,?,?,?)',(row['task'],now,old,new,family));break
+   except sqlite3.IntegrityError:continue
+  spec['search_parameters']={**params,'child_seed':new}
+  db.execute('UPDATE units SET specification=? WHERE task=?',(canonical(spec).decode(),row['task']))
+  return spec
  def finish(self,lease,owner,binding,challenge_id,commitment,accepted,result):
   if accepted:raise ValueError('Accepted pools require durable finish_outputs')
   return super().finish(lease,owner,binding,challenge_id,commitment,False,result)

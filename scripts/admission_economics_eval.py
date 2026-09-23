@@ -109,6 +109,11 @@ def attempt(w,who,lease,payload,submit_if_selected):
  if ch.get('deferred') and w.audit(lease,outputs,kinds,ch)['status']=='rejected':retained=0
  return True,retained
 
+def unit_keys(lease):
+ """(task, seed) for each leased unit. A cached result is only valid for the
+ same task at the same seed; a scheduler that reseeds on retry breaks reuse."""
+ return [(x['task'],x['spec']['search_parameters']['child_seed']) for x in lease['tasks']]
+
 def only_honest_drawn(drawn,kinds,ch):return all(kinds[t]=='honest' for t in drawn)
 
 def bundle_attack(verdicts,work,*,q,k,cap=DEPLOYED_CAP,cache='reuse',partial=None,adaptive=True):
@@ -125,12 +130,12 @@ def bundle_attack(verdicts,work,*,q,k,cap=DEPLOYED_CAP,cache='reuse',partial=Non
    who=w.identity();lease=w.request(who)
    if lease.get('status')!='assigned':w.advance(TTL+1);continue
    attempts+=1;payload={}
-   for i,t in enumerate(x['task'] for x in lease['tasks']):
+   for i,(t,seed) in enumerate(unit_keys(lease)):
     if partial:
-     if t not in done:spent+=partial[0]/256000;done.add(t)
+     if (t,seed) not in done:spent+=partial[0]/256000;done.add((t,seed))
      payload[t]=(b'partial:'+t.encode(),('partial',)+partial)
     elif i<k:
-     if t not in done:spent+=1;done.add(t)
+     if (t,seed) not in done:spent+=1;done.add((t,seed))
      payload[t]=(b'honest:'+t.encode(),'honest')
     else:payload[t]=(b'fabricated:'+t.encode(),'fabricated')
    w.advance(UNIT_S*(k if not partial else 4*partial[0]/256000))
@@ -166,9 +171,9 @@ def trusted_attack(verdicts,work,*,policy,p,G,acquire):
     lease=w.request(who);tries+=1
     if lease.get('status')!='assigned':w.advance(1800);continue
     k=4 if acquire=='honest' else 1;payload={}
-    for i,t in enumerate(x['task'] for x in lease['tasks']):
+    for i,(t,seed) in enumerate(unit_keys(lease)):
      if i<k:
-      if t not in done:spent+=1;done.add(t)
+      if (t,seed) not in done:spent+=1;done.add((t,seed))
       payload[t]=(b'honest:'+t.encode(),'honest')
      else:payload[t]=(b'fabricated:'+t.encode(),'fabricated')
     w.advance(UNIT_S*k);ok,_=attempt(w,who,lease,payload,only_honest_drawn);wins+=ok

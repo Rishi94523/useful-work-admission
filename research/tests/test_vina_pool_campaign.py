@@ -1,5 +1,7 @@
 import hashlib,tempfile,unittest
+from unittest import mock
 from pathlib import Path
+import research.vina_pool_campaign as rs
 from research.vina_pool_campaign import VinaPoolCampaign
 class PoolTests(unittest.TestCase):
  def test_multiple_ligand_pools_are_leased_atomically(self):
@@ -49,4 +51,35 @@ class PoolTests(unittest.TestCase):
    for task in ids:c.mark_replay_verified(task,hashlib.sha256(b'fixture').hexdigest())
    self.assertTrue(c.coverage('p')['all_replay_verified'])
    self.assertEqual(len(c.ordered_outputs('p',require_verified=True)),8)
+class ReseedTests(unittest.TestCase):
+ """A re-issued unit must not accept a result computed for an earlier attempt."""
+ spec={'model_version':'e','receptor':'r','ligand':'l','conformer_bank':'i','region':'b','search_parameters':{'max_evals':256000}}
+ def setUp(self):self.tmp=tempfile.TemporaryDirectory(dir='tmp');self.now=[0]
+ def tearDown(self):self.tmp.cleanup()
+ def campaign(self,seeds=(0,1,2,3)):
+  c=VinaPoolCampaign(Path(self.tmp.name)/'p.sqlite',clock=lambda:self.now[0]);c.register_pool('p',self.spec,list(seeds));return c
+ def seed(self,lease):return lease['tasks'][0]['spec']['search_parameters']['child_seed']
+ def test_first_issue_keeps_registered_seed(self):
+  c=self.campaign();self.assertEqual(self.seed(c.lease('p','x',ttl=10)),0)
+ def test_expired_unit_is_reissued_with_new_recorded_seed(self):
+  c=self.campaign();first=c.lease('p','x',ttl=10);self.now[0]=11;second=c.lease('p','y',ttl=10)
+  self.assertEqual(first['tasks'][0]['task'],second['tasks'][0]['task'])
+  self.assertNotEqual(self.seed(second),0);self.assertGreaterEqual(self.seed(second),rs.RESEED_FLOOR);self.assertLess(self.seed(second),rs.RESEED_CEIL)
+  with c.transaction() as db:row=db.execute('SELECT old_seed,new_seed FROM pool_reseeds').fetchone()
+  self.assertEqual((row['old_seed'],row['new_seed']),(0,self.seed(second)))
+ def test_rejected_audit_reissues_with_new_seed(self):
+  c=self.campaign();l=c.lease('p','x',ttl=60);ch=c.commit(l['lease'],'x',l['binding'],'a'*64,samples=1)
+  c.finish(l['lease'],'x',l['binding'],ch['id'],'a'*64,False,{})
+  again=c.lease('p','y',ttl=60);self.assertEqual(again['tasks'][0]['task'],l['tasks'][0]['task']);self.assertNotEqual(self.seed(again),self.seed(l))
+ def test_each_reissue_draws_again(self):
+  c=self.campaign();seeds=[]
+  for i in range(3):l=c.lease('p','o%d'%i,ttl=10);seeds.append(self.seed(l));self.now[0]+=11
+  self.assertEqual(len(set(seeds)),3)
+ def test_reserved_seed_range_cannot_be_registered(self):
+  c=VinaPoolCampaign(Path(self.tmp.name)/'q.sqlite',clock=lambda:0)
+  with self.assertRaises(ValueError):c.register_pool('p',self.spec,[rs.RESEED_FLOOR])
+ def test_colliding_draw_is_redrawn(self):
+  c=self.campaign(seeds=(0,1));c.lease('p','x',ttl=10,jobs=2);self.now[0]=11
+  with mock.patch.object(rs.secrets,'randbelow',side_effect=[5,5,7]):l=c.lease('p','y',ttl=10,jobs=2)
+  self.assertEqual(sorted(t['spec']['search_parameters']['child_seed'] for t in l['tasks']),[rs.RESEED_FLOOR+5,rs.RESEED_FLOOR+7])
 if __name__=='__main__':unittest.main()

@@ -43,12 +43,31 @@ challenge, campaign scheduling with disjoint leases, one-use work credits, the
 original Vina finalizer, and lossless prepared-state delivery to browsers over
 a CDN.
 
+**Matched compute — passed on all five targets.** 2,073 paired state jobs, three
+seeds, zero failures. Each ligand state was docked as a monolithic
+exhaustiveness-32 run and as independent 256k-evaluation units (median 140 per
+state) merged by the original finalizer, at matched evaluation budget.
+
+| Target | Mean ΔAUC | Paired 95% | Evaluation ratio | Search-time ratio |
+| --- | ---: | --- | ---: | ---: |
+| WEE1 | −0.0003 | [−0.0015, +0.0000] | 1.0040 | 0.961 |
+| PUR2 | +0.0033 | [−0.0067, +0.0164] | 1.0025 | 0.933 |
+| FA7 | +0.0020 | [−0.0093, +0.0163] | 1.0034 | 0.959 |
+| TGFR1 | −0.0008 | [−0.0060, +0.0036] | 1.0045 | 0.964 |
+| KIF11 | +0.0003 | [−0.0042, +0.0049] | 1.0045 | 0.974 |
+
+The predeclared noninferiority margin of −0.05 is generous relative to these
+effects and is not a discriminating test; the substantive finding is that every
+interval lies within ±0.017 and straddles or touches zero, with EF10 identical
+on 14 of 15 target-seed pairs. Decomposition costs under 0.5% extra evaluations
+and no search time. These remain 96-compound panels, not full-library results.
+
 ## What is not established
 
-- **The matched-compute comparison is running.** The campaign contains 2,073
-  paired state jobs; its final ranking analysis is still pending. Qualified
-  stock inputs do not establish distributed-run quality.
-- **Admission security** is analysed but not demonstrated end to end. A one-run
+- **Admission security** is analysed but not demonstrated end to end. Existing
+  attack experiments use modelled molecular verdicts. A predeclared evaluation
+  against real molecular replay, with a puzzle baseline, is specified in
+  `docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md` and not yet run. A one-run
   trusted tier is not an unconditional proof of work by anonymous users; at 0.1
   audit probability, zero-work trusted requests can pass unaudited.
 - **Device evidence** covers one iPhone 15 and one desktop. There is no

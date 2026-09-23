@@ -19,10 +19,9 @@ reported factor is an upper bound on what a capable attacker pays.
 
 See docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md, amendment 2.
 """
-import hashlib,json,random,secrets,shutil,sys,tempfile
+import hashlib,json,random,shutil,sys,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-from research.docking_campaign import canonical
 from research.pool_admission import PoolAdmission
 
 PHASE1=ROOT/'local-research/adversarial-2026-09-23/phase1.jsonl'
@@ -53,22 +52,17 @@ def scheduler(cap):
  """The deployed scheduler at the deployed cap; a counterfactual cap otherwise."""
  if cap==DEPLOYED_CAP:return PoolAdmission
  class Capped(PoolAdmission):
+  # request() calls VinaPoolCampaign._lease_plan by class, so leasing cannot be
+  # overridden. Instead keep the true count in a side table and drive the
+  # deployed column the unchanged lease filter reads (leasable while n<3).
   def _before_challenge(self,db,tasks):
+   db.execute('CREATE TABLE IF NOT EXISTS counterfactual_attempts(task TEXT PRIMARY KEY,n INTEGER NOT NULL)')
    for t in tasks:
-    if db.execute('UPDATE pool_attempts SET n=n+1 WHERE task=? AND n<?',(t['task'],cap)).rowcount!=1:raise ValueError('Attempt cap')
-  # Copy of VinaPoolCampaign._lease_plan with the attempt limit as a parameter.
-  def _lease_plan(self,plan,owner,ttl):
-   now=self.clock();lease=secrets.token_hex(16)
-   with self.transaction() as db:
-    self._expire(db,now);tasks=[]
-    for pool,jobs in plan.items():
-     chosen=db.execute("SELECT u.*,p.ordinal FROM pool_members p JOIN units u ON p.task=u.task JOIN pool_attempts a ON a.task=u.task WHERE p.pool=? AND u.state IN ('UNASSIGNED','EXPIRED') AND a.n<? ORDER BY p.ordinal LIMIT ?",(pool,cap,jobs)).fetchall()
-     if len(chosen)!=jobs:raise LookupError('Insufficient uncompleted units')
-     for r in chosen:tasks.append({'task':r['task'],'spec':json.loads(r['specification']),'start':0,'count':1,'estimated_cost':r['cost'],'ordinal':r['ordinal'],'pool':pool})
-    payload={'lease':lease,'campaign':next(iter(plan)),'pools':list(plan),'expires':now+ttl,'tasks':tasks};binding=hashlib.sha256(canonical(payload)).hexdigest();payload['binding']=binding
-    db.execute('INSERT INTO leases(id,owner,issued,expires,status,tasks,binding) VALUES(?,?,?,?,?,?,?)',(lease,owner,now,now+ttl,'OPEN',canonical(tasks).decode(),binding))
-    for task in tasks:db.execute("UPDATE units SET state='LEASED',lease=? WHERE task=?",(lease,task['task']))
-   return payload
+    db.execute('INSERT OR IGNORE INTO counterfactual_attempts VALUES(?,0)',(t['task'],))
+    n=db.execute('SELECT n FROM counterfactual_attempts WHERE task=?',(t['task'],)).fetchone()[0]
+    if n>=cap:raise ValueError('Attempt cap')
+    db.execute('UPDATE counterfactual_attempts SET n=? WHERE task=?',(n+1,t['task']))
+    db.execute('UPDATE pool_attempts SET n=? WHERE task=?',(3 if n+1>=cap else 0,t['task']))
  return Capped
 
 class World:
@@ -90,7 +84,8 @@ class World:
   return self.c.replay(lease['lease'],{t:(hashlib.sha256(outputs[t]).hexdigest(),self.verdicts(kinds[t])) for t in drawn})
  def exhausted(self):
   with self.c.transaction() as db:
-   return db.execute("SELECT count(*) FROM pool_attempts a JOIN units u ON u.task=a.task WHERE a.n>=? AND u.state!='COMPLETED'",(self.cap,)).fetchone()[0]
+   # n>=3 marks an exhausted task in both the deployed and counterfactual paths.
+   return db.execute("SELECT count(*) FROM pool_attempts a JOIN units u ON u.task=a.task WHERE a.n>=3 AND u.state!='COMPLETED'").fetchone()[0]
  def close(self):shutil.rmtree(self.dir,ignore_errors=True)
 
 def attempt(w,who,lease,payload,submit_if_selected):
@@ -181,7 +176,7 @@ def trusted_attack(verdicts,work,*,policy,p,G,acquire):
     t=lease['tasks'][0]['task'];ok,g=attempt(w,who,lease,{t:(b'fabricated:'+t.encode(),'fabricated')},submit_rule)
     if ok:fraud+=1;retained+=g
     if ok and policy=='deferred' and g==0:caught+=1;break
-    w.advance(2)
+    w.advance(4)  # stay under the >3-requests-per-10s velocity penalty
   per=lambda x:x/fraud if fraud else None
   return {'fraudulent_admissions':fraud,'identities':identities,'identities_caught':caught,'work_units':spent,
           'discount':per(spent),'fabricated_units_retained_per_admission':per(retained),'replayed_units_per_admission':per(w.replayed)}

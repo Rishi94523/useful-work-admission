@@ -19,7 +19,8 @@ reported factor is an upper bound on what a capable attacker pays.
 
 See docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md, amendment 2.
 """
-import hashlib,json,random,shutil,sys,tempfile
+import hashlib,json,os,random,shutil,sys,tempfile
+from concurrent.futures import ProcessPoolExecutor,as_completed
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from research.pool_admission import PoolAdmission
@@ -33,6 +34,8 @@ TTL=120
 UNIT_S=1.52
 DEPLOYED_CAP=3
 SEED=20260923
+GIVE_UP=2000
+WORKERS=12
 
 def digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
@@ -116,9 +119,9 @@ def bundle_attack(verdicts,work,*,q,k,cap=DEPLOYED_CAP,cache='reuse',partial=Non
  failed or abandoned attempt, so earlier work is useless.
  """
  w=World(work,verdicts,cap=cap,q=q);done=set();spent=0.0;admitted=retained=attempts=0
- limit=2000 if (k==0 and not partial) else TARGET*40
  try:
-  while admitted<TARGET and attempts<limit:
+  # Stop a configuration after 2,000 attempts without a single admission.
+  while admitted<TARGET and attempts<TARGET*40 and not (admitted==0 and attempts>=GIVE_UP):
    who=w.identity();lease=w.request(who)
    if lease.get('status')!='assigned':w.advance(TTL+1);continue
    attempts+=1;payload={}
@@ -206,31 +209,63 @@ def capacity_attack(verdicts,work,*,holders,duration=3600,honest_every=5):
   return {'holders':holders,'honest_arrivals':served+refused,'honest_refused':refused,'refusal_rate':refused/(served+refused),'attacker_work_units':0}
  finally:w.close()
 
-def main():
- OUT.mkdir(parents=True,exist_ok=True);work=ROOT/'tmp/adversarial/phase2';work.mkdir(parents=True,exist_ok=True)
- manifest={'protocol':digest(PROTOCOL),'runner':digest(Path(__file__)),'phase1':digest(PHASE1),
-  'scheduler':{f:digest(ROOT/'research'/f) for f in ('pool_admission.py','adaptive_admission.py','vina_pool_campaign.py','docking_campaign.py','whole_run_campaign.py')},
-  'target_admissions':TARGET,'verdict_seed':SEED,'unit_seconds':UNIT_S,
-  'note':'Scheduler challenge randomness is the unmodified system CSPRNG; only verdict resampling is seeded.'}
- mp=OUT/'phase2_manifest.json'
- if mp.exists():assert json.loads(mp.read_text())==manifest,'Immutable manifest changed: '+str(mp)
- else:mp.write_text(json.dumps(manifest,indent=2))
- verdicts=Verdicts(random.Random(SEED));rows=[]
- def emit(r):rows.append(r);print(json.dumps(r),flush=True)
+def grid():
+ """Every configuration, in reporting order, as (key, kind, parameters)."""
+ out=[]
  for q in (1,2,4):
   for k in (0,1,2,3,4):
    for cap,cache in ((3,'reuse'),(3,'invalid'),(1,'reuse'),(16,'reuse')):
-    emit({'tier':'bundle','q':q,'k':k,'cap':cap,'cache':cache,'deployed':(cap,cache)==(3,'reuse'),**bundle_attack(verdicts,work,q=q,k=k,cap=cap,cache=cache)})
- emit({'tier':'bundle','q':1,'k':1,'cap':3,'cache':'reuse','strategy':'submit-regardless','deployed':True,**bundle_attack(verdicts,work,q=1,k=1,adaptive=False)})
+    out.append(({'tier':'bundle','q':q,'k':k,'cap':cap,'cache':cache,'deployed':(cap,cache)==(3,'reuse')},'bundle',dict(q=q,k=k,cap=cap,cache=cache)))
+ out.append(({'tier':'bundle','q':1,'k':1,'cap':3,'cache':'reuse','strategy':'submit-regardless','deployed':True},'bundle',dict(q=1,k=1,adaptive=False)))
  for budget in (64000,128000):
   for mode in ('pool_only','pool_and_trace'):
-   emit({'tier':'bundle','q':1,'partial_budget':budget,'commitment':mode,'cap':3,'deployed':mode=='pool_and_trace',**bundle_attack(verdicts,work,q=1,k=0,partial=(budget,mode))})
+   out.append(({'tier':'bundle','q':1,'partial_budget':budget,'commitment':mode,'cap':3,'deployed':mode=='pool_and_trace'},'bundle',dict(q=1,k=0,partial=(budget,mode))))
  for policy in ('immediate','deferred'):
   for p in (0.02,0.05,0.1,0.25):
    for G in (1,3,10):
     for acquire in ('honest','cached'):
-     emit({'tier':'trusted','policy':policy,'p':p,'G':G,'acquire':acquire,**trusted_attack(verdicts,work,policy=policy,p=p,G=G,acquire=acquire)})
- for holders in (0,4,8,12,16):emit({'tier':'capacity',**capacity_attack(verdicts,work,holders=holders)})
- (OUT/'phase2.json').write_text(json.dumps(rows,indent=2));print('PHASE2 COMPLETE',flush=True)
+     out.append(({'tier':'trusted','policy':policy,'p':p,'G':G,'acquire':acquire},'trusted',dict(policy=policy,p=p,G=G,acquire=acquire)))
+ for holders in (0,4,8,12,16):out.append(({'tier':'capacity','holders':holders},'capacity',dict(holders=holders)))
+ return out
+
+def key(label):return json.dumps(label,sort_keys=True)
+
+def run_one(item):
+ """One configuration in its own process, database and verdict stream.
+
+ The verdict stream is seeded from the configuration itself, so a result does
+ not depend on which worker ran it or in what order.
+ """
+ label,kind,params=item
+ rng=random.Random(int(hashlib.sha256((str(SEED)+key(label)).encode()).hexdigest()[:16],16))
+ work=ROOT/'tmp/adversarial/phase2'/hashlib.sha256(key(label).encode()).hexdigest()[:12];work.mkdir(parents=True,exist_ok=True)
+ fn={'bundle':bundle_attack,'trusted':trusted_attack,'capacity':capacity_attack}[kind]
+ try:return {**label,**fn(Verdicts(rng),work,**params)}
+ finally:shutil.rmtree(work,ignore_errors=True)
+
+def main():
+ OUT.mkdir(parents=True,exist_ok=True)
+ manifest={'protocol':digest(PROTOCOL),'runner':digest(Path(__file__)),'phase1':digest(PHASE1),
+  'scheduler':{f:digest(ROOT/'research'/f) for f in ('pool_admission.py','adaptive_admission.py','vina_pool_campaign.py','docking_campaign.py','whole_run_campaign.py')},
+  'target_admissions':TARGET,'verdict_seed':SEED,'unit_seconds':UNIT_S,'give_up_after_attempts_without_admission':GIVE_UP,'workers':WORKERS,
+  'note':'Scheduler challenge randomness is the unmodified system CSPRNG; verdict resampling is seeded per configuration.'}
+ mp=OUT/'phase2_manifest.json'
+ if mp.exists():assert json.loads(mp.read_text())==manifest,'Immutable manifest changed: '+str(mp)
+ else:mp.write_text(json.dumps(manifest,indent=2))
+ ledger=OUT/'phase2.jsonl';items=grid();order={key(i[0]):n for n,i in enumerate(items)}
+ # Each row carries its configuration key, so a restart skips finished work.
+ recorded=[json.loads(s) for s in ledger.read_text().splitlines() if s.strip()] if ledger.exists() else []
+ done={r['config_key'] for r in recorded}
+ todo=[i for i in items if key(i[0]) not in done]
+ print('configurations: %d total, %d already recorded, %d to run'%(len(items),len(done),len(todo)),flush=True)
+ with ProcessPoolExecutor(max_workers=WORKERS) as pool:
+  futures={pool.submit(run_one,i):key(i[0]) for i in todo}
+  for f in as_completed(futures):
+   r={'config_key':futures[f],**f.result()}
+   with ledger.open('a') as h:
+    h.write(json.dumps(r)+chr(10));h.flush();os.fsync(h.fileno())
+   print(json.dumps(r),flush=True)
+ rows=sorted((json.loads(s) for s in ledger.read_text().splitlines() if s.strip()),key=lambda r:order[r['config_key']])
+ (OUT/'phase2.json').write_text(json.dumps(rows,indent=2));print('PHASE2 COMPLETE',len(rows),'rows',flush=True)
 
 if __name__=='__main__':main()

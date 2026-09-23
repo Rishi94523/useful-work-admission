@@ -1,4 +1,4 @@
-# Current status — 20 September 2026
+# Current status — 23 September 2026
 
 This repository implements **browser admission backed by auditable useful
 scientific computation**. A visitor's browser runs a bounded unit of real
@@ -82,8 +82,11 @@ Committing to the minima pool alone does not enforce work: retained minima often
 stabilise before the budget is spent, so truncated searches reproduce the pool
 byte for byte. Binding the per-step trace closes this completely. The browser
 worker already uploads the trace. Committing to a SHA-256 of the trace instead
-would preserve the guarantee while cutting upload from about 167 KB to 18 KB;
-that change is not implemented. Predictions P5 and P6 failed as literally
+preserves the guarantee exactly, since hash equality is byte equality, and is
+implemented as `research/trace_commitment.py`: across all 4,397 corpus units
+the median upload falls from 163 KB to 19 KB, an 88% reduction (215 KB to 23 KB
+at the 95th percentile). The browser worker still sends the full trace, because
+the device experiments compare it. Predictions P5 and P6 failed as literally
 stated, but the original finalizer recomputes every energy, so neither
 falsification nor single-unit displacement can be steered by an attacker.
 

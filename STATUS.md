@@ -62,14 +62,61 @@ interval lies within ±0.017 and straddles or touches zero, with EF10 identical
 on 14 of 15 target-seed pairs. Decomposition costs under 0.5% extra evaluations
 and no search time. These remain 96-compound panels, not full-library results.
 
+**Unit-level attacks under real replay — phase 1 complete.** 693 trials on 99
+units sampled by salted hash from 33 preserved campaign jobs, all five targets,
+judged by re-executing the unit with the frozen driver or by running the
+original finalizer over a tampered pool. Predictions were committed before
+execution (`docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md`, amendment 1).
+
+| Attack | Outcome |
+| --- | --- |
+| Honest unit | accepted 99/99 |
+| A1 substitution of another unit's result | accepted 0/99 |
+| A3 cached resubmission | accepted 99/99, by design; only one-use credits refuse it |
+| A2 quarter / half work, pool-only commitment | **accepted 20/99 and 45/99** |
+| A2 quarter / half work, pool and trace commitment | accepted 0/198 |
+| A8e best energy falsified by 0.1–3.0 kcal/mol | falsified value never reaches output; merge-order effect ≤0.11 kcal/mol in either direction, independent of lie size |
+| A8c best pose moved 0.1–2.0 Å | no effect at 0.1 and 0.5 Å; one genuine 0.118 kcal/mol improvement at 2.0 Å |
+
+Committing to the minima pool alone does not enforce work: retained minima often
+stabilise before the budget is spent, so truncated searches reproduce the pool
+byte for byte. Binding the per-step trace closes this completely. The browser
+worker already uploads the trace. Committing to a SHA-256 of the trace instead
+would preserve the guarantee while cutting upload from about 167 KB to 18 KB;
+that change is not implemented. Predictions P5 and P6 failed as literally
+stated, but the original finalizer recomputes every energy, so neither
+falsification nor single-unit displacement can be steered by an attacker.
+
+**Puzzle baseline — measured.** Hashcash calibrated natively to the same median
+client time under the same load (21 bits, 240 solves).
+
+| | Puzzle | Vina unit |
+| --- | ---: | ---: |
+| Client median | 1.38 s | 1.52 s |
+| Client p99 | 6.50 s | 3.38 s |
+| Client maximum | 13.4 s | 3.4 s |
+| Coefficient of variation | 0.95 | 0.48 |
+| Verifier cost per admission | 0.77 µs | q × 1.52 s |
+| Freshness guaranteed | yes | no |
+| Useful output | none | one docking unit |
+
+The puzzle wins decisively on verification cost and on freshness, as predicted.
+Useful work costs the verifier a fraction q of client work, which is roughly
+five orders of magnitude above a hash check at q = 0.1. The unit has half the
+latency variance and a far shorter tail, because its evaluation budget is
+bounded while a puzzle solve is geometric.
+
 ## What is not established
 
-- **Admission security** is analysed but not demonstrated end to end. Existing
-  attack experiments use modelled molecular verdicts. A predeclared evaluation
-  against real molecular replay, with a puzzle baseline, is specified in
-  `docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md` and not yet run. A one-run
-  trusted tier is not an unconditional proof of work by anonymous users; at 0.1
-  audit probability, zero-work trusted requests can pass unaudited.
+- **Admission economics under measured verdicts.** Retry grinding, identity
+  reset, disappearing workers and collusion (A4–A7) still run on modelled
+  molecular verdicts. They now need re-running with the phase-1 detection
+  rates. A one-run trusted tier is not an unconditional proof of work by
+  anonymous users; at 0.1 audit probability, zero-work trusted requests can pass
+  unaudited.
+- **Scientific quarantine and repair** after late detection is not implemented.
+- **Timing is native.** Browser and phone comparisons of unit against puzzle
+  remain to be measured.
 - **Device evidence** covers one iPhone 15 and one desktop. There is no
   population-level claim.
 - **Novelty positioning** against prior useful-work puzzles, volunteer computing

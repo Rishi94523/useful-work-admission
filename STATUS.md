@@ -252,12 +252,34 @@ merging, so no client-reported energy influences selection. That costs about
 nine energy evaluations per unit against 256,000 for the search. It changes the
 frozen driver's merge path and is not implemented.
 
+**v2 driver, rescoring before merge — verified, deployment candidate.** v2
+recomputes every submitted minimum's energy and coordinates from its
+conformation before merge selection. Only `parallel_mc.cpp` differs from v1,
+which stays frozen as the historical baseline for every result above; roles and
+hashes are pinned in `benchmarks/driver_registry.json`. Against amendment 8:
+
+| Check | v1 | v2 |
+| --- | --- | --- |
+| G1, G2, replay and re-finalization, five targets | pass | **pass, 5/5** |
+| Honest corpus pools finalized | — | **byte-identical to v1, 33/33** |
+| Falsified-energy attack, mean ΔAUC | as low as −0.034 | **within ±0.0016 at every fraction** |
+| Jobs worsened at 5% falsified units | 22/33 | **2/33, same as honest duplication** |
+| Coordinate-only tampering changes result | 16/33 | **0/33** |
+| Rescoring overhead per ligand state | — | **+91 ms median, 0.046% of client work** |
+
+With rescoring, a falsified energy has no effect beyond honest duplication, and
+screening results are unchanged within ±0.004 AUC at up to a quarter of units
+fabricated. Honest science is untouched, so no new matched campaign is needed.
+The overhead was measured while crystal docking loaded the machine, and
+per-state differences ranged from −196 to +265 ms.
+
 ## What is not established
 
-- **Merge rescoring.** Until submitted minima are rescored before merging, an
-  admitted attacker controlling about 5% of a state's units can hide its best
-  pose. This is omission, not falsification, but it measurably degrades
-  screening.
+- **Device timing** of docking units against proof-of-work puzzles. A test page
+  is deployed at `https://vina-cdn-benchmark.kelgis.workers.dev/timing`; only
+  pre-deployment desktop runs exist.
+- **v2 is not serving production traffic.** No production finalizer service
+  exists yet.
 - **A one-run trusted tier** is not an unconditional proof of work by anonymous
   users: an unaudited trusted admission is still granted on the identity's
   history, not on the unit.

@@ -1,0 +1,38 @@
+{
+  "purpose": "Which native scientific driver each role uses. Results are only comparable with the driver they were produced on.",
+  "drivers": {
+    "v1": {
+      "role": "historical experimental baseline",
+      "executable_sha256": "301782a9224415ca1ac986fc04cc8f394f5788da810f9d476bfcefad5c4ff2ef",
+      "build": "scripts/build_vina_tasks.py, then scripts/run_published_matched.py build()",
+      "used_by": [
+        "stock and matched campaigns (2026-09-15, 2026-09-20)",
+        "build-equivalence gates G1-G3",
+        "adversarial evaluation phases 1-7"
+      ],
+      "known_weakness": "Merges submitted minima on client-reported energies: fabricated minima claiming low energies can evict honest ones before refinement (protocol amendment 6, I-c).",
+      "status": "frozen; never modified"
+    },
+    "v2": {
+      "role": "deployment candidate for server-side finalization",
+      "executable_sha256": "4729907e118594e00765fb52c89defaee81a98183ff86ad26b4e6e475b080f0e",
+      "reference_instrumented_cli_sha256": "38804f4722ad02d5439948ccb75c525632bd3264230ec9f7b0a6e31cb0471aa3",
+      "build": "scripts/build_vina_tasks_v2.py",
+      "derived_from": "v1 sources; only parallel_mc.cpp differs",
+      "change": "Every minimum read from a submitted pool is rescored from its conformation (energy and heavy-atom coordinates) before merge selection; client-reported values never influence selection.",
+      "verification": {
+        "protocol": "docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md amendment 8",
+        "runner": "scripts/verify_driver_v2.py",
+        "G1_G2_replay_refinalize": "5/5 targets pass all four checks",
+        "honest_pools_byte_identical_to_v1": "33/33",
+        "falsified_energy_attack_mean_delta_auc": "v1: means as low as -0.034. v2: means within +/-0.0016 at every fraction; 95% intervals within +/-0.004 at f<=0.25 and +/-0.009 at f=0.75, the same as honest duplication.",
+        "coordinate_only_tampering": "0/33 changed (v1: 16/33)",
+        "rescoring_overhead_ms_per_state_median": 91.3,
+        "rescoring_overhead_share_of_client_work_median": 0.000461,
+        "overhead_note": "Measured while G1/G2 crystal docking loaded the machine; per-state differences ranged -196 to +265 ms."
+      },
+      "status": "verified; not yet serving production traffic"
+    }
+  },
+  "rule": "New campaigns and any production finalizer use v2. Reproducing an earlier result uses v1. Never mix outputs from the two in one comparison."
+}

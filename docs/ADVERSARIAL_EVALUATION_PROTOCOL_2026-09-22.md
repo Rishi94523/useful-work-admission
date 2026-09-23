@@ -279,3 +279,37 @@ scheduler.**
 - R5. Existing scheduler tests pass unchanged, and new tests show a re-issued
   unit carries a new recorded seed, reseeds are unique, and registration rejects
   the reserved range.
+
+## Amendment 4 — no audit reveal before upload, 23 September 2026
+
+Recorded before the change was implemented.
+
+**Change.** In the pool admission path, `commit()` returns only the challenge
+identifier. Whether a replay is required, which units are drawn and whether the
+policy is deferred are no longer disclosed before upload. A client learns only
+the outcome of `submit()`: granted, or pending a replay of outputs the server
+already holds. The trusted verifier reads the drawn units through a separate
+server-side accessor. The draw is still made at commit and stored, so the
+commitment binds outputs before selection exactly as before; it is only no
+longer disclosed. The whole-run audit path, which opens only sampled runs and
+therefore needs the challenge before upload, is unchanged.
+
+**Why.** The pool path already requires every output at upload, so the early
+reveal no longer saved bandwidth; its only remaining effect was letting a
+selected client abandon instead of being audited.
+
+**Predictions.**
+
+- S1. Trusted tier, immediate policy, trust after one honest bundle: an attacker
+  submitting fabricated units can no longer abandon on selection, so the first
+  selection rejects it and quarantines the identity. Identities are now caught.
+  Expected admissions per identity about (1-p)(1-(1-p)^10)/p, giving a factor of
+  about 0.68 at p = 0.1, up from 0.60 but still below 1.0. Removing the reveal
+  alone does not fix the trusted tier.
+- S2. With trust after three honest bundles, the factor is at least 1.0 at every
+  audit rate tested, as already measured with the reveal present.
+- S3. Deferred policy is unchanged, since it never used the reveal to abandon.
+- S4. Bundle-tier factors are unchanged from the reseeded values, since walking
+  away was never the cause there.
+- S5. All scheduler tests pass after replacing reads of the revealed fields with
+  the submit outcome and the trusted accessor.

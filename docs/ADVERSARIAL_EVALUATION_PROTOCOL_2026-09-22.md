@@ -250,3 +250,32 @@ as deployed, cheating in that configuration is cheaper than honest work, which a
 puzzle does not permit, and the paper must say so. Q1 and Q6 predict exactly
 that. The evaluation then measures which of the counterfactual controls in Q3
 and Q4 restore a factor of 1.0, and at what verifier cost.
+
+## Amendment 3 — reseed on retry, 23 September 2026
+
+Recorded before the change was implemented.
+
+**Change.** When the scheduler re-issues a unit that previously expired or
+failed an audit, it assigns a fresh child seed drawn by the server from a range
+reserved for reseeding, records the old and new seed, and issues the unit with
+the new specification. Registration rejects seeds in the reserved range, so a
+reseeded seed cannot collide with a registered one. Units never previously
+issued keep their registered seed. This is the only behavioural change.
+
+The harness now treats an attacker's cached result as valid only for the same
+task and seed, which is the true condition; behaviour on a scheduler that never
+reseeds is unchanged.
+
+**Predictions for the deployed bundle tier, one draw, rerun on the modified
+scheduler.**
+
+- R1. Attacker computing 1, 2 or 3 of 4 units: factor between 0.95 and 1.10,
+  from 0.46, 0.57 and 0.76.
+- R2. Honest client: exactly 1.0. Replayed units per admission unchanged at 1.
+- R3. Fabricated units retained per admission unchanged at 3, 2 and 1.
+  Reseeding fixes what cheating costs, not what an admitted cheat leaves behind.
+- R4. Reduced-budget units under pool-only commitment rise above 1.0: about 1.25
+  at 64k evaluations and 1.10 at 128k, because each attempt must be recomputed.
+- R5. Existing scheduler tests pass unchanged, and new tests show a re-issued
+  unit carries a new recorded seed, reseeds are unique, and registration rejects
+  the reserved range.

@@ -333,3 +333,49 @@ such as control-plane fixtures, must pass `trust_bundles=0` explicitly.
   already measured, about 2.4 at p = 0.1 immediate.
 - T4. All research tests pass, with fixtures that relied on immediate trust
   passing `trust_bundles=0` explicitly.
+
+## Amendment 6 — scientific integrity, 23 September 2026
+
+Recorded before phase 6 was implemented or run.
+
+**Question.** At attacker cost parity, admitted fabricated units can still enter
+storage unreplayed. This phase measures what they do to screening results, on
+the 33 preserved corpus jobs with the original finalizer, then propagates the
+measured damage onto the full five-target matched campaign.
+
+**Hypothesis.** The finalizer recomputes energies from ligand conformations, and
+a conformation of a fixed ligand topology is physically valid by construction.
+If so, a fabricated unit can only omit a good minimum, never create a false one,
+and its scientific damage is bounded by lost search effort.
+
+**Experiments.**
+
+- I-a. Stored coordinates of one unit's best minimum shifted 2 A while its
+  conformation is untouched, and the reverse, to establish which the finalizer
+  uses.
+- I-b. A fraction f in {0.05, 0.10, 0.25, 0.50, 0.75} of a job's units, chosen by
+  salted hash, replaced by copies of other units' valid pools, the cheapest
+  fabrication that parses, then finalized.
+- I-c. The same with every copied energy falsified to -20 kcal/mol.
+- I-d. A unit whose atom count does not match the ligand.
+- I-e. The per-state score change distribution at each f resampled onto every
+  ligand state of the matched campaign's decomposed arm, compound scores and
+  ROC-AUC recomputed per target and seed, with bootstrap intervals.
+
+**Predictions.**
+
+- I1. Coordinate-only tampering changes the final score by at most the phase-1
+  merge-order noise of 0.12 kcal/mol; conformation-only tampering behaves like
+  phase-1 A8c.
+- I2. Under I-b, no job's final score improves by more than 0.12 kcal/mol at
+  any f. The share of jobs whose score worsens grows with f; the median change
+  is zero at f of 0.05 and 0.10.
+- I3. I-c matches I-b within sampling noise: falsified energies are laundered at
+  scale, not only for a single unit.
+- I4. I-d is rejected when the pool is read, before finalization.
+- I5. Propagated ROC-AUC changes lie within +/-0.01 on every target at f up to
+  0.25. Larger f is reported without a prediction.
+
+If I2 fails, fabricated units can create false positives, the omission-only
+claim is false, and scientific integrity requires replaying every unit before
+aggregation.

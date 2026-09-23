@@ -7,6 +7,8 @@ class AdmissionTests(unittest.TestCase):
  def setUp(self):self.tmp=tempfile.TemporaryDirectory(dir='tmp');self.now=[0]
  def tearDown(self):self.tmp.cleanup()
  def create(self,**kwargs):
+  # Trusted-tier mechanics tests grant trust directly; the threshold has its own tests.
+  kwargs.setdefault('trust_bundles',0)
   c=PoolAdmission(Path(self.tmp.name)/'policy.sqlite',clock=lambda:self.now[0],**kwargs);self.c=c
   c.register_pool('p',dict(model_version='fixture',receptor='r',ligand='l',conformer_bank='i',region='b',search_parameters={'max_evals':256000}),list(range(64)))
   return c
@@ -61,5 +63,19 @@ class AdmissionTests(unittest.TestCase):
   self.assertEqual(self.submit(c,l,o,ch)['status'],'pending')
   r=c.replay(l['lease'],self.verdict(l,o,ch,False));self.assertEqual(r['status'],'rejected')
   with self.assertRaises(ValueError):c.grant_trust('a')
+
+ def earn_bundle(self,c,owner):
+  l,o,ch=self.commit(c,owner);self.assertEqual(self.submit(c,l,o,ch,owner)['status'],'pending');c.replay(l['lease'],self.verdict(l,o,ch));self.now[0]+=121
+ def test_trust_requires_three_audited_bundles_by_default(self):
+  c=self.create(trust_bundles=3)
+  for n in range(3):
+   with self.assertRaises(ValueError):c.grant_trust('a')
+   self.earn_bundle(c,'a')
+  c.grant_trust('a');self.assertEqual(c.request('p','a')['tier'],'trusted')
+ def test_rejected_bundles_do_not_count_and_quarantine_still_refuses(self):
+  c=self.create(trust_bundles=1);l,o,ch=self.commit(c);self.submit(c,l,o,ch);c.replay(l['lease'],self.verdict(l,o,ch,False))
+  with self.assertRaises(ValueError):c.grant_trust('a')
+ def test_default_threshold_is_three(self):
+  self.assertEqual(PoolAdmission(Path(self.tmp.name)/'d.sqlite',clock=lambda:0).trust_bundles,3)
 
 if __name__=='__main__':unittest.main()

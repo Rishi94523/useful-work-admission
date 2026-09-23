@@ -12,7 +12,7 @@ payloads=[canonical({'pool':r['pool'],'trace':r['trace']}) for r in source['runs
 results=[]
 for n in [1,2,4]:
  with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as tmp:
-  clock=[0];c=PoolAdmission(Path(tmp)/'payload.sqlite',clock=lambda:clock[0],bundle=n,audit_probability=0)
+  clock=[0];c=PoolAdmission(Path(tmp)/'payload.sqlite',clock=lambda:clock[0],bundle=n,audit_probability=0,trust_bundles=0)
   timings=[]
   for i in range(20):
    clock[0]+=60;owner=str(i);spec=dict(model_version='payload-timing-fixture',receptor='r',ligand='l',conformer_bank=str(i),region='b',search_parameters={'max_evals':256000});c.register_pool(owner,spec,list(range(n)))

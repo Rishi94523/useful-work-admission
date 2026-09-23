@@ -9,7 +9,7 @@ spec=dict(model_version='fixture-only',receptor='r',ligand='l',conformer_bank='i
 rows=[]
 for policy,p in [('immediate',.05),('immediate',.1),('deferred',.05),('deferred',.1)]:
  with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as tmp:
-  clock=[0.];c=PoolAdmission(Path(tmp)/'policy.sqlite',clock=lambda:clock[0],policy=policy,audit_probability=p)
+  clock=[0.];c=PoolAdmission(Path(tmp)/'policy.sqlite',clock=lambda:clock[0],policy=policy,audit_probability=p,trust_bundles=0)
   grants=replays=0;latencies=[];trials=400
   for i in range(trials):
    clock[0]+=60;owner='trusted-fixture-'+str(i);pool=str(i);c.register_pool(pool,{**spec,'conformer_bank':str(i)},[1]);c.grant_trust(owner,allowance=1)

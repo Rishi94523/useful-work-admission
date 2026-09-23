@@ -10,9 +10,9 @@ from research.docking_campaign import Campaign,canonical
 from research.vina_pool_campaign import VinaPoolCampaign
 
 class PoolAdmission(VinaPoolCampaign,AdaptiveAdmission):
- def __init__(self,path,clock=None,*,policy='immediate',audit_probability=.1,capacity=16,bundle=4,q=1):
-  if policy not in ('immediate','deferred') or not 0<=audit_probability<=1 or not 1<=q<=bundle<=128 or capacity<1:raise ValueError('Policy')
-  self.local=threading.local();self.policy=policy;self.probability=audit_probability;self.capacity=capacity;self.bundle=bundle;self.q=q
+ def __init__(self,path,clock=None,*,policy='immediate',audit_probability=.1,capacity=16,bundle=4,q=1,trust_bundles=3):
+  if policy not in ('immediate','deferred') or not 0<=audit_probability<=1 or not 1<=q<=bundle<=128 or capacity<1 or type(trust_bundles)!=int or trust_bundles<0:raise ValueError('Policy')
+  self.local=threading.local();self.policy=policy;self.probability=audit_probability;self.capacity=capacity;self.bundle=bundle;self.q=q;self.trust_bundles=trust_bundles
   super().__init__(path,clock)
   with self.transaction() as db:
    db.executescript('''CREATE TABLE IF NOT EXISTS pool_trust(owner TEXT PRIMARY KEY,remaining INTEGER,until REAL,revoked INTEGER);
@@ -38,6 +38,11 @@ class PoolAdmission(VinaPoolCampaign,AdaptiveAdmission):
   if not owner or type(allowance)!=int or not 1<=allowance<=100 or not 0<ttl<=86400:raise ValueError('Trust grant')
   with self.transaction() as db:
    if db.execute('SELECT 1 FROM pool_quarantine WHERE owner=?',(owner,)).fetchone():raise ValueError('Quarantined identity')
+   # Trust after a single audited bundle lets cheating cost less than honest
+   # work at audit rates up to 10%; three restores at least parity. Bundles
+   # are always replayed, so DONE means audited and accepted.
+   earned=db.execute("SELECT count(*) FROM pool_policy WHERE owner=? AND policy='bundle' AND state='DONE'",(owner,)).fetchone()[0]
+   if earned<self.trust_bundles:raise ValueError('Insufficient audited history for trust')
    db.execute('INSERT OR REPLACE INTO pool_trust VALUES(?,?,?,0)',(owner,allowance,self.clock()+ttl))
 
  def lease(self,*a,**k):raise ValueError('Use request')

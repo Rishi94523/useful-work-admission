@@ -193,16 +193,25 @@ below 1.0 at one honest bundle for audit rates up to 10%. With trust after three
 bundles it is 1.36â€“4.04 at every rate. Deferred policy and the bundle tier are
 unchanged within noise.
 
+**Trust threshold — enforced.** `grant_trust` now refuses an identity until it
+has three bundle-tier admissions that were replayed and accepted (amendment 5);
+bypassing it requires an explicit `trust_bundles=0`. On the real scheduler at
+p = 0.1, an attacker planning trust after one bundle obtained no trusted
+admission across 3,000 identities, spending 12,000 units of honest work, while
+one earning three bundles paid a factor of 2.04.
+
+With reseeding, no audit reveal and an enforced threshold, every deployed
+configuration measured costs an attacker at least as much as honest work.
+
 ## What is not established
 
-- **The trust threshold is not enforced.** Three admitted bundles before trust
-  restores a factor of at least 1.0, but `grant_trust` accepts any identity and
-  leaves the threshold to an external service. A one-run trusted tier is not an
-  unconditional proof of work by anonymous users.
-- **Scientific integrity is separate from admission cost.** Even at a factor of
-  1.0, an attacker who computes one unit of four and is admitted leaves three
-  unreplayed fabricated units in storage. Their effect on screening results and
-  the cost of repair are not measured.
+- **Scientific integrity is separate from admission cost.** At parity, an
+  admitted bundle that computed one unit of four still leaves three unreplayed
+  fabricated units, and an unaudited trusted admission leaves one. Their effect
+  on screening results and the cost of repair are not measured.
+- **A one-run trusted tier** is not an unconditional proof of work by anonymous
+  users: an unaudited trusted admission is still granted on the identity's
+  history, not on the unit.
 - **Scientific quarantine and repair** after late detection is not implemented.
 - **Timing is native.** Browser and phone comparisons of unit against puzzle
   remain to be measured.

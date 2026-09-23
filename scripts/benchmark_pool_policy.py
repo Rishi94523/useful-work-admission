@@ -15,8 +15,9 @@ for policy,p in [('immediate',.05),('immediate',.1),('deferred',.05),('deferred'
    clock[0]+=60;owner='trusted-fixture-'+str(i);pool=str(i);c.register_pool(pool,{**spec,'conformer_bank':str(i)},[1]);c.grant_trust(owner,allowance=1)
    start=time.perf_counter();l=c.request(pool,owner);outputs={t['task']:b'fabricated' for t in l['tasks']};ch=c.commit(l['lease'],owner,l['binding'],c.output_root(l['binding'],outputs));s=c.submit(l['lease'],owner,l['binding'],ch['id'],outputs)
    if s['status']=='granted':c.redeem(l['lease'],owner);grants+=1
-   if ch['replay_required']:
-    replays+=1;verdicts={t:(hashlib.sha256(v).hexdigest(),False) for t,v in outputs.items()};c.replay(l['lease'],verdicts)
+   targets=c.audit_targets(l['lease'])  # trusted verifier view; commit no longer reveals selection
+   if targets:
+    replays+=1;verdicts={t:(hashlib.sha256(outputs[t]).hexdigest(),False) for t in targets};c.replay(l['lease'],verdicts)
    latencies.append(1000*(time.perf_counter()-start))
   expected=1-p if policy=='immediate' else 1;se=math.sqrt(expected*(1-expected)/trials)
   assert abs(grants/trials-expected)<6*se+1e-12

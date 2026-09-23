@@ -83,12 +83,14 @@ class World:
   except LookupError:self._new_pool();return self.c.request(self.pool,who)
  def advance(self,s):self.now[0]+=s
  def audit(self,lease,outputs,kinds,ch):
-  drawn=[lease['tasks'][j]['task'] for j,_ in ch['draws']];self.replayed+=len(drawn)
+  drawn=self.c.audit_targets(lease['lease']);self.replayed+=len(drawn)
   return self.c.replay(lease['lease'],{t:(hashlib.sha256(outputs[t]).hexdigest(),self.verdicts(kinds[t])) for t in drawn})
  def exhausted(self):
   with self.c.transaction() as db:
    # n>=3 marks an exhausted task in both the deployed and counterfactual paths.
    return db.execute("SELECT count(*) FROM pool_attempts a JOIN units u ON u.task=a.task WHERE a.n>=3 AND u.state!='COMPLETED'").fetchone()[0]
+ def quarantined(self):
+  with self.c.transaction() as db:return db.execute('SELECT count(*) FROM pool_quarantine').fetchone()[0]
  def close(self):shutil.rmtree(self.dir,ignore_errors=True)
 
 def attempt(w,who,lease,payload,submit_if_selected):
@@ -99,14 +101,18 @@ def attempt(w,who,lease,payload,submit_if_selected):
  """
  outputs={t:v[0] for t,v in payload.items()};kinds={t:v[1] for t,v in payload.items()}
  ch=w.c.commit(lease['lease'],who,lease['binding'],w.c.output_root(lease['binding'],outputs))
- drawn={lease['tasks'][j]['task'] for j,_ in ch['draws']}
- if ch['replay_required'] and not submit_if_selected(drawn,kinds,ch):
-  w.advance(TTL+1);return False,0
- r=w.c.submit(lease['lease'],who,lease['binding'],ch['id'],outputs)
- if r['status']=='pending':r=w.audit(lease,outputs,kinds,ch)
+ # A scheduler that reveals the draw at commit lets the attacker choose to walk
+ # away; one that reveals only the identifier leaves nothing to act on.
+ if 'draws' in ch:
+  drawn={lease['tasks'][j]['task'] for j,_ in ch['draws']}
+  if ch['replay_required'] and not submit_if_selected(drawn,kinds,ch):
+   w.advance(TTL+1);return False,0
+ r=w.c.submit(lease['lease'],who,lease['binding'],ch['id'],outputs);audited=r['status']=='pending'
+ if audited:r=w.audit(lease,outputs,kinds,ch)
  if r['status']!='granted':return False,0
  retained=sum(1 for k in kinds.values() if k!='honest')
- if ch.get('deferred') and w.audit(lease,outputs,kinds,ch)['status']=='rejected':retained=0
+ # Granted directly but selected means deferred: access first, trusted replay after.
+ if not audited and w.c.audit_targets(lease['lease']) and w.audit(lease,outputs,kinds,ch)['status']=='rejected':retained=0
  return True,retained
 
 def unit_keys(lease):
@@ -190,7 +196,7 @@ def trusted_attack(verdicts,work,*,policy,p,G,acquire):
     if ok and policy=='deferred' and g==0:caught+=1;break
     w.advance(4)  # stay under the >3-requests-per-10s velocity penalty
   per=lambda x:x/fraud if fraud else None
-  return {'fraudulent_admissions':fraud,'identities':identities,'identities_caught':caught,'work_units':spent,
+  return {'fraudulent_admissions':fraud,'identities':identities,'identities_caught':caught,'identities_quarantined':w.quarantined(),'work_units':spent,
           'discount':per(spent),'fabricated_units_retained_per_admission':per(retained),'replayed_units_per_admission':per(w.replayed)}
  finally:w.close()
 

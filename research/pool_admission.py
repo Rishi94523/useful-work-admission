@@ -79,7 +79,19 @@ class PoolAdmission(VinaPoolCampaign,AdaptiveAdmission):
    challenge=Campaign.commit(self,lease,owner,binding,commitment,samples=p['q'])
    selected=p['policy']=='bundle' or secrets.randbelow(1000000)<self.probability*1000000
    db.execute("UPDATE pool_policy SET selected=?,state='COMMITTED' WHERE lease=?",(int(selected),lease))
-   return {**challenge,'replay_required':selected,'deferred':selected and p['policy']=='deferred'}
+   # Only the identifier is returned. Disclosing the draw before upload let a
+   # selected client abandon instead of being audited, and the pool path uploads
+   # every output anyway, so the reveal saved nothing. The draw is still fixed
+   # here, after the commitment, and read by the verifier via audit_targets.
+   return {'id':challenge['id']}
+
+ def audit_targets(self,lease):
+  """Trusted verifier API: units drawn for replay, or [] if none selected."""
+  with self.transaction() as db:
+   p=db.execute('SELECT selected FROM pool_policy WHERE lease=?',(lease,)).fetchone();l=db.execute('SELECT tasks,challenge FROM leases WHERE id=?',(lease,)).fetchone()
+   if not p or not l or not l['challenge']:raise ValueError('No committed lease')
+   if not p['selected']:return []
+   tasks=json.loads(l['tasks']);return [tasks[j]['task'] for j,_ in json.loads(l['challenge'])['draws']]
 
  def submit(self,lease,owner,binding,challenge_id,outputs):
   with self.transaction() as db:

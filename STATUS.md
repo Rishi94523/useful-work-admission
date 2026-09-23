@@ -203,6 +203,16 @@ one earning three bundles paid a factor of 2.04.
 With reseeding, no audit reveal and an enforced threshold, every deployed
 configuration measured costs an attacker at least as much as honest work.
 
+**Identity cost.** The simulation prices a fresh identity at zero. For the
+original design to reach parity on identity cost alone, each fresh identity
+would have had to cost the attacker 0.5–3.3 honest units in the bundle tier
+(the upper end for an attacker reusing one identity across walk-aways) and
+2.4–5.1 units in the trusted tier with trust after one bundle, one unit being
+about 1.5 s of CPU. After the fixes, parity holds with identities free, so it
+no longer rests on any assumption about identity cost. This is the precise
+difference from proof-of-work, whose per-admission cost never depended on
+identity.
+
 ## What is not established
 
 - **Scientific integrity is separate from admission cost.** At parity, an

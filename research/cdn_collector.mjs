@@ -11,6 +11,21 @@ export default {async fetch(request,env,ctx){
   const h=new Headers(asset.headers);h.set('Content-Type','application/octet-stream');h.set('Content-Encoding',encoding);h.set('Cache-Control','public, max-age=31536000, immutable');h.set('X-Delivery-Cache','MISS');h.delete('Vary');
   const response=new Response(asset.body,{headers:h,encodeBody:'manual'});ctx.waitUntil(caches.default.put(cacheKey,response.clone()));return request.method==='HEAD'?new Response(null,{headers:h}):response;
  }
+ if(url.pathname==='/timing-results'){
+  // Unit vs puzzle device timing. Units are re-checked here against the
+  // expected scientific outputs rather than trusting the page's own flag.
+  if(!env.UPLOAD_KEY||url.searchParams.get('key')!==env.UPLOAD_KEY)return new Response('Forbidden',{status:403});
+  if(request.method!=='POST')return new Response('Method',{status:405});
+  try{
+   const reader=request.body.getReader();let total=0,parts=[];for(;;){const {value,done}=await reader.read();if(done)break;total+=value.length;if(total>2000000){await reader.cancel();return new Response('Too large',{status:413});}parts.push(value);}
+   const bytes=new Uint8Array(total);let offset=0;for(const p of parts){bytes.set(p,offset);offset+=p.length;}const r=JSON.parse(new TextDecoder().decode(bytes));
+   if(typeof r.id!=='string'||!/^[a-f0-9-]{36}$/.test(r.id)||!Array.isArray(r.units)||r.units.length>40||!Array.isArray(r.puzzles)||r.puzzles.length>200)throw Error('Schema');
+   const m=await(await env.ASSETS.fetch(new URL('/manifest.json',request.url))).json();let exact=0;
+   for(const u of r.units){if(!Number.isInteger(u.index)||u.index<0||u.index>3)throw Error('Index');const e=m.expected.tasks[u.index];if(u.pool_sha256===e.pool&&u.trace_sha256===e.trace)exact++;}
+   r.server_checks={units:r.units.length,exact_units:exact,artifact_exact:r.artifact_sha256===m.artifact_sha256,wasm_exact:r.wasm_sha256===m.wasm_sha256};r.received_at=new Date().toISOString();
+   await env.RESULTS.put('timing_'+r.id,JSON.stringify(r));return Response.json({units:r.units.length,exact_units:exact},{headers:{'Cache-Control':'no-store'}});
+  }catch{return new Response('Invalid report',{status:400});}
+ }
  if(url.pathname!=='/results')return new Response('Not found',{status:404});
  if(!env.UPLOAD_KEY||url.searchParams.get('key')!==env.UPLOAD_KEY)return new Response('Forbidden',{status:403});
  if(request.method!=='POST')return new Response('Method',{status:405});

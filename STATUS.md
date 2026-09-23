@@ -193,7 +193,7 @@ below 1.0 at one honest bundle for audit rates up to 10%. With trust after three
 bundles it is 1.36–4.04 at every rate. Deferred policy and the bundle tier are
 unchanged within noise.
 
-**Trust threshold � enforced.** `grant_trust` now refuses an identity until it
+**Trust threshold — enforced.** `grant_trust` now refuses an identity until it
 has three bundle-tier admissions that were replayed and accepted (amendment 5);
 bypassing it requires an explicit `trust_bundles=0`. On the real scheduler at
 p = 0.1, an attacker planning trust after one bundle obtained no trusted
@@ -205,9 +205,9 @@ configuration measured costs an attacker at least as much as honest work.
 
 **Identity cost.** The simulation prices a fresh identity at zero. For the
 original design to reach parity on identity cost alone, each fresh identity
-would have had to cost the attacker 0.5�3.3 honest units in the bundle tier
+would have had to cost the attacker 0.5–3.3 honest units in the bundle tier
 (the upper end for an attacker reusing one identity across walk-aways) and
-2.4�5.1 units in the trusted tier with trust after one bundle, one unit being
+2.4–5.1 units in the trusted tier with trust after one bundle, one unit being
 about 1.5 s of CPU. After the fixes, parity holds with identities free, so it
 no longer rests on any assumption about identity cost. This is the precise
 difference from proof-of-work, whose per-admission cost never depended on

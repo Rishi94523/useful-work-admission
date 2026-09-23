@@ -313,3 +313,23 @@ selected client abandon instead of being audited.
   away was never the cause there.
 - S5. All scheduler tests pass after replacing reads of the revealed fields with
   the submit outcome and the trusted accessor.
+
+## Amendment 5 — enforced trust threshold, 23 September 2026
+
+Recorded before the change was implemented.
+
+**Change.** `grant_trust` refuses an identity until it has at least
+`trust_bundles` bundle-tier admissions that were replayed and accepted, default
+3. Quarantined identities remain refused. Callers that intend immediate trust,
+such as control-plane fixtures, must pass `trust_bundles=0` explicitly.
+
+**Predictions.**
+
+- T1. A grant after one or two admitted bundles is refused; after three it
+  succeeds; a quarantined identity is refused regardless of history.
+- T2. An attacker whose plan grants trust after one bundle obtains no trusted
+  admission, because every grant is refused.
+- T3. An attacker that earns three bundles reproduces the three-bundle factor
+  already measured, about 2.4 at p = 0.1 immediate.
+- T4. All research tests pass, with fixtures that relied on immediate trust
+  passing `trust_bundles=0` explicitly.

@@ -379,3 +379,25 @@ and its scientific damage is bounded by lost search effort.
 If I2 fails, fabricated units can create false positives, the omission-only
 claim is false, and scientific integrity requires replaying every unit before
 aggregation.
+
+## Amendment 7 — trace-hash commitment, 23 September 2026
+
+Recorded before implementation.
+
+**Change.** A unit's submitted payload becomes its minima pool plus the SHA-256
+of its per-step trace, instead of pool plus full trace. The verifier replays the
+unit, hashes its own trace and requires both the pool and the hash to match.
+Implemented as a protocol module; the browser worker is not changed, because the
+device experiments compare full traces.
+
+**Why no re-run.** Under SHA-256 collision resistance, hash equality is byte
+equality, so phase 1's 0 of 198 partial-work acceptances and 99 of 99 honest
+acceptances under pool-and-trace commitment carry over exactly. Re-executing
+them would confirm a construction, not measure anything.
+
+**Predictions.**
+
+- H1. Tests show an honest payload verifies, and one with any altered pool byte,
+  altered trace byte or truncated trace is rejected.
+- H2. Median payload across all 4,397 corpus medium units falls from about
+  167 KB to about 18 KB, a reduction near 90%.

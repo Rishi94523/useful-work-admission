@@ -136,3 +136,55 @@ recorded with every timing.
 
 Every run writes a frozen execution manifest recording protocol, corpus, build
 and runner hashes, in the same form as the campaign. Failures are preserved.
+
+## Amendment 1 — phase 1 operationalization, 23 September 2026
+
+Recorded before phase 1 was run. It narrows attackers already defined above into
+concrete procedures and adds predictions; no threshold above is changed.
+
+**Verifier soundness, established first.** Units at indices 0, 5, 82 and 164 of
+a 165-unit job were replayed with the frozen driver and reproduced both the
+minima pool and the per-step trace byte for byte. Replay of one unit is a
+re-execution of that unit, so auditing a unit costs one unit by construction.
+
+**Sampling.** Three units per preserved corpus job, chosen by salted SHA-256
+order under `adversarial-units-2026-09-23:`. Timing runs at four concurrent
+workers so client and verifier costs share load conditions; campaign timings,
+taken under 14-way contention, are not used as client costs.
+
+**Operational definitions.**
+
+- A1 substitution: a valid result computed for a different unit of the same
+  job is submitted as this unit's result.
+- A2 partial work: the unit is genuinely searched at 64k and 128k evaluations
+  instead of 256k and submitted. Judged twice, once when the client commits only
+  to the minima pool and once when it commits to pool and trace, because the
+  trace is 5x the size of the pool and whether clients must upload it is a real
+  design choice.
+- A3 cached: the true result resubmitted.
+- A8e energy falsification: the best minimum of one unit is given an energy
+  improved by 0.1, 1.0 or 3.0 kcal/mol, coordinates untouched, and the
+  original finalizer is run over the tampered pool.
+- A8c translation: the best minimum of one unit is translated by 0.1, 0.5 or
+  2.0 A along x, and the original finalizer is run over the tampered pool.
+
+**Predictions.**
+
+- P1. Honest units are accepted in every case.
+- P2. A1 is rejected in every case.
+- P3. A2 is always rejected under pool-and-trace commitment. Under pool-only
+  commitment a small nonzero acceptance rate is possible, for units whose
+  retained minima stop changing before the reduced budget is exhausted. The
+  rate is not predicted; it is the measurement.
+- P4. A3 is accepted in every case, by design.
+- P5. A8e does not improve the final reported score, because the finalizer
+  re-refines poses and recomputes energies from coordinates. This is uncertain:
+  a falsified energy could alter which minima survive merging and clustering.
+- P6. A8c never produces a better final score than the honest run. With about
+  140 independent units per state, the true best minimum is usually held by
+  another unit, so a single corrupted unit is expected to be absorbed.
+
+P5 and P6, if they hold, mean that energy falsification and single-unit
+corruption of the unaudited kind are neutralized by the aggregation itself, a
+property puzzle-based admission has no analogue for. If either fails, the
+failure is reported with its magnitude.

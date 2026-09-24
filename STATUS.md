@@ -273,11 +273,48 @@ fabricated. Honest science is untouched, so no new matched campaign is needed.
 The overhead was measured while crystal docking loaded the machine, and
 per-state differences ranged from −196 to +265 ms.
 
+**Device timing, docking unit against puzzle — four phones.** A test page on
+the benchmark Worker runs real WASM Vina units and hashcash puzzles on the same
+device, alternating one unit with four puzzles over twelve rounds so thermal
+effects hit both equally, with puzzle difficulty calibrated on the device to the
+median warm unit. The Worker re-checks every unit's pool and trace hashes before
+storing. The page holds a screen wake lock and timestamps every hidden period,
+flagging overlapping measurements for exclusion.
+
+| Device | Unit median / max | Puzzle median / p95 / max | Units exact |
+| --- | --- | --- | --- |
+| iPhone 15, Low Power Mode | 2.04 / 2.10 s | 1.85 / 6.57 / 8.24 s | 17/17 |
+| Samsung Galaxy A57 | 2.02 / 2.10 s | 2.09 / 7.82 / 10.5 s | 17/17 |
+| Moto Edge 50, Low Power Mode | 2.44 / 2.73 s | 1.86 / 8.83 / 10.4 s | 17/17 |
+| Samsung Galaxy M30s (2019 budget) | 7.55 / 10.1 s | 5.86 / 36.1 / 53.2 s | 17/17 |
+
+Pooled with each device scaled to its own median unit time:
+
+| | 95th pct | 99th pct | Worst | Over 2× median |
+| --- | ---: | ---: | ---: | ---: |
+| Docking unit, 64 | 1.19× | 1.33× | 1.33× | 0% |
+| Puzzle, 192 | 3.83× | 6.84× | 7.04× | 21.9% |
+
+Matched at the median, more than one visitor in five waits over twice as long
+for a puzzle; no docking unit reached 1.35 times its device's median. All 68
+units were bitwise exact across iOS and Android. The wake lock was granted on
+all three phones that ran the current page.
+
+The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
+slower at JavaScript hashing, so at equal flagship cost a puzzle would burden it
+more than a unit would. That is one device pair against a plain-JavaScript
+solver, not a general result. Its first contribution takes about 13 s (3.8 s
+assets, 1.5 s restore, 7.5 s first unit) against about 2 s on the iPhone, a real
+accessibility cost. Its units rose from 7.4 to 10.1 s mid-run and recovered,
+consistent with thermal throttling.
+
+An earlier iPhone run on the previous page, which could not flag hidden
+periods, lost one unit to the Low Power Mode auto-lock (11.1 s against a 1.9 s
+median). It is reported but excluded from the pooled figures.
+
 ## What is not established
 
-- **Device timing** of docking units against proof-of-work puzzles. A test page
-  is deployed at `https://vina-cdn-benchmark.kelgis.workers.dev/timing`; only
-  pre-deployment desktop runs exist.
+- **Device coverage is small**: four phones, one workload, 64 unit timings.
 - **v2 is not serving production traffic.** No production finalizer service
   exists yet.
 - **A one-run trusted tier** is not an unconditional proof of work by anonymous

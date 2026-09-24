@@ -336,6 +336,17 @@ median). It is reported but excluded from the pooled figures.
 - **Novelty positioning** against prior useful-work puzzles, volunteer computing
   and probabilistic verification remains outstanding.
 
+**Isolated ticket-admission prototype — tested, not deployed.** Authenticated
+tickets without audit seats, independent byte/queue reservations, commitment
+checks and an overload entry puzzle were exercised together through loopback
+HTTP. At 64 tickets/s issuance and four attacker arrivals/s, idle and unpaid
+fabrication cases completed 60/60 newcomers and 60/60 established users. A paid
+16-bit-puzzle flood reduced newcomers to 1/60; established users stayed at 60/60.
+Arrival and replay time are simulated in these cases; puzzles and protocol
+operations are real. A separate two-bundle native Vina smoke check accepted
+honest output and rejected corrupted trace commitments using actual full-unit
+replay. All 82 research tests passed. Paid-flood fairness and pricing remain open.
+
 The project is not submission-ready.
 
 ## Layout

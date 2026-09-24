@@ -433,3 +433,66 @@ remains the historical baseline for every earlier result.
 
 If V3 fails, v2 changes honest science and cannot replace v1 without a new
 matched campaign. If V4 fails, rescoring does not close the hijack.
+
+## Amendment 9 — pricing newcomer admission under a CPU budget, 24 September 2026
+
+Recorded before the mechanism below was implemented or run.
+
+**Context.** The isolated ticket prototype (`research/ticket_admission.py`,
+commit 7839c31) removed idle seats and protected established users, but fake
+submissions paying a fixed 16-bit overload puzzle left 1 of 60 honest newcomers
+served. A fake submission costs the attacker only its puzzle, while rejecting
+it costs the verifier a full molecular replay. A proof-of-work CAPTCHA verifies
+in microseconds and cannot be flooded this way, so this pressure is specific to
+useful work.
+
+**Mechanism.** An effort-priority queue on top of the ticket prototype: under
+overload a newcomer proves effort as a count of small subpuzzles bound to its
+ticket and commitment (10 bits each, following the subpuzzle result that
+reduces latency variance); newcomer submissions are replayed in decreasing
+effort; a full newcomer queue evicts its lowest-effort entry for a higher one;
+and the server publishes a suggested effort that rises only while the queue is
+full. Established users keep their reserved capacity.
+
+**Experiment.** Queue, eviction, ordering, tickets and commitments run the real
+prototype code. Arrivals, replay time (1.52 s), and all puzzle costs are
+simulated: costs are accounted from measured hash rates rather than executed,
+honest phones at the measured JavaScript rates of the budget, mid-range and
+flagship devices, the attacker at the measured native rate of 1.25 M hashes/s
+per core under load. Honest newcomers arrive at 0.5/s with 10 s of puzzle
+patience. Grid: 1, 2, 4 and 8 newcomer verifier workers; attacker budgets of
+0, 0.1, 0.25, 1, 4 and 16 cores; three mechanisms: the prototype's fixed 16-bit
+FIFO puzzle, a fixed 18-bit FIFO puzzle (about 7.5 s on the budget phone), and
+the priority queue. The attacker plays a best response: fake submissions each
+outbidding the published suggestion, as many as its budget affords. Ticket
+issuance rate limiting is disabled so this experiment isolates queue pricing.
+
+**Predictions.** With R the verifier's audit rate and lambda the honest arrival
+rate, honest users are outbid once the attacker's budget exceeds
+(R - lambda) x (device hash rate) x (patience):
+
+| Verifier workers | Budget phone | Mid-range | Flagship |
+| --- | --- | --- | --- |
+| 1 | 0.04 cores | 0.19 cores | 0.23 cores |
+| 2 | 0.23 cores | 0.97 cores | 1.19 cores |
+| 4 | 0.59 cores | 2.54 cores | 3.10 cores |
+| 8 | 1.33 cores | 5.67 cores | 6.93 cores |
+
+- C1. Priority queue: a device class keeps at least 90% of newcomers served when
+  the attacker's budget is below half its threshold, and at most 50% above twice
+  its threshold.
+- C2. Fixed 16-bit FIFO, one worker: newcomers are at most 10% served at 0.1
+  cores and above, reproducing the prototype's failure.
+- C3. Fixed 18-bit FIFO: newcomers are denied once the attacker's budget
+  exceeds R x 2^18 hashes/s (0.14 cores at one worker); honest phones pay the
+  full puzzle whenever the queue is busy, attack or not, with exponential solve
+  tails.
+- C4. Under the priority queue honest phones pay nothing without an attack, and
+  their solve times have a coefficient of variation near 1/sqrt(n) for n
+  subpuzzles.
+
+**Expected conclusion, unfavourable.** No puzzle pricing protects budget-phone
+newcomers against an attacker with a few cores at modest verifier capacity. The
+protection that holds is proportional to spare replay capacity, which the
+defender pays for in real CPU. That cost, absent from proof-of-work, is to be
+reported as a price of utility.

@@ -44,7 +44,7 @@ class SimPriority(PriorityAdmission):
  def effort_of(self,t,root,proof):return int(proof['accounted']) if proof and 'accounted' in proof else 0
 
 def run(item):
- mech,workers,cores,seed=item;rng=random.Random(seed);now=[0.0]
+ mech,workers,cores,seed=item[:4];strategy=item[4] if len(item)>4 else 'follow';rng=random.Random(seed);now=[0.0]
  work=Path(tempfile.mkdtemp(dir=ROOT/'tmp'));key=secrets.token_bytes(32)
  kw=dict(clock=lambda:now[0],capacity=16,issuance_rate=1e9,ttl=TTL)
  c=SimPriority(work/'q.sqlite',key,SPEC,sub_bits=SUB_BITS,**kw) if mech=='priority' else SimFixed(work/'q.sqlite',key,SPEC,puzzle_bits=16 if mech=='fixed16' else 18,**kw)
@@ -79,7 +79,8 @@ def run(item):
     else:
      t,body,root=issued;o=c.offer(t['ticket'],root,owner);proof=None
      if o['status']=='effort':
-      cap=max(1,int(rate*PATIENCE_S/SUB_HASHES));pay=min(cap,max(1,math.ceil(o['suggested']*HONEST_MARGIN)))
+      # 'follow' bids just above the suggestion; 'patience' bids the full 10 s (amendment 9b).
+      cap=max(1,int(rate*PATIENCE_S/SUB_HASHES));pay=cap if strategy=='patience' else min(cap,max(1,math.ceil(o['suggested']*HONEST_MARGIN)))
       rec['paid_s']=rng.gammavariate(pay,SUB_HASHES)/rate;proof={'accounted':pay};rec['bid']=pay;rec['capped']=pay==cap
      elif o['status']=='puzzle':
       rec['paid_s']=rng.expovariate(1/2**bits)/rate;proof={'accounted_ok':True}
@@ -111,22 +112,26 @@ def run(item):
                  served=sum(r['outcome']=='granted' for r in rs)/len(rs) if rs else None,
                  paid_s_median=statistics.median(paid) if paid else None,paid_s_p95=sorted(paid)[int(.95*(len(paid)-1))] if paid else None,
                  paid_any=sum(p>0 for p in paid),capped=sum(bool(r.get('capped')) for r in rs))
-  return dict(mechanism=mech,workers=workers,attacker_cores=cores,seed=seed,classes=per,attacker=att,
+  return dict(mechanism=mech,honest_strategy=strategy,workers=workers,attacker_cores=cores,seed=seed,classes=per,attacker=att,
               attacker_hashes_per_s=att['hashes']/ARRIVE_S)
  finally:shutil.rmtree(work,ignore_errors=True)
 
 def main():
- OUT.mkdir(parents=True,exist_ok=True)
+ strategy=sys.argv[1] if len(sys.argv)>1 else 'follow'
+ if strategy not in ('follow','patience'):raise ValueError('Strategy')
+ # The original grid keeps its directory; the amendment 9b follow-up gets its own.
+ out=OUT if strategy=='follow' else OUT.parent/(OUT.name+'-patience');out.mkdir(parents=True,exist_ok=True)
  digest=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
  manifest=dict(protocol=digest(PROTOCOL),runner=digest(Path(__file__)),prototype=digest(ROOT/'research/ticket_admission.py'),
   mechanism=digest(ROOT/'research/priority_admission.py'),devices=DEVICES,core_rate=CORE_RATE,replay_s=REPLAY_S,patience_s=PATIENCE_S,
   honest_per_s=1/HONEST_EVERY_S,sub_bits=SUB_BITS,arrive_s=ARRIVE_S,honest_margin=HONEST_MARGIN,attack_margin=ATTACK_MARGIN,
-  note='Queue code real; arrivals, replay time and puzzle costs simulated and accounted from measured rates.')
- mp=OUT/'manifest.json'
+  honest_strategy=strategy,note='Queue code real; arrivals, replay time and puzzle costs simulated and accounted from measured rates.')
+ mp=out/'manifest.json'
  if mp.exists():assert json.loads(mp.read_text())==manifest,'Immutable manifest changed'
  else:mp.write_text(json.dumps(manifest,indent=2))
- grid=[(m,w,c,20260924) for m in ('fixed16','fixed18','priority') for w in (1,2,4,8) for c in (0,0.1,0.25,1,4,16)]
- ledger=OUT/'results.jsonl';done={(r['mechanism'],r['workers'],r['attacker_cores']) for r in (json.loads(s) for s in ledger.read_text().splitlines() if s.strip())} if ledger.exists() else set()
+ if strategy=='patience':grid=[('priority',w,c,20260924,'patience') for w in (1,2,4,8) for c in (0,0.1,0.25,1,4,16)]
+ else:grid=[(m,w,c,20260924) for m in ('fixed16','fixed18','priority') for w in (1,2,4,8) for c in (0,0.1,0.25,1,4,16)]
+ ledger=out/'results.jsonl';done={(r['mechanism'],r['workers'],r['attacker_cores']) for r in (json.loads(s) for s in ledger.read_text().splitlines() if s.strip())} if ledger.exists() else set()
  todo=[g for g in grid if g[:3] not in done];print('runs: %d total, %d to run'%(len(grid),len(todo)),flush=True)
  with ProcessPoolExecutor(max_workers=12) as pool:
   for r in pool.map(run,todo):

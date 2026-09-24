@@ -496,3 +496,27 @@ newcomers against an attacker with a few cores at modest verifier capacity. The
 protection that holds is proportional to spare replay capacity, which the
 defender pays for in real CPU. That cost, absent from proof-of-work, is to be
 reported as a price of utility.
+
+## Amendment 9b — full-patience honest bidding, 24 September 2026
+
+Recorded after the amendment 9 grid, which is preserved unchanged, and before
+this follow-up was run. It is a post-hoc follow-up and is labelled as such.
+
+**What the amendment 9 run showed.** C3 held: a fixed 18-bit puzzle with eight
+verifier workers kept 93-97% of newcomers served at one attacker core and failed
+at four, matching a threshold of about 1.1 cores. C2 failed as stated: one
+worker under the 16-bit puzzle served 17-38% of newcomers, not at most 10%.
+C1 failed with 15 violations, and the priority queue behaved non-monotonically.
+The cause was a mismatch between prediction and implementation: the threshold
+assumed honest newcomers bid their full patience under pressure, while the
+harness had them bid 1.25 times the published suggestion against an attacker
+bidding 1.5 times it, so the attacker won every contest at low budgets.
+
+**Change.** Honest newcomers who meet pressure bid their full patience, 10 s of
+their own measured hash rate, instead of following the suggestion. Nothing else
+changes: queue code, attacker strategy, grid and thresholds are identical, and
+only the priority mechanism is rerun.
+
+**Predictions.** C1 is re-tested unchanged against the same thresholds. In
+addition, honest newcomers now pay close to their full 10 s whenever the queue
+is under pressure, attack or not; this cost is reported, not hidden.

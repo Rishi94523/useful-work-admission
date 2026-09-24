@@ -1,4 +1,4 @@
-# Current status — 23 September 2026
+# Current status — 24 September 2026
 
 This repository implements **browser admission backed by auditable useful
 scientific computation**. A visitor's browser runs a bounded unit of real
@@ -321,10 +321,18 @@ median). It is reported but excluded from the pooled figures.
   users: an unaudited trusted admission is still granted on the identity's
   history, not on the unit.
 - **Scientific quarantine and repair** after late detection is not implemented.
-- **Timing is native.** Browser and phone comparisons of unit against puzzle
-  remain to be measured.
-- **Device evidence** covers one iPhone 15 and one desktop. There is no
-  population-level claim.
+- **Stronger puzzle baselines** remain to be tested on phones. The four-phone
+  study compares against one pure-JavaScript hash puzzle, not optimized or
+  multi-subpuzzle proof of work. A separate Node/OpenSSL experiment with 96
+  trials per configuration reduced p95/median from 4.86 for one puzzle to 1.33
+  for 64 subpuzzles at equal expected hash count. This is desktop evidence,
+  not a new device result or a median-matched comparison.
+- **Availability under attack is unresolved.** Isolated real-scheduler fixtures
+  reproduce blocking by 16 idle leases. Separating assignment and audit counts
+  moves exhaustion to the assignment limit or the submitted-output queue; it
+  does not establish flood resistance. A separate fractional-refill bug was
+  fixed: rejected requests now preserve token credit. All 72 research tests
+  passed, including a regression that failed before the fix.
 - **Novelty positioning** against prior useful-work puzzles, volunteer computing
   and probabilistic verification remains outstanding.
 

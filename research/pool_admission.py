@@ -56,7 +56,9 @@ class PoolAdmission(VinaPoolCampaign,AdaptiveAdmission):
    now=self.clock();self._expire(db,now)
    # Existing global token bucket and reputation scoring are retained.
    b=db.execute('SELECT * FROM admission_budget WHERE id=1').fetchone();tokens=min(self.global_burst,b['tokens']+max(0,now-b['updated'])*self.global_rate)
-   db.execute('UPDATE admission_budget SET tokens=?,updated=? WHERE id=1',(max(0,tokens-1),now))
+   # Rejected requests must retain fractional refill credit; otherwise arrivals
+   # faster than global_rate can keep an empty bucket permanently at zero.
+   db.execute('UPDATE admission_budget SET tokens=?,updated=? WHERE id=1',(tokens-1 if tokens>=1 else tokens,now))
    if tokens<1:return {'status':'capacity'}
    db.execute('DELETE FROM requests WHERE at<?',(now-10,));velocity=db.execute('SELECT count(*) FROM requests WHERE identity=?',(identity,)).fetchone()[0]+1
    db.execute('INSERT INTO requests VALUES(?,?)',(identity,now));s=self._state(db,identity,now);s=self._event(db,identity,now,'request',(6 if velocity>3 else 0)+min(8,2*s['streak']))

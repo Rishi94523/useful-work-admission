@@ -78,4 +78,15 @@ class AdmissionTests(unittest.TestCase):
  def test_default_threshold_is_three(self):
   self.assertEqual(PoolAdmission(Path(self.tmp.name)/'d.sqlite',clock=lambda:0).trust_bundles,3)
 
+ def test_rejected_requests_preserve_fractional_global_refill(self):
+  c=self.create()
+  with c.transaction() as db:db.execute('UPDATE admission_budget SET tokens=0,updated=0')
+  outcomes=[]
+  for i in range(1,9):
+   self.now[0]=i/8
+   outcomes.append(c.request('p','fresh-'+str(i))['status'])
+  self.assertEqual(outcomes.count('assigned'),2)
+  with c.transaction() as db:
+   self.assertEqual(db.execute('SELECT tokens FROM admission_budget').fetchone()[0],0)
+
 if __name__=='__main__':unittest.main()

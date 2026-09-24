@@ -327,10 +327,13 @@ median). It is reported but excluded from the pooled figures.
   trials per configuration reduced p95/median from 4.86 for one puzzle to 1.33
   for 64 subpuzzles at equal expected hash count. This is desktop evidence,
   not a new device result or a median-matched comparison.
-- **Availability under attack is unresolved.** Isolated real-scheduler fixtures
-  reproduce blocking by 16 idle leases. Separating assignment and audit counts
-  moves exhaustion to the assignment limit or the submitted-output queue; it
-  does not establish flood resistance. A separate fractional-refill bug was
+- **Availability under attack is only partly resolved, and only in isolated
+  prototypes.** Stateless tickets and reserved tiers end the idle-lease attack
+  and protect established users; an effort-priority queue keeps newcomers served
+  below a budget of (R − λ) × phone hash rate × patience, but budget phones lose
+  first, every newcomer pays about 10 s under attack, and about 16 attacker
+  cores defeated every configuration tested. None of this is integrated into
+  `PoolAdmission`, and puzzle costs were accounted, not executed. A separate fractional-refill bug was
   fixed: rejected requests now preserve token credit. All 72 research tests
   passed, including a regression that failed before the fix.
 - **Novelty positioning** against prior useful-work puzzles, volunteer computing
@@ -346,6 +349,56 @@ Arrival and replay time are simulated in these cases; puzzles and protocol
 operations are real. A separate two-bundle native Vina smoke check accepted
 honest output and rejected corrupted trace commitments using actual full-unit
 replay. All 82 research tests passed. Paid-flood fairness and pricing remain open.
+
+**Pricing newcomer admission under a CPU budget — effort-priority queue on the
+ticket prototype.** Under overload a newcomer proves effort as a count of small
+subpuzzles bound to its ticket and commitment; newcomers are replayed highest
+effort first; a full newcomer queue evicts its lowest bid for a strictly higher
+one; a published suggested effort rises only under pressure. Seven tests with
+real solving cover the mechanism; 89 research tests pass. The evaluation drives
+the real queue code, with arrivals, 1.52 s replays and puzzle costs simulated
+and accounted from measured hash rates (phones' JavaScript rates, 1.25 M
+hashes/s per native attacker core), over 1–8 verifier workers and 0–16 attacker
+cores (amendments 9 and 9b).
+
+A fake submission costs its sender only the entry puzzle but costs the verifier
+a full molecular replay, so spare replay capacity is the scarce resource, a
+pressure proof-of-work, which verifies in microseconds, does not face. The
+predicted rule is that honest newcomers stay served while the attacker's
+budget is below (R − λ) × phone hash rate × patience, with R the verifier's
+audit rate and λ honest arrivals.
+
+| Newcomers served, budget / mid / flagship phone | 0.25 cores | 1 core | 4 cores | 16 cores |
+| --- | --- | --- | --- | --- |
+| Fixed 16-bit puzzle, 8 workers | 0.88 / 0.90 / 1.00 | 0.33 / 0.35 / 0.30 | 0.25 / 0.23 / 0.17 | 0.25 / 0.23 / 0.17 |
+| Fixed 18-bit puzzle, 8 workers | 0.97 / 1.00 / 1.00 | 0.95 / 0.93 / 0.97 | 0.15 / 0.25 / 0.42 | 0.07 / 0.17 / 0.12 |
+| Priority, full-patience bids, 8 workers | 0.90 / 0.88 / 0.93 | 0.95 / 0.95 / 1.00 | **0.05 / 0.95 / 1.00** | 0.05 / 0.03 / 0.05 |
+| Priority, full-patience bids, 4 workers | 0.97 / 0.95 / 0.97 | 0.03 / 0.97 / 1.00 | 0.03 / 0.05 / 1.00 | 0.03 / 0.03 / 0.05 |
+
+With honest newcomers bidding their full 10 s of patience, the rule held in 46
+of 48 testable cells. Against a 4-core attacker on eight workers the priority
+queue kept mid-range and flagship phones at 95–100% served where the fixed
+18-bit puzzle fell to 25–42%. Without an attack nobody pays; under any attack
+every newcomer pays about 10 s.
+
+Three findings qualify this.
+
+- **Budget phones lose first.** A native core hashes about 36 times faster than
+  the budget phone's JavaScript, so its threshold is lowest: denied at one core
+  with up to four workers and at four cores with eight. No pricing of a hash
+  puzzle removes that asymmetry.
+- **Client bidding strategy decides the outcome.** In the first run honest
+  clients bid 1.25 times the published suggestion against an attacker bidding
+  1.5 times; the attacker won every low-budget contest, C1 failed with 15
+  violations and service was non-monotonic in attacker budget. Following a
+  public price is exploitable.
+- **The defender's lever is replay capacity.** Protection grows with spare
+  verifier capacity, which costs real CPU; an attacker of about 16 cores
+  defeated every configuration tested. That cost is a price of utility.
+
+Fixed-price predictions: the 18-bit puzzle's threshold of about 1.1 cores at
+eight workers held; the prototype's 16-bit puzzle served 17–38% of newcomers
+at one worker under attack rather than the predicted at most 10%.
 
 The project is not submission-ready.
 

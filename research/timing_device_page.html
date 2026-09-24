@@ -2,14 +2,32 @@
 <title>Docking unit vs puzzle timing</title>
 <style>body{font:18px system-ui;max-width:720px;margin:30px auto;padding:20px;background:#f5f7f6;color:#193a30}input,button{font:inherit;padding:10px;margin:6px}label{display:block}pre{white-space:pre-wrap}button{background:#17694f;color:white;border:0;border-radius:6px}button:disabled{opacity:.5}</style>
 <h1>Docking unit vs puzzle timing</h1>
-<p>This test compares how long one real docking unit takes on this device against a proof-of-work puzzle tuned to the same median time. Keep the page visible, stay on Wi-Fi, and plug in if you can. It takes about three minutes. Timings and scientific outputs are uploaded to this benchmark's Cloudflare storage.</p>
+<p>This test compares how long one real docking unit takes on this device against a proof-of-work puzzle tuned to the same median time. It takes about four minutes. Timings and scientific outputs are uploaded to this benchmark's Cloudflare storage.</p>
+<p><b>Keep this page open until it says Saved.</b> The screen will stay on by itself, so you can put the phone down, but don't switch apps or lock it. Stay on Wi-Fi, and plug in if you can.</p>
 <label>Device <input id="model" placeholder="e.g. iPhone 15"></label><label>OS <input id="os" placeholder="e.g. iOS 18.6"></label>
 <label><input id="power" type="checkbox">Low Power Mode enabled</label>
 <label><input id="charging" type="checkbox">Plugged in</label>
 <button id="start">Start</button><pre id="status">Ready.</pre>
 <script>
-const q=new URLSearchParams(location.search),key=q.get('key'),status=document.querySelector('#status');let hidden=0;
-document.addEventListener('visibilitychange',()=>{if(document.hidden)hidden++});
+const q=new URLSearchParams(location.search),key=q.get('key'),status=document.querySelector('#status');let hidden=0,t0=null,wakeLock=null;
+// Every hidden/visible transition is timestamped so measurements overlapping a
+// hidden period can be excluded by rule; a count alone cannot say which.
+const visibility=[];
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden)hidden++;
+ if(t0!==null)visibility.push({state:document.visibilityState,at_ms:performance.now()-t0});
+ if(!document.hidden&&t0!==null)acquireWakeLock();  // the lock is released whenever the page is hidden
+});
+async function acquireWakeLock(){
+ if(!('wakeLock' in navigator))return 'unsupported';
+ try{wakeLock=await navigator.wakeLock.request('screen');return 'acquired'}catch(e){return 'denied: '+e.name}
+}
+function hiddenIntervals(end){
+ const out=[];let start=null;
+ for(const v of visibility){if(v.state==='hidden'&&start===null)start=v.at_ms;else if(v.state==='visible'&&start!==null){out.push([start,v.at_ms]);start=null}}
+ if(start!==null)out.push([start,end]);return out;
+}
+const overlaps=(from,to,intervals)=>intervals.some(([a,b])=>from<b&&to>a);
 const log=s=>{status.textContent+='\n'+s};
 const median=a=>{const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
 const hash=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -23,7 +41,9 @@ document.querySelector('#start').onclick=async()=>{
  const report={id:crypto.randomUUID(),device_model:document.querySelector('#model').value,os_version:document.querySelector('#os').value,
   low_power_mode_reported:document.querySelector('#power').checked,charging_reported:document.querySelector('#charging').checked,
   user_agent:navigator.userAgent,hardware_concurrency:navigator.hardwareConcurrency||null,started_at:new Date().toISOString(),units:[],puzzles:[]};
- const t0=performance.now();
+
+ t0=performance.now();report.wake_lock=await acquireWakeLock();
+ log(report.wake_lock==='acquired'?'Screen will stay on during the test.':'Could not keep the screen on ('+report.wake_lock+'). Please tap the screen now and then so it does not lock.');
  try{
   if(!key)throw Error('Missing ?key= in the page address');
   const manifest=await(await fetch('/manifest.json',{cache:'no-store'})).json();
@@ -53,13 +73,19 @@ document.querySelector('#start').onclick=async()=>{
    log(line+' ms');
   }
   vina.terminate();puzzle.terminate();
-  report.total_ms=performance.now()-t0;report.hidden_events=hidden;
-  const warm=report.units.filter(u=>u.mode==='reuse').map(u=>u.run_ms),solves=report.puzzles.map(p=>p.ms);
+  report.total_ms=performance.now()-t0;report.hidden_events=hidden;report.visibility=visibility;
+  const hid=hiddenIntervals(report.total_ms);
+  for(const u of report.units)u.overlaps_hidden=overlaps(u.at_ms-u.run_ms,u.at_ms,hid);
+  for(const p of report.puzzles)p.overlaps_hidden=overlaps(p.at_ms-p.ms,p.at_ms,hid);
+  const affected=report.units.filter(u=>u.overlaps_hidden).length+report.puzzles.filter(p=>p.overlaps_hidden).length;
+  if(affected)log('\nNote: the page was hidden during '+affected+' measurements. They are flagged and will be excluded; the rest are still usable.');
+  wakeLock?.release().catch(()=>{});
+  const warm=report.units.filter(u=>u.mode==='reuse'&&!u.overlaps_hidden).map(u=>u.run_ms),solves=report.puzzles.filter(p=>!p.overlaps_hidden).map(p=>p.ms);
   log('\nWarm unit median '+Math.round(median(warm))+' ms, max '+Math.round(Math.max(...warm))+' ms');
   log('Puzzle median '+Math.round(median(solves))+' ms, max '+Math.round(Math.max(...solves))+' ms');
   const a=await upload(report);log('Saved. Exact units: '+a.exact_units+'/'+a.units);
  }catch(e){
-  log('\n'+e);report.error=String(e);report.hidden_events=hidden;
+  log('\n'+e);report.error=String(e);report.hidden_events=hidden;report.visibility=visibility;wakeLock?.release().catch(()=>{});
   try{await upload(report);log('Partial result saved.')}catch(x){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report)],{type:'application/json'}));a.download='timing-result.json';a.textContent='Download results';document.body.append(a)}
  }
 };

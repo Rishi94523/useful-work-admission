@@ -33,9 +33,9 @@ use the five seeds, with no replacement of original evidence.
 under `F:/Programs/Git/usr/bin`; prepend that directory to PATH for the build
 if MiKTeX reports that the Perl script engine is missing.
 
-Before submission, authors must resolve the marked archive DOI, licence,
-ethics/consent, funding, competing-interest and contribution declarations.
-No author-only phone participation or ethics exemption is assumed by the draft.
+Before submission, authors must resolve the marked archive DOI, funding and
+competing-interest declarations. The authors confirmed on 25 September 2026
+that all test phones are theirs and that they ran every phone test.
 
 The Springer Nature class `sn-jnl.cls` and style `sn-basic.bst` (template
 v3.1, December 2024) are not redistributed here. Download the journal article

@@ -642,3 +642,49 @@ advantage of useful work over a well-designed puzzle; the paper will claim
 parity with subpuzzle proof of work and an advantage only over a single puzzle.
 At least three devices, one of them a budget phone, are needed before the
 comparison is reported.
+
+## Amendment 12 — exact replay completion and replicated availability, 25 September 2026
+
+This is a post-review correction, recorded before the corrected simulations.
+Amendments 9, 9b and 10 and their original ledgers remain historical results.
+Their 250 ms clock noticed a 1.52 s replay at 1.75 s, understating verifier
+service capacity relative to the analytical model. This amendment does not
+change molecular search, admission mechanisms, device rates, or thresholds.
+
+**Timing correction.** Process replay completions at their exact event times,
+immediately refill a freed worker, and start available workers after each
+arrival tick. Preserve 250 ms arrival, puzzle-submission polling and attacker
+budget ticks, their order, limits, expiry, and the original attack/drain
+horizons. This is an exact replay-service model with discretely polled inputs,
+not a production latency model. Regression checks must demonstrate 1.52 s
+service, including multiple completions between input ticks and parallel jobs.
+
+**Frozen grids.** Repeat all 72 amendment-9 follow-price cells, all 24
+amendment-9b full-patience cells, all 96 amendment-10 one-shot cells and all
+32 amendment-10 bootstrap cells, each at seeds 20260925, 20260926, 20260927,
+20260928 and 20260929: 1,120 runs. Retain every seed, refusal and prediction
+miss. Output goes into a new amendment-12 directory, with immutable manifests
+containing protocol, runner and mechanism hashes. Each ledger key includes
+the seed; original results must never be overwritten. Execution worker count
+affects throughput only, not the simulated verifier-worker count.
+
+**Analysis fixed before rerun.** Re-evaluate C1 and A1-A6 without changing
+thresholds. C1 is a coarse directional test: at least 90% served below half
+the predicted budget, at most 50% above twice it; the intervening band is not
+tested. Report passes/eligible checks for each seed and in total, and identify
+original versus corrected results explicitly. A4 compares corrected one-shot
+and corrected patience cells using the same seed. Report service and trust
+fractions as the mean and min/max across the five seeds, with 40 arrivals per
+device class per seed, rather than treating all arrivals as independent.
+Report exact replay service separately from input polling and finite-horizon
+draining. No prediction of improved acceptance, parity, or threshold success
+is imposed by this correction.
+
+**Interpretation.** Hash expenditure remains modeled from measured rates;
+attacker proof costs use expected hashes while honest solve times are sampled.
+MockAttester assumes an origin-bound, single-use token and a per-device issuer
+quota; no deployed issuer, blind-signature integration, or real device farm is
+tested. Five seeds measure simulation variability, not uncertainty in device
+rates, workload duration, attacker optimality, or real traffic. The analytical
+threshold remains conditional on those assumptions. A correction that weakens
+the earlier conclusions will be reported without retuning the protocol.

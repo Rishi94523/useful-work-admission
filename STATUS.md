@@ -339,8 +339,15 @@ median). It is reported but excluded from the pooled figures.
   `PoolAdmission`, and puzzle costs were accounted, not executed. A separate fractional-refill bug was
   fixed: rejected requests now preserve token credit. All 72 research tests
   passed at the time, including a regression that failed before the fix.
-- **Novelty positioning** against prior useful-work puzzles, volunteer computing
-  and probabilistic verification remains outstanding.
+- **Novelty positioning** is drafted locally against 53 checked sources. The
+  closest prior proposal is a password-cracking proof-of-work CAPTCHA (FedCSIS
+  2023): a design without measurements that trusts a 51% majority of visitors.
+  The effort-priority queue is Tor's onion-service design, puzzle auctions and
+  subpuzzles are older still, and the attested lane applies Privacy Pass. What
+  remains ours is the measured, replay-verified system, its admission economics
+  with free identities, the aggregation attack and the replay-capacity cost.
+  Claiming lower latency variance than proof of work in general needs the
+  subpuzzle baseline measured on phones first.
 
 **Isolated ticket-admission prototype — tested, not deployed.** Authenticated
 tickets without audit seats, independent byte/queue reservations, commitment
@@ -407,7 +414,8 @@ at one worker under attack rather than the predicted at most 10%.
 present a device-attestation token get a third lane: no puzzle, their own seats,
 and replay ahead of anonymous bidding. The token is modelled on the
 rate-limited Privacy Pass tokens behind Apple's Private Access Tokens:
-single-use, bound to one site, unlinkable, and capped per device by the issuer.
+single-use, bound to one site, unlinkable, and assumed capped per device by the
+issuer.
 A mock issuer stands in; the blind-signature cryptography is not implemented.
 Six tests cover the lane; 95 research tests pass. The evaluation reuses the
 amendment 9b harness and rates unchanged, varying the share of honest
@@ -465,9 +473,14 @@ What this means:
   replays take priority, so at 1–10 tokens/s the attacker starves the anonymous
   lane without spending any CPU.
 - **Platform reach is the practical limit.** Private Access Tokens exist on
-  Apple devices; Android's Play Integrity is not unlinkable. The budget
-  Android phones this lane is meant to protect may be least able to obtain a
-  privacy-preserving token. That is not measured here.
+  Apple devices. Android browsers have no deployed web attestation: Play
+  Integrity attests apps, not web pages, and Google abandoned its Web
+  Environment Integrity proposal in 2023. The budget Android phones this lane
+  is meant to protect currently cannot obtain such a token at all.
+- **The per-device cap is an assumption.** The IETF draft for per-origin
+  rate-limited tokens expired in 2024, and Apple says its attester can
+  rate-limit devices but publishes no limits. The lane's protection rests on a
+  cap no deployed issuer documents.
 - The mock issuer capped honest devices at ten tokens per hour, which some
   retrying users exhausted under the 10 tokens/s attack; bootstrap figures in
   that cell are therefore conservative.

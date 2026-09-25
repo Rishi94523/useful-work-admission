@@ -87,6 +87,24 @@ def section(md,name):
  if not m:raise ValueError('Missing section '+name)
  return m.group(1).strip()
 
+def authors(md):
+ """Author lines: '- Given | Surname | email | affiliation keys | ORCID | corresponding'
+ and affiliation lines: '- key: Department; Organisation; City; State; Country'."""
+ block=section(md,'Authors');out=[];affils=[]
+ for line in block.split('\n'):
+  line=line.strip()
+  if not line.startswith('- '):continue
+  parts=[x.strip() for x in line[2:].split('|')]
+  if len(parts)==1 and ':' in parts[0]:
+   key,rest=parts[0].split(':',1);f=[x.strip() for x in rest.split(';')]
+   div='\\orgdiv{'+text(f[0])+'}, ' if f[0] else ''
+   affils.append('\\affil'+('*' if key.strip()=='1' else '')+'['+key.strip()+']{'+div+'\\orgname{'+text(f[1])+'}, \\orgaddress{\\city{'+text(f[2])+'}, \\state{'+text(f[3])+'}, \\country{'+text(f[4])+'}}}')
+  else:
+   given,sur,email,keys,orcid,role=parts
+   star='*' if role=='corresponding' else ''
+   out.append('\\author'+star+'['+keys+']{\\fnm{'+text(given)+'} \\sur{'+text(sur)+'}}\\email{'+plain(email)+'}')
+ return '\n'.join(out+affils)
+
 def main():
  md=(PAPER/'MANUSCRIPT.md').read_text(encoding='utf-8');rw=(PAPER/'RELATED_WORK.md').read_text(encoding='utf-8')
  related=re.search(r'^## 2 Related work\n(.*?)(?=^## Claims ledger)',rw,re.S|re.M).group(1)
@@ -102,7 +120,7 @@ def main():
   '\\usepackage{graphicx,booktabs,tabularx,amsmath,amssymb,xcolor,tikz,url}',
   '\\renewcommand{\\tabularxcolumn}[1]{>{\\raggedright\\arraybackslash}p{#1}}','\\usetikzlibrary{arrows.meta,positioning,fit}',
   '\\raggedbottom','\\begin{document}','\\title['+text(short)+']{'+text(title)+'}',
-  '\\author*[1]{\\fnm{[Author]} \\sur{[TODO]}}\\email{[TODO]}','\\affil*[1]{\\orgname{[TODO]}, \\orgaddress{\\country{[TODO]}}}',
+  authors(md),
   '\\abstract{'+text(' '.join(abstract.split()))+'}','\\keywords{'+', '.join(text(k) for k in keywords)+'}','\\maketitle','',
   body(main_md),'\\backmatter','\\section*{Declarations}','',body(declarations,level_shift=2),
   '\\bibliography{references}','\\end{document}']

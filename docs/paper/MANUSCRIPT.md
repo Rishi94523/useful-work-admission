@@ -8,6 +8,16 @@
 ledgers by committed scripts; re-check before submission. [TODO] marks items
 for the author.*
 
+## Authors
+
+- Rishi | D V | rishidv2005@gmail.com | 1 | 0000-0003-1868-639X | corresponding
+- Ram Ganesh | Vemula | ramganeshvemula@gmail.com | 1 | - | author
+- Sanjay | D M | sanjaydm23072005@gmail.com | 1 | - | author
+- Rithik Madhav | V | rithik7680@gmail.com | 1 | - | author
+- Jayashree | R | jayashree@pes.edu | 2 | - | author
+- 1: ; PES University; Bengaluru; Karnataka; India
+- 2: Department of Computer Science and Engineering (AI & ML); PES University; Bengaluru; Karnataka; India
+
 ## Abstract
 
 *(150–250 words; currently about 245.)*

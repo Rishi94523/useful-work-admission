@@ -332,10 +332,13 @@ median). It is reported but excluded from the pooled figures.
   and protect established users; an effort-priority queue keeps newcomers served
   below a budget of (R − λ) × phone hash rate × patience, but budget phones lose
   first, every newcomer pays about 10 s under attack, and about 16 attacker
-  cores defeated every configuration tested. None of this is integrated into
+  cores defeated every puzzle-only configuration tested. An attested-newcomer
+  lane admits token holders, budget phones included, and lets them earn trust
+  against 16 cores, but only while tokens are costly to the attacker, not for
+  anonymous visitors, and only on platforms with unlinkable attestation. None of this is integrated into
   `PoolAdmission`, and puzzle costs were accounted, not executed. A separate fractional-refill bug was
   fixed: rejected requests now preserve token credit. All 72 research tests
-  passed, including a regression that failed before the fix.
+  passed at the time, including a regression that failed before the fix.
 - **Novelty positioning** against prior useful-work puzzles, volunteer computing
   and probabilistic verification remains outstanding.
 
@@ -399,6 +402,75 @@ Three findings qualify this.
 Fixed-price predictions: the 18-bit puzzle's threshold of about 1.1 cores at
 eight workers held; the prototype's 16-bit puzzle served 17–38% of newcomers
 at one worker under attack rather than the predicted at most 10%.
+
+**An attested-newcomer lane — outside trust instead of CPU.** Newcomers who
+present a device-attestation token get a third lane: no puzzle, their own seats,
+and replay ahead of anonymous bidding. The token is modelled on the
+rate-limited Privacy Pass tokens behind Apple's Private Access Tokens:
+single-use, bound to one site, unlinkable, and capped per device by the issuer.
+A mock issuer stands in; the blind-signature cryptography is not implemented.
+Six tests cover the lane; 95 research tests pass. The evaluation reuses the
+amendment 9b harness and rates unchanged, varying the share of honest
+newcomers holding a token (0, 50%, 90%) and the attacker's token supply (none,
+0.1/s, 1/s, 10/s) as well as its CPU (amendment 10, 128 runs).
+
+| Newcomers served, 50% attested, budget / mid / flagship | 1 core | 16 cores |
+| --- | --- | --- |
+| 8 workers, attacker has no tokens: attested | 1.00 / 1.00 / 1.00 | **1.00 / 1.00 / 1.00** |
+| 8 workers, attacker has no tokens: anonymous | 0.95 / 0.90 / 1.00 | 0.25 / 0.00 / 0.10 |
+| 8 workers, attacker has 10 tokens/s: attested | 0.45 / 0.50 / 0.50 | 0.45 / 0.50 / 0.50 |
+| 8 workers, attacker has 10 tokens/s: anonymous | 0.00 / 0.00 / 0.00 | 0.05 / 0.00 / 0.00 |
+| 2 workers, attacker has 1 token/s: attested | 0.80 / 1.00 / 0.70 | 0.80 / 1.00 / 0.70 |
+
+Newcomers reaching trust (three granted bundles) under a 16-core attack, with
+each bundle taking four of its device's measured unit times:
+
+| 8 workers, budget / mid / flagship | Reached trust | Median time |
+| --- | --- | --- |
+| No attestation | 0.00 / 0.00 / 0.00 | — |
+| 90% attested, attacker 0–1 tokens/s | 1.00 / 1.00 / 1.00 | 69 / 24 / 24 s |
+| 90% attested, attacker 10 tokens/s | 0.92 / 0.89 / 0.97 | 112 / 100 / 100 s |
+| Same at 4 workers | 0.08 / 0.44 / 0.42 | 278 / 123 / 142 s |
+
+Predictions held: A1 in 120/120 checks (a token-holding budget phone was served
+at every CPU budget, 16 cores included, while its lane was not overloaded), A3
+in 118/118 (anonymous newcomers follow (R − λ − a) × phone hash rate ×
+patience, so the attacker's tokens lower their threshold), A4 in 24/24 (without
+tokens the lane is inert and matches amendment 9b), A6 in 192/192 (token holders
+paid no puzzle unless they fell back). Two missed.
+
+- **A2, 112/120.** All eight misses were one-shot cells without a CPU attacker
+  and 10 tokens/s, served above the bound. A post-hoc diagnostic run with the
+  attack continuing through the drain phase brought them within the bound
+  (0.14–0.45 attested): submissions that fell back to the anonymous lane were
+  being served after the attack stopped. The misses are recorded as they were.
+- **A5, 63/66.** The lockout reproduced (no class reached trust without
+  attestation) and 90% attestation broke it for every class when tokens were
+  costly. The prediction that 10 tokens/s would hold trust below half failed at
+  eight workers (0.89–0.97): a newcomer served on about half its attempts
+  still reaches three grants by retrying. At four workers the same attack held
+  budget phones to 0.08, because their 30 s bundles allow fewer retries; under
+  token saturation the budget phone loses again, on docking speed rather than
+  hashing.
+
+What this means:
+
+- **Attestation replaces the CPU asymmetry with the attacker's cost of tokens.**
+  With tokens costly, budget phones holding one are admitted and earn trust in
+  about a minute against 16 cores, where every puzzle-only configuration
+  locked them out. The whole defence then rests on the issuer's per-device
+  cap: tokens are unlinkable, so a device whose output fails audit cannot be
+  penalised.
+- **Cheap tokens are worse than none for anonymous visitors.** Attested
+  replays take priority, so at 1–10 tokens/s the attacker starves the anonymous
+  lane without spending any CPU.
+- **Platform reach is the practical limit.** Private Access Tokens exist on
+  Apple devices; Android's Play Integrity is not unlinkable. The budget
+  Android phones this lane is meant to protect may be least able to obtain a
+  privacy-preserving token. That is not measured here.
+- The mock issuer capped honest devices at ten tokens per hour, which some
+  retrying users exhausted under the 10 tokens/s attack; bootstrap figures in
+  that cell are therefore conservative.
 
 The project is not submission-ready.
 

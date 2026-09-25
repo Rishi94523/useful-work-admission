@@ -139,8 +139,8 @@ mechanism as new. The setting differs in who the adversary is. Volunteers are
 long-lived identities who accumulate credit and can be blacklisted; an
 admission gate faces anonymous newcomers whose identities are free, so every
 fix we measured had to hold with identity cost at zero, and did (attacker
-discount factor at least 1.0 after reseeding, removal of the audit reveal and
-a three-bundle trust threshold). Replay is only decisive if execution is
+discount factor at parity or above after reseeding, removal of the audit
+reveal and a three-bundle trust threshold). Replay is only decisive if execution is
 deterministic across platforms. WebAssembly specifies deterministic floating
 point except for NaN payloads [Haas17]; we observed all 68 phone units bitwise
 identical to native execution across iOS and Android, and confined the only

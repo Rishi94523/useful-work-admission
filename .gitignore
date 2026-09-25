@@ -109,3 +109,5 @@ docs/paper/*.out
 docs/paper/*.pdf
 docs/paper/*.fdb_latexmk
 docs/paper/*.fls
+docs/paper/sn-jnl.cls
+docs/paper/sn-basic.bst

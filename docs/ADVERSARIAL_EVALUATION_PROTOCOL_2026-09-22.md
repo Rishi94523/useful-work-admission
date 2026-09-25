@@ -520,3 +520,85 @@ only the priority mechanism is rerun.
 **Predictions.** C1 is re-tested unchanged against the same thresholds. In
 addition, honest newcomers now pay close to their full 10 s whenever the queue
 is under pressure, attack or not; this cost is reported, not hidden.
+
+## Amendment 10 — an attested-newcomer lane, 25 September 2026
+
+Recorded before the mechanism below was implemented or run.
+
+**Context.** Amendments 9 and 9b showed that no pricing of a hash puzzle
+protects budget-phone newcomers: a native core hashes about 36 times faster than
+the budget phone's JavaScript. Because trust requires three audited bundles
+(amendment 5), a newcomer that is outbid cannot earn trust either, so under a
+sustained attack budget phones are locked out of the trusted lane. This
+amendment tests whether a trust signal from outside the system, one that costs
+an attacker something other than CPU, breaks that asymmetry.
+
+**Mechanism.** A third lane between trusted users and anonymous newcomers. A
+newcomer presenting a device-attestation token receives an attested ticket.
+The token is modelled on Privacy Pass rate-limited tokens as used by Apple's
+Private Access Tokens: the issuer attests a genuine device and caps tokens per
+device per origin, and the origin sees an unlinkable, single-use,
+origin-bound token. The prototype checks the token through an issuer
+verification callback and stores a nullifier against double spending; the
+blind-signature cryptography is not implemented, and a mock issuer with a
+per-device limit stands in for the attester. Attested submissions pay no
+puzzle, have their own seat and byte reservation, and are replayed first-come
+first-served with strict priority over anonymous newcomers. If the attested
+lane is full, the newcomer falls back to the anonymous effort-bidding lane of
+amendment 9. Established users keep their reserved lane unchanged. Because
+tokens are unlinkable, a device whose submission fails audit cannot be
+penalised; only the issuer's per-device limit bounds abuse.
+
+**Experiment.** The amendment 9b harness, unchanged in its measured rates,
+1.52 s replay, 10 s patience, full-patience honest bidding and attacker best
+response, with two additions. A share s of honest newcomers carries a token,
+assigned in equal proportion within each device class; attested newcomers are
+drawn from the same budget, mid-range and flagship classes. The attacker, in
+addition to its CPU budget, obtains attestation tokens at a rate a per second,
+standing for its cost of obtaining them: a = 0 (unobtainable), 0.1 (costly, 360
+per hour, such as a farm of 360 devices at one token per device per hour), 1
+(moderate) and 10 (cheap). It spends each token on a fake attested submission.
+
+- E1, one-shot newcomers as in amendment 9: verifier workers 2 and 8; attacker
+  cores 0, 1, 4 and 16; s = 0, 0.5 and 0.9; a = 0, 0.1, 1 and 10 (96 runs).
+- E2, trust bootstrap: each honest newcomer keeps contributing until three
+  bundles are granted, the trust threshold, preparing each bundle in four times
+  its device's measured median unit time from the device-timing study (30.2 s
+  budget, 8.1 s mid-range, 8.2 s flagship) and starting a new bundle after every
+  outcome. The attack runs for the whole 390 s. Verifier workers 4 and 8;
+  attacker cores 0 and 16; s = 0 and 0.9; a = 0, 0.1, 1 and 10 (32 runs).
+
+**Predictions.** With R the verifier's replay rate, lambda = 0.5 honest
+newcomers per second and lambda_A = s x lambda of them attested:
+
+- A1. Attested honest newcomers of every device class are at least 90% served
+  in E1 whenever lambda_A + a <= 0.8R, at every attacker CPU budget including
+  16 cores.
+- A2. Where lambda_A + a >= 1.25R, the attested lane saturates: attested honest
+  newcomers are at most R/(lambda_A + a) + 0.1 served, and anonymous newcomers,
+  starved by the attested lane's priority, at most 20%.
+- A3. For anonymous newcomers the amendment 9 threshold becomes
+  (R - lambda - a) x (device hash rate) x patience: fake attested submissions
+  take replay capacity first. The C1 rule (at least 90% served below half the
+  threshold, at most 50% above twice it) is tested for s = 0 and 0.5, where a
+  class has at least 20 anonymous newcomers, and for attacker budgets above
+  zero.
+- A4. With s = 0 and a = 0 the lane is inert: service matches the amendment 9b
+  results at the same cells within 0.10.
+- A5. Trust bootstrap under a 16-core attack: with s = 0, at most 10% of any
+  device class reaches trust, reproducing the lockout; with s = 0.9 and
+  a <= 0.1, at least 90% of attested newcomers in every class reach trust,
+  budget phones included; anonymous newcomers still reach trust at most 10%;
+  and with a = 10 at most half of attested newcomers reach trust.
+- A6. Attested honest newcomers pay no puzzle time except after falling back;
+  the fallback share is reported.
+
+**Expected conclusion.** Attestation replaces the CPU asymmetry with the
+attacker's cost of obtaining tokens, so it protects budget phones that hold a
+token at any CPU budget. It does nothing for anonymous visitors, whose
+threshold falls when attestations are cheap, and it is only as strong as the
+issuer's per-device limit. Its reach is limited by platform: Private Access
+Tokens exist on Apple devices, while the Android equivalent, Play Integrity, is
+not unlinkable, so a privacy-preserving token may be least available on the
+budget Android phones it is meant to protect. That limitation is to be reported
+with the result.

@@ -100,3 +100,12 @@ server/nul
 /local-research/
 /docs/evaluation/
 /docs/research/
+docs/paper/figures/
+docs/paper/*.aux
+docs/paper/*.log
+docs/paper/*.bbl
+docs/paper/*.blg
+docs/paper/*.out
+docs/paper/*.pdf
+docs/paper/*.fdb_latexmk
+docs/paper/*.fls

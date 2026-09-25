@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from research.ticket_admission import TicketAdmission,encoded
 from research.priority_admission import PriorityAdmission
+from scripts.admission_replay_clock import ReplayClock
 
 OUT=ROOT/'local-research/priority-admission-2026-09-24'
 PROTOCOL=ROOT/'docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md'
@@ -43,7 +44,7 @@ class SimFixed(TicketAdmission):
 class SimPriority(PriorityAdmission):
  def effort_of(self,t,root,proof):return int(proof['accounted']) if proof and 'accounted' in proof else 0
 
-def run(item):
+def run(item, exact_replay=False):
  mech,workers,cores,seed=item[:4];strategy=item[4] if len(item)>4 else 'follow';rng=random.Random(seed);now=[0.0]
  work=Path(tempfile.mkdtemp(dir=ROOT/'tmp'));key=secrets.token_bytes(32)
  kw=dict(clock=lambda:now[0],capacity=16,issuance_rate=1e9,ttl=TTL)
@@ -56,17 +57,22 @@ def run(item):
   t=c.issue(owner)
   if t['status']!='ticket':return None
   body=encoded({str(s):('honest' if good else 'fake') for s in t['assignment']['seeds']});return t,body,hashlib.sha256(body).hexdigest()
+ def finish_replay(row):
+  payload=json.loads(row['payload']);good=payload[next(iter(payload))]=='honest'
+  try:c.finish(row['id'],(row['root'],good),lambda db,r:None)
+  except ValueError:return
+  if good and row['id'] in honest:honest[row['id']]['outcome']='granted';honest[row['id']]['wait']=now[0]-honest[row['id']]['arrived']
+  elif not good:att['replayed']+=1
+ service=ReplayClock(now,inflight,workers,REPLAY_S,lambda:c.claim('new'),finish_replay)
  try:
   for tick in range(int((ARRIVE_S+DRAIN_S)/DT)):
-   now[0]=tick*DT;arriving=now[0]<ARRIVE_S
+   if exact_replay:service.advance(tick*DT)
+   else:now[0]=tick*DT
+   arriving=now[0]<ARRIVE_S
    # Verifier: finish due replays, then claim up to `workers` newcomer submissions.
-   for job in [j for j in inflight if j[0]<=now[0]]:
-    inflight.remove(job);_,row=job;good=json.loads(row['payload']).get(next(iter(json.loads(row['payload']))))=='honest'
-    try:c.finish(row['id'],(row['root'],good),lambda db,r:None)
-    except ValueError:continue
-    if good and row['id'] in honest:honest[row['id']]['outcome']='granted';honest[row['id']]['wait']=now[0]-honest[row['id']]['arrived']
-    elif not good:att['replayed']+=1
-   while len(inflight)<workers:
+   for job in [j for j in inflight if not exact_replay and j[0]<=now[0]]:
+    inflight.remove(job);finish_replay(job[1])
+   while not exact_replay and len(inflight)<workers:
     r=c.claim('new')
     if not r:break
     inflight.append((now[0]+REPLAY_S,r))
@@ -103,6 +109,7 @@ def run(item):
      if cost>budget:break
      budget-=cost;att['hashes']+=cost;att['submitted']+=1
      if c.submit(t['ticket'],root,body,owner,proof)['status']=='queued':att['queued']+=1
+   if exact_replay:service.fill()
    if not arriving and not inflight and not scheduled:break
   # Anything still queued or auditing at the end counts as not served.
   per={}
@@ -113,7 +120,8 @@ def run(item):
                  paid_s_median=statistics.median(paid) if paid else None,paid_s_p95=sorted(paid)[int(.95*(len(paid)-1))] if paid else None,
                  paid_any=sum(p>0 for p in paid),capped=sum(bool(r.get('capped')) for r in rs))
   return dict(mechanism=mech,honest_strategy=strategy,workers=workers,attacker_cores=cores,seed=seed,classes=per,attacker=att,
-              attacker_hashes_per_s=att['hashes']/ARRIVE_S)
+              attacker_hashes_per_s=att['hashes']/ARRIVE_S,
+              timing=service.metrics() if exact_replay else {'mode':'legacy-tick'})
  finally:shutil.rmtree(work,ignore_errors=True)
 
 def main():

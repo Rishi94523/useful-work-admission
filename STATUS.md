@@ -1,9 +1,39 @@
-# Current status — 24 September 2026
+# Current status — 25 September 2026
+
+## Manuscript review correction and replication
+
+Amendment 12 is complete: **1,120 simulations, 224 cells × five seeds**, with
+exact 1.52 s replay events instead of the historical 1.75 s tick-rounded
+service. The original ledgers below remain historical evidence, not corrected
+measurements. Corrected C1 full-patience checks pass **230/240 (46/48 in each
+seed)**; follow-price checks pass 153/240. Attestation A1/A3/A4/A6 pass all
+eligible checks; A2 passes 557/600 and A5 315/330. These checks test specified
+finite-horizon models, not deployed resilience or an exact threshold law.
+
+Results: `local-research/admission-amendment12-2026-09-25/memory-sqlite/`;
+reproduce with `scripts/evaluate_admission_amendment12.py` and
+`scripts/analyze_admission_amendment12.py`. An initial 12-cell disk-backed
+attempt is preserved in the parent directory. In-memory SQLite accelerates
+the simulator only, with identical SQL/transaction semantics checked against
+disk-backed fixtures. It does not accelerate or benchmark production replay.
+
+The revised manuscript distinguishes measurements, simulations and projections.
+Attacker-cost estimates near 1 do not establish a lower bound of 1. The
+0.034 AUC poisoning loss is an exploratory projection at **10%** corruption;
+the measured **5%** result is 22/33 re-finalised jobs worsened. Attestation
+uses a mock issuer and assumed quotas. Corrected bootstrap results differ from
+historical values: without tokens at eight workers, flagship trust is 0.030
+on average (range 0–0.050), rather than universally zero. See Section 5.6 of
+`docs/paper/MANUSCRIPT.md` for corrected tables and all prediction misses.
+
+## Project overview and historical experiment record
 
 This repository implements **browser admission backed by auditable useful
 scientific computation**. A visitor's browser runs a bounded unit of real
-molecular docking work; the server verifies that work far more cheaply than
-producing it, and the scientific output is aggregated across contributors.
+molecular docking work; the server samples complete units for replay, and
+scientific output is aggregated across contributors. Sampled bundle auditing
+costs less than executing the whole bundle; replay of a single unit is not
+cheaper than that unit's own molecular computation.
 
 The workload is AutoDock Vina docking, not ML inference. The earlier MNIST
 demonstrator is project history and no longer describes this system.

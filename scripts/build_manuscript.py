@@ -70,7 +70,9 @@ def body(md,level_shift=0):
    while j<len(lines) and lines[j].startswith('|'):j+=1
    out.append(table(lines[i:j],caption));out.append('');caption=None;i=j;continue
   m=re.match(r'^(- |\d+\. )(.*)',line)
-  if m:
+  # CommonMark: an ordered list may interrupt prose only when it starts at 1.
+  # Otherwise a wrapped year such as "2024. Apple ..." is paragraph text.
+  if m and (not para or m.group(1) in ('- ', '1. ')):
    flush();env='enumerate' if m.group(1)[0].isdigit() else 'itemize';items=[]
    while i<len(lines) and (re.match(r'^(- |\d+\. )',lines[i]) or (lines[i].startswith('   ') and items)):
     mm=re.match(r'^(- |\d+\. )(.*)',lines[i])
@@ -131,6 +133,8 @@ def main():
   log=(PAPER/'manuscript.log').read_text(encoding='utf-8',errors='replace') if (PAPER/'manuscript.log').exists() else ''
   undefined=sorted(set(re.findall(r"Citation `([^']+)' .*undefined",log)))
   print('latexmk exit',r.returncode,'| undefined citations:',undefined or 'none','| warnings:',log.count('LaTeX Warning'))
-  if r.returncode:print(r.stdout[-3000:])
+  if r.returncode:
+   print(r.stdout[-3000:]);print(r.stderr[-3000:]);raise SystemExit(r.returncode)
+  if undefined:raise SystemExit('Unresolved citations in manuscript')
 
 if __name__=='__main__':main()

@@ -24,8 +24,8 @@ ticket prototype does. Stebila et al. strengthened the definition of puzzle
 difficulty so that solving n puzzles is provably n times as hard as solving one
 [Stebila11], which is the property our effort count, a number of distinct
 subpuzzle solutions, relies on. The property of puzzles we contrast with most is
-older and simpler: a hash puzzle verifies in microseconds, so verification never
-limits the defender.
+older and simpler: a hash puzzle verifies cheaply relative to solving, substantially reducing
+the verifier load per submission compared with molecular replay.
 
 Two lines of criticism carry over directly. Laurie and Clayton argued that no
 single price deters spammers without burdening legitimate senders, because the
@@ -86,7 +86,7 @@ What we add is not the idea but the measured system: a real scientific workload
 (AutoDock Vina [Trott10, Eberhardt21] units of 256,000 evaluations), verified
 by deterministic replay rather than by majority, shown to reproduce monolithic
 screening results at matched compute on five targets, attacked under a
-predeclared protocol, and timed on four phones.
+predeclared protocol, and timed in two phone studies, including a five-device subpuzzle comparison.
 
 ### 2.3 Proofs of useful work in consensus
 
@@ -106,9 +106,8 @@ a trusted party, hardness guarantees for adversarially chosen instances, and
 public verification. An admission gate has a trusted server that assigns the
 task and holds the verification key, so useful work can come from an ordinary
 scientific queue. Pass shows that, at equilibrium pricing, useful work does not
-lower the cost of attacking a proof-of-useful-work chain [Pass26]; our setting
-reaches a related conclusion by measurement, since usefulness never discounts
-the attacker's price of admission. What the consensus setting teaches instead is the cost of
+lower the cost of attacking a proof-of-useful-work chain [Pass26]; our measurements instead test particular strategies and find near-parity
+estimates after fixing structural discounts, without a comparable proof. What the consensus setting teaches instead is the cost of
 verification. Luu et al.'s verifier's dilemma shows that when checking a
 computation is expensive, rational verifiers skip it [Luu15]. Our verifier
 cannot skip replay without admitting fabricated output, so the dilemma becomes
@@ -134,26 +133,25 @@ verifier replays one sampled unit per bundle and faces the same trade-off
 between audit coverage and re-execution cost.
 
 Our audit is a spot check in Sarmenta's sense, and we do not claim the audit
-mechanism as new. The setting differs in who the adversary is. Volunteers are
-long-lived identities who accumulate credit and can be blacklisted; an
-admission gate faces anonymous newcomers whose identities are free, so every
-fix we measured had to hold with identity cost at zero, and did (attacker
-discount factor at parity or above after reseeding, removal of the audit
-reveal and a three-bundle trust threshold). Replay is only decisive if execution is
+mechanism as new. Volunteer platforms also face untrusted participants and
+cheap identities; our emphasis is admission value obtainable through short
+sessions, retries and trust transitions. We test those paths with identity
+cost set to zero. The observed large discounts disappear after fixes, while
+bundle-tier estimates remain consistent with parity rather than proving it.
+Replay also requires execution to be
 deterministic across platforms. WebAssembly specifies deterministic floating
 point except for NaN payloads [Haas17]; we observed all 68 phone units bitwise
 identical to native execution across iOS and Android, and confined the only
 cross-toolchain divergence to last-bit C runtime differences amplified by Monte
 Carlo search.
 
-One threat appears to be specific to useful work that is merged: an attacker
-who never needs to be admitted can still corrupt the aggregate. Falsified
-energies in 5% of units displaced honest minima from the finaliser's retained
-set and lowered screening ROC-AUC by up to 0.034; rescoring every submitted
-minimum before merging (+91 ms per ligand state) removed the effect. We have
-not found this attack class treated in the volunteer-computing literature,
-which verifies results individually rather than through the aggregation step,
-but we state this as the result of our search, not as a novelty guarantee.
+A separate issue arises when unverified candidate pools are merged before
+all search units are audited. In our corpus, fabricated energies at 5% of
+units worsened 22 of 33 re-finalised jobs. A separate exploratory projection
+at 10% corruption estimated AUC losses up to 0.034. Rescoring candidates
+before merge mitigated the measured ordering failure. We claim this empirical
+failure mode and repair in the Vina admission pipeline, not the invention of
+aggregate poisoning or a general integrity guarantee.
 
 ### 2.5 Pricing admission under denial-of-service attack
 
@@ -170,17 +168,14 @@ and the service publishes a suggested effort that rises with backlog and decays
 when idle [TorProp327, TorPoW23]. Our effort-priority newcomer queue
 (amendment 9) adopts that design and makes no claim to it.
 
-What differs is what the queue protects. In these systems admitted service is
-the scarce resource and puzzle verification is free; in ours the scarce
-resource is replay of the submission itself. That changes the threshold: honest
-newcomers stay served while the attacker's hash rate is below
-(R − λ) × device hash rate × patience, with R the verifier's replay rate and λ
-the honest arrival rate. This held in 46 of 48 testable cells, it shows that
-the defender buys protection with replay CPU, and it exposes the device
-disparity of Section 2.1: budget phones cross their threshold at one attacker
-core with up to four verifier workers. The measurement is a simulation over
-the real queue code with puzzle costs accounted from measured rates, not a
-deployment.
+What differs is what the queue protects. In our design a structurally valid
+fake selected for audit consumes a molecular replay. We test the conditional
+budget scale (R − λ) × device hash rate × patience, with R the verifier's
+replay rate and λ the honest arrival rate. It models a full-patience honest
+bid and spare service capacity; it is not a universal admission threshold.
+Section 5.6 reports the original simulations separately from an exact-service,
+five-seed correction. Both use real queue code with modeled replay and puzzle
+costs rather than deployment traffic.
 
 ### 2.6 Privacy-preserving attestation as an outside trust signal
 
@@ -200,16 +195,16 @@ security devices to give servers unlinkable rate-assurance proofs [Akama24],
 the closest research design to the per-device cap our lane assumes. Critics
 object to device attestation on openness grounds [Rescorla22].
 
-Our attested lane (amendment 10) is an application of these tokens, not a new
-credential. Its measured contribution is the interaction with useful-work
-replay: token holders, budget phones included, were served and reached the
-three-bundle trust threshold within about a minute against a 16-core attacker
-while tokens were costly, where every puzzle-only configuration locked them
-out; cheap tokens starved anonymous visitors, because attested replays take
-priority. Two limits come from the literature above, not from our simulation.
-The per-device cap our model assumes is not a published guarantee of any
-deployed issuer, and the budget Android phones the lane is meant to protect
-have, at present, no deployed privacy-preserving web attestation at all.
+Our attested lane (amendments 10 and 12) models an application of rate-limited
+tokens, not a new credential or deployed issuer integration. A mock issuer
+stands in for origin-bound, single-use tokens and a per-device quota; blind
+signatures are not implemented. Simulations test whether a reserved lane can
+help token holders reach trust under CPU flooding, conditional on an
+externally constrained attacker token supply. Cheap attacker tokens can
+instead consume the protected replay capacity. The assumed per-device cap
+is not a published guarantee of deployed issuers. The platform literature
+therefore motivates an assumption to test, not a demonstrated deployment
+path for every browser or budget phone.
 
 ### 2.7 Scientific workload
 
@@ -218,8 +213,8 @@ widely used docking programs, and large-scale docking is a standing demand for
 computation. We make no methodological claim about docking. Our scientific
 claim is narrow: decomposing an exhaustiveness-32 search into independent
 256k-evaluation units and merging them with Vina's own finaliser changed
-screening ROC-AUC by at most ±0.017 (paired 95% intervals) on five
-96-compound panels at under 0.5% extra evaluations.
+mean screening ROC-AUC by −0.0008 to +0.0033, with paired 95%
+intervals contained within ±0.017, on five 96-compound panels at under 0.5% extra evaluations.
 
 ---
 
@@ -229,12 +224,12 @@ What the literature leaves to us, stated no more strongly than the evidence:
 
 | Candidate contribution | Prior work that bounds it | How we state it |
 | --- | --- | --- |
-| A browser admission gate whose work is a real scientific computation, verified by deterministic replay, evaluated end to end | reCAPTCHA (human useful work), Coinhive (monetised work), Hashptcha (design only, majority vote), Webina (browser Vina, no admission) | "To our knowledge, the first measured and adversarially evaluated" — keep "to our knowledge" |
+| A browser admission gate whose work is a real scientific computation, verified by deterministic replay, with separate molecular, phone and scheduler experiments | reCAPTCHA (human useful work), Coinhive (monetised work), Hashptcha (design only, majority vote), Webina (browser Vina, no admission) | "To our knowledge, the first measured and adversarially evaluated" — keep "to our knowledge" |
 | Decomposition preserves screening results at matched compute | Vina's own parallel Monte Carlo | Measured on five small panels; not a docking-method claim |
 | Admission economics with free identities: attacker discount factor, reseeding, audit-reveal removal, trust threshold | Spot-checking and credibility [Sarmenta02]; BOINC host history | The mechanisms are known; the measured failure modes and fixes in an anonymous-admission setting are ours |
 | Aggregation-integrity attack on merged useful work and its fix | Volunteer computing verifies results individually | "We did not find this attack treated" — not "first" |
-| Replay capacity as the defender's binding cost; threshold law and device asymmetry | Tor PoW, puzzle auctions, verifier's dilemma, Laurie–Clayton, Abadi et al. | The queue design is Tor's; the law, its measurement and the useful-work-specific cost are ours |
-| Outside trust breaks the trust-bootstrap lockout | Privacy Pass, PAT, Liu–Camp | An application with measured conditions and stated platform limits |
+| Replay capacity as the defender's binding cost; conditional threshold model and device asymmetry | Tor PoW, puzzle auctions, verifier's dilemma, Laurie–Clayton, Abadi et al. | The queue design is Tor's; the conditional model and useful-work replay costs are evaluated here |
+| Outside trust breaks the trust-bootstrap lockout | Privacy Pass, PAT, Liu–Camp | A mock-issuer simulation with conditional benefits and stated platform limits |
 | Bounded useful work has lower latency variance than a puzzle | Friendly Captcha subpuzzles | Measured on five phones: advantage over a single puzzle only; parity with 64 subpuzzles. Not claimed |
 
 ## Things this search changed

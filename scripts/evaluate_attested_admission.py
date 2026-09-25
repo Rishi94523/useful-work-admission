@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from research.ticket_admission import encoded
 from research.attested_admission import AttestedAdmission,MockAttester
+from scripts.admission_replay_clock import ReplayClock
 from scripts.evaluate_priority_admission import (DT,ARRIVE_S,DRAIN_S,REPLAY_S,PATIENCE_S,TTL,HONEST_EVERY_S,CORE_RATE,
   DEVICES,SUB_BITS,SUB_HASHES,ATTACK_CAP_PER_TICK,ATTACK_MARGIN,SPEC)
 
@@ -31,7 +32,7 @@ def attested_flags(n,share):
  """Exactly `share` of each class's first n users carry a token, spread evenly."""
  return [int((k+1)*share+1e-9)>int(k*share+1e-9) for k in range(n)]
 
-def run(item):
+def run(item, exact_replay=False):
  exp,workers,cores,share,arate,seed=item;rng=random.Random(seed);now=[0.0];clock=lambda:now[0]
  work=Path(tempfile.mkdtemp(dir=ROOT/'tmp'))
  issuer=MockAttester(ORIGIN,per_device=10,window_s=3600,clock=clock)
@@ -61,22 +62,27 @@ def run(item):
     if r['status']=='queued':u['pending']=r['id'];owners[r['id']]=u;u['lanes'].append('attested');return
    u['fallbacks']+=1  # attested lane full: fall back to bidding
   u['lanes'].append('anonymous');anonymous(u,owner)
+ def finish_replay(row):
+  payload=json.loads(row['payload']);good=payload[next(iter(payload))]=='honest'
+  try:c.finish(row['id'],(row['root'],good),lambda db,r:None)
+  except ValueError:return
+  u=owners.pop(row['id'],None)
+  if good and u:
+   u['grants']+=1;u['pending']=None;u.setdefault('first_grant',now[0]-u['arrived'])
+   if exp=='oneshot' or u['grants']>=TRUST_BUNDLES:u['done']=True;u['trusted_at']=now[0]-u['arrived']
+   else:u['next_at']=now[0]+WORK_S[u['cls']]
+  elif not good:
+   att['replayed']+=1
+   if row['tier']=='attested':att['attested_replayed']+=1
+ service=ReplayClock(now,inflight,workers,REPLAY_S,c.next_newcomer,finish_replay)
  try:
   for tick in range(int(total/DT)):
-   now[0]=tick*DT;arriving=now[0]<ARRIVE_S;attacking=now[0]<attack_until
-   for job in [j for j in inflight if j[0]<=now[0]]:
-    inflight.remove(job);_,row=job;good=json.loads(row['payload'])[next(iter(json.loads(row['payload'])))]=='honest'
-    try:c.finish(row['id'],(row['root'],good),lambda db,r:None)
-    except ValueError:continue
-    u=owners.pop(row['id'],None)
-    if good and u:
-     u['grants']+=1;u['pending']=None;u.setdefault('first_grant',now[0]-u['arrived'])
-     if exp=='oneshot' or u['grants']>=TRUST_BUNDLES:u['done']=True;u['trusted_at']=now[0]-u['arrived']
-     else:u['next_at']=now[0]+WORK_S[u['cls']]
-    elif not good:
-     att['replayed']+=1
-     if row['tier']=='attested':att['attested_replayed']+=1
-   while len(inflight)<workers:
+   if exact_replay:service.advance(tick*DT)
+   else:now[0]=tick*DT
+   arriving=now[0]<ARRIVE_S;attacking=now[0]<attack_until
+   for job in [j for j in inflight if not exact_replay and j[0]<=now[0]]:
+    inflight.remove(job);finish_replay(job[1])
+   while not exact_replay and len(inflight)<workers:
     r=c.next_newcomer()
     if not r:break
     inflight.append((now[0]+REPLAY_S,r))
@@ -112,6 +118,7 @@ def run(item):
      if cost>budget:break
      budget-=cost;att['hashes']+=cost;att['submitted']+=1
      if c.submit(t['ticket'],root,body,owner,proof)['status']=='queued':att['queued']+=1
+   if exact_replay:service.fill()
    if exp=='oneshot' and not arriving and not inflight and not scheduled:break
   groups={}
   for cls in classes:
@@ -125,7 +132,8 @@ def run(item):
       attempts=sum(u['attempts'] for u in rs),fallbacks=sum(u['fallbacks'] for u in rs),
       puzzle_s_median=statistics.median(paid) if paid else 0.0,puzzle_s_total=sum(paid))
   return dict(experiment=exp,workers=workers,attacker_cores=cores,attested_share=share,attacker_tokens_per_s=arate,seed=seed,
-              groups=groups,attacker=att,attacker_hashes_per_s=att['hashes']/attack_until)
+              groups=groups,attacker=att,attacker_hashes_per_s=att['hashes']/attack_until,
+              timing=service.metrics() if exact_replay else {'mode':'legacy-tick'})
  finally:shutil.rmtree(work,ignore_errors=True)
 
 def grid(exp):

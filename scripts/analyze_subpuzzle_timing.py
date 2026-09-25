@@ -12,7 +12,7 @@ OUT=ROOT/'local-research/device-timing-subpuzzle'
 NS='0e88d0177dde4a31b21c844ff36bbbfd';WRANGLER=['npx','wrangler','kv','key']
 
 def wrangler(*args):
- return subprocess.run(WRANGLER+list(args)+['--namespace-id='+NS,'--remote'],capture_output=True,text=True,check=True,shell=sys.platform=='win32').stdout
+ return subprocess.run(WRANGLER+list(args)+['--namespace-id='+NS,'--remote'],capture_output=True,text=True,encoding='utf-8',check=True,shell=sys.platform=='win32').stdout
 
 def fetch():
  OUT.mkdir(parents=True,exist_ok=True)

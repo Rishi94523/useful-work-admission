@@ -312,6 +312,31 @@ An earlier iPhone run on the previous page, which could not flag hidden
 periods, lost one unit to the Low Power Mode auto-lock (11.1 s against a 1.9 s
 median). It is reported but excluded from the pooled figures.
 
+**Subpuzzle proof-of-work baseline on five phones (amendment 11).** A second
+page interleaved each warm docking unit with two single puzzles and two
+64-subpuzzle puzzles, all calibrated on the device to the median unit. Five
+phones ran it: iPhone 15 (Low Power Mode), Samsung Galaxy A57, Moto Edge 50,
+Samsung Galaxy M30s and Infinix Note 40 Pro; all units were exact and no
+measurement overlapped a hidden page.
+
+| Pooled, scaled as predeclared by each device's median unit | p95/median | Over 2× median |
+| --- | ---: | ---: |
+| Docking unit, 80 | 1.15 | 0% |
+| Single puzzle, 120 | 4.40 | 25.8% |
+| 64-subpuzzle puzzle, 120 | 2.02 | 5.8% |
+
+S2 (single puzzles at least 15% over twice the median) and S3 (unit
+p95/median at most 1.35) held. S1 failed: subpuzzles did not stay within 1.35.
+S4 failed too, and explains S1: calibration missed on two phones, the Moto's
+subpuzzle median landing at 1.66 times its unit median and the M30s's at 0.70,
+so pooling by unit median mixes shifted distributions. Measured within each
+device instead (post hoc), 64-subpuzzle solves had p95/median 1.14–1.40 and
+none over twice their own median, pooled 1.21, against 1.15 for units. As
+stated in advance, lower latency variance is therefore not an advantage of
+useful work over a well-designed puzzle; the paper claims parity with
+subpuzzle proof of work and an advantage only over a single puzzle. One Moto
+unit ran 1.83 times its median, the largest unit excursion measured.
+
 ## What is not established
 
 - **Device coverage is small**: four phones, one workload, 64 unit timings.
@@ -321,12 +346,10 @@ median). It is reported but excluded from the pooled figures.
   users: an unaudited trusted admission is still granted on the identity's
   history, not on the unit.
 - **Scientific quarantine and repair** after late detection is not implemented.
-- **Stronger puzzle baselines** remain to be tested on phones. The four-phone
-  study compares against one pure-JavaScript hash puzzle, not optimized or
-  multi-subpuzzle proof of work. A separate Node/OpenSSL experiment with 96
-  trials per configuration reduced p95/median from 4.86 for one puzzle to 1.33
-  for 64 subpuzzles at equal expected hash count. This is desktop evidence,
-  not a new device result or a median-matched comparison.
+- **Latency advantage over proof of work holds only against a single
+  puzzle.** A 64-subpuzzle puzzle on phones was as predictable as a docking
+  unit (see the subpuzzle result above); an optimized or WebAssembly solver
+  was not tested.
 - **Availability under attack is only partly resolved, and only in isolated
   prototypes.** Stateless tickets and reserved tiers end the idle-lease attack
   and protect established users; an effort-priority queue keeps newcomers served

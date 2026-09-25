@@ -688,3 +688,16 @@ tested. Five seeds measure simulation variability, not uncertainty in device
 rates, workload duration, attacker optimality, or real traffic. The analytical
 threshold remains conditional on those assumptions. A correction that weakens
 the earlier conclusions will be reported without retuning the protocol.
+
+**Execution note, before the full rerun.** The initial disk-backed attempt was
+stopped after 12 recorded cells because SQLite durability dominated wall time.
+That partial ledger and manifest are preserved in the amendment-12 root.
+The complete grid will use a separate `memory-sqlite` subdirectory. Within
+each single-process simulation, SQLite retains the same schema, queries and
+BEGIN IMMEDIATE/commit/rollback transactions, but its private database resides
+in memory and the connection is reused. No concurrent requests share that
+connection. This changes simulation execution overhead, not the modeled clock,
+mechanism, grids or reported replay capacity. Before launch, compare disk and
+memory execution on shortened deterministic priority and attested fixtures,
+including overload and rollback, and require identical scientific metrics.
+Neither execution time is a benchmark of production database throughput.

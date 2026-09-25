@@ -602,3 +602,43 @@ Tokens exist on Apple devices, while the Android equivalent, Play Integrity, is
 not unlinkable, so a privacy-preserving token may be least available on the
 budget Android phones it is meant to protect. That limitation is to be reported
 with the result.
+
+## Amendment 11 — a subpuzzle proof-of-work baseline on phones, 25 September 2026
+
+Recorded before the test page below was deployed or run on any device.
+
+**Context.** The four-phone timing study compared docking units against a
+single hashcash puzzle, whose solve time is geometric. Deployed proof-of-work
+CAPTCHAs instead split the work into many small puzzles, which narrows the
+distribution; a desktop experiment reduced p95/median from 4.86 to 1.33 with
+64 subpuzzles. The paper cannot claim that useful work is more predictable than
+proof of work in general until this baseline is measured on the same phones.
+
+**Test.** A second page, separate from the frozen one, runs on each device: one
+cold unit, four warm calibration units, a measured JavaScript hash rate, then
+twelve rounds of one warm docking unit, two single puzzles and two 64-subpuzzle
+puzzles, interleaved so thermal effects hit all three. Both puzzle types are
+calibrated on the device to the median warm unit: the single puzzle as before,
+and each subpuzzle so that the median of the sum of 64 geometric solve counts,
+about 63.67 per-subpuzzle means, matches the unit median. Solvers use the same
+pure-JavaScript SHA-256 as the first study. The server re-checks every unit's
+pool and trace hashes; hidden-page overlaps are flagged and excluded as before.
+Pooling scales each device's times by its own median unit time, as in the first
+study.
+
+**Predictions.** Pooled over all devices that complete the page:
+
+- S1. 64-subpuzzle solves: p95/median at most 1.35 and none above twice the
+  median (a Gamma(64) distribution gives 1.22, 1.32 at p99, and a negligible
+  probability above 2).
+- S2. Single puzzles reproduce the first study: at least 15% of solves above
+  twice the median.
+- S3. Docking units reproduce the first study: p95/median at most 1.35.
+- S4. Each device's subpuzzle median lies within 20% of its unit median, which
+  checks the calibration rather than the method.
+
+**Consequence stated in advance.** If S1 holds, lower latency variance is not an
+advantage of useful work over a well-designed puzzle; the paper will claim
+parity with subpuzzle proof of work and an advantage only over a single puzzle.
+At least three devices, one of them a budget phone, are needed before the
+comparison is reported.

@@ -53,9 +53,8 @@ solving deployed CAPTCHAs [Searles23], and Motoyama et al. showed that human
 solving services price CAPTCHAs at a small fraction of a cent [Motoyama10]. We
 take from this work the baseline (a subpuzzle hash puzzle is the strongest
 wasteful comparator) and the device-disparity problem. We do not claim a new
-puzzle, and our phone latency comparison is so far against a single hashcash
-puzzle only; a subpuzzle baseline cut the p95/median ratio from 4.86 to 1.33 on
-desktop and has not yet been measured on phones.
+puzzle. On phones, a 64-subpuzzle puzzle proved as predictable as a docking
+unit (Section 5.5), so we claim no latency advantage over this baseline.
 
 ### 2.2 Useful work in place of wasted work at the gate
 
@@ -236,7 +235,7 @@ What the literature leaves to us, stated no more strongly than the evidence:
 | Aggregation-integrity attack on merged useful work and its fix | Volunteer computing verifies results individually | "We did not find this attack treated" — not "first" |
 | Replay capacity as the defender's binding cost; threshold law and device asymmetry | Tor PoW, puzzle auctions, verifier's dilemma, Laurie–Clayton, Abadi et al. | The queue design is Tor's; the law, its measurement and the useful-work-specific cost are ours |
 | Outside trust breaks the trust-bootstrap lockout | Privacy Pass, PAT, Liu–Camp | An application with measured conditions and stated platform limits |
-| Bounded useful work has lower latency variance than a puzzle | Friendly Captcha subpuzzles | Only against single-puzzle hashcash so far; must add subpuzzle baseline on phones before claiming |
+| Bounded useful work has lower latency variance than a puzzle | Friendly Captcha subpuzzles | Measured on five phones: advantage over a single puzzle only; parity with 64 subpuzzles. Not claimed |
 
 ## Things this search changed
 

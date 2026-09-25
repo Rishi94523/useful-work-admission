@@ -6,7 +6,7 @@
 `scripts/build_manuscript.py` generates. Related work is included from
 `RELATED_WORK.md`. Every number is taken from `STATUS.md` or from the recorded
 ledgers by committed scripts; re-check before submission. [TODO] marks items
-for the author. Section 5.5 carries a pending result (amendment 11).*
+for the author.*
 
 ## Abstract
 
@@ -209,7 +209,7 @@ timings (Section 5.5) are real measurements on participants' phones.
 
 ### 4.4 Use of AI tools
 
-[TODO: author to confirm and edit.] Large language model coding assistants
+Large language model coding assistants
 (Anthropic Claude and OpenAI Codex) were used to implement experiment code,
 analysis scripts and prototypes, to search and verify literature, and to draft
 text, under the author's direction. All predictions were committed to version
@@ -363,19 +363,40 @@ Table: Docking unit and device-calibrated single hashcash puzzle on four phones,
 | Samsung Galaxy M30s (2019 budget) | 7.55 / 10.1 s | 5.86 / 36.1 / 53.2 s | 17/17 |
 
 Scaled to each device's median, 21.9% of puzzle solves exceeded twice the
-median and none of 64 units did (Figure 2). All 68 units were bitwise
-identical across iOS and Android.
+median and none of 64 units did. All 68 units were bitwise identical across iOS
+and Android.
 
-[PENDING amendment 11. The same comparison against a 64-subpuzzle puzzle is
-running on phones. Theory predicts subpuzzles close most of this gap
-(p95/median about 1.22). If they do, the claim becomes parity with a
-well-designed puzzle, not an advantage.]
+A single hash puzzle is not the strongest baseline: deployed proof-of-work
+CAPTCHAs split the work into many small puzzles [FriendlyCaptcha], and the
+sum of 64 geometric solve counts is far narrower than one. We therefore ran a
+second page on five phones, interleaving each unit with two single puzzles and
+two 64-subpuzzle puzzles, all calibrated on the device to its median unit
+(amendment 11).
+
+Table: Five phones, 16 warm units and 24 solves of each puzzle type per phone, pooled by each device's median unit time as predeclared.
+
+| Kind | n | p95/median | Over 2× median |
+| --- | ---: | ---: | ---: |
+| Docking unit | 80 | 1.15 | 0% |
+| Single puzzle | 120 | 4.40 | 25.8% |
+| 64-subpuzzle puzzle | 120 | 2.02 | 5.8% |
+
+Two of four predictions held: single puzzles again had a long tail, and units
+stayed within 1.35 times their median at the 95th percentile. The prediction
+that subpuzzles would too failed, and so did the calibration check that
+explains it: on-device calibration missed by up to a factor of 1.66 (Moto Edge
+50) and 0.70 (Galaxy M30s), so pooling by unit time mixes shifted
+distributions. Measured within each device instead, a post-hoc analysis,
+subpuzzle solves had p95/median 1.14–1.40 and none exceeded twice their own
+median; pooled, 1.21 against 1.15 for units (Figure 2). As stated before the
+experiment, lower latency variance is therefore not an advantage of useful work
+over a well-designed puzzle. It is an advantage only over a single puzzle.
 
 ```latex
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/device_latency.pdf}
-\caption{Solve time on four phones, each time divided by its device's median docking-unit time. The curves show the fraction of runs slower than a given multiple; the dotted line marks twice the median.}
+\caption{Solve time on five phones for docking units, single puzzles and 64-subpuzzle puzzles run in the same sessions. Each time is divided by its device's median for that kind, so the curves compare distribution shape; the dotted line marks twice the median. Calibration error, which this scaling removes, is reported in the text.}
 \label{fig:latency}
 \end{figure}
 ```
@@ -457,7 +478,8 @@ visitors, because attested replays take priority.
 **When is useful work worth it?** Only when someone needs the output and the
 verifier can afford replay. A puzzle is strictly better on verifier cost and
 freshness. Useful work reaches parity with it on attacker cost only after
-closing leaks a puzzle does not have, and it pays in replay CPU for every fake
+closing leaks a puzzle does not have, it is no more predictable for the
+visitor than a subpuzzle puzzle, and it pays in replay CPU for every fake
 submission. What it buys is that the visitor's computation is not wasted: the
 units a site would otherwise discard dock real ligands with screening quality
 indistinguishable from monolithic runs.
@@ -479,7 +501,7 @@ privacy-preserving attestation at all [WEI23, PlayIntegrity].
 [Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
 say so, and it gives them a reason a puzzle cannot.
 
-**Limitations.** Four phones, one workload and five 96-compound panels.
+**Limitations.** Six phone models, one workload and five 96-compound panels.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts.
@@ -509,10 +531,10 @@ figure and manuscript builders are in the repository.
 
 ### Ethics approval and consent to participate
 
-[TODO: author to confirm.] Phone timing tests were run by volunteers on their
-own devices using a public test page. The page recorded device model and
-operating system as typed by the volunteer, the browser user agent, and
-timings; no names, contact details or location were collected.
+Not applicable. Phone timing tests were run by the authors on their own
+devices. The test page recorded the device model and operating system as
+entered, the browser user agent and timings; no other personal data were
+collected.
 
 ### Competing interests
 

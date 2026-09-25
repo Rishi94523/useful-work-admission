@@ -23,23 +23,26 @@ plt.rcParams.update({'font.size':9,'axes.spines.top':False,'axes.spines.right':F
 def jsonl(path):return [json.loads(s) for s in path.read_text(encoding='utf-8').splitlines() if s.strip()]
 
 def device_timing():
- """Latency on phones, each time scaled by its device's median warm unit."""
+ """Latency shape on phones (amendment 11 runs, all three kinds interleaved in
+ the same sessions). Each kind is scaled by its own per-device median, so the
+ curves compare distribution shape; calibration error is excluded by design
+ and reported separately in the text."""
  series={'unit':[],'single':[],'sub':[]}
- for f in sorted((LR/'device-timing').glob('timing_*.json'))+sorted((LR/'device-timing-subpuzzle').glob('timing_*.json')):
+ for f in sorted((LR/'device-timing-subpuzzle').glob('timing_*.json')):
   r=json.loads(f.read_text(encoding='utf-8'))
-  if 'visibility' not in r or r.get('error'):continue
-  warm=sorted(u['run_ms'] for u in r['units'] if u['mode']=='reuse' and not u.get('overlaps_hidden'));m=warm[len(warm)//2] if len(warm)%2 else (warm[len(warm)//2-1]+warm[len(warm)//2])/2
-  if f.parent.name=='device-timing':series['unit']+= [t/m for t in warm]
-  for p in r['puzzles']:
-   if not p.get('overlaps_hidden'):series[p.get('kind','single')].append(p['ms']/m)
+  if r.get('error'):continue
+  kinds={'unit':[u['run_ms'] for u in r['units'] if u['mode']=='reuse' and not u.get('overlaps_hidden')]}
+  for k in ('single','sub'):kinds[k]=[p['ms'] for p in r['puzzles'] if p['kind']==k and not p.get('overlaps_hidden')]
+  for k,v in kinds.items():
+   s_=sorted(v);m=s_[len(s_)//2] if len(s_)%2 else (s_[len(s_)//2-1]+s_[len(s_)//2])/2
+   series[k]+=[t/m for t in v]
  fig,ax=plt.subplots(figsize=(3.4,2.4))
  names={'unit':'Docking unit','single':'Single puzzle','sub':'64-subpuzzle puzzle'}
  for k,v in series.items():
-  if not v:continue
-  s=sorted(v);ax.step(s,[1-(i+1)/len(s) for i in range(len(s))],where='post',color=COLOR[k],label='%s (n=%d)'%(names[k],len(s)))
- ax.set_xscale('log');ax.set_yscale('log');ax.set_ylim(1/300,1.05)
+  s_=sorted(v);ax.step(s_,[1-(i+1)/len(s_) for i in range(len(s_))],where='post',color=COLOR[k],label='%s (n=%d)'%(names[k],len(s_)))
+ ax.set_xscale('log');ax.set_yscale('log');ax.set_ylim(1/200,1.05)
  ax.axvline(2,color='0.6',lw=0.8,ls=':');ax.text(2.05,0.6,'2× median',color='0.4',fontsize=7)
- ax.set_xlabel('Time ÷ device median unit time');ax.set_ylabel('Fraction slower than x')
+ ax.set_xlabel('Time ÷ device median for that kind');ax.set_ylabel('Fraction slower than x')
  ax.legend(frameon=False,fontsize=7,loc='lower left');fig.savefig(OUT/'device_latency.pdf');plt.close(fig)
  return {k:len(v) for k,v in series.items()}
 

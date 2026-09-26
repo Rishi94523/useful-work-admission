@@ -724,11 +724,11 @@ names, contact details or location data.
 
 ### Competing interests
 
-[TODO]
+The authors declare that they have no competing interests.
 
 ### Funding
 
-[TODO]
+Not applicable.
 
 ### Authors' contributions
 

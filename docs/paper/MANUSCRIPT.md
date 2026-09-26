@@ -398,6 +398,18 @@ threshold rather than proportionally: holders of 4, 8 and 12 of 16 leases
 caused no refusals, and 16 caused 81%. Stateless tickets that allocate seeds
 without reserving queue seats removed the effect in the isolated prototype.
 
+Every behaviour in the threat model is covered, though not all by a
+dedicated experiment. Zero work (A1), partial work (A2) and cached replay (A3)
+are the unit-level attacks above. Retry grinding (A4) and identity reset (A5)
+are the retry, cap and fresh-identity strategies of the admission experiments,
+all run with identities free. Disappearing workers (A6) are the lease-exhaustion
+result. Collusion (A7), identities sharing one computed result, was not run
+separately: a result computed for another unit fails replay like substitution
+(0 of 99 accepted), and resubmitting the same result for the same unit is
+refused by one-use credits. Subtle corruption (A8) is Section 5.4.
+Supplementary Section S4 lists the further scheduler configurations: attempt
+caps, two audit draws, reduced-budget units and trust acquisition.
+
 Section 6 discusses what trace commitment does and does not establish about
 the work an accepted unit requires.
 
@@ -413,11 +425,15 @@ Table: Corpus re-finalisation measurements; the ROC-AUC entry is a separate expl
 | Experiment | Measured |
 | --- | --- |
 | Units with the wrong atom count | rejected 33/33 |
+| Stored coordinates moved 2 Å, conformation untouched | −0.10 to +0.02 kcal/mol, within the predicted 0.12 |
+| Conformation moved 2 Å, coordinates untouched | −0.42 to +1.37 kcal/mol; the prediction of no gain failed |
 | Honest duplication of 5–75% of units | measured best gain −0.10 kcal/mol; projected ROC-AUC within ±0.004 up to 25% |
 | Duplicated units claiming −20 kcal/mol, 5% of units | 22 of 33 jobs worse (95% interval 0.48–0.82), by up to 2.6 kcal/mol |
 
-No falsified energy ever reached output: the finaliser recomputes every
-reported energy. But its merge still ranks and clusters minima by the
+No false positive was observed: every final score is an energy the finaliser
+recomputed for a physically valid conformation, and no gain exceeded
+0.42 kcal/mol, a genuine minimum reached from a displaced start. No falsified
+energy ever reached output: the finaliser recomputes every reported energy. But its merge still ranks and clusters minima by the
 energies clients report and keeps a bounded set for refinement, so fabricated
 minima displace honest ones before refinement sees them. In an exploratory,
 non-predeclared resampling projection, mean ROC-AUC changes reached about
@@ -434,6 +450,7 @@ Table: Rescoring driver against the original driver.
 | Honest pools finalised | — | byte-identical, 33/33 |
 | Falsified-energy attack, projected mean ΔAUC | as low as −0.034 | within ±0.0016 |
 | Jobs worsened at 5% falsified units | 22/33 | 2/33, as honest duplication |
+| Jobs changed by coordinate-only tampering | 16/33 | 0/33 |
 | Rescoring overhead per ligand state | — | +91 ms median; 0.046% relative to calibrated client work |
 
 The original driver is retained as the historical baseline for every earlier
@@ -523,7 +540,7 @@ seeds and device classes (Supplementary Table S4).
 \end{figure}
 ```
 
-A1, A3, A4 and A6 pass every corrected eligible check; A2 and A5 retain
+T1, T3, T4 and T6 pass every corrected eligible check; T2 and T5 retain
 misses. The original post-hoc drain diagnostic and saturation failures remain
 in the archive. One-shot traffic drains after attack cessation; bootstrap
 attacks continue throughout the observation window, with repeated attempts
@@ -638,7 +655,7 @@ proof of work.
 Additional file 1 (PDF): Supplementary Information. Complete experimental
 methods (S1), the first four-phone timing study (S2), and all availability
 prediction checks, five-seed service and trust tables and historical
-comparisons (S3).
+comparisons (S3), and further admission-economics configurations (S4).
 
 ### Availability of data and materials
 

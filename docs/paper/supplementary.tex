@@ -36,6 +36,8 @@ The original simulator processed replay completions only on 250 ms ticks, so a 1
 
 \section{First phone timing study}
 
+\textbf{Device protocol.} A test page served from the benchmark's content delivery network runs real WebAssembly Vina units and hash puzzles on the same device: one cold unit, four warm calibration units, a measured JavaScript hash rate, then twelve rounds alternating units with puzzles so that thermal effects fall on both. Puzzle difficulty is calibrated on the device to the median warm unit. The page holds a screen wake lock and timestamps every hidden period; measurements overlapping a hidden period are flagged and excluded by rule. The server re-checks every unit's pool and trace hashes against the reference before storing a report. An earlier iPhone run on a previous page, which could not flag hidden periods, lost one unit to the Low Power Mode auto-lock (11.1 s against a 1.9 s median); it is reported here but excluded from all pooled figures. The budget phone's units rose from 7.4 to 10.1 s mid-run and recovered, consistent with thermal throttling; its first contribution took about 13 s (3.8 s asset delivery, 1.5 s restore, 7.5 s first unit).
+
 Against a hashcash puzzle calibrated natively to the same median time, a docking unit had half the coefficient of variation (0.48 against 0.95) and a p99 of 3.38 s against 6.50 s. On four phones, a test page alternated real units with puzzles calibrated on the device to its median unit.
 
 \begin{table}[htbp]
@@ -58,7 +60,9 @@ Scaled to each device's median, 21.9\% of puzzle solves exceeded twice the media
 
 \section{Availability: prediction checks and replicated results}
 
-Every prediction check from amendments 9, 9b and 10, original single-seed and corrected five-seed (amendment 12), with misses retained.
+Every prediction check from amendments 9, 9b and 10, original single-seed and corrected five-seed (amendment 12), with misses retained. The protocol labels the amendment-10 predictions A1--A6; here and in the main text they are T1--T6 so they cannot be confused with attacker behaviours A1--A8.
+
+The ticket prototype underlying these simulations was also exercised through loopback HTTP with real puzzles and protocol operations, and a separate two-bundle native smoke check with actual full-unit replay accepted honest output and rejected corrupted trace commitments.
 
 \begin{table}[htbp]
 \caption{Original single-seed and corrected five-seed prediction checks. A check is a device-group outcome in an eligible grid cell; counts retain all misses.}
@@ -70,12 +74,12 @@ Prediction & Original passed / eligible & Corrected passed / eligible \\
 \midrule
 C1, follow published price & 33/48 & 153/240 \\
 C1, full-patience bid & 46/48 & 230/240 \\
-A1, attested service below capacity & 120/120 & 600/600 \\
-A2, saturation upper bounds & 112/120 & 557/600 \\
-A3, anonymous capacity model & 118/118 & 590/590 \\
-A4, inert attested lane & 24/24 & 120/120 \\
-A5, trust bootstrap & 63/66 & 315/330 \\
-A6, puzzle-free without fallback & 192/192 & 960/960 \\
+T1, attested service below capacity & 120/120 & 600/600 \\
+T2, saturation upper bounds & 112/120 & 557/600 \\
+T3, anonymous capacity model & 118/118 & 590/590 \\
+T4, inert attested lane & 24/24 & 120/120 \\
+T5, trust bootstrap & 63/66 & 315/330 \\
+T6, puzzle-free without fallback & 192/192 & 960/960 \\
 \botrule
 \end{tabularx}
 \end{table}
@@ -120,6 +124,32 @@ Workers, attacker tokens/s & Budget & Mid-range & Flagship \\
 \end{table}
 
 The original one-seed ten-token/s results were 0.92 / 0.89 / 0.97 at eight workers and 0.08 / 0.44 / 0.42 at four. The corrected results show substantial changes and seed variation, particularly for budget phones; increased replay capacity does not imply monotonic improvement for every group in this finite queue, fallback and retry process. These observations do not isolate which transient interaction causes each change.
+
+\section{Further admission-economics configurations}
+
+The committed scheduler was driven under a simulated clock with audit verdicts resampled from real replay records: 118 configurations, of which 110 ran to completion and 8 were stopped at 5.9 hours with their measured counts recorded. Values are attacker discount factors before the fixes unless stated.
+
+\begin{table}[htbp]
+\caption{Further admission-economics configurations on the committed scheduler.}
+\centering
+\small
+\begin{tabularx}{\textwidth}{XXX}
+\toprule
+Configuration & Predicted & Measured \\
+\midrule
+Bundle tier, attacker always submits instead of walking away & as walking away & 0.42 \\
+Attempt cap 1 / cap 16, one unit computed & 1.0 / 0.25 & 0.98 / 0.25 \\
+Two audit draws, 2 or 3 units computed & 1.19 / 0.86 & 1.19 / 0.85 \\
+Reduced-budget units, pool-only commitment, 64k / 128k evaluations & 0.51 / 0.60 & 0.54 / 0.60 \\
+Same after reseeding & about 1.25 / 1.10 & 1.39 / 1.12 \\
+Reduced-budget units, pool and trace commitment & never admitted & never admitted \\
+Trusted tier, trust after 1 bundle, p = 0.1, immediate / deferred audit & about 0.5 / 0.61 & 0.60 / 0.63 \\
+Disappearing workers holding 4 / 8 / 12 / 16 of 16 leases & refusals about D/16 & 0\% / 0\% / 0\% / 81\% refused \\
+\botrule
+\end{tabularx}
+\end{table}
+
+Trust acquisition. With the three-bundle threshold, acquiring trust by cached reuse cost 5--15 times honest work. At ten bundles, that strategy earned trust about 720 times per configuration from roughly 7,450 bundle admissions and never produced a trusted admission, because abandonments left every identity above the trusted tier's risk limit after the strategy's fixed 30-minute backoff; this bounds only a 30-minute-backoff attacker. On the enforced threshold at p = 0.1, an attacker planning trust after one bundle obtained no trusted admission across 3,000 identities while spending 12,000 units of honest work; one earning three bundles paid a factor of 2.04.
 
 \bibliographystyle{sn-basic}
 \bibliography{references}

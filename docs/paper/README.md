@@ -5,7 +5,9 @@ Target: *Cybersecurity* (SpringerOpen), Research article.
 - `MANUSCRIPT.md` is the source of truth; `RELATED_WORK.md` supplies Section 2.
 - `references.bib` holds only fields checked against publisher or primary
   records; unconfirmed fields are omitted.
-- `manuscript.tex` is generated. Do not edit it by hand.
+- `SUPPLEMENTARY.md` is Additional file 1 (full methods, the first phone study,
+  all availability prediction checks and replicated tables).
+- `manuscript.tex` and `supplementary.tex` are generated. Do not edit them by hand.
 
 Build:
 

@@ -1,0 +1,166 @@
+# Supplementary Information: The Price of Utility
+
+Additional file 1 for “The Price of Utility: Scientific Computation as Browser
+Admission Work, Measured Under Attack”. Section and table numbers prefixed S
+refer to this file; all others refer to the main text.
+
+## S1 Experimental methods
+
+**Input preparation and qualification.** The five targets were fixed from the
+Vina-scoring results in Eberhardt et al.'s supplementary Table S2 [Eberhardt21]
+before local docking. For each target, SHA-256 ordering with salt
+`published-vina-validation-2026-09-15:` selects 32 active and 64 decoy source
+compound IDs from DUD-E. All supplied states of each selected compound are
+retained; the crystal compound is excluded if its ID matches. There is no
+replacement after preparation or docking failure. Earlier DYR, AKT1 and
+PPARG failures remain negative results outside this qualified panel; this
+study does not establish that arbitrary targets pass stock Vina's gate.
+
+Receptor waters and existing hydrogens are removed; REDUCE 3.16 with `-BUILD`
+rebuilds hydrogens and allows its standard flips. ADFRsuite's
+`prepare_receptor4.py` uses `-U nphs_lps_waters`, retaining nonprotein chains;
+recognized metal charges are set to +2 in this protocol. Original DUD-E MOL2
+ligand states pass through `prepare_ligand4.py` defaults. Heavy-atom counts
+and coordinates are checked, and source/prepared files and tool hashes are
+retained. The box is 22 × 22 × 22 Å, centered on the arithmetic centroid of
+the crystal ligand's heavy atoms, with 0.375 Å grid spacing. This centroid
+convention and the small panel are explicit local choices. Stock Vina 1.2.7
+is used rather than the publication's 1.2.0; this is not an exact reproduction
+of its full-library enrichment.
+
+Stock qualification uses exhaustiveness 32, one CPU per job, nine modes and
+seed 104729. All 96 compounds must complete, with ROC-AUC at least 0.75, its
+bootstrap lower 95% bound above 0.60, and EF10 at least 1.5. Redocking must
+have top-pose symmetry-corrected RMSD at most 2 Å in at least two of seeds
+104729, 130363 and 155921, without alignment. Only qualified targets enter
+the matched comparison. Screening score is the minimum over all required
+states; any missing state makes the compound incomplete.
+
+**Compute matching and uncertainty.** For each ligand state and parent seed,
+the same-build monolithic E32 arm supplies its measured evaluation count E.
+The distributed arm runs `ceil(E / 256000)` independently seeded units,
+then uses the original finaliser. The same inputs, box and state aggregation
+are used in both arms. The matching variable is energy evaluations, not
+elapsed browser time; search-time and evaluation ratios are reported
+separately. This is an oracle-budget experimental comparison: production
+scheduling need not rerun stock docking to assign every budget. The 2,073
+pairs represent state/seed jobs, not 2,073 independent compounds.
+
+Paired ROC-AUC intervals use 5,000 stratified compound bootstrap resamples
+with random seed 104729. Active and decoy compound indices are sampled
+separately; the same sampled indices are applied to both arms and all three
+seeds before averaging seed-specific AUC differences. Repeated states and
+seeds are therefore not treated as independent compounds. AUC gives ties
+half credit. EF10 selects the top `ceil(0.1 × n)` compounds and gives
+fractional occupancy to ties at the cutoff. The predeclared non-inferiority
+margin is −0.05 AUC. Unit-level binomial intervals are descriptive and do
+not account for dependence among units from the same molecular job.
+
+**Poisoning projection.** Measured score changes from the 33 re-finalised
+corpus jobs are pooled across targets, separately for each attack fraction.
+For each of 1,000 resampling draws (random seed 20260923), a change is sampled
+independently for each matched state/seed score. Compound minima and
+seed-averaged target AUCs are recomputed. This assumes exchangeable shifts
+across targets, states and activity labels; it does not model their
+correlation or an adversary selecting compounds by label. The resulting AUC
+changes are exploratory projections, not whole-panel attack measurements or
+confirmatory confidence intervals for real-world poisoning.
+
+**Availability timing and replication.** Queue operations use the prototype
+SQL, while arrivals, replay duration and puzzle costs are simulated. Honest
+arrivals are 0.5/s for 240 s, cycling three device classes (40 each), followed
+by 150 s of draining. Bootstrap attacks continue for all 390 s. Replay cost
+is fixed at 1.52 s. Honest puzzle times are exponential for a single puzzle
+or gamma-distributed for subpuzzles at measured device hash rates; attacker
+costs use expected hashes at 1.25 million hashes/s/core. Issuance is capped
+at 30 attacker attempts per 250 ms tick. Ten seconds is the honest bidding
+budget, not a hard end-to-end access deadline; random solve times can exceed
+it. Successful access within the observation window includes draining.
+
+The original simulator processed replay completions only on 250 ms ticks,
+so a 1.52 s replay occupied a worker for 1.75 s. Amendment 12 processes
+completion and worker refill at exact service event times and dispatches
+available work after each input tick. Input and puzzle-completion polling
+remain at 250 ms, with the final input tick at 389.75 s if the simulation
+has not already drained. All 224 original grid cells are repeated at five fixed
+seeds, 20260925–20260929 (1,120 runs). Original results remain preserved.
+Private in-memory SQLite uses the same SQL and transaction boundaries to
+accelerate simulation; it is not a production database benchmark. Mean and
+min/max across seeds describe simulation variability, not uncertainty in
+measured rates or attacker optimality. Main-text Section 5.5 and Section S3 distinguish historical results from this
+corrected replication.
+
+## S2 First phone timing study
+
+Against a hashcash puzzle calibrated natively to the same median time, a
+docking unit had half the coefficient of variation (0.48 against 0.95) and a
+p99 of 3.38 s against 6.50 s. On four phones, a test page alternated real
+units with puzzles calibrated on the device to its median unit.
+
+Table: Docking unit and device-calibrated single hashcash puzzle on four phones, 12 rounds each.
+
+| Device | Unit median / max | Puzzle median / p95 / max | Units exact |
+| --- | --- | --- | --- |
+| iPhone 15, Low Power Mode | 2.04 / 2.10 s | 1.85 / 6.57 / 8.24 s | 17/17 |
+| Samsung Galaxy A57 | 2.02 / 2.10 s | 2.09 / 7.82 / 10.5 s | 17/17 |
+| Moto Edge 50, Low Power Mode | 2.44 / 2.73 s | 1.86 / 8.83 / 10.4 s | 17/17 |
+| Samsung Galaxy M30s (2019 budget) | 7.55 / 10.1 s | 5.86 / 36.1 / 53.2 s | 17/17 |
+
+Scaled to each device's median, 21.9% of puzzle solves exceeded twice the
+median and none of 64 units did. All 68 units were bitwise identical across iOS
+and Android.
+
+## S3 Availability: prediction checks and replicated results
+
+Every prediction check from amendments 9, 9b and 10, original single-seed and
+corrected five-seed (amendment 12), with misses retained.
+
+Table: Original single-seed and corrected five-seed prediction checks. A check is a device-group outcome in an eligible grid cell; counts retain all misses.
+
+| Prediction | Original passed / eligible | Corrected passed / eligible |
+| --- | ---: | ---: |
+| C1, follow published price | 33/48 | 153/240 |
+| C1, full-patience bid | 46/48 | 230/240 |
+| A1, attested service below capacity | 120/120 | 600/600 |
+| A2, saturation upper bounds | 112/120 | 557/600 |
+| A3, anonymous capacity model | 118/118 | 590/590 |
+| A4, inert attested lane | 24/24 | 120/120 |
+| A5, trust bootstrap | 63/66 | 315/330 |
+| A6, puzzle-free without fallback | 192/192 | 960/960 |
+
+Table: Corrected eight-worker service, mean [minimum, maximum] across five seeds, 40 arrivals per device class per seed. These are observed ranges, not confidence intervals.
+
+| Mechanism, attacker cores | Budget | Mid-range | Flagship |
+| --- | --- | --- | --- |
+| Fixed 18-bit, 0.25 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| Fixed 18-bit, 1 | 0.945 [0.900, 0.975] | 0.940 [0.875, 1.000] | 0.915 [0.800, 0.975] |
+| Fixed 18-bit, 4 | 0.390 [0.350, 0.425] | 0.325 [0.175, 0.475] | 0.365 [0.325, 0.400] |
+| Fixed 18-bit, 16 | 0.230 [0.175, 0.275] | 0.145 [0.075, 0.250] | 0.195 [0.125, 0.250] |
+| Full-patience priority, 0.25 | 0.995 [0.975, 1.000] | 0.965 [0.950, 0.975] | 1.000 [1.000, 1.000] |
+| Full-patience priority, 1 | 0.990 [0.975, 1.000] | 0.970 [0.950, 0.975] | 0.965 [0.950, 0.975] |
+| Full-patience priority, 4 | 0.070 [0.050, 0.100] | 0.965 [0.950, 0.975] | 1.000 [1.000, 1.000] |
+| Full-patience priority, 16 | 0.110 [0.100, 0.125] | 0.135 [0.050, 0.200] | 0.130 [0.100, 0.175] |
+
+For direct historical comparison at four attacker cores, the original
+fixed-18-bit service fractions were 0.15 / 0.25 / 0.42 and priority fractions
+were 0.05 / 0.95 / 1.00. At sixteen cores these were 0.07 / 0.17 / 0.12
+and 0.05 / 0.03 / 0.05, respectively. Original single-seed outcomes and new
+five-seed means differ in both timing and replication; the difference cannot
+be attributed solely to the service-time correction.
+
+Table: Trust bootstrap under sixteen attacker cores. Corrected entries are mean [minimum, maximum] across five seeds among token holders at 90% coverage (36 per device class per seed).
+
+| Workers, attacker tokens/s | Budget | Mid-range | Flagship |
+| --- | --- | --- | --- |
+| 8, 0 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| 8, 0.1 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| 8, 1 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| 8, 10 | 0.639 [0.500, 0.750] | 0.944 [0.917, 1.000] | 0.861 [0.806, 0.889] |
+| 4, 10 | 0.311 [0.250, 0.389] | 0.189 [0.139, 0.250] | 0.100 [0.083, 0.139] |
+
+The original one-seed ten-token/s results were 0.92 / 0.89 / 0.97 at eight
+workers and 0.08 / 0.44 / 0.42 at four. The corrected results show substantial
+changes and seed variation, particularly for budget phones; increased replay
+capacity does not imply monotonic improvement for every group in this
+finite queue, fallback and retry process. These observations do not isolate
+which transient interaction causes each change.

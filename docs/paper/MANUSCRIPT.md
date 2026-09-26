@@ -75,15 +75,19 @@ remove large observed discounts; they do not establish a lower bound against
 all algorithms, hardware or strategies. Replay capacity and device disparity
 remain material costs.
 
-We evaluate that claim under a protocol written before any attack was
-implemented, amended twelve times with each amendment's predictions committed
-to version control before the experiment it governs, and with every miss
-reported. We make four contributions.
+This paper is organised around one thesis: useful computation can replace
+discarded proof of work at a browser gate, but verification changes the
+economics of admission. We test it through five questions, each answered by a
+separate experiment under a protocol written before any attack was
+implemented. The protocol was amended twelve times, each amendment's
+predictions committed to version control before the experiment it governs,
+and every miss is reported. The measured answers are our contributions.
 
-1. **A measured useful-work admission design.** Molecular experiments establish screening preservation at matched evaluation counts on five qualified panels; phone measurements establish reproducibility for the tested units. Separate scheduler simulations evaluate admission behavior (Sections 5.1 and 5.5).
-2. **Admission economics with free identities.** Three structural flaws yield large attacker discounts. Fixes bring tested bundle strategies near parity under the evaluated cost model, without a universal guarantee (Section 5.3).
-3. **A measured aggregation failure and mitigation.** Fabricated energies can displace honest candidates before refinement. Rescoring mitigates this failure in the corpus; full-panel AUC effects are exploratory projections, and the relative overhead uses calibrated unit cost (Section 5.4).
-4. **The availability price of utility.** Simulations test a conditional replay-capacity model and show how its outcomes depend on device speed, attacker resources and an assumed external token quota (Section 5.6).
+1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
+2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit; unit latency is as predictable as a 64-subpuzzle puzzle, not more (Section 5.2).
+3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
+4. **Can fabricated work corrupt the science without being admitted?** Yes, through the merge. Rescoring before merging mitigates the measured failure (Section 5.4).
+5. **Is useful work better than proof of work?** Not universally. Replay turns fake submissions into verifier load, device disparity decides who is denied first, and an outside trust signal helps only under stated issuer assumptions (Section 5.5).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -111,7 +115,7 @@ WebAssembly and uploads the resulting minima pool.
 
 Prepared receptor and grid state is delivered through a content-addressed CDN,
 so a warm browser runs a unit in about 2 s on a current phone and 7.5 s on a
-2019 budget phone (Section 5.5).
+2019 budget phone (Section 5.2).
 
 ```latex
 \begin{figure}[htbp]
@@ -144,7 +148,7 @@ build, inputs and seed and compares output byte for byte. Three measures make
 that comparison meaningful.
 
 - **Output commitment.** A client commits to the SHA-256 of its full output before the audit draw is derived, and the draw is computed server-side from a secret, so a client cannot learn which unit will be replayed before uploading.
-- **Trace commitment.** The commitment covers a hash of the per-step search trace, not only the final minima pool. Section 5.2 shows why the pool alone is insufficient.
+- **Trace commitment.** The commitment covers a hash of the per-step search trace, not only the final minima pool. Section 5.3 shows why the pool alone is insufficient.
 - **Fresh seeds.** Each unit's seed is drawn by the server, and a unit re-issued after expiry or failure receives a new seed, so an earlier answer cannot satisfy that new assignment. This prevents ordinary duplicate-answer caching, not every form of precomputation or algorithmic shortcut.
 
 Build equivalence was established before any security experiment: three
@@ -209,6 +213,7 @@ reported with exact (Clopper–Pearson) 95% intervals. Attacker discount factors
 are ratios of attempt counts; we report 95% intervals from the geometric
 distribution of attempts per admission, treating attempts as independent.
 
+
 ### 4.3 Measurement boundaries and reproducible methods
 
 Table: Evidence supporting the claims and what each experiment does not establish.
@@ -223,89 +228,14 @@ Table: Evidence supporting the claims and what each experiment does not establis
 | Overload and trust bootstrap | Real queue SQL with modeled arrivals, replay and puzzle costs | Conditional finite-horizon simulations; not measured HTTP throughput |
 | Attestation benefit | Mock issuer, token checks and one-use nullifiers | Assumed quota and token supply; no deployed issuer or blind-signature integration |
 
-**Input preparation and qualification.** The five targets were fixed from the
-Vina-scoring results in Eberhardt et al.'s supplementary Table S2 [Eberhardt21]
-before local docking. For each target, SHA-256 ordering with salt
-`published-vina-validation-2026-09-15:` selects 32 active and 64 decoy source
-compound IDs from DUD-E. All supplied states of each selected compound are
-retained; the crystal compound is excluded if its ID matches. There is no
-replacement after preparation or docking failure. Earlier DYR, AKT1 and
-PPARG failures remain negative results outside this qualified panel; this
-study does not establish that arbitrary targets pass stock Vina's gate.
+Supplementary Section S1 gives the complete protocols: target selection and
+input preparation, compute matching and the paired bootstrap, the poisoning
+projection, and the availability simulator. The availability results use
+exact replay-event timing and five seeds (amendment 12). That amendment
+corrected an earlier discretisation which, by noticing completions only on
+250 ms ticks, lengthened each simulated 1.52 s replay to 1.75 s; the original
+single-seed results are preserved and compared in Supplementary Section S3.
 
-Receptor waters and existing hydrogens are removed; REDUCE 3.16 with `-BUILD`
-rebuilds hydrogens and allows its standard flips. ADFRsuite's
-`prepare_receptor4.py` uses `-U nphs_lps_waters`, retaining nonprotein chains;
-recognized metal charges are set to +2 in this protocol. Original DUD-E MOL2
-ligand states pass through `prepare_ligand4.py` defaults. Heavy-atom counts
-and coordinates are checked, and source/prepared files and tool hashes are
-retained. The box is 22 × 22 × 22 Å, centered on the arithmetic centroid of
-the crystal ligand's heavy atoms, with 0.375 Å grid spacing. This centroid
-convention and the small panel are explicit local choices. Stock Vina 1.2.7
-is used rather than the publication's 1.2.0; this is not an exact reproduction
-of its full-library enrichment.
-
-Stock qualification uses exhaustiveness 32, one CPU per job, nine modes and
-seed 104729. All 96 compounds must complete, with ROC-AUC at least 0.75, its
-bootstrap lower 95% bound above 0.60, and EF10 at least 1.5. Redocking must
-have top-pose symmetry-corrected RMSD at most 2 Å in at least two of seeds
-104729, 130363 and 155921, without alignment. Only qualified targets enter
-the matched comparison. Screening score is the minimum over all required
-states; any missing state makes the compound incomplete.
-
-**Compute matching and uncertainty.** For each ligand state and parent seed,
-the same-build monolithic E32 arm supplies its measured evaluation count E.
-The distributed arm runs `ceil(E / 256000)` independently seeded units,
-then uses the original finaliser. The same inputs, box and state aggregation
-are used in both arms. The matching variable is energy evaluations, not
-elapsed browser time; search-time and evaluation ratios are reported
-separately. This is an oracle-budget experimental comparison: production
-scheduling need not rerun stock docking to assign every budget. The 2,073
-pairs represent state/seed jobs, not 2,073 independent compounds.
-
-Paired ROC-AUC intervals use 5,000 stratified compound bootstrap resamples
-with random seed 104729. Active and decoy compound indices are sampled
-separately; the same sampled indices are applied to both arms and all three
-seeds before averaging seed-specific AUC differences. Repeated states and
-seeds are therefore not treated as independent compounds. AUC gives ties
-half credit. EF10 selects the top `ceil(0.1 × n)` compounds and gives
-fractional occupancy to ties at the cutoff. The predeclared non-inferiority
-margin is −0.05 AUC. Unit-level binomial intervals are descriptive and do
-not account for dependence among units from the same molecular job.
-
-**Poisoning projection.** Measured score changes from the 33 re-finalised
-corpus jobs are pooled across targets, separately for each attack fraction.
-For each of 1,000 resampling draws (random seed 20260923), a change is sampled
-independently for each matched state/seed score. Compound minima and
-seed-averaged target AUCs are recomputed. This assumes exchangeable shifts
-across targets, states and activity labels; it does not model their
-correlation or an adversary selecting compounds by label. The resulting AUC
-changes are exploratory projections, not whole-panel attack measurements or
-confirmatory confidence intervals for real-world poisoning.
-
-**Availability timing and replication.** Queue operations use the prototype
-SQL, while arrivals, replay duration and puzzle costs are simulated. Honest
-arrivals are 0.5/s for 240 s, cycling three device classes (40 each), followed
-by 150 s of draining. Bootstrap attacks continue for all 390 s. Replay cost
-is fixed at 1.52 s. Honest puzzle times are exponential for a single puzzle
-or gamma-distributed for subpuzzles at measured device hash rates; attacker
-costs use expected hashes at 1.25 million hashes/s/core. Issuance is capped
-at 30 attacker attempts per 250 ms tick. Ten seconds is the honest bidding
-budget, not a hard end-to-end access deadline; random solve times can exceed
-it. Successful access within the observation window includes draining.
-
-The original simulator processed replay completions only on 250 ms ticks,
-so a 1.52 s replay occupied a worker for 1.75 s. Amendment 12 processes
-completion and worker refill at exact service event times and dispatches
-available work after each input tick. Input and puzzle-completion polling
-remain at 250 ms, with the final input tick at 389.75 s if the simulation
-has not already drained. All 224 original grid cells are repeated at five fixed
-seeds, 20260925–20260929 (1,120 runs). Original results remain preserved.
-Private in-memory SQLite uses the same SQL and transaction boundaries to
-accelerate simulation; it is not a production database benchmark. Mean and
-min/max across seeds describe simulation variability, not uncertainty in
-measured rates or attacker optimality. Section 5.6 distinguishes historical
-results from this corrected replication.
 
 ### 4.4 Use of AI tools
 
@@ -320,7 +250,7 @@ not authors.
 
 ## 5 Results
 
-### 5.1 Decomposition preserves the science
+### 5.1 Can docking be decomposed without changing the science?
 
 Five targets from the DUD-E benchmark [Mysinger12], selected from published
 Vina results before any local run and each a panel of 32 actives and 64
@@ -347,9 +277,61 @@ of −0.05 is generous relative to these effects, so we read the result from the
 intervals, not the margin. These are 96-compound panels, not full-library
 screens.
 
-### 5.2 Unit-level attacks under real replay
+### 5.2 Can browsers reproduce the units, and at what latency?
 
-We ran 693 trials on 99 units sampled by salted hash from the corpus, across
+In a first study on four phones, every one of 68 units was bitwise identical
+to the native reference output across iOS and Android. Against a single
+hashcash puzzle calibrated on each device to its median unit, 21.9% of puzzle
+solves exceeded twice the median and none of 64 warm units did
+(Supplementary Section S2). Natively, a docking unit also had half the
+coefficient of variation of a median-matched hashcash puzzle (0.48 against
+0.95).
+
+A single hash puzzle is not the strongest baseline: deployed proof-of-work
+CAPTCHAs split the work into many small puzzles [FriendlyCaptcha], and the
+sum of 64 geometric solve counts is far narrower than one. We therefore ran a
+second page on five phones, interleaving each unit with two single puzzles and
+two 64-subpuzzle puzzles, all calibrated on the device to its median unit
+(amendment 11).
+
+Table: Five phones, 16 warm units and 24 solves of each puzzle type per phone, pooled by each device's median unit time as predeclared.
+
+| Kind | n | p95/median | Over 2× median |
+| --- | ---: | ---: | ---: |
+| Docking unit | 80 | 1.15 | 0% |
+| Single puzzle | 120 | 4.40 | 25.8% |
+| 64-subpuzzle puzzle | 120 | 2.02 | 5.8% |
+
+Two of four predictions held: single puzzles again had a long tail, and units
+stayed within 1.35 times their median at the 95th percentile. The prediction
+that subpuzzles would too failed, and so did the calibration check that
+explains it: on-device calibration missed by up to a factor of 1.66 (Moto Edge
+50) and 0.70 (Galaxy M30s), so pooling by unit time mixes shifted
+distributions. Measured within each device instead, a post-hoc analysis,
+subpuzzle solves had p95/median 1.14–1.40 and none exceeded twice their own
+median; pooled, 1.21 against 1.15 for units (Figure 2). As stated before the
+experiment, lower latency variance is therefore not an advantage of useful work
+over a well-designed puzzle. It is an advantage only over a single puzzle.
+
+```latex
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/device_latency.pdf}
+\caption{Solve time on five phones for docking units, single puzzles and 64-subpuzzle puzzles run in the same sessions. Each time is divided by its device's median for that kind, so the curves compare distribution shape; the dotted line marks twice the median. Calibration error, which this scaling removes, is reported in the text.}
+\label{fig:latency}
+\end{figure}
+```
+
+The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
+slower at JavaScript hashing, and its first contribution takes about 13 s
+including asset delivery, a real accessibility cost.
+
+All 85 units in this second study also matched the reference output exactly.
+
+
+### 5.3 Can clients fake the work cheaply?
+
+**Unit-level attacks under real replay.** We ran 693 trials on 99 units sampled by salted hash from the corpus, across
 all five targets.
 
 Table: Unit-level attacks judged by exact replay, 99 corpus units.
@@ -374,9 +356,7 @@ from 163 KB to 19 KB. Falsifying the best energy by
 0.1–3.0 kcal/mol never changed any output, because the finaliser recomputes
 energies; moving the best pose by 0.1 or 0.5 Å had no effect.
 
-### 5.3 Admission economics with free identities
-
-We define the attacker discount factor as attacker work per admission divided
+**Admission economics with free identities.** We define the attacker discount factor as attacker work per admission divided
 by honest work per admission in the same tier. A hash puzzle is normalised to
 1.0 under a common hardware and expected-hash cost model; that is not a claim
 of equal wall time or energy across hardware. Below 1.0, the modeled attacker
@@ -418,7 +398,11 @@ threshold rather than proportionally: holders of 4, 8 and 12 of 16 leases
 caused no refusals, and 16 caused 81%. Stateless tickets that allocate seeds
 without reserving queue seats removed the effect in the isolated prototype.
 
-### 5.4 An aggregation attack on the science
+Section 6 discusses what trace commitment does and does not establish about
+the work an accepted unit requires.
+
+
+### 5.4 Can fabricated work corrupt the science?
 
 An attacker need not be admitted to harm the campaign; it need only place
 units in the pool. We ran the original finaliser over the corpus with units
@@ -439,7 +423,7 @@ minima displace honest ones before refinement sees them. In an exploratory,
 non-predeclared resampling projection, mean ROC-AUC changes reached about
 −0.016 at 5% and −0.034 at 10% fabricated units. These are not measured
 whole-panel poisoning outcomes: corpus score shifts were resampled onto
-otherwise unchanged campaign scores (Section 4.3). A revised driver that rescores every submitted minimum from
+otherwise unchanged campaign scores (Supplementary Section S1). A revised driver that rescores every submitted minimum from
 its conformation before merging was verified against the same gates.
 
 Table: Rescoring driver against the original driver.
@@ -459,66 +443,15 @@ The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
 that honest search would have found.
 
-### 5.5 Client cost and latency on phones
+### 5.5 What does useful work cost compared with proof of work?
 
-Against a hashcash puzzle calibrated natively to the same median time, a
-docking unit had half the coefficient of variation (0.48 against 0.95) and a
-p99 of 3.38 s against 6.50 s. On four phones, a test page alternated real
-units with puzzles calibrated on the device to its median unit.
-
-Table: Docking unit and device-calibrated single hashcash puzzle on four phones, 12 rounds each.
-
-| Device | Unit median / max | Puzzle median / p95 / max | Units exact |
-| --- | --- | --- | --- |
-| iPhone 15, Low Power Mode | 2.04 / 2.10 s | 1.85 / 6.57 / 8.24 s | 17/17 |
-| Samsung Galaxy A57 | 2.02 / 2.10 s | 2.09 / 7.82 / 10.5 s | 17/17 |
-| Moto Edge 50, Low Power Mode | 2.44 / 2.73 s | 1.86 / 8.83 / 10.4 s | 17/17 |
-| Samsung Galaxy M30s (2019 budget) | 7.55 / 10.1 s | 5.86 / 36.1 / 53.2 s | 17/17 |
-
-Scaled to each device's median, 21.9% of puzzle solves exceeded twice the
-median and none of 64 units did. All 68 units were bitwise identical across iOS
-and Android.
-
-A single hash puzzle is not the strongest baseline: deployed proof-of-work
-CAPTCHAs split the work into many small puzzles [FriendlyCaptcha], and the
-sum of 64 geometric solve counts is far narrower than one. We therefore ran a
-second page on five phones, interleaving each unit with two single puzzles and
-two 64-subpuzzle puzzles, all calibrated on the device to its median unit
-(amendment 11).
-
-Table: Five phones, 16 warm units and 24 solves of each puzzle type per phone, pooled by each device's median unit time as predeclared.
-
-| Kind | n | p95/median | Over 2× median |
-| --- | ---: | ---: | ---: |
-| Docking unit | 80 | 1.15 | 0% |
-| Single puzzle | 120 | 4.40 | 25.8% |
-| 64-subpuzzle puzzle | 120 | 2.02 | 5.8% |
-
-Two of four predictions held: single puzzles again had a long tail, and units
-stayed within 1.35 times their median at the 95th percentile. The prediction
-that subpuzzles would too failed, and so did the calibration check that
-explains it: on-device calibration missed by up to a factor of 1.66 (Moto Edge
-50) and 0.70 (Galaxy M30s), so pooling by unit time mixes shifted
-distributions. Measured within each device instead, a post-hoc analysis,
-subpuzzle solves had p95/median 1.14–1.40 and none exceeded twice their own
-median; pooled, 1.21 against 1.15 for units (Figure 2). As stated before the
-experiment, lower latency variance is therefore not an advantage of useful work
-over a well-designed puzzle. It is an advantage only over a single puzzle.
-
-```latex
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.6\textwidth]{figures/device_latency.pdf}
-\caption{Solve time on five phones for docking units, single puzzles and 64-subpuzzle puzzles run in the same sessions. Each time is divided by its device's median for that kind, so the curves compare distribution shape; the dotted line marks twice the median. Calibration error, which this scaling removes, is reported in the text.}
-\label{fig:latency}
-\end{figure}
-```
-
-The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
-slower at JavaScript hashing, and its first contribution takes about 13 s
-including asset delivery, a real accessibility cost.
-
-### 5.6 The availability price of utility
+A hashcash puzzle calibrated natively to a similar median client time (1.38 s
+against 1.52 s for a unit) verifies in 0.77 µs. Verifying useful work costs a
+replay of 1.52 s for each audited unit, a fraction q of client work: about
+five orders of magnitude more at q = 0.1. The puzzle also guarantees
+freshness, which useful work must restore with assignment seeds and one-use
+credits. The rest of this section asks what that verification cost does
+under attack.
 
 A structurally admissible fake selected for audit consumes a modeled 1.52 s
 replay, whereas hash-puzzle verification is comparatively cheap. Let R be
@@ -543,18 +476,7 @@ worker: budget-phone service at 0.1 attacker cores and flagship service at
 one core exceed the predicted upper limit. These are not 240 independent
 traffic scenarios or validation of an exact cutoff (Figure 3).
 
-Table: Original single-seed and corrected five-seed prediction checks. A check is a device-group outcome in an eligible grid cell; counts retain all misses.
-
-| Prediction | Original passed / eligible | Corrected passed / eligible |
-| --- | ---: | ---: |
-| C1, follow published price | 33/48 | 153/240 |
-| C1, full-patience bid | 46/48 | 230/240 |
-| A1, attested service below capacity | 120/120 | 600/600 |
-| A2, saturation upper bounds | 112/120 | 557/600 |
-| A3, anonymous capacity model | 118/118 | 590/590 |
-| A4, inert attested lane | 24/24 | 120/120 |
-| A5, trust bootstrap | 63/66 | 315/330 |
-| A6, puzzle-free without fallback | 192/192 | 960/960 |
+Supplementary Table S2 lists every prediction check, original and corrected.
 
 At eight replay workers the priority mechanism still discriminates sharply by
 device under a four-core attack. Corrected service means are 0.070, 0.965
@@ -562,26 +484,6 @@ and 1.000 for budget, mid-range and flagship devices. At sixteen attacker
 cores they are 0.110, 0.135 and 0.130. Service is measured within the finite
 observation window, including post-attack draining; it is not a ten-second
 admission guarantee.
-
-Table: Corrected eight-worker service, mean [minimum, maximum] across five seeds, 40 arrivals per device class per seed. These are observed ranges, not confidence intervals.
-
-| Mechanism, attacker cores | Budget | Mid-range | Flagship |
-| --- | --- | --- | --- |
-| Fixed 18-bit, 0.25 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
-| Fixed 18-bit, 1 | 0.945 [0.900, 0.975] | 0.940 [0.875, 1.000] | 0.915 [0.800, 0.975] |
-| Fixed 18-bit, 4 | 0.390 [0.350, 0.425] | 0.325 [0.175, 0.475] | 0.365 [0.325, 0.400] |
-| Fixed 18-bit, 16 | 0.230 [0.175, 0.275] | 0.145 [0.075, 0.250] | 0.195 [0.125, 0.250] |
-| Full-patience priority, 0.25 | 0.995 [0.975, 1.000] | 0.965 [0.950, 0.975] | 1.000 [1.000, 1.000] |
-| Full-patience priority, 1 | 0.990 [0.975, 1.000] | 0.970 [0.950, 0.975] | 0.965 [0.950, 0.975] |
-| Full-patience priority, 4 | 0.070 [0.050, 0.100] | 0.965 [0.950, 0.975] | 1.000 [1.000, 1.000] |
-| Full-patience priority, 16 | 0.110 [0.100, 0.125] | 0.135 [0.050, 0.200] | 0.130 [0.100, 0.175] |
-
-For direct historical comparison at four attacker cores, the original
-fixed-18-bit service fractions were 0.15 / 0.25 / 0.42 and priority fractions
-were 0.05 / 0.95 / 1.00. At sixteen cores these were 0.07 / 0.17 / 0.12
-and 0.05 / 0.03 / 0.05, respectively. Original single-seed outcomes and new
-five-seed means differ in both timing and replication; the difference cannot
-be attributed solely to the service-time correction.
 
 ```latex
 \begin{figure}[htbp]
@@ -609,23 +511,8 @@ At zero attacker tokens, mean within-seed median trust times are about
 66 / 23 / 23 s, conditional on success and excluding the initial bundle's
 molecular work, which is already available at first arrival in this harness.
 Later bundles include device-calibrated work time.
-
-Table: Trust bootstrap under sixteen attacker cores. Corrected entries are mean [minimum, maximum] across five seeds among token holders at 90% coverage (36 per device class per seed).
-
-| Workers, attacker tokens/s | Budget | Mid-range | Flagship |
-| --- | --- | --- | --- |
-| 8, 0 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
-| 8, 0.1 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
-| 8, 1 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
-| 8, 10 | 0.639 [0.500, 0.750] | 0.944 [0.917, 1.000] | 0.861 [0.806, 0.889] |
-| 4, 10 | 0.311 [0.250, 0.389] | 0.189 [0.139, 0.250] | 0.100 [0.083, 0.139] |
-
-The original one-seed ten-token/s results were 0.92 / 0.89 / 0.97 at eight
-workers and 0.08 / 0.44 / 0.42 at four. The corrected results show substantial
-changes and seed variation, particularly for budget phones; increased replay
-capacity does not imply monotonic improvement for every group in this
-finite queue, fallback and retry process. These observations do not isolate
-which transient interaction causes each change.
+At ten attacker tokens per second, trust fractions fall and vary across
+seeds and device classes (Supplementary Table S4).
 
 ```latex
 \begin{figure}[htbp]
@@ -657,6 +544,24 @@ submission. What it buys is that the visitor's computation is not wasted: the
 units a site would otherwise discard dock real ligands with screening differences
 small on the five qualified panels, within the reported uncertainty.
 
+**What trace commitment does and does not establish.** The committed trace
+records, for every Monte Carlo step, the refined candidate's energy at full
+double precision and the cumulative number of energy evaluations. A matching
+trace therefore fixes the exact sequence of evaluations the honest algorithm
+performs, and replay compares it byte for byte. Two routes to a cheaper
+accepted trace remain open. Faster hardware or a faster implementation of the
+same operations, such as native code, vectorisation or a GPU, is not a
+shortcut in the security sense: it is the same hardware disparity proof of
+work already has, and Section 5.5 prices it. Avoiding evaluations is the real
+question. Approximate energies, reordered arithmetic or incremental updates
+change floating-point rounding and hence the committed bytes; fresh
+server-drawn seeds make one unit's intermediate states unlikely to recur in
+another. We know of no method that yields a matching trace with fewer
+evaluations than the honest search, but we have not proved that none exists.
+A lower bound of that kind, for example showing that any accepted trace of N
+steps requires Ω(N) evaluations under stated assumptions about the scoring
+function, remains open.
+
 **Identity cost.** Proof of work is indifferent to identities. Our first
 scheduler was not: its security depended on identities costing between 0.5
 and 5.1 honest units. We regard this as the most transferable lesson for any
@@ -674,7 +579,7 @@ external requirements, not properties established by our prototype.
 [Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
 say so, and it gives them a reason a puzzle cannot.
 
-**Limitations.** Six phone models, one workload and five 96-compound panels.
+**Limitations.** Five phone models, one workload and five 96-compound panels.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts.
@@ -688,21 +593,31 @@ prototype ticket identifiers and their tie-breaking remain cryptographically
 random. The initial bootstrap bundle is assumed ready at arrival. There is
 no integrated production traffic or energy-cost validation.
 
+
 ## 7 Conclusion
 
-Our experiments identify conditions under which bounded molecular work can
-support browser admission while preserving screening performance on five
-qualified panels. Trace commitment, fresh assignment seeds, concealed audit
-draws and a trust threshold remove the large discounts found in tested
-attacks; the remaining estimates are near parity under the cost model, not a
-proof that cheating cannot be cheaper. Rescoring mitigates a measured merge
-failure. Verification still consumes replay capacity, and simulated overload
-falls unequally on devices. Any benefit from external attestation depends on
-issuer and token-supply assumptions. These results quantify the practical
-costs and limits of useful-work admission rather than establish a universal
-replacement for proof of work.
+Useful computation can stand in for discarded proof of work at a browser gate,
+but verification changes the economics of admission. On five qualified panels,
+bounded Vina units preserve screening performance and reproduce exactly on
+phones. Trace commitment, fresh assignment seeds, concealed audit draws and a
+trust threshold remove the large discounts found in tested attacks; the
+remaining estimates are near parity under the cost model, not a proof that
+cheating cannot be cheaper. Rescoring mitigates a measured merge failure.
+Verification still consumes replay capacity, overload falls unequally on
+devices, and any benefit from external attestation depends on issuer and
+token-supply assumptions. These results quantify the practical costs and limits
+of useful-work admission rather than establish a universal replacement for
+proof of work.
+
 
 ## Declarations
+
+### Supplementary information
+
+Additional file 1 (PDF): Supplementary Information. Complete experimental
+methods (S1), the first four-phone timing study (S2), and all availability
+prediction checks, five-seed service and trust tables and historical
+comparisons (S3).
 
 ### Availability of data and materials
 

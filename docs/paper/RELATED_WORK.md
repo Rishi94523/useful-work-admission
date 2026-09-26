@@ -54,7 +54,7 @@ solving services price CAPTCHAs at a small fraction of a cent [Motoyama10]. We
 take from this work the baseline (a subpuzzle hash puzzle is the strongest
 wasteful comparator) and the device-disparity problem. We do not claim a new
 puzzle. On phones, a 64-subpuzzle puzzle proved as predictable as a docking
-unit (Section 5.5), so we claim no latency advantage over this baseline.
+unit (Section 5.2), so we claim no latency advantage over this baseline.
 
 ### 2.2 Useful work in place of wasted work at the gate
 
@@ -173,7 +173,7 @@ fake selected for audit consumes a molecular replay. We test the conditional
 budget scale (R − λ) × device hash rate × patience, with R the verifier's
 replay rate and λ the honest arrival rate. It models a full-patience honest
 bid and spare service capacity; it is not a universal admission threshold.
-Section 5.6 reports the original simulations separately from an exact-service,
+Section 5.5 reports the original simulations separately from an exact-service,
 five-seed correction. Both use real queue code with modeled replay and puzzle
 costs rather than deployment traffic.
 

@@ -568,6 +568,27 @@ and 5.1 honest units. We regard this as the most transferable lesson for any
 useful-work admission design, whatever the workload: every retry, reveal and
 trust path must be checked with identities priced at zero.
 
+**Reputation under load.** Verifying reputed submitters first protects them.
+In the isolated ticket prototype, a flood of fake submissions paying a 16-bit
+puzzle cut newcomers to 1 of 60 served while established users, who hold
+reserved replay capacity, stayed at 60 of 60 (arrivals and replay simulated).
+A failed audit quarantines the identity, so a reputed submitter who turns
+malicious is caught at the trusted tier's audit rate. Reputation cannot, however,
+rescue honest newcomers. A surge in new identities reveals that an attack is
+under way but not which newcomers are attackers; both have no history.
+Deprioritising all new identities under load therefore denies honest
+newcomers as well, which is the trust-bootstrap lockout of Section 5.5.
+Separating them requires an outside signal, such as the attestation modelled
+there or the cross-site behavioural signals of deployed challenge services
+[Turnstile22], which trade privacy for discrimination. The standard attack on
+reputation is the sleeper identity: identities aged during quiet periods and
+spent together in an attack [Douceur02]. Useful-work admission changes the
+price of that strategy. Earning trust here requires three replayed and
+accepted bundles, so an attacker who pre-builds reputation must first perform
+real, audited docking. Aged identities still gain admission, but the work that
+bought them is useful. We have not measured a sleeper-identity attack; its
+cost and yield are a natural next experiment.
+
 **Availability.** The conditional budget scale (R − λ) · r · T exposes the
 cost of replay capacity under the modeled attack. Corrected five-seed results
 retain substantial anonymous-newcomer denial at sixteen attacker cores. A

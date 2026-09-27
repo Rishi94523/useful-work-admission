@@ -86,7 +86,7 @@ and every miss is reported. The measured answers are our contributions.
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit; unit latency is as predictable as a 64-subpuzzle puzzle, not more (Section 5.2).
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
-4. **Can fabricated work corrupt the science without being admitted?** Yes, through the merge. Rescoring before merging mitigates the measured failure (Section 5.4).
+4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not universally. Replay turns fake submissions into verifier load, device disparity decides who is denied first, and an outside trust signal helps only under stated issuer assumptions (Section 5.5).
 
 We also report where the approach loses. A puzzle beats useful work on
@@ -279,8 +279,9 @@ screens.
 
 ### 5.2 Can browsers reproduce the units, and at what latency?
 
-In a first study on four phones, every one of 68 units was bitwise identical
-to the native reference output across iOS and Android. Against a single
+In a first study on four phones, all 68 executions of four distinct reference
+units were bitwise identical to the native reference output across iOS and
+Android. Against a single
 hashcash puzzle calibrated on each device to its median unit, 21.9% of puzzle
 solves exceeded twice the median and none of 64 warm units did
 (Supplementary Section S2). Natively, a docking unit also had half the
@@ -326,7 +327,9 @@ The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
 slower at JavaScript hashing, and its first contribution takes about 13 s
 including asset delivery, a real accessibility cost.
 
-All 85 units in this second study also matched the reference output exactly.
+All 85 executions in this second study also matched the reference output
+exactly. These repeat four distinct reference units across the five phones;
+they are not 85 distinct molecular workloads.
 
 
 ### 5.3 Can clients fake the work cheaply?
@@ -416,9 +419,12 @@ the work an accepted unit requires.
 
 ### 5.4 Can fabricated work corrupt the science?
 
-An attacker need not be admitted to harm the campaign; it need only place
-units in the pool. We ran the original finaliser over the corpus with units
-replaced or altered.
+We ran the original finaliser over saved corpus pools with units replaced or
+altered. This offline experiment measures damage conditional on malicious
+outputs entering the aggregate; it does not demonstrate a way to bypass the
+admission scheduler. In the scheduler, a bundle rejected by immediate audit
+does not enter the scientific pool. Unaudited outputs in accepted bundles
+and outputs admitted before deferred audit are distinct exposure paths.
 
 Table: Corpus re-finalisation measurements; the ROC-AUC entry is a separate exploratory projection.
 
@@ -428,12 +434,15 @@ Table: Corpus re-finalisation measurements; the ROC-AUC entry is a separate expl
 | Stored coordinates moved 2 Å, conformation untouched | −0.10 to +0.02 kcal/mol, within the predicted 0.12 |
 | Conformation moved 2 Å, coordinates untouched | −0.42 to +1.37 kcal/mol; the prediction of no gain failed |
 | Honest duplication of 5–75% of units | measured best gain −0.10 kcal/mol; projected ROC-AUC within ±0.004 up to 25% |
-| Duplicated units claiming −20 kcal/mol, 5% of units | 22 of 33 jobs worse (95% interval 0.48–0.82), by up to 2.6 kcal/mol |
+| Duplicated units claiming −20 kcal/mol, 5% of units | 22 of 33 jobs worse (95% interval 0.48–0.82), by up to 1.859 kcal/mol |
 
-No false positive was observed: every final score is an energy the finaliser
-recomputed for a physically valid conformation, and no gain exceeded
-0.42 kcal/mol, a genuine minimum reached from a displaced start. No falsified
-energy ever reached output: the finaliser recomputes every reported energy. But its merge still ranks and clusters minima by the
+In these tests, fabricated reported energies did not survive final rescoring:
+the finaliser recomputed the output energies from conformations. This does
+not establish biological validity or rule out false positives in screening.
+The largest score improvement across these pool-tampering experiments was
+0.466 kcal/mol, in the 5% fabricated-energy condition. The largest worsening
+was 2.632 kcal/mol at 10% corruption, compared with 1.859 at 5%.
+The merge still ranks and clusters minima by the
 energies clients report and keeps a bounded set for refinement, so fabricated
 minima displace honest ones before refinement sees them. In an exploratory,
 non-predeclared resampling projection, mean ROC-AUC changes reached about
@@ -564,14 +573,16 @@ small on the five qualified panels, within the reported uncertainty.
 **What trace commitment does and does not establish.** The committed trace
 records, for every Monte Carlo step, the refined candidate's energy at full
 double precision and the cumulative number of energy evaluations. A matching
-trace therefore fixes the exact sequence of evaluations the honest algorithm
-performs, and replay compares it byte for byte. Two routes to a cheaper
+trace binds these recorded per-step values, which replay compares byte for
+byte. It does not record every intermediate energy evaluation, coordinate or
+gradient, and therefore does not uniquely establish the internal sequence of
+computations. Two routes to a cheaper
 accepted trace remain open. Faster hardware or a faster implementation of the
 same operations, such as native code, vectorisation or a GPU, is not a
 shortcut in the security sense: it is the same hardware disparity proof of
 work already has, and Section 5.5 prices it. Avoiding evaluations is the real
 question. Approximate energies, reordered arithmetic or incremental updates
-change floating-point rounding and hence the committed bytes; fresh
+can change floating-point rounding and hence the committed bytes; fresh
 server-drawn seeds make one unit's intermediate states unlikely to recur in
 another. We know of no method that yields a matching trace with fewer
 evaluations than the honest search, but we have not proved that none exists.
@@ -622,7 +633,10 @@ Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts.
 The trusted tier grants unaudited admissions on history, not on the unit.
-Scientific quarantine after late detection is not implemented. The rescoring
+The scheduler quarantines contributors after failed replay and blocks
+aggregate-output retrieval when their contributions are present. A dedicated
+late-failure test covers this guard; automatic campaign repair and retraction
+of already-produced scientific results have not been demonstrated. The rescoring
 driver is a verified candidate, not yet serving traffic. Pool poisoning AUCs
 are projections based on exchangeable corpus score shifts. The availability
 replication measures five-seed variability but keeps arrival rates, device

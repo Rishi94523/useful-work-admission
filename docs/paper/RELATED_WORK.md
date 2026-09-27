@@ -140,8 +140,9 @@ cost set to zero. The observed large discounts disappear after fixes, while
 bundle-tier estimates remain consistent with parity rather than proving it.
 Replay also requires execution to be
 deterministic across platforms. WebAssembly specifies deterministic floating
-point except for NaN payloads [Haas17]; we observed all 68 phone units bitwise
-identical to native execution across iOS and Android, and confined the only
+point except for NaN payloads [Haas17]; we observed all 68 phone executions
+of four distinct reference units bitwise identical to native execution
+across iOS and Android, and confined the only
 cross-toolchain divergence to last-bit C runtime differences amplified by Monte
 Carlo search.
 

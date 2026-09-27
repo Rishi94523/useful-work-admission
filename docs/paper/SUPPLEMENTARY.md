@@ -66,6 +66,14 @@ correlation or an adversary selecting compounds by label. The resulting AUC
 changes are exploratory projections, not whole-panel attack measurements or
 confirmatory confidence intervals for real-world poisoning.
 
+The underlying integrity experiment directly replaces or alters units in
+saved pools and reruns the finaliser; it does not exercise an admission-bypass
+path. At 5% fabricated-energy units, 22 of 33 jobs worsen, by at most
+1.859 kcal/mol; the maximum worsening of 2.632 occurs at 10%. Across these
+pool-tampering experiments, the largest score improvement is 0.466 kcal/mol
+at 5% fabricated-energy units. Recomputed output energies do not establish
+biological validity or exclude screening false positives.
+
 **Availability timing and replication.** Queue operations use the prototype
 SQL, while arrivals, replay duration and puzzle costs are simulated. Honest
 arrivals are 0.5/s for 240 s, cycling three device classes (40 each), followed
@@ -122,8 +130,11 @@ Table: Docking unit and device-calibrated single hashcash puzzle on four phones,
 | Samsung Galaxy M30s (2019 budget) | 7.55 / 10.1 s | 5.86 / 36.1 / 53.2 s | 17/17 |
 
 Scaled to each device's median, 21.9% of puzzle solves exceeded twice the
-median and none of 64 units did. All 68 units were bitwise identical across iOS
-and Android.
+median and none of 64 warm executions did. All 68 executions were bitwise
+identical to reference outputs across iOS and Android. They repeat four
+distinct reference units. The second study in main-text Section 5.2 likewise
+repeats four distinct units, producing 85 matching executions on five phones;
+execution counts should not be interpreted as counts of distinct workloads.
 
 ## S3 Availability: prediction checks and replicated results
 

@@ -257,15 +257,15 @@ jobs.
 | I-a stored coordinates moved 2 Å, conformation untouched | change ≤ 0.12 kcal/mol | −0.10 to +0.02 ✓ |
 | I-a conformation moved 2 Å, coordinates untouched | like phase-1 A8c | −0.42 to +1.37 ✗ |
 | I-b duplicated units, f = 0.05 → 0.75 | no gain > 0.12; losses grow with f; median 0 at small f | best gain −0.10; jobs worse 2 → 12; median 0 throughout ✓ |
-| I-c duplicated units claiming −20 kcal/mol | same as I-b | **22 of 33 jobs worse at f = 0.05, by up to 2.6 kcal/mol** ✗ |
+| I-c duplicated units claiming −20 kcal/mol | same as I-b | **22 of 33 jobs worse at f = 0.05, by up to 1.859 kcal/mol; maximum worsening 2.632 at f = 0.10** ✗ |
 | I-e ROC-AUC change from I-b, f ≤ 0.25 | within ±0.01 | within ±0.004; within ±0.009 at f = 0.75 ✓ |
 
-**No false positives were observed.** Every final score is an energy the
-finalizer recomputed for a physically valid conformation; no falsified value
-reached any output, and no gain exceeded 0.42 kcal/mol, a genuine minimum
-reached from a displaced start. Honest duplication, the cheapest fabrication
-that parses, costs only lost search effort and leaves screening results
-unchanged within ±0.004 AUC at up to a quarter of units fabricated.
+**Fabricated reported energies did not survive final rescoring in these tests.**
+The finalizer recomputed output energies from conformations; this does not
+establish biological validity or exclude screening false positives. The largest
+score improvement was 0.466 kcal/mol, at 5% fabricated-energy units. Honest
+duplication, the cheapest fabrication that parses, leaves projected screening
+ROC-AUC changes within ±0.004 at up to a quarter of units fabricated.
 
 **Falsified energies hijack the merge.** The value is laundered, but the merge
 still ranks and clusters minima by the energies clients report, and keeps only
@@ -375,7 +375,11 @@ unit ran 1.83 times its median, the largest unit excursion measured.
 - **A one-run trusted tier** is not an unconditional proof of work by anonymous
   users: an unaudited trusted admission is still granted on the identity's
   history, not on the unit.
-- **Scientific quarantine and repair** after late detection is not implemented.
+- **Scientific quarantine** after failed replay is implemented: the scheduler
+  quarantines contributors and blocks aggregate-output retrieval when their
+  contributions are present. A dedicated late-failure test covers this guard.
+  Automatic campaign repair and retraction of already-produced scientific
+  results have not been demonstrated.
 - **Latency advantage over proof of work holds only against a single
   puzzle.** A 64-subpuzzle puzzle on phones was as predictable as a docking
   unit (see the subpuzzle result above); an optimized or WebAssembly solver

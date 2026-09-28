@@ -22,28 +22,27 @@ for the author.*
 
 Proof-of-work challenges protect websites by making visitors spend computation
 that is then discarded. We characterise the price of making that computation
-useful. In our design each admission carries bounded AutoDock Vina docking
-units whose outputs join a virtual screening campaign, and the server verifies
-a secretly sampled unit by exact replay. This gives up the two properties that
-make puzzles safe, cheap verification and guaranteed freshness, so we evaluated
-the design under a protocol whose predictions were committed before each
-experiment. Splitting docking searches into independent units preserved
-screening accuracy on five benchmark targets, with paired 95% intervals within
-±0.017 ROC-AUC, and units reproduced bit for bit on five phones. Committing to
-the search trace, not only its result, rejected all 198 truncated-work
-submissions, and three scheduler fixes removed large attacker discounts,
-leaving attacker cost near honest cost even with free identities. Fabricated
-energies could still corrupt merged results; rescoring before merging mitigated
-this. The price is verification. Each audited submission costs a molecular
-replay instead of a hash check, so under attack the verifier's capacity decides
-who is admitted. In simulation, budget phones were denied first, and keeping
-them served needed about five replay cores per attacker core, while the same
-queue with proof-of-work verification kept every device class served. Useful
-work at the gate can produce real science at an attacker cost comparable to
-proof of work, but only by spending verifier capacity that proof of work does
-not need.
+useful, on two workload classes, under a protocol whose predictions were
+committed before each experiment. In the first, each admission carries bounded
+AutoDock Vina docking units whose outputs join a virtual screening campaign,
+verified by exactly replaying a secretly sampled unit. Splitting docking
+searches into units preserved screening accuracy on five benchmark targets,
+and units reproduced bit for bit on five phones. Committing to the search
+trace rejected all 198 truncated-work submissions, and three scheduler fixes
+removed large attacker discounts, leaving attacker cost near honest cost even
+with free identities; rescoring before merging stopped fabricated energies from
+corrupting results. The price is verification: each audited submission costs a
+molecular replay, so under attack verifier capacity decides who is admitted,
+budget phones are denied first, and protecting them needed about five replay
+cores per attacker core, while the same queue with proof-of-work verification
+served every device class. In the second class, five image classifiers for
+data labelling are verified algebraically in milliseconds and stay available
+under attack, but verifying them costs the server about as much as computing
+them. Across both, work worth delegating was expensive to verify, and work
+cheap to verify was not worth delegating: useful admission trades cheap
+verification against the useful work each unit of verification buys.
 
-**Keywords.** proof of work; useful work; admission control; CAPTCHA alternatives; volunteer computing; denial of service; result verification; molecular docking
+**Keywords.** proof of work; useful work; admission control; CAPTCHA alternatives; verifiable computation; denial of service; result verification; molecular docking; data labelling
 
 ## 1 Introduction
 
@@ -79,9 +78,9 @@ This is a characterisation study. We do not propose useful work as a drop-in
 replacement for proof of work; we measure what making the work useful costs,
 and who pays. The paper is organised around one thesis: useful computation can
 replace discarded proof of work at a browser gate, but verification changes the
-economics of admission. We test it through five questions, each answered by a
+economics of admission. We test it on two workload classes through six questions, each answered by a
 separate experiment under a protocol written before any attack was
-implemented. The protocol was amended thirteen times, each amendment's
+implemented. The protocol was amended fifteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -90,6 +89,7 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43. Docking reaches leverage 4 to 10 only by paying for replay (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -224,6 +224,20 @@ justify treating attempts as independent in the discount-factor intervals.
 The proposition bounds expected work, not its variance, and says nothing about
 the scientific quality of the unaudited units, which Section 5.4 examines.
 
+### 3.6 Verification time and leverage
+
+Three quantities characterise a useful-work gate. The verification time V is
+the verifier's CPU time per admission, including audits; with W verifier cores
+the gate can check at most W / V admissions per second, the capacity R of
+Section 5.5. The leverage L is the time the server would need to compute the
+same useful output itself, with its best native implementation, divided by V:
+useful work obtained per unit of verifier work. The delivery D is the bytes a
+client downloads and uploads per admission. Proof of work has V of about a
+microsecond and no useful output. A docking bundle has V = 1.52 s for four
+units of work, L = 4, and L = 1/p in the trusted tier, where only a fraction p
+of units is replayed. Section 5.6 measures V, L and D for a second workload
+class whose results are checked algebraically rather than by replay.
+
 ## 4 Methodology
 
 ### 4.1 Predeclared protocol
@@ -278,6 +292,7 @@ Table: Evidence supporting the claims and what each experiment does not establis
 | Browser feasibility | Real phone execution and reference hash checks | Cooperative sessions, selected repeated units; not client attestation |
 | Overload and trust bootstrap | Real queue SQL with modeled arrivals, replay and puzzle costs | Conditional finite-horizon simulations; not measured HTTP throughput |
 | Attestation benefit | Mock issuer, token checks and one-use nullifiers | Assumed quota and token supply; no deployed issuer or blind-signature integration |
+| Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models, single-input admissions, one CPU; not GPU or batched serving |
 
 Supplementary Section S1 gives the complete protocols: target selection and
 input preparation, compute matching and the paired bootstrap, the poisoning
@@ -613,7 +628,70 @@ seeds and device classes (Supplementary Table S4).
 Cheap attacker tokens consume attested replay capacity ahead of anonymous
 visitors, and the benefit rests on the assumed issuer quota and token supply.
 
+### 5.6 Does cheaper verification escape the trade-off?
+
+Replay makes docking's verification expensive. To test whether that is a
+property of useful work or of replay, we added a workload verified
+algebraically: image classification for data labelling. A client runs a
+small classifier in exact integer arithmetic and uploads every affine layer's
+output; the verifier checks each layer with four secret Freivalds projections
+[Freivalds77], as in Slalom [Tramer19], and recomputes only the cheap nonlinear
+operations. We measured five models, from a 110-thousand-parameter MNIST
+perceptron to VGG11-BN on CIFAR-10.1 and a perceptron with two 2,048-wide
+layers, against the server's best native inference (Table 8, Supplementary
+Section S6).
+
+Table: Verification leverage of five labelling models. C is the server's best native inference time and V the verification time, including parsing, hashing, range checks, projections, nonlinear operations and an 8% audit rate; leverage L is C/V, shown without audits and at an 8% audit rate. Accuracy is the quantized model's test accuracy.
+
+| Model | Acc. | C / V (ms) | L, 0% / 8% | Trace | Weights |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MNIST MLP | 96.8% | 0.078 / 0.219 | 0.37 / 0.36 | 0.8 KB | 0.11 MB |
+| MNIST CNN | 98.7% | 0.262 / 0.377 | 0.73 / 0.69 | 37.9 KB | 0.05 MB |
+| CIFAR CNN | 76.2% | 0.985 / 1.13 | 0.93 / 0.87 | 115.2 KB | 0.16 MB |
+| VGG11-BN | 83.1% | 3.87 / 5.69 | 1.08 / 0.68 | 610.3 KB | 9.76 MB |
+| Wide MNIST MLP | 97.6% | 1.60 / 1.12 | 1.80 / 1.43 | 16.4 KB | 5.84 MB |
+
+All three predictions about correctness and ordinary models held: every
+perturbation of every trace was rejected, and the four ordinary models reached
+leverage 0.36–0.87 at an 8% audit rate, below the predicted 1.5. For the
+smallest models the verifier spends more than it would to compute the answer.
+The prediction that the wide perceptron would reach leverage 10 failed: it
+reached 1.80 without audits and 1.43 with them. That prediction came from an
+earlier micro-benchmark that compared checking with an exact double-precision
+baseline; against optimised native inference, a 2,048-wide layer computes in
+about a millisecond, and the verifier's fixed per-layer work of parsing,
+hashing and range checking, not the projections themselves, dominates.
+
+Cheap verification does fix availability. Rerunning the admission grid with
+each model's verification time in place of the replay kept every device class
+at least 90% served in all 360 cells up to sixteen attacker cores, as the
+proof-of-work gate did. What it does not provide is leverage. Figure 5 places
+every measured workload by verification time and leverage: proof of work at a
+microsecond with no useful output, the classifiers at 0.2–6 ms with leverage
+near one, and docking at leverage 4 and 10 with 152–1,520 ms of verification.
+No workload we measured is both cheap to verify and high in leverage.
+
+```latex
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/design_space.pdf}
+\caption{Verifier time per admission against verification leverage for every measured workload. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
+\label{fig:design}
+\end{figure}
+```
+
 ## 6 Discussion
+
+**The trade-off.** The two workloads fall at opposite ends of one trade-off.
+Docking is expensive for the server to compute, so delegating it buys leverage,
+but checking it without a certificate means replaying it, which is what exposes
+availability. The classifiers can be checked algebraically in milliseconds,
+but work that cheap to check at this scale is also cheap for the server to
+compute, so delegating it saves nothing. A useful workload in the empty region
+of Figure 5 would need results that are expensive to produce and cheap to
+check with a certificate, as a hash preimage is for proof of work. Search
+problems with succinct certificates have that shape; docking's search does
+not, because its best pose carries no proof that the search was done.
 
 **When is useful work worth it?** Only when someone needs the output and the
 verifier can afford replay. A puzzle is strictly better on verifier cost and
@@ -713,7 +791,7 @@ external requirements, not properties established by our prototype.
 [Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
 say so, and it gives them a reason a puzzle cannot.
 
-**Limitations.** Five phone models, one workload and five 96-compound panels.
+**Limitations.** Five phone models, two workload classes, five 96-compound panels and five small classifiers measured on one host without GPU or batched serving.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts,
@@ -735,7 +813,9 @@ no integrated production traffic or energy-cost validation.
 ## 7 Conclusion
 
 Useful computation can stand in for discarded proof of work at a browser gate,
-but verification changes the economics of admission. On five qualified panels,
+but verification changes the economics of admission. Across two workload
+classes, the work worth delegating was expensive to verify and the work cheap
+to verify was not worth delegating. On five qualified panels,
 bounded Vina units preserve screening performance and reproduce exactly on
 phones. Trace commitment, fresh assignment seeds, concealed audit draws and a
 trust threshold remove the large discounts found in tested attacks; the
@@ -756,8 +836,8 @@ proof of work.
 Additional file 1 (PDF): Supplementary Information. Complete experimental
 methods (S1), the first four-phone timing study (S2), and all availability
 prediction checks, five-seed service and trust tables and historical
-comparisons (S3), further admission-economics configurations (S4), and the
-proof-of-work gate baseline (S5).
+comparisons (S3), further admission-economics configurations (S4), the
+proof-of-work gate baseline (S5), and the inference-leverage methods (S6).
 
 ### Availability of data and materials
 

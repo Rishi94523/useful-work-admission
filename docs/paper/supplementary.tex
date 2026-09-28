@@ -161,6 +161,10 @@ Trust acquisition. With the three-bundle threshold, acquiring trust by cached re
 
 Amendment 13 reran the amendment-12 grids for the fixed 16-bit and 18-bit puzzles and the full-patience priority queue (1, 2, 4 and 8 workers; 0 to 16 attacker cores; five seeds; 360 runs) with 0.77 $\mu$s verification in place of a 1.52 s replay. P1, every device class at least 90\% served as a five-seed mean in every cell, held in 72 of 72 cells. P2, every class at least 0.9 in the cells at 4 and 16 attacker cores where useful-work service fell below 0.2, held in 23 of 23: the lowest-served class ranged from 0.950 to 1.000 under the proof-of-work gate against 0.025 to 0.155 with replay. Downstream load from admitted attackers is outside the model.
 
+\section{Inference-leverage methods}
+
+Five classifiers were verified by one generic exact-integer implementation: per-channel int8 weights, signed 7-bit activations with integer requantization, batch normalisation fused into convolutions, and four secret projections per affine layer over the field of size 2\textasciicircum{}31 $-$ 1, with a native C kernel for the projections and nonlinear operations. The MNIST perceptron (784-128-64-10), MNIST convolutional network (two 3x3 convolutions of 8 and 16 channels), CIFAR convolutional network (three convolutions of 16, 32 and 64 channels) and wide perceptron (784-2048-2048-10) were trained with Adam and seed 20260928 (5, 5, 20 and 5 epochs); VGG11-BN is the pretrained model used earlier, evaluated on CIFAR-10.1. Calibration uses the first 256 training images. Timings use one native thread over 128 distinct test inputs with twelve excluded warm-up runs and method order randomised per input; central is the faster of FP32 and native INT8 inference in PyTorch. Every single-entry perturbation of every layer's trace (offsets +1, $-$1 and 2\textasciicircum{}31 $-$ 1) was rejected. Availability used the amendment-13 grid (fixed 16-bit and 18-bit puzzles and the full-patience priority queue; 1--8 workers; 0--16 attacker cores; five seeds) with each model's verification time at an 8\% audit rate.
+
 \bibliographystyle{sn-basic}
 \bibliography{references}
 \end{document}

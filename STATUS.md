@@ -381,6 +381,33 @@ bottleneck. Downstream load from attackers admitted by paying the puzzle is
 not modelled, so this isolates the availability price of replay verification
 at the gate, not a whole-deployment comparison.
 
+**Verification leverage across two workloads (amendment 14).** Five image
+classifiers for data labelling were verified by one exact-integer Freivalds
+implementation restored from the earlier inference work: MNIST perceptron,
+MNIST and CIFAR convolutional networks, VGG11-BN on CIFAR-10.1 and a
+784-2048-2048-10 perceptron. Leverage is the server's best native inference
+time divided by verification time.
+
+| Model | Accuracy | Central / verify (ms) | Leverage, 0% / 8% audit | Trace | Weights |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MNIST MLP | 96.8% | 0.078 / 0.219 | 0.37 / 0.36 | 0.8 KB | 0.11 MB |
+| MNIST CNN | 98.7% | 0.262 / 0.377 | 0.73 / 0.69 | 37.9 KB | 0.05 MB |
+| CIFAR CNN | 76.2% | 0.985 / 1.13 | 0.93 / 0.87 | 115.2 KB | 0.16 MB |
+| VGG11-BN | 83.1% | 3.87 / 5.69 | 1.08 / 0.68 | 610.3 KB | 9.76 MB |
+| Wide MNIST MLP | 97.6% | 1.60 / 1.12 | 1.80 / 1.43 | 16.4 KB | 5.84 MB |
+
+L1 (every trace perturbation rejected), L2 (ordinary models below 1.5 at 8%
+audits), L4 (every class at least 90% served in all 360 availability cells,
+1,800 runs) and L5 (no workload with verification under 10 ms and leverage
+above 4) held. L3 failed: the wide perceptron reached 1.80 and 1.43, not 10
+and 2.5. The prediction came from an earlier micro-benchmark against an exact
+double-precision baseline; against optimised native inference the verifier's
+fixed per-layer work dominates. Docking has leverage 4 per newcomer bundle and
+1/p in the trusted tier. Across both classes, the work worth delegating was
+expensive to verify and the work cheap to verify was not worth delegating.
+Phone runs of the classifiers and a scrypt memory-hard baseline (amendment 14b)
+are pending.
+
 ## What is not established
 
 - **Device coverage is small**: four phones, one workload, 64 unit timings.

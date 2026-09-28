@@ -1,4 +1,6 @@
-# Auditable Useful Work for Browser Admission
+# Useful Work Admission
+
+Repository: https://github.com/Rishi94523/useful-work-admission
 
 A browser admission system in which the work a visitor performs is **real
 scientific computation** rather than an artificial puzzle. A visitor's browser
@@ -22,8 +24,8 @@ rather than corrupting a shared model.
 
 The workload is scientific computation, not ML inference. An earlier MNIST-based
 demonstrator explored the same admission question with distributed inference;
-that phase is retained in git history and the local sibling
-`../legacy-capstone/cleanup-2026-09-20/` archive. Its inference server, widget,
+that phase is retained in git history and a separate local legacy archive.
+Its inference server, widget,
 SDK, models and training tools are not part of the current system.
 
 ## Design

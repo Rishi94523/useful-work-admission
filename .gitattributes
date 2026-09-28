@@ -1,0 +1,2 @@
+# Release bundles must not recursively enter later source snapshots.
+/releases/zenodo export-ignore

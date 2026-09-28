@@ -1,4 +1,6 @@
-# Current status — 25 September 2026
+# Useful Work Admission — current status, 28 September 2026
+
+Repository: https://github.com/Rishi94523/useful-work-admission
 
 ## Manuscript review correction and replication
 
@@ -557,7 +559,7 @@ cloudflare/vina-cdn/ prepared-state static delivery configuration
 
 Working reports, generated evidence and raw device logs are kept locally and
 are not tracked. The remaining inference stack, datasets, models and historical setup documents
-are archived locally in `../legacy-capstone/cleanup-2026-09-20/`.
+are kept in a separate local legacy archive.
 The MNIST and CIFAR phases were moved out of this repository;
 the committed history retains the earlier pipeline as a record of the project's
 development.

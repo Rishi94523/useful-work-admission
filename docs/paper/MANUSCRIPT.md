@@ -673,9 +673,9 @@ comparisons (S3), and further admission-economics configurations (S4).
 
 ### Availability of data and materials
 
-Project name: Capstone useful-work admission research prototype. Project home page: https://github.com/Rishi94523/Capstone.
-Archived version: [TODO: Zenodo DOI of the submission commit and result
-bundle]. Operating systems: Windows, Linux, and iOS and Android browsers.
+Project name: Useful Work Admission research prototype. Project home page: https://github.com/Rishi94523/useful-work-admission.
+Archived version: the submission commit and the result ledgers behind every
+reported number are archived on Zenodo, https://doi.org/10.5281/zenodo.23005913. Operating systems: Windows, Linux, and iOS and Android browsers.
 Programming languages: Python, C++, JavaScript and WebAssembly. Licence:
 MIT; AutoDock Vina and other upstream components, fetched and patched at build
 time rather than redistributed, keep their own licences (Vina: Apache 2.0).

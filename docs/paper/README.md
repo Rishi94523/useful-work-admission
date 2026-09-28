@@ -35,7 +35,7 @@ use the five seeds, with no replacement of original evidence.
 under `F:/Programs/Git/usr/bin`; prepend that directory to PATH for the build
 if MiKTeX reports that the Perl script engine is missing.
 
-Before submission, authors must add the Zenodo archive DOI. The authors confirmed on 25 September 2026
+The Zenodo archive DOI, reserved on 28 September 2026, is 10.5281/zenodo.23005913; it resolves once the record is published at submission. The authors confirmed on 25 September 2026
 that all test phones are theirs and that they ran every phone test.
 
 The Springer Nature class `sn-jnl.cls` and style `sn-basic.bst` (template

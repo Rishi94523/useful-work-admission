@@ -640,3 +640,18 @@ perceptron spends about 220 us, mostly Python-level overhead (SHA-256 of the
 trace is 8 us), against 700 us of native inference. An optimised native
 verifier could therefore reach much higher leverage for wide dense layers;
 this is untested.
+
+**Native fused verification (amendment 15b).** A C kernel verifies a whole
+dense network per call and provides an exact native audit and a native forward
+pass, the last added to the central baselines (fastest of PyTorch FP32, INT8,
+native forward and the amendment-15 GPU). N1 held (exact; every perturbation
+rejected). N2 failed: native verification of the wide perceptron took 0.183 ms
+at B = 1, 1.9x faster than the numpy verifier, not 5x; per-admission fixed
+costs (hashing, input quantisation, the call boundary, cold caches between
+interleaved requests) remain. N3 failed: the wide perceptron reached leverage
+2.21 at 8% audits against the fastest baseline (the GPU; 3.15 against the
+fastest CPU-only baseline, the native forward pass), below 4. N4 held: the
+MNIST perceptron stayed below 1. As stated in advance, the paper will report
+that the trade-off held with an optimised native verifier. Post-hoc
+diagnostic: with verification reduced to hashing alone, 8% exact audits would
+cap the wide perceptron near 7 against the GPU.

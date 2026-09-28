@@ -740,3 +740,58 @@ The comparison isolates what replay verification adds at the gate itself.
 useful work is attributable to replay verification rather than to the queue
 design, and the manuscript will present the two side by side. If they fail,
 the failure and its cause will be reported.
+
+## Amendment 14 — verification leverage across workloads, 28 September 2026
+
+Recorded after a second external review and before any measurement below.
+
+**Context.** The docking study shows that replay verification makes useful
+work lose to proof of work at the gate. A single workload cannot say whether
+that is a property of useful work or of replay. This amendment adds a second
+workload class, image classification for data labelling, whose results are
+verified algebraically rather than by replay, and characterises both on
+three quantities: verification time per admission V, which sets how many
+admissions a verifier can check and hence availability; verification leverage
+L, the server's cost of computing the same result itself divided by the cost
+of verifying it, which sets how much useful output each unit of verifier time
+buys; and delivery bytes D, the weights and trace a client must download and
+upload.
+
+**Workloads.** Five small classification models, all verified by one generic
+exact-integer implementation restored from the project's earlier inference
+work (per-channel int8 weights, signed 7-bit activations, four secret Freivalds
+projections per affine layer over the field of size 2^31 − 1, nonlinear
+operations recomputed by the verifier): an MNIST multilayer perceptron
+784-128-64-10; an MNIST convolutional network with two 3x3 convolutions; a
+small CIFAR-10 convolutional network with three convolutions; the pretrained
+VGG11-BN on CIFAR-10.1; and a wide MNIST perceptron 784-2048-2048-10. Models
+other than VGG11-BN are trained here with fixed seeds, and their test accuracy
+is reported. Docking's leverage is computed from its existing measurements:
+four units per bundle for one replay, and 1/p in the trusted tier.
+
+**Measurement.** Per model, on one native thread over 128 distinct inputs with
+randomised method order and warm-up runs excluded: the server's cheapest
+native central inference (FP32 or INT8), full-trace verification including
+parsing and hashing, a forced full audit, trace and weight bytes, and a check
+that every single-entry perturbation of the trace is rejected. Leverage is
+reported at audit rates 0 and 8%. Each model's verification time is then run
+through the amendment-12 availability harness with the same grids and seeds.
+
+**Predictions.**
+
+- L1. Every perturbation of every model's trace is rejected.
+- L2. For the four ordinary labelling models, leverage at an 8% audit rate is
+  below 1.5: verification is not substantially cheaper than computing.
+- L3. For the wide perceptron, leverage is at least 10 without audits and at
+  least 2.5 at 8% audits.
+- L4. With inference verification times, every device class is at least 90%
+  served in every availability cell up to 16 attacker cores.
+- L5. Docking, the inference models and proof of work occupy distinct regions
+  of the (V, L) plane: no workload measured combines verification time below
+  10 ms with leverage above 4.
+
+**Consequence stated in advance.** If L2 and L5 hold, the paper will argue that
+useful-work admission faces a trade-off between cheap verification and useful
+leverage, with docking and inference at opposite ends, and that high leverage
+at low verification cost requires wide layers whose weights are costly to
+deliver. Any failed prediction will be reported with its cause.

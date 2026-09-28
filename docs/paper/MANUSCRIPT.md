@@ -20,28 +20,28 @@ for the author.*
 
 ## Abstract
 
-Proof-of-work admission spends client computation on puzzles. We investigate
-replacing that work with bounded AutoDock Vina searches whose outputs join a
-virtual-screening campaign. The evaluation combines molecular replay, phone
-measurements and admission simulations under a versioned protocol.
-Across five preselected 96-compound panels and 2,073 paired state jobs,
-decomposition changed mean ROC-AUC by −0.0008 to +0.0033; paired 95% intervals
-lay within ±0.017. Tested browser units reproduced reference pool and trace
-hashes. Committing to the trace rejected all 198 tested truncated-work
-submissions, whereas result-only commitments accepted some. Scheduler fixes
-removed large attacker discounts observed with free identities; remaining
-bundle-tier estimates were near parity under the evaluated cost model,
-without establishing a general work lower bound. Fabricated energies in 5%
-of units worsened 22 of 33 re-finalised jobs. An exploratory resampling
-projection at 10% corruption estimated ROC-AUC losses up to 0.034; rescoring
-before merge reduced this effect in the tested corpus. Phone measurements
-showed no general latency-variability advantage over a 64-subpuzzle baseline.
-Availability simulations expose the principal cost: a structurally admissible
-fake selected for audit consumes a molecular replay. We evaluate a conditional
-capacity model and a mock-attestation lane whose benefits depend on assumed
-issuer quotas and attacker token supply. Useful-work admission can preserve
-scientific screening performance on these panels, but trades cheap
-verification for replay capacity and imposes unequal costs across devices.
+Proof-of-work challenges protect websites by making visitors spend computation
+that is then discarded. We characterise the price of making that computation
+useful. In our design each admission carries bounded AutoDock Vina docking
+units whose outputs join a virtual screening campaign, and the server verifies
+a secretly sampled unit by exact replay. This gives up the two properties that
+make puzzles safe, cheap verification and guaranteed freshness, so we evaluated
+the design under a protocol whose predictions were committed before each
+experiment. Splitting docking searches into independent units preserved
+screening accuracy on five benchmark targets, with paired 95% intervals within
+±0.017 ROC-AUC, and units reproduced bit for bit on five phones. Committing to
+the search trace, not only its result, rejected all 198 truncated-work
+submissions, and three scheduler fixes removed large attacker discounts,
+leaving attacker cost near honest cost even with free identities. Fabricated
+energies could still corrupt merged results; rescoring before merging mitigated
+this. The price is verification. Each audited submission costs a molecular
+replay instead of a hash check, so under attack the verifier's capacity decides
+who is admitted. In simulation, budget phones were denied first, and keeping
+them served needed about five replay cores per attacker core, while the same
+queue with proof-of-work verification kept every device class served. Useful
+work at the gate can produce real science at an attacker cost comparable to
+proof of work, but only by spending verifier capacity that proof of work does
+not need.
 
 **Keywords.** proof of work; useful work; admission control; CAPTCHA alternatives; volunteer computing; denial of service; result verification; molecular docking
 
@@ -75,11 +75,13 @@ remove large observed discounts; they do not establish a lower bound against
 all algorithms, hardware or strategies. Replay capacity and device disparity
 remain material costs.
 
-This paper is organised around one thesis: useful computation can replace
-discarded proof of work at a browser gate, but verification changes the
+This is a characterisation study. We do not propose useful work as a drop-in
+replacement for proof of work; we measure what making the work useful costs,
+and who pays. The paper is organised around one thesis: useful computation can
+replace discarded proof of work at a browser gate, but verification changes the
 economics of admission. We test it through five questions, each answered by a
 separate experiment under a protocol written before any attack was
-implemented. The protocol was amended twelve times, each amendment's
+implemented. The protocol was amended thirteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -87,7 +89,7 @@ and every miss is reported. The measured answers are our contributions.
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit; unit latency is as predictable as a 64-subpuzzle puzzle, not more (Section 5.2).
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
-5. **Is useful work better than proof of work?** Not universally. Replay turns fake submissions into verifier load, device disparity decides who is denied first, and an outside trust signal helps only under stated issuer assumptions (Section 5.5).
+5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -168,7 +170,7 @@ For availability we evaluate, as isolated prototypes rather than the deployed
 scheduler, stateless authenticated tickets with reserved capacity for
 established users, an effort-priority queue for newcomers adopted from Tor's
 onion-service defence [TorProp327], and an attested lane for newcomers holding
-token from a mock issuer inspired by Privacy Pass [Davidson18, RFC9576].
+tokens from a mock issuer inspired by Privacy Pass [Davidson18, RFC9576].
 The mock assumes an origin-bound, single-use token with a per-device quota;
 it does not implement blind signatures or integrate a deployed issuer.
 
@@ -186,6 +188,42 @@ puzzles, because a plausible but wrong result cannot be rejected by a cheap
 structural check. Attacks on the verifier's host, side channels and
 compromise of the attestation issuer are out of scope.
 
+### 3.5 Security model
+
+We state the admission guarantee we rely on, and its assumption, rather than
+prove a general lower bound. A unit u is fixed by its prepared inputs, a
+server-drawn seed s and an evaluation budget B of 256,000 energy evaluations.
+Honest execution produces a minima pool P and a trace T = ((e_1, c_1), …,
+(e_n, c_n)), where e_i is the energy of the refined candidate at Monte Carlo
+step i, recorded at full double precision, and c_i is the cumulative number of
+energy evaluations. A bundle of four units is accepted if one unit, drawn
+uniformly by a keyed hash of the ticket and the client's commitment to every
+unit's pool and trace hash, replays to byte-identical P and T.
+
+**Assumption (trace work).** For a fresh seed, producing (P, T) equal to the
+honest output without performing essentially the honest sequence of
+evaluations succeeds with negligible probability. The committed values are the
+outcomes of a sequential search in which each step starts from the previous
+accepted state, and equality is byte-exact, so an approximate or reordered
+computation changes the committed bytes. We support the assumption
+empirically (Section 5.3) and discuss its limits in Section 6; we do not prove
+it.
+
+**Proposition.** Under the assumption, with a secret draw derived only after
+commitment and a fresh seed for every re-issued unit, any strategy that
+computes m of a bundle's four units and fabricates the rest has expected work
+per admission of four units, the same as honest work, for every m from 1 to 4.
+*Argument.* The bundle is accepted only if the draw selects a computed unit,
+which happens with probability m/4 on each attempt. Because the draw is secret
+and every retry carries fresh seeds, attempts are independent and earlier
+answers cannot be reused, so the expected number of attempts is 4/m, each
+costing m units. The flaws measured in Section 5.3 each break one premise:
+unchanged seeds on retry let computed units be reused, and revealing the draw
+before upload let a client abandon exactly when selected. The same premises
+justify treating attempts as independent in the discount-factor intervals.
+The proposition bounds expected work, not its variance, and says nothing about
+the scientific quality of the unaudited units, which Section 5.4 examines.
+
 ## 4 Methodology
 
 ### 4.1 Predeclared protocol
@@ -194,11 +232,19 @@ The evaluation follows a written protocol dated 22 September 2026, before any
 attack was implemented and before the matched scientific campaign completed.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Twelve amendments cover phase
+governs, with the original preserved. Thirteen amendments cover phase
 operationalisation, the three economic fixes, scientific integrity, trace
-commitment, the rescoring driver, newcomer pricing, attestation and the
-subpuzzle baseline, and a post-review replay-timing correction with five-seed
-replication. Where a prediction failed we report the failure, its
+commitment, the rescoring driver, newcomer pricing, attestation, the
+subpuzzle baseline, a post-review replay-timing correction with five-seed
+replication, and a proof-of-work gate baseline.
+
+The timeline is short, and every step is dated in the public commit history.
+The docking pipeline was built from 7 September 2026, and the stock
+qualification and matched campaigns ran from 14 to 23 September; the
+adversarial protocol took effect on 22 September, while the matched campaign
+was finishing. The later experiments are fast relative to docking: attacks
+replay units from a fixed corpus, and each availability simulation takes
+seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its
 cause and any post-hoc diagnostic separately from the predeclared result.
 
 ### 4.2 Corpus, manifests and statistics
@@ -211,7 +257,8 @@ Every run writes a frozen execution manifest recording protocol, corpus, build
 and runner hashes, and re-running with a changed input fails. Proportions are
 reported with exact (Clopper–Pearson) 95% intervals. Attacker discount factors
 are ratios of attempt counts; we report 95% intervals from the geometric
-distribution of attempts per admission, treating attempts as independent.
+distribution of attempts per admission, treating attempts as independent, as
+Section 3.5 justifies for the fixed scheduler.
 
 
 ### 4.3 Measurement boundaries and reproducible methods
@@ -242,10 +289,10 @@ single-seed results are preserved and compared in Supplementary Section S3.
 Large language model coding assistants
 (Anthropic Claude and OpenAI Codex) were used to implement experiment code,
 analysis scripts and prototypes, to search and verify literature, and to draft
-text, under the author's direction. All predictions were committed to version
+text, under the authors' direction. All predictions were committed to version
 control before the experiments they govern ran; every number in this paper is
-produced by committed scripts from recorded data; and the author reviewed the
-code, results and text and takes responsibility for them. The assistants are
+produced by committed scripts from recorded data; and the authors reviewed the
+code, results and text and take responsibility for them. The assistants are
 not authors.
 
 ## 5 Results
@@ -467,7 +514,12 @@ result. The relative overhead denominator is number of units multiplied by a
 calibrated 1,520 ms per unit, not measured client time for each attacked job.
 The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
-that honest search would have found.
+that honest search would have found. An omission attacker, who submits
+well-formed but weak minima in unaudited units, is bounded by the honest
+duplication experiment: replacing up to a quarter of a job's units with
+duplicates, which contribute no new minima, moved projected ROC-AUC by at most
+0.004. By Section 3.5, such units also cost the attacker its full share of
+computed work to admit.
 
 ### 5.5 What does useful work cost compared with proof of work?
 
@@ -515,10 +567,24 @@ admission guarantee.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/served_vs_cores.pdf}
-\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Input polling remains discrete; replay completion uses exact event times.}
+\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Grey dotted: the same queue with proof-of-work verification (amendment 13), lowest-served device class. Input polling remains discrete; replay completion uses exact event times.}
 \label{fig:served}
 \end{figure}
 ```
+
+**Proof-of-work gate baseline.** To isolate what replay adds, amendment 13
+reran the same queue, arrivals, device and attacker rates, bidding strategies
+and seeds with verification costing the measured 0.77 µs hash check instead of
+a 1.52 s replay (360 runs). Both predictions held. Every device class was at
+least 90% served, as a five-seed mean, in all 72 cells up to 16 attacker cores.
+In the 23 cells where useful-work service fell below 0.2 for some class, the
+proof-of-work gate served every class at 0.95–1.00; at eight workers and 16
+cores the lowest-served class went from 0.110 to 0.950 (Figure 3). The gate
+itself never became the bottleneck. This baseline models the gate only: under
+proof of work an attacker who pays the puzzle is admitted and loads the
+protected service behind it, which we did not simulate. The comparison
+therefore isolates the availability price of replay verification rather than
+comparing whole deployments.
 
 A native core's measured hash rate is about 36 times the budget phone's
 JavaScript rate. Pricing alone does not remove that disparity. Under the
@@ -590,6 +656,29 @@ A lower bound of that kind, for example showing that any accepted trace of N
 steps requires Ω(N) evaluations under stated assumptions about the scoring
 function, remains open.
 
+**What the useful output is worth.** In the newcomer tier the server replays
+one unit of every four admitted, so it spends 0.25 units of its own compute per
+donated unit: four units of docking for one of replay. In the trusted tier at
+audit rate p the ratio is 1/p, ten to one at p = 0.1. A ligand state needs a
+median of 140 units, about 35 newcomer admissions or 140 trusted admissions,
+and 140 units are roughly 213 native core-seconds. At an assumed cloud price of
+0.04 US dollars per core-hour, one newcomer admission donates about six
+core-seconds, under a hundredth of a US cent of compute, similar to what a puzzle wastes. The case for useful
+admission is therefore not revenue. It is that computation a gate would spend
+anyway produces science instead of heat, at the cost of the verifier capacity
+Section 5.5 prices.
+
+**Attacker scale.** Sixteen cores is a small attacker, about 0.64 US dollars
+per hour at the same assumed price. The capacity model scales directly: to keep
+a device class served, spare replay capacity must grow by 1.25 million / (r · T)
+replays per second for every attacker core, 1.25 million hashes per second
+being the measured native rate of one core. With measured rates this is about
+5.4 replay cores per attacker core for the budget phone, 1.3 for the mid-range
+phone and 1.0 for the flagship. Defending budget phones against a botnet
+therefore requires replay capacity several times the attacker's CPU. This is
+the price of utility stated as a ratio, and it is the regime in which an
+outside trust signal, rather than more replay, has to carry the defence.
+
 **Identity cost.** Proof of work is indifferent to identities. Our first
 scheduler was not: its security depended on identities costing between 0.5
 and 5.1 honest units. We regard this as the most transferable lesson for any
@@ -631,7 +720,8 @@ say so, and it gives them a reason a puzzle cannot.
 **Limitations.** Five phone models, one workload and five 96-compound panels.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
-rather than executed. Discount-factor intervals assume independent attempts.
+rather than executed. Discount-factor intervals assume independent attempts,
+which Section 3.5 argues but does not prove.
 The trusted tier grants unaudited admissions on history, not on the unit.
 The scheduler quarantines contributors after failed replay and blocks
 aggregate-output retrieval when their contributions are present. A dedicated
@@ -655,7 +745,8 @@ phones. Trace commitment, fresh assignment seeds, concealed audit draws and a
 trust threshold remove the large discounts found in tested attacks; the
 remaining estimates are near parity under the cost model, not a proof that
 cheating cannot be cheaper. Rescoring mitigates a measured merge failure.
-Verification still consumes replay capacity, overload falls unequally on
+Verification still consumes replay capacity, where the same queue with
+proof-of-work verification kept every device class served, and overload falls unequally on
 devices, and any benefit from external attestation depends on issuer and
 token-supply assumptions. These results quantify the practical costs and limits
 of useful-work admission rather than establish a universal replacement for
@@ -669,7 +760,8 @@ proof of work.
 Additional file 1 (PDF): Supplementary Information. Complete experimental
 methods (S1), the first four-phone timing study (S2), and all availability
 prediction checks, five-seed service and trust tables and historical
-comparisons (S3), and further admission-economics configurations (S4).
+comparisons (S3), further admission-economics configurations (S4), and the
+proof-of-work gate baseline (S5).
 
 ### Availability of data and materials
 

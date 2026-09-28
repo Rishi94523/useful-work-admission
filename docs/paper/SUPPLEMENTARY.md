@@ -227,3 +227,15 @@ backoff; this bounds only a 30-minute-backoff attacker. On the enforced
 threshold at p = 0.1, an attacker planning trust after one bundle obtained no
 trusted admission across 3,000 identities while spending 12,000 units of
 honest work; one earning three bundles paid a factor of 2.04.
+
+## S5 Proof-of-work gate baseline
+
+Amendment 13 reran the amendment-12 grids for the fixed 16-bit and 18-bit
+puzzles and the full-patience priority queue (1, 2, 4 and 8 workers; 0 to 16
+attacker cores; five seeds; 360 runs) with 0.77 µs verification in place of a
+1.52 s replay. P1, every device class at least 90% served as a five-seed mean
+in every cell, held in 72 of 72 cells. P2, every class at least 0.9 in the
+cells at 4 and 16 attacker cores where useful-work service fell below 0.2,
+held in 23 of 23: the lowest-served class ranged from 0.950 to 1.000 under the
+proof-of-work gate against 0.025 to 0.155 with replay. Downstream load from
+admitted attackers is outside the model.

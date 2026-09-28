@@ -369,6 +369,18 @@ useful work over a well-designed puzzle; the paper claims parity with
 subpuzzle proof of work and an advantage only over a single puzzle. One Moto
 unit ran 1.83 times its median, the largest unit excursion measured.
 
+**Proof-of-work gate baseline (amendment 13).** The amendment-12 queue and
+attacker grid were rerun with 0.77 µs hash-check verification in place of a
+1.52 s replay: fixed 16-bit and 18-bit puzzles and the full-patience priority
+queue, 1-8 workers, 0-16 attacker cores, five seeds, 360 runs. P1 held in 72
+of 72 cells: every device class at least 90% served as a five-seed mean. P2
+held in 23 of 23: where useful-work service fell below 0.2, the proof-of-work
+gate served every class at 0.95-1.00 (lowest class at 8 workers and 16 cores:
+0.110 with replay, 0.950 with proof of work). The gate never became the
+bottleneck. Downstream load from attackers admitted by paying the puzzle is
+not modelled, so this isolates the availability price of replay verification
+at the gate, not a whole-deployment comparison.
+
 ## What is not established
 
 - **Device coverage is small**: four phones, one workload, 64 unit timings.

@@ -69,6 +69,13 @@ def served_vs_cores():
    ax.fill_between(cores,[p[1] for p in pts],[p[2] for p in pts],color=COLOR[cls],alpha=.14)
    t=(R-1/HONEST_EVERY_S)*DEVICES[cls]*PATIENCE_S/CORE_RATE
    ax.axvline(t,color=COLOR[cls],lw=0.8,ls='--')
+  # Amendment 13: the same queue with proof-of-work verification, lowest-served class.
+  pow_path=LR/'admission-amendment13-2026-09-28/results.jsonl'
+  if pow_path.exists():
+   prow=[r for r in jsonl(pow_path) if r.get('grid')=='patience' and r['workers']==w and r['attacker_cores']>0]
+   pc=sorted({r['attacker_cores'] for r in prow})
+   low=[min(sum(r['classes'][c]['served'] for r in prow if r['attacker_cores']==x)/max(1,sum(1 for r in prow if r['attacker_cores']==x)) for c in CLASSES) for x in pc]
+   if pc:ax.plot(pc,low,color='0.25',lw=1.2,ls=':',marker='s',ms=2.5,label='Proof-of-work gate')
   ax.set_xscale('log');ax.set_xlabel('Attacker CPU cores');ax.set_title('%d verifier workers'%w,fontsize=9)
  axes[0].set_ylabel('Honest newcomers served');axes[0].legend(frameon=False,fontsize=7)
  fig.savefig(OUT/'served_vs_cores.pdf');plt.close(fig)

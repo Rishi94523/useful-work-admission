@@ -132,6 +132,20 @@ its requests and cut the cost of naive replay by deduplication [Tan17]; our
 verifier replays one sampled unit per bundle and faces the same trade-off
 between audit coverage and re-execution cost.
 
+Closest in mechanism is proof-of-learning. Jia et al. verify that a model was
+trained by committing to a training trace and replaying sampled segments
+[Jia21], structurally the same pattern as our trace commitment with spot
+replay. Later work spoofed such proofs with less computation than honest
+training [Zhang22, Fang23]. Those attacks rely on the tolerance proof-of-learning
+must allow, because GPU training is not bit-reproducible, so a verifier accepts
+segments within an error bound. Our replay compares committed bytes exactly,
+which removes that slack, but the underlying question those papers raise,
+whether a matching trace can be produced more cheaply than by honest
+computation, is the open question of Section 6. Succinct arguments such as
+Groth16 [Groth16] would give verification independent of search length, but
+proving a 256,000-evaluation floating-point Monte Carlo search in a circuit
+would cost the client far more than the search itself; we did not pursue it.
+
 Our audit is a spot check in Sarmenta's sense, and we do not claim the audit
 mechanism as new. Volunteer platforms also face untrusted participants and
 cheap identities; our emphasis is admission value obtainable through short
@@ -217,7 +231,6 @@ claim is narrow: decomposing an exhaustiveness-32 search into independent
 mean screening ROC-AUC by −0.0008 to +0.0033, with paired 95%
 intervals contained within ±0.017, on five 96-compound panels at under 0.5% extra evaluations.
 
----
 
 ## Claims ledger
 

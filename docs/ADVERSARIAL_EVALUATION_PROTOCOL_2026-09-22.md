@@ -795,3 +795,23 @@ useful-work admission faces a trade-off between cheap verification and useful
 leverage, with docking and inference at opposite ends, and that high leverage
 at low verification cost requires wide layers whose weights are costly to
 deliver. Any failed prediction will be reported with its cause.
+
+## Amendment 14b — phone predictions for inference and the memory-hard baseline, 28 September 2026
+
+Recorded after the server-side amendment-14 measurements and before any phone
+ran the inference page. A test page runs the five exported models (three
+inputs, three repeats each) in exact integer JavaScript, reports each trace's
+SHA-256, then measures the SHA-256 hashcash rate and eight scrypt evaluations
+(RFC 7914, N = 16384, r = 8, p = 1, 16 MB; the implementation matches the RFC
+test vectors). Native references: 1.25 million SHA-256 hashes per second per
+core, and scrypt measured on one idle core of the study host (62.4 ms).
+
+- D1. Every trace hash on every phone matches the server's expected value.
+- D2. For the budget phone, the native-to-phone speed ratio for scrypt is at
+  most one third of its ratio for SHA-256: memory-hard puzzles narrow the
+  device gap that decides who is denied first.
+- D3. VGG11-BN inference on the budget phone takes at least three times as
+  long as on the fastest phone tested.
+
+At least three phones, including the 2019 budget phone, are required before
+these are reported.

@@ -405,8 +405,25 @@ double-precision baseline; against optimised native inference the verifier's
 fixed per-layer work dominates. Docking has leverage 4 per newcomer bundle and
 1/p in the trusted tier. Across both classes, the work worth delegating was
 expensive to verify and the work cheap to verify was not worth delegating.
-Phone runs of the classifiers and a scrypt memory-hard baseline (amendment 14b)
-are pending.
+
+**Phones (amendment 14b).** Six reports from four phones (iPhone 15 and Samsung
+M30s twice each, Galaxy A57, Infinix Note 40 Pro); no measurement overlapped a
+hidden page. Medians pool each phone's runs; ratios are native ÷ phone speed
+against 1.25 million SHA-256 hashes/s and 62.4 ms scrypt per core.
+
+| Phone | SHA-256/s | × native | scrypt (ms) | × native | VGG11-BN (ms) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| iPhone 15 | 368,066 | 3.4 | 96 | 1.5 | 255 |
+| Galaxy A57 | 153,501 | 8.1 | 168 | 2.7 | 443 |
+| Infinix Note 40 Pro | 69,678 | 17.9 | 371 | 6.0 | 718 |
+| Samsung M30s (2019) | 36,063 | 34.7 | 500 | 8.0 | 1,458 |
+
+D1 held (all 270 trace hashes matched the export), D2 held (the budget phone's
+scrypt gap, 8.0x, is below a third of its SHA-256 gap, 34.7x) and D3 held
+(budget VGG11-BN 5.7x the iPhone 15; 5.7x warm-only). The memory-hard puzzle
+cuts an attacker core's advantage over the budget phone about fourfold and the
+budget-to-flagship spread from 10x to 5.2x, but does not remove it; labelling
+work on the same phones spreads 5.7x, like scrypt.
 
 ## What is not established
 

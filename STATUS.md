@@ -619,3 +619,24 @@ are kept in a separate local legacy archive.
 The MNIST and CIFAR phases were moved out of this repository;
 the committed history retains the earlier pipeline as a record of the project's
 development.
+
+**Batched verification (amendment 15).** One admission labels B inputs,
+B in {1, 8, 32, 128}, checked by a batched exact verifier (numpy, one thread)
+against the server's batched CPU inference and, secondarily, its RTX 4060 GPU.
+M1 held (every perturbation rejected; outputs equal to the per-input
+verifier). M2 failed: batching cut verification per input only for the dense
+models (to 0.06x and 0.21x at B = 32); convolutional models stayed flat or
+worsened, because the verifier's work per activation dominates and those
+models have many activations per multiply-accumulate. M3 failed: no model
+reached leverage 4 at B = 32 (best 1.05, the wide perceptron); leverage fell
+with batch size for every model, as the server's own batched inference gained
+more than verification. M4 failed: at small batches the GPU was slower than
+one CPU thread (launch and transfer overhead), so leverage against it reached
+2.7 for the MNIST perceptron at B = 1, falling below 1 by B = 128. Cells whose
+verification exceeds 5.69 ms per admission are not claimed as available.
+
+Post-hoc diagnostic, not a result: per-input verification of the wide
+perceptron spends about 220 us, mostly Python-level overhead (SHA-256 of the
+trace is 8 us), against 700 us of native inference. An optimised native
+verifier could therefore reach much higher leverage for wide dense layers;
+this is untested.

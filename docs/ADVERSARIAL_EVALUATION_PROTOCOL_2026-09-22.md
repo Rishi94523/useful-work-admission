@@ -815,3 +815,61 @@ core, and scrypt measured on one idle core of the study host (62.4 ms).
 
 At least three phones, including the 2019 budget phone, are required before
 these are reported.
+
+## Amendment 15 — batched verification leverage, 28 September 2026
+
+Recorded after amendment 14b's results and a third review, before any batched
+verifier was written or any measurement below was taken.
+
+**Context.** Amendment 14 measured leverage with one input per admission and
+found it near one. Checking an affine layer with prepared projections costs
+O(inputs + outputs) while computing it costs O(inputs × outputs), so the low
+leverage came from fixed per-layer verifier work, not from the algebra.
+Batching could amortise that work. It also makes the server's own inference
+cheaper, and a GPU cheaper still. Whether batching moves any workload into the
+empty region of the (V, L) plane is the open question.
+
+**Design.** One admission labels a batch of B inputs of one model, B in
+{1, 8, 32, 128}. The visitor uploads one trace of all B inputs. A batched
+verifier checks every affine layer of the whole batch with the same four
+secret projections as matrix products, then does range checks, hashing and
+the nonlinear operations over the batch; its outputs must equal the per-input
+verifier's. The audit recomputes every affine layer of the batch exactly. V(B)
+is verification per admission at an 8% audit rate. C(B) is the server's
+cheapest native inference of the same B inputs on one CPU thread (FP32 or
+INT8), the primary baseline, as in amendment 14. A secondary baseline runs the
+same models on the host's GPU (RTX 4060 Laptop, FP32 or FP16, including
+host-device transfer). The verifier runs on one CPU thread throughout.
+Leverage L(B) = C(B) / V(B). Timings use one thread, warm-up excluded,
+randomised method order and distinct inputs within each batch. Client time
+per admission on each phone is B times that phone's per-input median from
+amendment 14b; a batch that the budget phone cannot finish within the 10 s
+patience of the admission model does not count for that class.
+
+**Predictions.**
+
+- M1. For every model and batch size, every single-entry perturbation (+1, −1,
+  2^31 − 1) at a randomly drawn batch position of every layer's trace is
+  rejected, and honest batches are accepted with outputs equal to the
+  per-input verifier's.
+- M2. Batching amortises verification: for every model, verification time per
+  input at B = 32 is at most one third of that at B = 1.
+- M3. The empty region is reachable: at B = 32 with the CPU baseline and 8%
+  audits, at least one model reaches leverage at least 4 with verification
+  under 10 ms per admission, on a batch the budget phone finishes within 10 s.
+  (Our estimate before measuring is that this is borderline and most likely
+  only for the wide perceptron.)
+- M4. Against the GPU baseline, no model reaches leverage 1 at 8% audits for
+  any batch size.
+
+**Availability.** Amendment 14 showed every class at least 90% served for
+verification times up to 5.69 ms per admission. Any model and batch size whose
+verification per admission exceeds that is rerun through the amendment-13
+grid before availability is claimed for it.
+
+**Consequence stated in advance.** If M3 holds, the paper will report that
+batched algebraic verification of wide layers escapes the trade-off, populate
+the empty region of Figure 5, and revise its conclusion accordingly. If M3
+fails, the trade-off claim will state that it holds with batching as well. If
+M4 holds, the paper will state that delegating these workloads pays only for a
+server without an accelerator.

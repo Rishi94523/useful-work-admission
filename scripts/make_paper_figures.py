@@ -104,6 +104,27 @@ def trust_bootstrap():
  h,l=axes[0].get_legend_handles_labels();fig.legend(h,l,frameon=False,fontsize=7,ncol=3,loc='upper center',bbox_to_anchor=(0.5,1.06))
  fig.savefig(OUT/'trust_bootstrap.pdf');plt.close(fig)
 
+def design_space():
+ """Verification cost per admission against leverage, for every measured workload."""
+ path=LR/'inference-leverage-2026-09-28/results.json'
+ if not path.exists():return
+ rows=json.loads(path.read_text(encoding='utf-8'))
+ names={'mnist-mlp':'MNIST MLP','mnist-cnn':'MNIST CNN','cifar-cnn':'CIFAR CNN','vgg11-bn':'VGG11','mnist-wide-mlp':'Wide MLP'}
+ fig,ax=plt.subplots(figsize=(4.6,3.0))
+ for r in rows:
+  ax.plot(r['verify_eff_ms'],r['leverage_8pct'],'o',color='#4f81bd',ms=5)
+  off={'mnist-cnn':(-44,3),'cifar-cnn':(4,4),'vgg11-bn':(4,-9)}.get(r['model'],(4,3))
+  ax.annotate(names[r['model']],(r['verify_eff_ms'],r['leverage_8pct']),textcoords='offset points',xytext=off,fontsize=6.5,color='#4f81bd')
+ ax.plot(1520,4,'s',color='#2e7d32',ms=6);ax.annotate('Docking, newcomer bundle',(1520,4),textcoords='offset points',xytext=(-60,-12),fontsize=6.5,color='#2e7d32')
+ ax.plot(152,10,'s',color='#2e7d32',ms=6,mfc='white');ax.annotate('Docking, trusted (p = 0.1)',(152,10),textcoords='offset points',xytext=(-20,-12),fontsize=6.5,color='#2e7d32')
+ ax.plot(0.77e-3,0.25,'v',color='#c0504d',ms=6);ax.annotate('Proof of work\n(no useful output)',(0.77e-3,0.25),textcoords='offset points',xytext=(5,-4),fontsize=6.5,color='#c0504d')
+ ax.axhline(1,color='0.6',lw=0.8,ls=':');ax.text(9e3,0.88,'leverage 1: verifying costs\nas much as computing',fontsize=6,color='0.4',va='top',ha='right')
+ ax.axvspan(1e-4,10,ymin=(math.log10(4)-math.log10(0.2))/(math.log10(20)-math.log10(0.2)),color='#f2c14e',alpha=0.18,lw=0)
+ ax.text(1.5e-4,12,'cheap to verify and high leverage:\nno measured workload',fontsize=6.5,color='#8a6d00')
+ ax.set_xscale('log');ax.set_yscale('log');ax.set_xlim(1e-4,1e4);ax.set_ylim(0.2,20)
+ ax.set_xlabel('Verifier time per admission (ms, log scale)');ax.set_ylabel('Leverage (log scale)')
+ fig.savefig(OUT/'design_space.pdf');plt.close(fig)
+
 if __name__=='__main__':
- print('device latency samples',device_timing());served_vs_cores();trust_bootstrap()
+ print('device latency samples',device_timing());served_vs_cores();trust_bootstrap();design_space()
  print('figures in',OUT)

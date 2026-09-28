@@ -81,7 +81,7 @@ and who pays. The paper is organised around one thesis: useful computation can
 replace discarded proof of work at a browser gate, but verification changes the
 economics of admission. We test it on two workload classes through six questions, each answered by a
 separate experiment under a protocol written before any attack was
-implemented. The protocol was amended fifteen times, each amendment's
+implemented. The protocol was amended sixteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -247,11 +247,12 @@ The evaluation follows a written protocol dated 22 September 2026, before any
 attack was implemented and before the matched scientific campaign completed.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Thirteen amendments cover phase
-operationalisation, the three economic fixes, scientific integrity, trace
-commitment, the rescoring driver, newcomer pricing, attestation, the
-subpuzzle baseline, a correction of the simulator's replay timing with five-seed
-replication, and a proof-of-work gate baseline.
+governs, with the original preserved. Sixteen amendments (numbered 1 to 14, with 9b
+and 14b) cover phase operationalisation, the three economic fixes, scientific
+integrity, trace commitment, the rescoring driver, newcomer pricing,
+attestation, the subpuzzle baseline, a correction of the simulator's replay
+timing with five-seed replication, a proof-of-work gate baseline, and the
+verification-leverage study with its phone predictions.
 
 The timeline is short, and every step is dated in the public commit history.
 The docking pipeline was built from 7 September 2026, and the stock
@@ -579,7 +580,7 @@ mid-range and flagship phones; against sixteen cores, 0.110, 0.135 and 0.130.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/served_vs_cores.pdf}
-\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Grey dotted: the same queue with proof-of-work verification (amendment 13), lowest-served device class. Input polling remains discrete; replay completion uses exact event times.}
+\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Grey dotted: the same queue with proof-of-work verification, lowest-served device class. Input polling remains discrete; replay completion uses exact event times.}
 \label{fig:served}
 \end{figure}
 ```
@@ -692,14 +693,14 @@ device arithmetic. The budget phone's gap to one native core was 8.0× for
 scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9).
 The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN.
 
-Table: Phone timings for the proof-of-work baselines and the largest classifier (amendment 14b); medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
+Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
 
 | Phone | SHA-256/s | Gap | scrypt (ms) | Gap | VGG11-BN (ms) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| iPhone 15 | 368,066 | 3.4 | 96 | 1.5 | 255 |
-| Galaxy A57 | 153,501 | 8.1 | 168 | 2.7 | 443 |
-| Infinix Note 40 Pro | 69,678 | 17.9 | 371 | 6.0 | 718 |
-| Galaxy M30s (2019) | 36,063 | 34.7 | 500 | 8.0 | 1,458 |
+| iPhone 15 | 368066 | 3.4 | 96 | 1.5 | 255 |
+| Galaxy A57 | 153501 | 8.1 | 168 | 2.7 | 443 |
+| Infinix Note 40 Pro | 69678 | 17.9 | 371 | 6.0 | 718 |
+| Galaxy M30s (2019) | 36063 | 34.7 | 500 | 8.0 | 1458 |
 
 A memory-hard puzzle therefore cuts an attacker core's advantage over the
 budget phone about fourfold; since the capacity model of Section 5.5 scales a
@@ -861,6 +862,19 @@ of useful-work admission rather than establish a universal replacement for
 proof of work.
 
 
+## Abbreviations
+
+AUC: area under the curve; BFGS: Broyden-Fletcher-Goldfarb-Shanno; CAPTCHA:
+Completely Automated Public Turing test to tell Computers and Humans Apart;
+CDN: content delivery network; CIFAR: Canadian Institute for Advanced Research
+image dataset; CNN: convolutional neural network; CPU: central processing unit;
+DUD-E: Directory of Useful Decoys, Enhanced; GPU: graphics processing unit;
+HTTP: Hypertext Transfer Protocol; MLP: multilayer perceptron; MNIST: Modified
+National Institute of Standards and Technology handwritten-digit dataset;
+PoW: proof of work; RNG: random number generator; ROC: receiver operating
+characteristic; SHA-256: Secure Hash Algorithm, 256-bit; SQL: Structured Query
+Language; VGG: Visual Geometry Group network.
+
 ## Declarations
 
 ### Supplementary information
@@ -888,6 +902,10 @@ Not applicable. All phone timing tests were run by the authors on phones they
 own. The test page submitted the device model and operating system as entered,
 the browser user agent and performance measurements; the study stored no
 names, contact details or location data.
+
+### Consent for publication
+
+Not applicable.
 
 ### Competing interests
 

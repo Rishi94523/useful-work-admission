@@ -25,7 +25,7 @@ This paper asks what the web gives up, and what it gains, when that discarded co
 
 Useful work changes both verification cost and answer reuse. Verifying a docking unit requires replay, far more expensive than checking a hash-puzzle solution. Scientific inputs may recur, so assignments and one-use credits must prevent repeated redemption of the same result. We investigate whether decomposition, trace commitment and sampled replay preserve useful output while removing exploitable discounts in admission cost. The tested fixes remove large observed discounts; they do not establish a lower bound against all algorithms, hardware or strategies. Replay capacity and device disparity remain material costs.
 
-This is a characterisation study. We do not propose useful work as a drop-in replacement for proof of work; we measure what making the work useful costs, and who pays. The paper is organised around one thesis: useful computation can replace discarded proof of work at a browser gate, but verification changes the economics of admission. We test it on two workload classes through six questions, each answered by a separate experiment under a protocol written before any attack was implemented. The protocol was amended fifteen times, each amendment's predictions committed to version control before the experiment it governs, and every miss is reported. The measured answers are our contributions.
+This is a characterisation study. We do not propose useful work as a drop-in replacement for proof of work; we measure what making the work useful costs, and who pays. The paper is organised around one thesis: useful computation can replace discarded proof of work at a browser gate, but verification changes the economics of admission. We test it on two workload classes through six questions, each answered by a separate experiment under a protocol written before any attack was implemented. The protocol was amended sixteen times, each amendment's predictions committed to version control before the experiment it governs, and every miss is reported. The measured answers are our contributions.
 
 \begin{enumerate}
 \item \textbf{Can a docking search be split into admission-sized units without changing the science?} On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
@@ -52,7 +52,7 @@ Proof of work has become a deployed browser defence. Friendly Captcha splits the
 
 reCAPTCHA made the human effort spent at an admission gate useful by pairing an unknown word, whose transcription digitised books, with a control word of known answer that decided admission~\citep{vonAhn08}. Our design mirrors that split at the level of computation: the admission decision rests on a replayed unit, and the remaining units are accepted into the scientific pool unverified. The difference is that reCAPTCHA needed human consensus to trust the unknown word, whereas a docking unit can be replayed bit for bit.
 
-Computational useful work at the gate has been proposed with far less evidence. The Coinhive proof-of-work CAPTCHA mined Monero for the site owner; measurement studies documented how the same scripts were used without consent~\citep{Eskandari18,Konoth18,Rueth18}, a history that makes consent and transparency first-order design requirements for any system that spends a visitor's CPU. The closest prior proposal to ours is Chadam and Topa's password-cracking CAPTCHA~\citep{ChadamTopa23}: the visitor brute-forces a range of candidate passwords against a stored hash, and progress is trusted when at least 51\% of a small group of visitors agree. It is a four-page work-in-progress design without implementation measurements, adversarial evaluation or device results, and its majority rule is exactly the redundancy that Sybil identities defeat~\citep{Douceur02}. Klarman et al.'s Webcoin rewards crowdsourced web indexing rather than hashing and states plainly the problem we quantify: unlike a nonce, useful output cannot be validated in nanoseconds, so only a fraction of it is verified~\citep{Klarman18}.
+Computational useful work at the gate has been proposed with far less evidence. The Coinhive proof-of-work CAPTCHA mined Monero for the site owner; measurement studies documented how the same scripts were used without consent~\citep{Eskandari18,Konoth18,Rueth18}, a history that makes consent and transparency first-order design requirements for any system that spends a visitor's CPU. The closest prior proposal to ours is Chadam and Topa's password-cracking CAPTCHA~\citep{ChadamTopa23}: the visitor brute-forces a range of candidate passwords against a stored hash, and progress is trusted when at least 51\% of a small group of visitors agree. The paper presents the design; implementation measurements, adversarial evaluation and device results were outside its scope, and majority agreement among visitors is a form of redundancy that Sybil identities can undermine~\citep{Douceur02}. Klarman et al.'s Webcoin rewards crowdsourced web indexing rather than hashing and states plainly the problem we quantify: unlike a nonce, useful output cannot be validated in nanoseconds, so only a fraction of it is verified~\citep{Klarman18}.
 
 What we add is not the idea but the measured system: a real scientific workload (AutoDock Vina~\citep{Trott10,Eberhardt21} units of 256,000 evaluations), verified by deterministic replay rather than by majority, shown to reproduce monolithic screening results at matched compute on five targets, attacked under a predeclared protocol, and timed in two phone studies, including a five-device subpuzzle comparison.
 
@@ -156,7 +156,7 @@ Three quantities characterise a useful-work gate. The verification time V is the
 
 \subsection{Predeclared protocol}
 
-The evaluation follows a written protocol dated 22 September 2026, before any attack was implemented and before the matched scientific campaign completed. Thresholds could not be revised after outcomes were seen; every change is a dated amendment committed to version control before the experiment it governs, with the original preserved. Thirteen amendments cover phase operationalisation, the three economic fixes, scientific integrity, trace commitment, the rescoring driver, newcomer pricing, attestation, the subpuzzle baseline, a correction of the simulator's replay timing with five-seed replication, and a proof-of-work gate baseline.
+The evaluation follows a written protocol dated 22 September 2026, before any attack was implemented and before the matched scientific campaign completed. Thresholds could not be revised after outcomes were seen; every change is a dated amendment committed to version control before the experiment it governs, with the original preserved. Sixteen amendments (numbered 1 to 14, with 9b and 14b) cover phase operationalisation, the three economic fixes, scientific integrity, trace commitment, the rescoring driver, newcomer pricing, attestation, the subpuzzle baseline, a correction of the simulator's replay timing with five-seed replication, a proof-of-work gate baseline, and the verification-leverage study with its phone predictions.
 
 The timeline is short, and every step is dated in the public commit history. The docking pipeline was built from 7 September 2026, and the stock qualification and matched campaigns ran from 14 to 23 September; the adversarial protocol took effect on 22 September, while the matched campaign was finishing. The later experiments are fast relative to docking: attacks replay units from a fixed corpus, and each availability simulation takes seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its cause and any post-hoc diagnostic separately from the predeclared result. The protocol is internally predeclared and timestamped in version control, not lodged with a third-party registry. Amendments chose later experiments in light of earlier results; what they fix in advance is each experiment's predictions and thresholds, not the sequence of experiments.
 
@@ -358,7 +358,7 @@ At eight replay workers the queue discriminates sharply by device. Against a fou
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/served_vs_cores.pdf}
-\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Grey dotted: the same queue with proof-of-work verification (amendment 13), lowest-served device class. Input polling remains discrete; replay completion uses exact event times.}
+\caption{Corrected full-patience simulation: mean service across five seeds, with shading for the observed minimum--maximum range. Dashed lines mark the conditional budget scale $(R-\lambda)\,r\,T$, not a guaranteed cutoff. Grey dotted: the same queue with proof-of-work verification, lowest-served device class. Input polling remains discrete; replay completion uses exact event times.}
 \label{fig:served}
 \end{figure}
 
@@ -412,17 +412,17 @@ Cheap verification does fix availability. Rerunning the admission grid with each
 We then ran the five classifiers on four of the study phones in exact integer JavaScript, three inputs and three repetitions each, followed by the SHA-256 puzzle rate and eight evaluations of scrypt~\citep{RFC7914}, a memory-hard function using 16 MB (N = 16384, r = 8, p = 1), as a proof-of-work baseline that the earlier studies lacked. Three predictions were recorded before the page ran (amendment 14b), and all held. All 270 classifier traces matched the server's expected hashes bit for bit, so algebraic verification needs no tolerance for device arithmetic. The budget phone's gap to one native core was 8.0$\times$ for scrypt against 34.7$\times$ for SHA-256, less than a third, as predicted (Table 9). The budget phone took 5.7$\times$ as long as the iPhone 15 for VGG11-BN.
 
 \begin{table}[htbp]
-\caption{Phone timings for the proof-of-work baselines and the largest classifier (amendment 14b); medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.}
+\caption{Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.}
 \centering
 \small
 \begin{tabularx}{\textwidth}{Xrrrrr}
 \toprule
 Phone & SHA-256/s & Gap & scrypt (ms) & Gap & VGG11-BN (ms) \\
 \midrule
-iPhone 15 & 368,066 & 3.4 & 96 & 1.5 & 255 \\
-Galaxy A57 & 153,501 & 8.1 & 168 & 2.7 & 443 \\
-Infinix Note 40 Pro & 69,678 & 17.9 & 371 & 6.0 & 718 \\
-Galaxy M30s (2019) & 36,063 & 34.7 & 500 & 8.0 & 1,458 \\
+iPhone 15 & 368066 & 3.4 & 96 & 1.5 & 255 \\
+Galaxy A57 & 153501 & 8.1 & 168 & 2.7 & 443 \\
+Infinix Note 40 Pro & 69678 & 17.9 & 371 & 6.0 & 718 \\
+Galaxy M30s (2019) & 36063 & 34.7 & 500 & 8.0 & 1458 \\
 \botrule
 \end{tabularx}
 \end{table}
@@ -456,6 +456,10 @@ A memory-hard puzzle therefore cuts an attacker core's advantage over the budget
 Useful computation can stand in for discarded proof of work at a browser gate, but verification changes the economics of admission. Across two workload classes, the work worth delegating was expensive to verify and the work cheap to verify was not worth delegating. On five qualified panels, bounded Vina units preserve screening performance and reproduce exactly on phones. Trace commitment, fresh assignment seeds, concealed audit draws and a trust threshold remove the large discounts found in tested attacks; the remaining estimates are near parity under the cost model, not a proof that cheating cannot be cheaper. Rescoring mitigates a measured merge failure. Verification still consumes replay capacity, where the same queue with proof-of-work verification kept every device class served, and overload falls unequally on devices, and any benefit from external attestation depends on issuer and token-supply assumptions. These results quantify the practical costs and limits of useful-work admission rather than establish a universal replacement for proof of work.
 
 \backmatter
+\section*{Abbreviations}
+
+AUC: area under the curve; BFGS: Broyden-Fletcher-Goldfarb-Shanno; CAPTCHA: Completely Automated Public Turing test to tell Computers and Humans Apart; CDN: content delivery network; CIFAR: Canadian Institute for Advanced Research image dataset; CNN: convolutional neural network; CPU: central processing unit; DUD-E: Directory of Useful Decoys, Enhanced; GPU: graphics processing unit; HTTP: Hypertext Transfer Protocol; MLP: multilayer perceptron; MNIST: Modified National Institute of Standards and Technology handwritten-digit dataset; PoW: proof of work; RNG: random number generator; ROC: receiver operating characteristic; SHA-256: Secure Hash Algorithm, 256-bit; SQL: Structured Query Language; VGG: Visual Geometry Group network.
+
 \section*{Declarations}
 
 \paragraph{Supplementary information}
@@ -469,6 +473,10 @@ Project name: Useful Work Admission research prototype. Project home page: \url{
 \paragraph{Ethics approval and consent to participate}
 
 Not applicable. All phone timing tests were run by the authors on phones they own. The test page submitted the device model and operating system as entered, the browser user agent and performance measurements; the study stored no names, contact details or location data.
+
+\paragraph{Consent for publication}
+
+Not applicable.
 
 \paragraph{Competing interests}
 

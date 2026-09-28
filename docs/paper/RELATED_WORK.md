@@ -74,10 +74,10 @@ transparency first-order design requirements for any system that spends a
 visitor's CPU. The closest prior proposal to ours is Chadam and Topa's
 password-cracking CAPTCHA [ChadamTopa23]: the visitor brute-forces a range of
 candidate passwords against a stored hash, and progress is trusted when at
-least 51% of a small group of visitors agree. It is a four-page
-work-in-progress design without implementation measurements, adversarial
-evaluation or device results, and its majority rule is exactly the redundancy
-that Sybil identities defeat [Douceur02]. Klarman et al.'s Webcoin rewards
+least 51% of a small group of visitors agree. The paper presents the design;
+implementation measurements, adversarial evaluation and device results were
+outside its scope, and majority agreement among visitors is a form of
+redundancy that Sybil identities can undermine [Douceur02]. Klarman et al.'s Webcoin rewards
 crowdsourced web indexing rather than hashing and states plainly the problem we
 quantify: unlike a nonce, useful output cannot be validated in nanoseconds, so
 only a fraction of it is verified [Klarman18].

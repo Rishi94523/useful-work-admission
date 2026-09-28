@@ -86,7 +86,7 @@ predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
-2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit; unit latency is as predictable as a 64-subpuzzle puzzle, not more (Section 5.2).
+2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
@@ -235,7 +235,7 @@ dated amendment committed to version control before the experiment it
 governs, with the original preserved. Thirteen amendments cover phase
 operationalisation, the three economic fixes, scientific integrity, trace
 commitment, the rescoring driver, newcomer pricing, attestation, the
-subpuzzle baseline, a post-review replay-timing correction with five-seed
+subpuzzle baseline, a correction of the simulator's replay timing with five-seed
 replication, and a proof-of-work gate baseline.
 
 The timeline is short, and every step is dated in the public commit history.
@@ -246,6 +246,10 @@ was finishing. The later experiments are fast relative to docking: attacks
 replay units from a fixed corpus, and each availability simulation takes
 seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its
 cause and any post-hoc diagnostic separately from the predeclared result.
+The protocol is internally predeclared and timestamped in version control,
+not lodged with a third-party registry. Amendments chose later experiments in
+light of earlier results; what they fix in advance is each experiment's
+predictions and thresholds, not the sequence of experiments.
 
 ### 4.2 Corpus, manifests and statistics
 
@@ -480,7 +484,7 @@ Table: Corpus re-finalisation measurements; the ROC-AUC entry is a separate expl
 | Units with the wrong atom count | rejected 33/33 |
 | Stored coordinates moved 2 Å, conformation untouched | −0.10 to +0.02 kcal/mol, within the predicted 0.12 |
 | Conformation moved 2 Å, coordinates untouched | −0.42 to +1.37 kcal/mol; the prediction of no gain failed |
-| Honest duplication of 5–75% of units | measured best gain −0.10 kcal/mol; projected ROC-AUC within ±0.004 up to 25% |
+| Honest duplication of 5–75% of units | measured best gain −0.10 kcal/mol; projected mean ROC-AUC change within ±0.002, and every 95% envelope within ±0.009, up to 75% |
 | Duplicated units claiming −20 kcal/mol, 5% of units | 22 of 33 jobs worse (95% interval 0.48–0.82), by up to 1.859 kcal/mol |
 
 In these tests, fabricated reported energies did not survive final rescoring:
@@ -514,12 +518,20 @@ result. The relative overhead denominator is number of units multiplied by a
 calibrated 1,520 ms per unit, not measured client time for each attacked job.
 The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
-that honest search would have found. An omission attacker, who submits
-well-formed but weak minima in unaudited units, is bounded by the honest
-duplication experiment: replacing up to a quarter of a job's units with
-duplicates, which contribute no new minima, moved projected ROC-AUC by at most
-0.004. By Section 3.5, such units also cost the attacker its full share of
-computed work to admit.
+that honest search would have found. **Contamination at scale.** Rescoring removes fabricated energies but not
+missing search. Under Section 3.5, an attacker who computes m of a bundle's
+four units is admitted only when the audit lands on a computed unit, so each
+admitted attacker bundle carries 4 − m fabricated units, at most three, into
+the pool. If attackers hold a share s of admitted bundles, the fraction of
+admitted units that are fabricated is s(4 − m)/4, and the campaign's useful
+yield per admission falls to 1 − s(4 − m)/4. Even at s = 1 and m = 1 this is
+75%, and no admitted attacker can exceed it, since m = 0 is never admitted.
+The duplication experiment covers that whole range: replacing up to 75% of a
+job's units with duplicates, which add no new minima, moved projected mean
+ROC-AUC by at most 0.002 on every target, with 95% envelopes within ±0.009.
+Contamination therefore slows the campaign, requiring up to four times as many
+admissions per ligand, rather than corrupting its rankings, provided energies
+are rescored.
 
 ### 5.5 What does useful work cost compared with proof of work?
 
@@ -531,37 +543,21 @@ freshness, which useful work must restore with assignment seeds and one-use
 credits. The rest of this section asks what that verification cost does
 under attack.
 
-A structurally admissible fake selected for audit consumes a modeled 1.52 s
-replay, whereas hash-puzzle verification is comparatively cheap. Let R be
-replay service capacity, λ the honest newcomer arrival rate, r a device's
-hash rate and T its bidding budget. Under full-patience bidding, an honest
-bid is approximately rT hashes. Buying the spare R − λ replay slots per
-second at that price gives the budget scale (R − λ) · r · T. This is a
-conditional capacity model, not a universal threshold: finite queues,
-transient prices, device mixtures, randomized solve times and the attack/drain
-horizon can change observed service. The predeclared C1 test checks only
-budgets below half or above twice this scale, leaving the intermediate band
-untested.
+Each fake submission selected for audit costs the verifier a 1.52 s replay.
+Let R be the verifier's replay capacity in replays per second, λ the honest
+newcomer arrival rate, r a device's hash rate and T the time a visitor will
+spend bidding. An honest bid is about rT hashes, so an attacker who buys the
+spare R − λ replay slots each second at that price needs a hash budget of
+about (R − λ) · r · T. We use this as a capacity model, not a sharp cutoff,
+and tested it on an effort-priority queue following Tor's design, driving the
+real queue code with measured phone and native rates, 40 honest newcomers per
+device class and five seeds (Figure 3). The model's predictions held in 230 of
+240 checks; every check, and how these results relate to an earlier
+single-seed run, is in Supplementary Section S3.
 
-**Historical results and correction.** The original follow-price experiment
-passed 33/48 C1 checks; the full-patience follow-up passed 46/48. Both used
-one seed and rounded replay completion to the next 250 ms tick, giving 1.75 s
-service rather than the assumed 1.52 s. Amendment 12 preserves those results
-and repeats all four grids with exact replay events and five seeds, 1,120
-runs in total. The corrected full-patience experiment passes 230/240 eligible
-checks: 46/48 in each seed. The same two directional misses recur at one
-worker: budget-phone service at 0.1 attacker cores and flagship service at
-one core exceed the predicted upper limit. These are not 240 independent
-traffic scenarios or validation of an exact cutoff (Figure 3).
-
-Supplementary Table S2 lists every prediction check, original and corrected.
-
-At eight replay workers the priority mechanism still discriminates sharply by
-device under a four-core attack. Corrected service means are 0.070, 0.965
-and 1.000 for budget, mid-range and flagship devices. At sixteen attacker
-cores they are 0.110, 0.135 and 0.130. Service is measured within the finite
-observation window, including post-attack draining; it is not a ten-second
-admission guarantee.
+At eight replay workers the queue discriminates sharply by device. Against a
+four-core attacker, mean service was 0.070, 0.965 and 1.000 for budget,
+mid-range and flagship phones; against sixteen cores, 0.110, 0.135 and 0.130.
 
 ```latex
 \begin{figure}[htbp]
@@ -586,17 +582,16 @@ protected service behind it, which we did not simulate. The comparison
 therefore isolates the availability price of replay verification rather than
 comparing whole deployments.
 
-A native core's measured hash rate is about 36 times the budget phone's
-JavaScript rate. Pricing alone does not remove that disparity. Under the
-sixteen-core bootstrap attack, without attestation, no budget or mid-range
-users reach trust in the corrected runs; flagship users reach trust at a mean
-of 0.030 (range 0–0.050) with eight workers. The historical single-seed
-statement that no device class ever reached trust is therefore too strong.
+A native core hashes about 36 times faster than the budget phone's JavaScript,
+and pricing alone does not remove that disparity. Because trust requires three
+audited bundles, newcomers who are outbid cannot earn trust either: under a
+sixteen-core attack without attestation, no budget or mid-range newcomer
+reached trust, and flagship newcomers did so at a mean of 0.030.
 
-**Conditional mock-attestation result.** If an issuer supplies origin-bound,
-one-use tokens with an effective per-device quota, a separate replay lane
-can help token holders earn trust without winning the hash auction. This is
-an experiment with MockAttester, not a deployed Privacy Pass integration.
+**Outside trust.** If an issuer supplies origin-bound, one-use tokens with a
+per-device quota, a separate replay lane lets token holders earn trust without
+winning the hash auction. We model the issuer with a mock; this is not a
+deployed Privacy Pass integration.
 At an assumed 90% honest token coverage, every attested group reaches trust
 in all five seeds at attacker supply 0, 0.1 or 1 tokens/s with eight workers.
 At zero attacker tokens, mean within-seed median trust times are about
@@ -615,15 +610,8 @@ seeds and device classes (Supplementary Table S4).
 \end{figure}
 ```
 
-T1, T3, T4 and T6 pass every corrected eligible check; T2 and T5 retain
-misses. The original post-hoc drain diagnostic and saturation failures remain
-in the archive. One-shot traffic drains after attack cessation; bootstrap
-attacks continue throughout the observation window, with repeated attempts
-until three grants. Consequently, one-shot service ratios and eventual trust
-fractions answer different questions. Token availability and issuer quotas
-are assumptions, and cheap attacker tokens consume capacity ahead of
-anonymous users. No conclusion here establishes production availability or
-an implementable quota from a deployed issuer.
+Cheap attacker tokens consume attested replay capacity ahead of anonymous
+visitors, and the benefit rests on the assumed issuer quota and token supply.
 
 ## 6 Discussion
 
@@ -678,7 +666,9 @@ Section 5.5 prices.
 per hour at the same assumed price. The capacity model scales directly: to keep
 a device class served, spare replay capacity must grow by 1.25 million / (r · T)
 replays per second for every attacker core, 1.25 million hashes per second
-being the measured native rate of one core. With measured rates this is about
+being the measured native rate of one core. Each replay occupies a verifier
+core for 1.52 s, so the replay cores needed per attacker core are
+1.52 × 1.25 million / (r · T). With measured rates this is about
 5.4 replay cores per attacker core for the budget phone, 1.3 for the mid-range
 phone and 1.0 for the flagship. Defending budget phones against a botnet
 therefore requires replay capacity several times the attacker's CPU. This is

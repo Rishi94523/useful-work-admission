@@ -24,6 +24,7 @@ DATA={
  'priority-admission-2026-09-24-patience':'Original single-seed full-patience results, amendment 9b (Supplementary S3)',
  'attested-admission-2026-09-25':'Original single-seed attested-lane results, amendment 10 (Supplementary S3)',
  'admission-amendment12-2026-09-25':'Corrected five-seed availability replication, 1,120 runs, amendment 12 (Section 5.5, Supplementary S3)',
+ 'admission-amendment13-2026-09-28':'Proof-of-work gate baseline, 360 runs, amendment 13 (Section 5.5, Figure 3, Supplementary S5)',
  'ticket-prototype-2026-09-24':'Isolated ticket prototype over loopback HTTP (Section 6, Supplementary S3)',
  'ticket-prototype-2026-09-24-wide':'Ticket prototype, wider configuration (Supplementary S3)',
  'ticket-molecular-2026-09-24':'Ticket prototype two-bundle native smoke check with real replay (Supplementary S3)',

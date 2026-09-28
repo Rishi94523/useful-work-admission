@@ -21,27 +21,24 @@ for the author.*
 ## Abstract
 
 Proof-of-work challenges protect websites by making visitors spend computation
-that is then discarded. We characterise the price of making that computation
+that is then discarded. We measure the price of making that computation
 useful, on two workload classes, under a protocol whose predictions were
 committed before each experiment. In the first, each admission carries bounded
-AutoDock Vina docking units whose outputs join a virtual screening campaign,
-verified by exactly replaying a secretly sampled unit. Splitting docking
-searches into units preserved screening accuracy on five benchmark targets,
-and units reproduced bit for bit on five phones. Committing to the search
-trace rejected all 198 truncated-work submissions, and three scheduler fixes
-removed large attacker discounts, leaving attacker cost near honest cost even
-with free identities; rescoring before merging stopped fabricated energies from
-corrupting results. The price is verification: each audited submission costs a
-molecular replay, so under attack verifier capacity decides who is admitted,
-budget phones are denied first, and protecting them needed about five replay
-cores per attacker core, while the same queue with proof-of-work verification
-served every device class. In the second class, five image classifiers for
-data labelling are verified algebraically in milliseconds and stay available
-under attack, but verifying them costs the server about as much as computing
-them, even batched or natively optimised; on four phones every classifier result matched the server's bit for bit.
-Across both, work worth delegating was expensive to verify, and work
-cheap to verify was not worth delegating: useful admission trades cheap
-verification against the useful work each unit of verification buys.
+AutoDock Vina docking units that join a virtual screening campaign and are
+verified by exactly replaying a secretly sampled unit. Decomposed searches
+preserved screening accuracy and reproduced bit for bit on phones; with trace
+commitment and three easily overlooked scheduler fixes, attackers paid about
+what honest clients pay even with free identities, and rescoring stopped
+fabricated energies from reordering results. The price is verification: each
+audit is a molecular replay, so under attack verifier capacity decides who is
+admitted and budget phones are denied first. Protecting them needed about five
+replay cores per attacker core, while the same queue with proof-of-work
+verification served every device class. In the second class, image
+classifiers for data labelling are verified algebraically in milliseconds and
+stay available under attack, but verifying them costs the server about as much
+as computing them, even batched or natively optimised. In both workloads we
+measured, work worth delegating was expensive to verify and work cheap to
+verify was not worth delegating.
 
 **Keywords.** proof of work; useful work; admission control; CAPTCHA alternatives; verifiable computation; denial of service; result verification; molecular docking; data labelling
 
@@ -70,12 +67,17 @@ the server needs to check one admission and by its leverage, the useful work
 it obtains per unit of checking (Section 3.6). Work worth delegating is
 expensive for the server to compute, and without a succinct certificate it is
 also expensive to check: from honest submissions, docking buys four to ten
-units of work per unit replayed, but replay makes verifier capacity decide who is admitted under
-attack. Work that can be checked cheaply, here image classification checked
+units of work per unit replayed, a ratio fixed by its audit rate, but replay
+makes verifier capacity decide who is admitted under attack. Work that can be checked cheaply, here image classification checked
 algebraically, keeps every device class served but buys little, because at
 this scale the server computes the answer almost as cheaply as it checks it;
 neither batching nor an optimised native verifier raised its leverage above
 2.2. No workload we measured was both cheap to check and high in leverage.
+The useful output per admission is small, a few core-seconds of docking worth
+under a hundredth of a US cent at cloud prices (Section 6). The case for
+useful admission is not revenue but that computation a gate spends anyway
+produces science instead of heat; the question is what that costs the
+verifier, and who pays.
 
 Useful work changes both verification cost and answer reuse. Verifying a
 docking unit requires replay, far more expensive than checking a hash-puzzle
@@ -99,7 +101,7 @@ and every miss is reported. The measured answers are our contributions.
 
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
-3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
+3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws: unchanged seeds on retry, an audit draw disclosed before upload, and trust after one bundle. Each fix is standard commit-then-challenge practice, but the flaws were easy to introduce and appeared only once identities were priced at zero, which we regard as the most transferable lesson for useful-work admission. Trace commitment and the fixes leave estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
 6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
@@ -257,8 +259,14 @@ useful units, so useful work per newcomer replay falls from 4 to m²/4, 0.25 at
 m = 1; in the trusted tier a fabricating identity yields no useful work for
 about 1/p units before an audit quarantines it. The classifiers of Section 5.6
 check every layer, so fabricated results are rejected rather than admitted,
-but each rejection still costs V. Section 5.6 measures V, L and D for a second workload
-class whose results are checked algebraically rather than by replay.
+but each rejection still costs V. For docking these values are set
+by construction: a replay costs the server as much as the unit it checks, so
+leverage is the inverse of the fraction of work replayed, and what docking
+measures is the availability cost of that verification (Section 5.5). For a
+workload checked without replay, leverage is an empirical ratio of two
+measured times; we always take it against the server's fastest measured
+option for the same output. Section 5.6 measures V, L and D for a second
+workload class whose results are checked algebraically rather than by replay.
 
 ## 4 Methodology
 
@@ -290,7 +298,11 @@ cause and any post-hoc diagnostic separately from the predeclared result.
 The protocol is internally predeclared and timestamped in version control,
 not lodged with a third-party registry. Amendments chose later experiments in
 light of earlier results; what they fix in advance is each experiment's
-predictions and thresholds, not the sequence of experiments.
+predictions and thresholds, not the sequence of experiments. The compressed
+timeline does not weaken that: each amendment was committed before its
+experiment ran, which the audit script checks against the run manifests, and
+every prediction is reported whether it held or failed. What it cannot rule
+out is that more time would have led to different experiments.
 
 ### 4.2 Corpus, manifests and statistics
 
@@ -704,13 +716,15 @@ batching made the server's own inference cheaper per input faster than it
 made verification cheaper, and in convolutional networks, where most output
 values come from early layers with only 9 to 576 multiply-accumulates each,
 the verifier's work per value dominates. A GPU baseline was slower than one CPU thread at small batches,
-from launch and transfer overhead, so leverage against it reached 2.7 for
-single inputs, but fell below 1 for every model at 128 inputs. In amendment
+from launch and transfer overhead, so leverage measured against the GPU
+alone reached 2.7 for the MNIST perceptron's single inputs, 0.31 against the
+server's fastest option, one CPU thread; against the GPU it fell below 1 for
+every model at 128 inputs. In amendment
 15b a native kernel verified a whole dense network per call, with an exact
 native audit, and the native forward pass joined the server's baselines. It
 was exact, but the wide perceptron reached leverage 2.21 at 8% audits against
-the server's fastest option, the GPU, and 3.15 against its fastest CPU option,
-short of the predicted 4. What remains is per-admission work that does not
+the server's fastest option, the GPU, and 3.15 had the server no GPU,
+short of the predicted 4; the 2.2 quoted elsewhere is the former. What remains is per-admission work that does not
 shrink with the layer: hashing the trace, quantising the input, entering
 native code with cold caches, and the audits. Of the eight predictions in the
 two amendments, three held: exactness in both, and the narrow perceptron
@@ -720,7 +734,7 @@ staying below 4 (Supplementary Section S6).
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/design_space.pdf}
-\caption{Verifier time per admission against verification leverage for every measured workload. Leverage is for honest submissions (Section 3.6). The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
+\caption{Verifier time per admission against verification leverage for every measured workload. All leverage is for honest submissions; docking's is set by its audit rate and falls under attack (Section 3.6). The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
 \label{fig:design}
 \end{figure}
 ```
@@ -787,10 +801,17 @@ accepted trace remain open. Faster hardware or a faster implementation of the
 same operations, such as native code, vectorisation or a GPU, is not a
 shortcut in the security sense: it is the same hardware disparity proof of
 work already has, and Section 5.5 prices it. Avoiding evaluations is the real
-question. Approximate energies, reordered arithmetic or incremental updates
-can change floating-point rounding and hence the committed bytes; fresh
-server-drawn seeds make one unit's intermediate states unlikely to recur in
-another. We know of no method that yields a matching trace with fewer
+question. Each committed energy is the end of a local optimisation that starts
+from a random perturbation of the previous accepted state, and whether that
+step is accepted decides where the next one starts, so every recorded value
+depends on the full path of evaluations before it. Matching the trace without
+the evaluations means predicting a chaotic floating-point trajectory for a
+fresh seed, not only its end point. Approximate energies, reordered arithmetic
+or incremental updates change rounding and hence the committed bytes, and
+fresh server-drawn seeds make one unit's intermediate states unlikely to recur
+in another. Reusing the precomputed grid maps across units is not a shortcut,
+since honest clients reuse them too. We tested truncation only; approximate
+scoring and cross-unit reuse attacks remain untested. We know of no method that yields a matching trace with fewer
 evaluations than the honest search, but we have not proved that none exists.
 A lower bound of that kind, for example showing that any accepted trace of N
 steps requires Ω(N) evaluations under stated assumptions about the scoring
@@ -875,9 +896,11 @@ no integrated production traffic or energy-cost validation.
 ## 7 Conclusion
 
 Useful computation can stand in for discarded proof of work at a browser gate,
-but verification changes the economics of admission. Across two workload
-classes, the work worth delegating was expensive to verify and the work cheap
-to verify was not worth delegating. Bounded Vina units
+but verification changes the economics of admission. In the two workload
+classes we measured, the work worth delegating was expensive to verify and the
+work cheap to verify was not worth delegating; a workload whose results carry
+a cheaply checkable certificate is the natural test of whether that holds more
+generally. Bounded Vina units
 preserve screening performance and reproduce exactly on phones, and the
 tested fixes leave attacker cost near parity, not provably so. Replay
 verification still consumes capacity that a proof-of-work gate does not,

@@ -477,11 +477,10 @@ Table: Attacker discount factor on the committed scheduler before and after the 
 | Trusted tier, trust after 3 audited bundles | — | 1.36–4.04 | at least 1.0 |
 
 With reseeding, no reveal and a three-bundle threshold, the large observed
-bundle-tier discounts (0.46–0.76) disappear: tested estimates become
-0.96–1.03. These are consistent with parity under the evaluated cost model.
+bundle-tier discounts disappear, and the estimates are consistent with parity
+under the evaluated cost model.
 The lowest interval, 0.96 ± 0.09, also permits a modest attacker advantage;
-containing 1.0 does not establish equality or a lower bound of 1.0. The
-trusted-tier strategies tested after the threshold change cost 1.36–4.04.
+containing 1.0 does not establish equality or a lower bound of 1.0.
 Identities are free in these experiments, but results apply to the specified
 strategies, attempt model and workload costs, not every possible adversary.
 Before the fixes, compensating for the measured discounts would have required
@@ -878,16 +877,12 @@ no integrated production traffic or energy-cost validation.
 Useful computation can stand in for discarded proof of work at a browser gate,
 but verification changes the economics of admission. Across two workload
 classes, the work worth delegating was expensive to verify and the work cheap
-to verify was not worth delegating. On five qualified panels,
-bounded Vina units preserve screening performance and reproduce exactly on
-phones. Trace commitment, fresh assignment seeds, concealed audit draws and a
-trust threshold remove the large discounts found in tested attacks; the
-remaining estimates are near parity under the cost model, not a proof that
-cheating cannot be cheaper. Rescoring mitigates a measured merge failure.
-Verification still consumes replay capacity, where the same queue with
-proof-of-work verification kept every device class served, and overload falls unequally on
-devices, and any benefit from external attestation depends on issuer and
-token-supply assumptions. These results quantify the practical costs and limits
+to verify was not worth delegating. Bounded Vina units
+preserve screening performance and reproduce exactly on phones, and the
+tested fixes leave attacker cost near parity, not provably so. Replay
+verification still consumes capacity that a proof-of-work gate does not,
+overload falls first on budget devices, and external attestation helps only
+under issuer and token-supply assumptions. These results quantify the practical costs and limits
 of useful-work admission rather than establish a universal replacement for
 proof of work.
 

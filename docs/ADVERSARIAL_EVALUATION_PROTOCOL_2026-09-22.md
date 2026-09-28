@@ -873,3 +873,53 @@ the empty region of Figure 5, and revise its conclusion accordingly. If M3
 fails, the trade-off claim will state that it holds with batching as well. If
 M4 holds, the paper will state that delegating these workloads pays only for a
 server without an accelerator.
+
+## Amendment 15b — native fused verification of dense layers, 28 September 2026
+
+Recorded after amendment 15's results and before the native kernel below was
+written or measured.
+
+**Context.** Amendment 15 found that leverage falls with batching, and a
+post-hoc profile found the wide perceptron's per-input verification (about
+220 us) dominated by Python-level overhead: SHA-256 of its trace takes 8 us and
+the projections a few thousand multiply-accumulates, against about 700 us of
+native inference. The measured trade-off may therefore reflect the verifier's
+implementation for dense layers rather than the method. This amendment tests
+that.
+
+**Design.** A C kernel verifies a whole dense network in one call per input:
+for each layer, range checks, the same four secret projections over the field
+of size 2^31 − 1, and requantisation, with SHA-256 of the trace computed as
+before. A second entry point computes the exact integer forward pass (int8
+weights, 7-bit activations, int32 accumulation) and serves both as the exact
+audit (compared with the uploaded trace) and as an additional native central
+baseline. Both are compiled with the same flags (-O3 -march=native). The
+central baseline is the fastest of PyTorch FP32, PyTorch INT8, the native
+forward pass on one CPU thread, and amendment 15's GPU measurement. Models: the
+two dense models, the MNIST perceptron 784-128-64-10 and the wide perceptron
+784-2048-2048-10, at B = 1 and B = 32 (the native batch loops over inputs in
+one call). Timing as in amendment 15.
+
+**Predictions.**
+
+- N1. The native kernel accepts honest traces with outputs equal to the
+  per-input reference verifier, rejects every single-entry perturbation (+1,
+  −1, 2^31 − 1) of every layer, and its forward pass reproduces the reference
+  trace bit for bit.
+- N2. Native verification of the wide perceptron at B = 1, without audits, is
+  at least five times faster than amendment 15's batched verifier at B = 1
+  (0.352 ms).
+- N3. The wide perceptron at B = 1 with 8% native audits reaches leverage at
+  least 4 against the fastest central baseline, with verification under 10 ms
+  per admission.
+- N4. The MNIST perceptron stays below leverage 4 at 8% audits for both batch
+  sizes: its layers are too narrow.
+
+**Consequence stated in advance.** If N3 holds, the paper will replace the
+claim that no measured workload is both cheap to verify and high in leverage
+with a design rule: leverage is bounded by the computation each checked value
+represents, so replayed docking and convolutional labelling cannot escape the
+trade-off while wide dense layers can, at the cost of delivering their
+weights. Amendment 14's L5 will be reported as superseded by an optimised
+verifier. If N3 fails, the paper will state that the trade-off held with an
+optimised native verifier.

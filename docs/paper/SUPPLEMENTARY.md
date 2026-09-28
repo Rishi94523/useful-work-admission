@@ -66,6 +66,11 @@ correlation or an adversary selecting compounds by label. The resulting AUC
 changes are exploratory projections, not whole-panel attack measurements or
 confirmatory confidence intervals for real-world poisoning.
 
+**Rescoring driver.** The original driver is retained as the historical
+baseline for every earlier result. The rescoring overhead is expressed
+relative to the number of units multiplied by a calibrated 1,520 ms per unit,
+not measured client time for each attacked job.
+
 The underlying integrity experiment directly replaces or alters units in
 saved pools and reruns the finaliser; it does not exercise an admission-bypass
 path. At 5% fabricated-energy units, 22 of 33 jobs worsen, by at most

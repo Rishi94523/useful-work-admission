@@ -315,10 +315,9 @@ Table: Evidence supporting the claims and what each experiment does not establis
 Supplementary Section S1 gives the complete protocols: target selection and
 input preparation, compute matching and the paired bootstrap, the poisoning
 projection, and the availability simulator. The availability results use
-exact replay-event timing and five seeds (amendment 12). That amendment
-corrected an earlier discretisation which, by noticing completions only on
-250 ms ticks, lengthened each simulated 1.52 s replay to 1.75 s; the original
-single-seed results are preserved and compared in Supplementary Section S3.
+exact replay-event timing and five seeds, correcting an earlier simulator
+discretisation; the original single-seed results are preserved and compared
+in Supplementary Section S3.
 
 
 ### 4.4 Use of AI tools
@@ -486,14 +485,10 @@ caused no refusals, and 16 caused 81%. Stateless tickets that allocate seeds
 without reserving queue seats removed the effect in the isolated prototype.
 
 Every behaviour in the threat model is covered, though not all by a
-dedicated experiment. Zero work (A1), partial work (A2) and cached replay (A3)
-are the unit-level attacks above. Retry grinding (A4) and identity reset (A5)
-are the retry, cap and fresh-identity strategies of the admission experiments,
-all run with identities free. Disappearing workers (A6) are the lease-exhaustion
-result. Collusion (A7), identities sharing one computed result, was not run
-separately: a result computed for another unit fails replay like substitution
-(0 of 99 accepted), and resubmitting the same result for the same unit is
-refused by one-use credits. Subtle corruption (A8) is Section 5.4.
+dedicated experiment: A1–A3 above, A4 and A5 by the free-identity admission
+strategies, A6 by lease exhaustion and A8 in Section 5.4. Collusion (A7) was
+not run separately; a result computed for another unit fails replay like
+substitution, and resubmission is refused by one-use credits.
 Supplementary Section S4 lists the further scheduler configurations: attempt
 caps, two audit draws, reduced-budget units and trust acquisition.
 
@@ -546,9 +541,6 @@ Table: Rescoring driver against the original driver.
 | Jobs changed by coordinate-only tampering | 16/33 | 0/33 |
 | Rescoring overhead per ligand state | — | +91 ms median; 0.046% relative to calibrated client work |
 
-The original driver is retained as the historical baseline for every earlier
-result. The relative overhead denominator is number of units multiplied by a
-calibrated 1,520 ms per unit, not measured client time for each attacked job.
 The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
 that honest search would have found. **Contamination at scale.** Rescoring removes fabricated energies but not
@@ -726,7 +718,9 @@ earlier studies lacked. Three predictions were recorded before the page ran
 (amendment 14b), and all held. All 270 classifier traces matched the server's
 expected hashes bit for bit, so algebraic verification needs no tolerance for
 device arithmetic. The budget phone's gap to one native core was 8.0× for
-scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9).
+scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9),
+though the two native references were measured under different load
+(Supplementary Section S6).
 The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN.
 
 Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
@@ -748,12 +742,9 @@ on the same phones.
 
 ## 6 Discussion
 
-**The trade-off.** The two workloads fall at opposite ends of one trade-off.
-Docking is expensive for the server to compute, so delegating it buys leverage,
-but checking it without a certificate means replaying it, which is what exposes
-availability. The classifiers can be checked algebraically in milliseconds,
-but work that cheap to check at this scale is also cheap for the server to
-compute, so delegating it saves nothing. A useful workload in the empty region
+**The trade-off.** The two workloads fall at opposite ends of one trade-off
+(Figure 5): docking buys leverage by paying for replay, and the classifiers
+are cheap to check because they are cheap to compute. A useful workload in the empty region
 of Figure 5 would need results that are expensive to produce and cheap to
 check with a certificate, as a hash preimage is for proof of work. Search
 problems with succinct certificates have that shape; docking's search does
@@ -765,12 +756,10 @@ elsewhere in Figure 5.
 
 **When is useful work worth it?** Only when someone needs the output and the
 verifier can afford replay. A puzzle is strictly better on verifier cost and
-freshness. Useful work removes large observed attacker discounts only after
-closing the tested reuse and trust leaks, it is no more predictable for the
-visitor than a subpuzzle puzzle, and it pays in replay CPU for every fake
-submission. What it buys is that the visitor's computation is not wasted: the
-units a site would otherwise discard dock real ligands with screening differences
-small on the five qualified panels, within the reported uncertainty.
+freshness; useful work is no more predictable than a subpuzzle puzzle, closes
+attacker discounts only after the tested fixes, and pays a replay for every
+fake submission. What it buys is that the visitor's computation docks real
+ligands instead of being discarded.
 
 **What trace commitment does and does not establish.** The committed trace
 records, for every Monte Carlo step, the refined candidate's energy at full
@@ -790,18 +779,14 @@ another. We know of no method that yields a matching trace with fewer
 evaluations than the honest search, but we have not proved that none exists.
 A lower bound of that kind, for example showing that any accepted trace of N
 steps requires Ω(N) evaluations under stated assumptions about the scoring
-function, remains open. Proof of work is in the same position in form:
-hashcash also rests on an assumption, that SHA-256 admits no shortcut to a
-preimage below the target, rather than on a proof. The difference is in the
-evidence. The hash assumption is backed by decades of public cryptanalysis;
-the trace-work assumption is backed only by the attacks tested here. We
-therefore present it as a stated assumption and an open question, not as an
-equivalent guarantee.
+function, remains open. Hashcash also rests on an assumption rather than a
+proof, that SHA-256 admits no shortcut to a preimage below the target, but one
+backed by decades of public cryptanalysis; the trace-work assumption is backed
+only by the attacks tested here, so we state it as an assumption and an open
+question, not an equivalent guarantee.
 
-**What the useful output is worth.** In the newcomer tier the server replays
-one unit of every four admitted, so it spends 0.25 units of its own compute per
-donated unit: four units of docking for one of replay. In the trusted tier at
-audit rate p the ratio is 1/p, ten to one at p = 0.1. A ligand state needs a
+**What the useful output is worth.** Docking's leverage is four units per
+replay in the newcomer tier and 1/p in the trusted tier (Section 3.6). A ligand state needs a
 median of 140 units, about 35 newcomer admissions or 140 trusted admissions,
 and 140 units are roughly 213 native core-seconds. At an assumed cloud price of
 0.04 US dollars per core-hour, one newcomer admission donates about six
@@ -822,52 +807,39 @@ phone and 1.0 for the flagship. Defending budget phones against a botnet
 therefore requires replay capacity several times the attacker's CPU. This is
 the price of utility stated as a ratio, and it is the regime in which an
 outside trust signal, rather than more replay, has to carry the defence.
-Memory-hard puzzles narrow the gap at its source: with scrypt, the budget phone
-trailed a native core by 8.0× rather than 34.7× (Section 5.6), though the
-native references were measured under different load (Supplementary S6).
+Memory-hard puzzles narrow this gap at its source (Section 5.6).
 
-**Identity cost.** Proof of work is indifferent to identities. Our first
-scheduler was not: its security depended on identities costing between 0.5
-and 5.1 honest units. We regard this as the most transferable lesson for any
-useful-work admission design, whatever the workload: every retry, reveal and
-trust path must be checked with identities priced at zero.
+**Identity cost.** Proof of work is indifferent to identities; our first
+scheduler's security depended on identities costing 0.5–5.1 honest units
+(Section 5.3). We regard this as the most transferable lesson for any
+useful-work admission design: every retry, reveal and trust path must be
+checked with identities priced at zero.
 
-**Reputation under load.** Verifying reputed submitters first protects them.
-In the isolated ticket prototype, a flood of fake submissions paying a 16-bit
-puzzle cut newcomers to 1 of 60 served while established users, who hold
-reserved replay capacity, stayed at 60 of 60 (arrivals and replay simulated).
-A failed audit quarantines the identity, so a reputed submitter who turns
-malicious is caught at the trusted tier's audit rate. Reputation cannot, however,
-rescue honest newcomers. A surge in new identities reveals that an attack is
-under way but not which newcomers are attackers; both have no history.
-Deprioritising all new identities under load therefore denies honest
-newcomers as well, which is the trust-bootstrap lockout of Section 5.5.
-Separating them requires an outside signal, such as the attestation modelled
-there or the cross-site behavioural signals of deployed challenge services
-[Turnstile22], which trade privacy for discrimination. The standard attack on
-reputation is the sleeper identity: identities aged during quiet periods and
-spent together in an attack [Douceur02]. Useful-work admission changes the
-price of that strategy. Earning trust here requires three replayed and
-accepted bundles, so an attacker who pre-builds reputation must first perform
-real, audited docking. Aged identities still gain admission, but the work that
-bought them is useful. We have not measured a sleeper-identity attack; its
-cost and yield are a natural next experiment.
+**Reputation under load.** Verifying reputed submitters first protects them:
+in the isolated ticket prototype, a flood of fake submissions paying a 16-bit
+puzzle cut newcomers to 1 of 60 served while established users, holding
+reserved replay capacity, stayed at 60 of 60 (arrivals and replay simulated),
+and a failed audit quarantines a reputed submitter who turns malicious. It
+cannot rescue honest newcomers, who have no more history than attackers; that
+is the trust-bootstrap lockout of Section 5.5, and separating them needs an
+outside signal such as attestation or the cross-site behavioural signals of
+deployed challenge services [Turnstile22], which trade privacy for
+discrimination. Against sleeper identities aged during quiet periods
+[Douceur02], useful admission changes the price: earning trust requires three
+replayed bundles, so pre-built reputation is paid for in real, audited
+docking. We have not measured a sleeper-identity attack.
 
-**Availability.** The conditional budget scale (R − λ) · r · T exposes the
-cost of replay capacity under the modeled attack. Corrected five-seed results
-retain substantial anonymous-newcomer denial at sixteen attacker cores. A
-mock-attestation lane improves outcomes only under assumed honest coverage
-and attacker token budgets; issuer quotas and platform availability remain
-external requirements, not properties established by our prototype.
-
-**Consent.** Browser mining without consent became a documented abuse
-[Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
-say so, and it gives them a reason a puzzle cannot.
+**Consent.** Given the history of covert browser mining (Section 2.2), a
+useful-work gate that spends visitors' energy must say so, and it gives them a
+reason a puzzle cannot.
 
 **Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one laptop-class host.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
-rather than executed. Discount-factor intervals assume independent attempts,
+rather than executed. Corrected five-seed results retain substantial
+anonymous-newcomer denial at sixteen attacker cores, and the mock-attestation
+lane helps only under assumed honest coverage and attacker token budgets;
+issuer quotas and platform availability are external requirements. Discount-factor intervals assume independent attempts,
 which Section 3.5 argues but does not prove.
 The trusted tier grants unaudited admissions on history, not on the unit.
 The scheduler quarantines contributors after failed replay and blocks

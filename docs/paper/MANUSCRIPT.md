@@ -1,4 +1,4 @@
-# The Price of Utility: Scientific Computation as Browser Admission Work, Measured Under Attack
+# The Price of Utility: Verification Leverage in Useful-Work Browser Admission
 
 **Short title.** The Price of Utility
 
@@ -38,7 +38,8 @@ cores per attacker core, while the same queue with proof-of-work verification
 served every device class. In the second class, five image classifiers for
 data labelling are verified algebraically in milliseconds and stay available
 under attack, but verifying them costs the server about as much as computing
-them. Across both, work worth delegating was expensive to verify, and work
+them; on four phones every classifier result matched the server's bit for bit.
+Across both, work worth delegating was expensive to verify, and work
 cheap to verify was not worth delegating: useful admission trades cheap
 verification against the useful work each unit of verification buys.
 
@@ -89,7 +90,7 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43. Docking reaches leverage 4 to 10 only by paying for replay (Section 5.6).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43. Docking reaches leverage 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -680,6 +681,34 @@ No workload we measured is both cheap to verify and high in leverage.
 \end{figure}
 ```
 
+We then ran the five classifiers on four of the study phones in exact integer
+JavaScript, three inputs and three repetitions each, followed by the SHA-256
+puzzle rate and eight evaluations of scrypt [RFC7914], a memory-hard function
+using 16 MB (N = 16384, r = 8, p = 1), as a proof-of-work baseline that the
+earlier studies lacked. Three predictions were recorded before the page ran
+(amendment 14b), and all held. All 270 classifier traces matched the server's
+expected hashes bit for bit, so algebraic verification needs no tolerance for
+device arithmetic. The budget phone's gap to one native core was 8.0× for
+scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9).
+The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN.
+
+Table: Phone timings for the proof-of-work baselines and the largest classifier (amendment 14b); medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
+
+| Phone | SHA-256/s | Gap | scrypt (ms) | Gap | VGG11-BN (ms) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| iPhone 15 | 368,066 | 3.4 | 96 | 1.5 | 255 |
+| Galaxy A57 | 153,501 | 8.1 | 168 | 2.7 | 443 |
+| Infinix Note 40 Pro | 69,678 | 17.9 | 371 | 6.0 | 718 |
+| Galaxy M30s (2019) | 36,063 | 34.7 | 500 | 8.0 | 1,458 |
+
+A memory-hard puzzle therefore cuts an attacker core's advantage over the
+budget phone about fourfold; since the capacity model of Section 5.5 scales a
+device's protection with its rate relative to an attacker core, the budget
+phone gains the same factor at a puzzle gate. It does not remove device
+disparity: the spread from budget phone to flagship fell from 10.2× under
+SHA-256 to 5.2× under scrypt, similar to the 5.7× spread for labelling work
+on the same phones.
+
 ## 6 Discussion
 
 **The trade-off.** The two workloads fall at opposite ends of one trade-off.
@@ -752,6 +781,9 @@ phone and 1.0 for the flagship. Defending budget phones against a botnet
 therefore requires replay capacity several times the attacker's CPU. This is
 the price of utility stated as a ratio, and it is the regime in which an
 outside trust signal, rather than more replay, has to carry the defence.
+Memory-hard puzzles narrow the gap at its source: with scrypt, the budget phone
+trailed a native core by 8.0× rather than 34.7× (Section 5.6), though the
+native references were measured under different load (Supplementary S6).
 
 **Identity cost.** Proof of work is indifferent to identities. Our first
 scheduler was not: its security depended on identities costing between 0.5
@@ -791,7 +823,7 @@ external requirements, not properties established by our prototype.
 [Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
 say so, and it gives them a reason a puzzle cannot.
 
-**Limitations.** Five phone models, two workload classes, five 96-compound panels and five small classifiers measured on one host without GPU or batched serving.
+**Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one host without GPU or batched serving.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts,

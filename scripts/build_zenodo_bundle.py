@@ -71,7 +71,7 @@ def main():
   for f,b,arc in inputs:
    z.writestr(arc,b);files+=1
    sums.append(hashlib.sha256(b).hexdigest()+'  '+arc)
-  readme=['# Result ledgers for "The Price of Utility"','',
+  readme=['# Result ledgers for "The Price of Utility: Verification Leverage in Useful-Work Browser Admission"','',
    'Code commit: '+commit,'','Each directory under results/ is the unmodified local output of one experiment,',
    'with its execution manifest where the runner writes one. Earlier attempts and',
    'misses are preserved rather than removed. SHA256SUMS lists every result file.',

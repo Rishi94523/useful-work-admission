@@ -1,7 +1,7 @@
 # Supplementary Information: The Price of Utility
 
-Additional file 1 for “The Price of Utility: Scientific Computation as Browser
-Admission Work, Measured Under Attack”. Section and table numbers prefixed S
+Additional file 1 for “The Price of Utility: Verification Leverage in Useful-Work
+Browser Admission”. Section and table numbers prefixed S
 refer to this file; all others refer to the main text.
 
 ## S1 Experimental methods
@@ -284,3 +284,15 @@ layer's trace (offsets +1, −1 and 2^31 − 1) was rejected. Availability used 
 amendment-13 grid (fixed 16-bit and 18-bit puzzles and the full-patience
 priority queue; 1–8 workers; 0–16 attacker cores; five seeds) with each model's
 verification time at an 8% audit rate.
+
+Phone timings (amendment 14b) used a page that downloaded each exported model
+(int8 weights, int32 biases and three inputs) and ran exact integer inference
+in a web worker, then measured the SHA-256 hashcash rate for three seconds and
+eight scrypt evaluations with a JavaScript implementation checked against the
+RFC 7914 test vectors. The scrypt native reference, 62.4 ms, was measured on
+one idle core of the study host through OpenSSL; the SHA-256 reference, 1.25
+million hashes per second, was measured under campaign load, so the SHA-256
+gaps may be understated relative to the scrypt gaps. Six reports came from four
+phones (two each from the iPhone 15 and Galaxy M30s); no timing overlapped a
+hidden page. Medians pool each phone's runs; dropping the first repetition of
+each input changed the VGG11-BN budget-to-flagship ratio from 5.72 to 5.71.

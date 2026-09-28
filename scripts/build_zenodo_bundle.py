@@ -25,12 +25,18 @@ DATA={
  'attested-admission-2026-09-25':'Original single-seed attested-lane results, amendment 10 (Supplementary S3)',
  'admission-amendment12-2026-09-25':'Corrected five-seed availability replication, 1,120 runs, amendment 12 (Section 5.5, Supplementary S3)',
  'admission-amendment13-2026-09-28':'Proof-of-work gate baseline, 360 runs, amendment 13 (Section 5.5, Figure 3, Supplementary S5)',
+ 'inference-leverage-2026-09-28':'Classifier verification leverage, trace sizes, perturbation checks and native scrypt reference, amendment 14 (Section 5.6, Table 8, Figure 5, Supplementary S6)',
+ 'admission-amendment14-2026-09-28':'Availability with classifier verification in place of replay, 1,800 runs, amendment 14 (Section 5.6)',
  'ticket-prototype-2026-09-24':'Isolated ticket prototype over loopback HTTP (Section 6, Supplementary S3)',
  'ticket-prototype-2026-09-24-wide':'Ticket prototype, wider configuration (Supplementary S3)',
  'ticket-molecular-2026-09-24':'Ticket prototype two-bundle native smoke check with real replay (Supplementary S3)',
  'hashcash-batches-2026-09-24':'Desktop subpuzzle hashcash variance baseline',
  'capacity-review-2026-09-24':'Capacity review of the ticket prototype',
 }
+# Inputs outside local-research, stored under their own prefix in the data zip.
+# The trained classifiers are included because retraining is not bit-exact and
+# the reported accuracies and timings depend on these exact weights.
+EXTRA={'data/inference-models':'models/inference-models'}
 SECRETS=re.compile(rb'api[_-]?key|secret|password|bearer|PRIVATE KEY|UPLOAD_KEY|Users[\\/]+\w+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}',re.I)
 
 def git(*a):return subprocess.check_output(['git',*a],cwd=ROOT,text=True).strip()
@@ -48,14 +54,21 @@ def main():
   for f in paths:
    b=f.read_bytes()
    if SECRETS.search(b):sys.exit('Possible secret or personal data in '+str(f.relative_to(LR)))
-   inputs.append((f,b))
+   inputs.append((f,b,'results/'+f.relative_to(LR).as_posix()))
+ for d,prefix in EXTRA.items():
+  paths=sorted(f for f in (ROOT/d).rglob('*') if f.is_file())
+  if not paths:sys.exit('Missing required input directory: '+d)
+  for f in paths:
+   b=f.read_bytes()
+   if SECRETS.search(b):sys.exit('Possible secret or personal data in '+d+'/'+f.name)
+   inputs.append((f,b,prefix+'/'+f.relative_to(ROOT/d).as_posix()))
  commit=git('rev-parse','HEAD');short=commit[:7];OUT.mkdir(parents=True,exist_ok=True)
  code=OUT/('useful-work-admission-code-'+short+'.zip')
  subprocess.check_call(['git','archive','--format=zip','--prefix=useful-work-admission-'+short+'/','-o',str(code),commit],cwd=ROOT)
  data=OUT/('useful-work-admission-results-'+short+'.zip');sums=[];files=0
  with zipfile.ZipFile(data,'w',zipfile.ZIP_DEFLATED) as z:
-  for f,b in inputs:
-   arc='results/'+f.relative_to(LR).as_posix();z.writestr(arc,b);files+=1
+  for f,b,arc in inputs:
+   z.writestr(arc,b);files+=1
    sums.append(hashlib.sha256(b).hexdigest()+'  '+arc)
   readme=['# Result ledgers for "The Price of Utility"','',
    'Code commit: '+commit,'','Each directory under results/ is the unmodified local output of one experiment,',
@@ -70,6 +83,10 @@ def main():
    'specified by the benchmark protocols. Included fixture outputs are only a smoke test.',
    '', '| Directory | Supports |','| --- | --- |']
   readme+=['| `%s` | %s |'%(d,v) for d,v in DATA.items()]
+  readme+=['','`models/inference-models/` holds the four classifiers trained for amendment 14',
+   '(seed 20260928, `scripts/train_inference_models.py`; training.json records accuracies).',
+   'Place it at data/inference-models to rerun the leverage benchmark. VGG11-BN and the',
+   'MNIST and CIFAR-10/10.1 datasets are public downloads pinned with hashes in research/inference/workload_provenance.json.']
   readme+=['','Regenerate the paper figures and PDFs from the matching code snapshot:',
    'place results/ at the repository root as local-research/, then run',
    '`python scripts/make_paper_figures.py` and `python scripts/build_manuscript.py --pdf`.',

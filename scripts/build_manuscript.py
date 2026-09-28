@@ -151,7 +151,7 @@ IDENTIFYING=[r'Rishi',r'Vemula',r'Sanjay',r'Rithik',r'Jayashree',r'\bPES\b',r'Be
 def blind_declarations(decl):
  """Replace the declarations that identify the authors. The anonymised
  repository link is taken from the ANON_REPO_URL environment variable."""
- anon=os.environ.get('ANON_REPO_URL','').strip()
+ anon=os.environ.get('ANON_REPO_URL','https://anonymous.4open.science/r/uwa-review-C3D9/').strip()
  where=('An anonymised copy of the repository, including protocol amendments, runners, manifests, analysis scripts, the result ledgers and the figure and manuscript builders, is available for review at '+anon+'.' if anon else
   'An anonymised copy of the repository and result ledgers is provided to the editor for review.')
  decl=re.sub(r'(### Availability of data and materials\n)(.*?)(?=\n### )',lambda m:m.group(1)+'\n'+where+' The public repository and the archived Zenodo record are withheld to preserve anonymity and will be cited in the final version.\n',decl,flags=re.S)

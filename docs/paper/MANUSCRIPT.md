@@ -65,6 +65,18 @@ into cryptocurrency mining [Rueth18], and a recent design proposes cracking
 password hashes in place of hashcash [ChadamTopa23]. What has been missing is a
 measured answer to whether such a gate can be made secure, and at what cost.
 
+Our answer is a trade-off. A useful-work gate is characterised by how long
+the server needs to check one admission and by its leverage, the useful work
+it obtains per unit of checking (Section 3.6). Work worth delegating is
+expensive for the server to compute, and without a succinct certificate it is
+also expensive to check: docking buys four to ten units of work per unit
+replayed, but replay makes verifier capacity decide who is admitted under
+attack. Work that can be checked cheaply, here image classification checked
+algebraically, keeps every device class served but buys little, because at
+this scale the server computes the answer almost as cheaply as it checks it;
+neither batching nor an optimised native verifier raised its leverage above
+2.2. No workload we measured was both cheap to check and high in leverage.
+
 Useful work changes both verification cost and answer reuse. Verifying a
 docking unit requires replay, far more expensive than checking a hash-puzzle
 solution. Scientific inputs may recur, so assignments and one-use credits
@@ -79,9 +91,9 @@ This is a characterisation study. We do not propose useful work as a drop-in
 replacement for proof of work; we measure what making the work useful costs,
 and who pays. The paper is organised around one thesis: useful computation can
 replace discarded proof of work at a browser gate, but verification changes the
-economics of admission. We test it on two workload classes through six questions, each answered by a
-separate experiment under a protocol written before any attack was
-implemented. The protocol was amended eighteen times, each amendment's
+economics of admission. We test this trade-off on two workload classes through
+six questions, each answered by a separate experiment under a protocol
+committed before any attack was run. The protocol was amended eighteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 

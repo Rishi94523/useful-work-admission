@@ -654,7 +654,13 @@ another. We know of no method that yields a matching trace with fewer
 evaluations than the honest search, but we have not proved that none exists.
 A lower bound of that kind, for example showing that any accepted trace of N
 steps requires Ω(N) evaluations under stated assumptions about the scoring
-function, remains open.
+function, remains open. Proof of work is in the same position in form:
+hashcash also rests on an assumption, that SHA-256 admits no shortcut to a
+preimage below the target, rather than on a proof. The difference is in the
+evidence. The hash assumption is backed by decades of public cryptanalysis;
+the trace-work assumption is backed only by the attacks tested here. We
+therefore present it as a stated assumption and an open question, not as an
+equivalent guarantee.
 
 **What the useful output is worth.** In the newcomer tier the server replays
 one unit of every four admitted, so it spends 0.25 units of its own compute per

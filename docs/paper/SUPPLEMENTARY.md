@@ -316,3 +316,60 @@ Native verification of the wide perceptron took 0.183 ms per admission, 1.9
 times faster than the batched numpy verifier; in a hot loop without
 interleaved requests it took 0.078 ms, a post-hoc diagnostic not used in the
 results.
+
+Table: Batched verification (amendment 15): server's best batched CPU inference C, verification per admission V at an 8% audit rate, and leverage against the CPU and GPU baselines.
+
+| Model | B | C, ms (backend) | V, ms | L, CPU | L, GPU |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MNIST MLP | 1 | 0.065 (FP32) | 0.212 | 0.31 | 2.74 |
+| MNIST MLP | 8 | 0.094 (FP32) | 0.266 | 0.35 | 2.55 |
+| MNIST MLP | 32 | 0.154 (FP32) | 0.398 | 0.39 | 1.62 |
+| MNIST MLP | 128 | 0.371 (FP32) | 0.915 | 0.41 | 0.82 |
+| MNIST CNN | 1 | 0.267 (FP32) | 0.553 | 0.48 | 2.10 |
+| MNIST CNN | 8 | 0.654 (FP32) | 2.403 | 0.27 | 0.46 |
+| MNIST CNN | 32 | 1.263 (FP32) | 12.4 | 0.10 | 0.10 |
+| MNIST CNN | 128 | 3.609 (FP32) | 54.5 | 0.07 | 0.02 |
+| CIFAR CNN | 1 | 0.641 (FP32) | 1.240 | 0.52 | 1.37 |
+| CIFAR CNN | 8 | 1.428 (INT8) | 9.468 | 0.15 | 0.15 |
+| CIFAR CNN | 32 | 3.138 (INT8) | 42.4 | 0.07 | 0.03 |
+| CIFAR CNN | 128 | 10.6 (INT8) | 181.4 | 0.06 | 0.01 |
+| Wide MNIST MLP | 1 | 0.962 (FP32) | 0.496 | 1.94 | 1.06 |
+| Wide MNIST MLP | 8 | 2.186 (INT8) | 1.335 | 1.64 | 0.42 |
+| Wide MNIST MLP | 32 | 3.487 (INT8) | 3.335 | 1.05 | 0.16 |
+| Wide MNIST MLP | 128 | 8.445 (INT8) | 20.1 | 0.42 | 0.03 |
+| VGG11-BN | 1 | 2.375 (INT8) | 6.296 | 0.38 | 0.51 |
+| VGG11-BN | 8 | 9.781 (INT8) | 67.4 | 0.15 | 0.05 |
+| VGG11-BN | 32 | 61.8 (INT8) | 421.4 | 0.15 | 0.01 |
+| VGG11-BN | 128 | 249.0 (INT8) | 1692.6 | 0.15 | 0.00 |
+
+Table: Native fused verification of dense networks (amendment 15b): central C is the fastest of PyTorch FP32 and INT8, the native forward pass and the GPU.
+
+| Model | B | C, ms (baseline) | Verify, ms | Audit, ms | L, 0% | L, 8% |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| MNIST MLP | 1 | 0.083 (native) | 0.108 | 0.148 | 0.77 | 0.75 |
+| MNIST MLP | 32 | 0.276 (FP32) | 0.294 | 0.687 | 0.94 | 0.85 |
+| Wide MNIST MLP | 1 | 0.527 (GPU) | 0.183 | 0.876 | 2.88 | 2.21 |
+| Wide MNIST MLP | 32 | 0.532 (GPU) | 1.795 | 21.6 | 0.30 | 0.16 |
+
+The eight predictions of amendments 15 and 15b: M1, exact batched
+verification, held; M2, per-input verification at B = 32 at most a third of
+that at B = 1 for every model, failed (ratios MNIST MLP 0.06, MNIST CNN 0.70, CIFAR CNN 1.07, Wide MNIST MLP 0.21, VGG11-BN 2.09); M3, some model at leverage 4
+or more at B = 32, failed; M4, no model at leverage 1 or more against the GPU,
+failed (maximum 2.74, the MNIST perceptron at B = 1); N1, exact native
+verification, held; N2, native verification of the wide perceptron five times
+faster than the batched verifier, failed (1.9 times); N3, the wide perceptron
+at leverage 4 or more, failed (2.21; 3.15 without a GPU); N4, the MNIST
+perceptron below leverage 4, held.
+
+All inference timings used one thread of an AMD Ryzen 7 7435HS laptop CPU
+under Windows 11, Python 3.14.4, PyTorch 2.14.0 (CPU build) and NumPy 2.4.4;
+the GPU baseline used an NVIDIA GeForce RTX 4060 Laptop GPU with PyTorch
+2.14.0 built for CUDA 13.0, and the native kernels were compiled with GCC 14.2
+(MinGW-w64) at -O3 -march=native. The 8% audit rate was fixed in amendment 14
+before measurement without further justification; leverage without audits is
+reported alongside so that other rates can be applied. The four secret
+projections per layer are drawn once per verifier instance from operating
+system randomness and are not refreshed within a run. Because each rejected
+submission reveals a little about them, a deployment would need to redraw
+them after a bounded number of rejections, as in the prepared-verification
+setting of Slalom [Tramer19]; we did not implement or measure that rotation.

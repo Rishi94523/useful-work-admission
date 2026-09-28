@@ -30,15 +30,15 @@ preserved screening accuracy and reproduced bit for bit on phones; with trace
 commitment and three easily overlooked scheduler fixes, attackers paid about
 what honest clients pay even with free identities, and rescoring stopped
 fabricated energies from reordering results. The price is verification: each
-audit is a molecular replay, so under attack verifier capacity decides who is
-admitted and budget phones are denied first. Protecting them needed about five
+audit is a molecular replay, so in simulations under attack verifier capacity
+decides who is admitted and budget phones are denied first. Protecting them needed about five
 replay cores per attacker core, while the same queue with proof-of-work
 verification served every device class. In the second class, image
 classifiers for data labelling are verified algebraically in milliseconds and
 stay available under attack, but verifying them costs the server about as much
 as computing them, even batched or natively optimised. In both workloads we
-measured, work worth delegating was expensive to verify and work cheap to
-verify was not worth delegating.
+measured, work worth delegating was expensive to verify, and work cheap to
+verify bought only modest leverage.
 
 **Keywords.** proof of work; useful work; admission control; CAPTCHA alternatives; verifiable computation; denial of service; result verification; molecular docking; data labelling
 
@@ -690,7 +690,7 @@ hashing and range checking, not the projections themselves, dominates.
 Cheap verification does fix availability. Rerunning the admission grid with
 each model's verification time in place of the replay kept every device class
 at least 90% served in all 360 cells up to sixteen attacker cores, as the
-proof-of-work gate did. What it does not provide is leverage. Figure 5 places
+proof-of-work gate did. What it does not provide is high leverage. Figure 5 places
 every measured workload by verification time and leverage: proof of work at a
 microsecond with no useful output, the classifiers at 0.2–6 ms with leverage
 near one, and docking at honest-submission leverage 4 and 10 with 152–1,520 ms
@@ -772,8 +772,8 @@ region, but both were measured on laptop-class hardware; wider dense layers
 or server-class accelerators, which change both sides of the ratio, may land
 elsewhere in Figure 5.
 
-**When is useful work worth it?** Only when someone needs the output and the
-verifier can afford replay. A puzzle is strictly better on verifier cost and
+**When is useful work worth it?** For docking, only when someone needs the
+output and the verifier can afford replay. A puzzle is strictly better on verifier cost and
 freshness; useful work is no more predictable than a subpuzzle puzzle, closes
 attacker discounts only after the tested fixes, and pays a replay for every
 fake submission. What it buys is that the visitor's computation docks real
@@ -882,7 +882,7 @@ no integrated production traffic or energy-cost validation.
 Useful computation can stand in for discarded proof of work at a browser gate,
 but verification changes the economics of admission. In the two workload
 classes we measured, the work worth delegating was expensive to verify and the
-work cheap to verify was not worth delegating. Bounded Vina units
+work cheap to verify bought only modest leverage. Bounded Vina units
 preserve screening performance and reproduce exactly on phones, and the
 tested fixes leave attacker cost near parity, not provably so. Replay
 verification still consumes capacity that a proof-of-work gate does not,

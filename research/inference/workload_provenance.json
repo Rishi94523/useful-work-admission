@@ -1,0 +1,55 @@
+{
+  "purpose": "Pretrained classifiers and separately collected CIFAR-10.1 v6 test images; no retraining or human-label claim.",
+  "model_repository_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+  "dataset_repository_commit": "d9982abb0bfc4846b8d13a11e66b887d946205d0",
+  "assets": [
+    {
+      "source": "https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz",
+      "path": "data/cifar10/cifar-10-binary.tar.gz",
+      "sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+      "bytes": 170052171
+    },
+    {
+      "source": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/pytorch_cifar_models/resnet.py",
+      "path": "research/inference/vendor/cifar_models/resnet.py",
+      "sha256": "885b8fd2ccfb8ee27c02d3a382e2951622fdcbc2af2bbca375aaf71d40f5f246",
+      "bytes": 7549
+    },
+    {
+      "source": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/pytorch_cifar_models/vgg.py",
+      "path": "research/inference/vendor/cifar_models/vgg.py",
+      "sha256": "5562540e312da9184ff2e4ebc290dc68a9aec1e2a3f5b1e395b9cab4d7e8c3e5",
+      "bytes": 6875
+    },
+    {
+      "source": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/LICENSE",
+      "path": "research/inference/vendor/cifar_models/LICENSE",
+      "sha256": "0eab51837bca1227951f45df5d2c4e07c5fc9926862d758ab3fe629ff31b04bc",
+      "bytes": 1509
+    },
+    {
+      "source": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar10_resnet20-4118986f.pt",
+      "path": "data/journal-workloads/cifar10_resnet20-4118986f.pt",
+      "sha256": "4118986f0df73003d572b0e397f0ac7b3f60af1f31aff3d2da164536e36f6ec8",
+      "bytes": 1139055
+    },
+    {
+      "source": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/vgg/cifar10_vgg11_bn-eaeebf42.pt",
+      "path": "data/journal-workloads/cifar10_vgg11_bn-eaeebf42.pt",
+      "sha256": "eaeebf42370c92fdfbb5dbe8eba7c27d4eb7366a1dca0b5be435364ccdf54378",
+      "bytes": 39068509
+    },
+    {
+      "source": "https://raw.githubusercontent.com/modestyachts/CIFAR-10.1/d9982abb0bfc4846b8d13a11e66b887d946205d0/datasets/cifar10.1_v6_data.npy",
+      "path": "data/journal-workloads/cifar10.1_v6_data.npy",
+      "sha256": "2997188e5816f5bd545dc77771b6227828c28146049fcecf3fa10775474cacc6",
+      "bytes": 6144128
+    },
+    {
+      "source": "https://raw.githubusercontent.com/modestyachts/CIFAR-10.1/d9982abb0bfc4846b8d13a11e66b887d946205d0/datasets/cifar10.1_v6_labels.npy",
+      "path": "data/journal-workloads/cifar10.1_v6_labels.npy",
+      "sha256": "ae40beda001693674edc94d925ee8268cfe68905f8f9aff800c8dcdfcd6c9448",
+      "bytes": 8128
+    }
+  ]
+}

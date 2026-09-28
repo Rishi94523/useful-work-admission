@@ -701,3 +701,42 @@ mechanism, grids or reported replay capacity. Before launch, compare disk and
 memory execution on shortened deterministic priority and attested fixtures,
 including overload and rollback, and require identical scientific metrics.
 Neither execution time is a benchmark of production database throughput.
+
+## Amendment 13 — a proof-of-work gate baseline for availability, 28 September 2026
+
+Recorded after an external review and before the simulations below were run.
+
+**Context.** The availability results of amendment 12 show useful-work
+admission failing under attacker CPU because every submission selected for
+audit costs a 1.52 s replay. The manuscript states that a hash puzzle wins on
+verifier cost, but no simulation shows the same queue and attacker grid with
+puzzle-cost verification. This amendment adds that baseline so the price of
+replay can be read from one comparison.
+
+**Baseline.** The amendment-12 harness and exact event timing are reused
+unchanged, except that verifying a submission costs the measured hash-check
+time of 0.77 µs instead of a 1.52 s replay. Everything else is identical:
+queue code and seat limits, arrivals, device and attacker hash rates, bidding
+strategies, issuance caps, horizons and seeds. Grids: the fixed 16-bit and
+fixed 18-bit puzzles and the full-patience priority queue; 1, 2, 4 and 8
+verifier workers; attacker budgets of 0, 0.1, 0.25, 1, 4 and 16 cores; seeds
+20260925 to 20260929 (360 runs).
+
+**Scope.** The baseline models only the admission gate. Under a real
+proof-of-work gate, an attacker who pays the puzzle is admitted and loads the
+protected service behind the gate; that downstream cost is not modelled here.
+The comparison isolates what replay verification adds at the gate itself.
+
+**Predictions.**
+
+- P1. With puzzle-cost verification, honest newcomers of every device class
+  are at least 90% served, as a five-seed mean, in every cell up to 16
+  attacker cores: the verifier never becomes the bottleneck.
+- P2. The contrast with amendment 12 is largest where replay capacity binds:
+  at 4 and 16 attacker cores, where amendment-12 service fell below 0.2 for at
+  least one device class, the baseline serves every class at least 0.9.
+
+**Consequence stated in advance.** If P1 and P2 hold, the availability price of
+useful work is attributable to replay verification rather than to the queue
+design, and the manuscript will present the two side by side. If they fail,
+the failure and its cause will be reported.

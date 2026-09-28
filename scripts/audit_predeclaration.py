@@ -41,7 +41,8 @@ def find_protocol(d, path=''):
 # Runs whose manifests name the protocol commit rather than hash the file, and
 # phone studies whose reports carry the collector's receipt time. Each is
 # checked against the commit of the amendment that governs it.
-BY_COMMIT = {'admission-amendment14-2026-09-28': '5105313', 'inference-leverage-2026-09-28': '5105313'}
+BY_COMMIT = {'admission-amendment14-2026-09-28': '5105313', 'inference-leverage-2026-09-28': '5105313',
+             'batched-leverage-2026-09-28': 'fbe767f', 'native-dense-2026-09-28': 'a1c1d83'}
 PHONES = {'device-timing-subpuzzle': '5a19d42', 'device-inference-2026-09-28': '30992dc'}
 
 

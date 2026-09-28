@@ -38,7 +38,7 @@ cores per attacker core, while the same queue with proof-of-work verification
 served every device class. In the second class, five image classifiers for
 data labelling are verified algebraically in milliseconds and stay available
 under attack, but verifying them costs the server about as much as computing
-them; on four phones every classifier result matched the server's bit for bit.
+them, even batched or natively optimised; on four phones every classifier result matched the server's bit for bit.
 Across both, work worth delegating was expensive to verify, and work
 cheap to verify was not worth delegating: useful admission trades cheap
 verification against the useful work each unit of verification buys.
@@ -81,7 +81,7 @@ and who pays. The paper is organised around one thesis: useful computation can
 replace discarded proof of work at a browser gate, but verification changes the
 economics of admission. We test it on two workload classes through six questions, each answered by a
 separate experiment under a protocol written before any attack was
-implemented. The protocol was amended sixteen times, each amendment's
+implemented. The protocol was amended eighteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -90,7 +90,7 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43. Docking reaches leverage 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43, and at most 2.2 with batching or an optimised native verifier. Docking reaches leverage 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -247,14 +247,15 @@ The evaluation follows a written protocol dated 22 September 2026 and
 committed to version control on 23 September, before any attack was run.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Sixteen amendments (numbered 1 to 14, with 9b
-and 14b) cover phase operationalisation, the three economic fixes, scientific
+governs, with the original preserved. Eighteen amendments (numbered 1 to 15, with 9b,
+14b and 15b) cover phase operationalisation, the three economic fixes, scientific
 integrity, trace commitment, the rescoring driver, newcomer pricing,
 attestation, the subpuzzle baseline, a correction of the simulator's replay
 timing with five-seed replication, a proof-of-work gate baseline, and the
-verification-leverage study with its phone predictions. Every run manifest
+verification-leverage study with its phone, batching and native-verifier
+predictions. Every run manifest
 records the protocol version it ran under, and a committed audit script
-confirms that each of the 18 predeclared result sets was produced after the
+confirms that each of the 20 predeclared result sets was produced after the
 commit of its governing amendment.
 
 The timeline is short, and every step is dated in the public commit history.
@@ -297,7 +298,7 @@ Table: Evidence supporting the claims and what each experiment does not establis
 | Browser feasibility | Real phone execution and reference hash checks | Cooperative sessions, selected repeated units; not client attestation |
 | Overload and trust bootstrap | Real queue SQL with modeled arrivals, replay and puzzle costs | Conditional finite-horizon simulations; not measured HTTP throughput |
 | Attestation benefit | Mock issuer, token checks and one-use nullifiers | Assumed quota and token supply; no deployed issuer or blind-signature integration |
-| Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models, single-input admissions, one CPU; not GPU or batched serving |
+| Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models on one laptop-class host; batches to 128 inputs, a laptop GPU and a native dense verifier; no server-class accelerators |
 
 Supplementary Section S1 gives the complete protocols: target selection and
 input preparation, compute matching and the paired bootstrap, the poisoning
@@ -676,11 +677,31 @@ microsecond with no useful output, the classifiers at 0.2–6 ms with leverage
 near one, and docking at leverage 4 and 10 with 152–1,520 ms of verification.
 No workload we measured is both cheap to verify and high in leverage.
 
+Two further amendments asked whether batch size or the verifier's
+implementation, rather than the method, set that limit. In amendment 15 each
+admission labelled a batch of up to 128 inputs, verified with the same secret
+projections as matrix products. Leverage fell with batch size for every model:
+batching made the server's own inference cheaper per input faster than it
+made verification cheaper, and in convolutional networks, where most output
+values come from early layers with only 9 to 576 multiply-accumulates each,
+the verifier's work per value dominates. A GPU baseline was slower than one CPU thread at small batches,
+from launch and transfer overhead, so leverage against it reached 2.7 for
+single inputs, but fell below 1 for every model at 128 inputs. In amendment
+15b a native kernel verified a whole dense network per call, with an exact
+native audit, and the native forward pass joined the server's baselines. It
+was exact, but the wide perceptron reached leverage 2.21 at 8% audits against
+the server's fastest option, the GPU, and 3.15 against its fastest CPU option,
+short of the predicted 4. What remains is per-admission work that does not
+shrink with the layer: hashing the trace, quantising the input, entering
+native code with cold caches, and the audits. Of the eight predictions in the
+two amendments, three held: exactness in both, and the narrow perceptron
+staying below 4 (Supplementary Section S6).
+
 ```latex
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/design_space.pdf}
-\caption{Verifier time per admission against verification leverage for every measured workload. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
+\caption{Verifier time per admission against verification leverage for every measured workload. The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
 \label{fig:design}
 \end{figure}
 ```
@@ -725,6 +746,10 @@ of Figure 5 would need results that are expensive to produce and cheap to
 check with a certificate, as a hash preimage is for proof of work. Search
 problems with succinct certificates have that shape; docking's search does
 not, because its best pose carries no proof that the search was done.
+Neither batching nor an optimised verifier moved a classifier into that
+region, but both were measured on laptop-class hardware; wider dense layers
+or server-class accelerators, which change both sides of the ratio, may land
+elsewhere in Figure 5.
 
 **When is useful work worth it?** Only when someone needs the output and the
 verifier can afford replay. A puzzle is strictly better on verifier cost and
@@ -827,7 +852,7 @@ external requirements, not properties established by our prototype.
 [Eskandari18, Konoth18]. A useful-work gate spends visitors' energy; it must
 say so, and it gives them a reason a puzzle cannot.
 
-**Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one host without GPU or batched serving.
+**Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one laptop-class host.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler, and their puzzle costs were accounted from measured rates
 rather than executed. Discount-factor intervals assume independent attempts,

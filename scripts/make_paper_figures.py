@@ -115,6 +115,11 @@ def design_space():
   ax.plot(r['verify_eff_ms'],r['leverage_8pct'],'o',color='#4f81bd',ms=5)
   off={'mnist-cnn':(-44,3),'cifar-cnn':(4,4),'vgg11-bn':(4,-9)}.get(r['model'],(4,3))
   ax.annotate(names[r['model']],(r['verify_eff_ms'],r['leverage_8pct']),textcoords='offset points',xytext=off,fontsize=6.5,color='#4f81bd')
+ native=LR/'native-dense-2026-09-28/summary.json'
+ if native.exists():
+  w=next(r for r in json.loads(native.read_text(encoding='utf-8'))['rows'] if r['model']=='mnist-wide-mlp' and r['batch']==1)
+  ax.plot(w['verify_eff_ms'],w['leverage_8pct'],'o',color='#4f81bd',mfc='white',ms=5)
+  ax.annotate('Wide MLP, native',(w['verify_eff_ms'],w['leverage_8pct']),textcoords='offset points',xytext=(-62,3),fontsize=6.5,color='#4f81bd')
  ax.plot(1520,4,'s',color='#2e7d32',ms=6);ax.annotate('Docking, newcomer bundle',(1520,4),textcoords='offset points',xytext=(-60,-12),fontsize=6.5,color='#2e7d32')
  ax.plot(152,10,'s',color='#2e7d32',ms=6,mfc='white');ax.annotate('Docking, trusted (p = 0.1)',(152,10),textcoords='offset points',xytext=(-20,-12),fontsize=6.5,color='#2e7d32')
  ax.plot(0.77e-3,0.25,'v',color='#c0504d',ms=6);ax.annotate('Proof of work\n(no useful output)',(0.77e-3,0.25),textcoords='offset points',xytext=(5,-4),fontsize=6.5,color='#c0504d')

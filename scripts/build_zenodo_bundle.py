@@ -28,6 +28,7 @@ DATA={
  'inference-leverage-2026-09-28':'Classifier verification leverage, trace sizes, perturbation checks and native scrypt reference, amendment 14 (Section 5.6, Table 8, Figure 5, Supplementary S6)',
  'device-inference-2026-09-28':'Phone classifier inference, SHA-256 and scrypt timing, four phones, amendment 14b (Section 5.6)',
  'admission-amendment14-2026-09-28':'Availability with classifier verification in place of replay, 1,800 runs, amendment 14 (Section 5.6)',
+ 'predeclaration-audit':'Check that every predeclared result set was produced after its governing amendment commit (Section 4.1; scripts/audit_predeclaration.py)',
  'ticket-prototype-2026-09-24':'Isolated ticket prototype over loopback HTTP (Section 6, Supplementary S3)',
  'ticket-prototype-2026-09-24-wide':'Ticket prototype, wider configuration (Supplementary S3)',
  'ticket-molecular-2026-09-24':'Ticket prototype two-bundle native smoke check with real replay (Supplementary S3)',

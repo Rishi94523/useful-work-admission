@@ -243,8 +243,8 @@ class whose results are checked algebraically rather than by replay.
 
 ### 4.1 Predeclared protocol
 
-The evaluation follows a written protocol dated 22 September 2026, before any
-attack was implemented and before the matched scientific campaign completed.
+The evaluation follows a written protocol dated 22 September 2026 and
+committed to version control on 23 September, before any attack was run.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
 governs, with the original preserved. Sixteen amendments (numbered 1 to 14, with 9b
@@ -252,12 +252,15 @@ and 14b) cover phase operationalisation, the three economic fixes, scientific
 integrity, trace commitment, the rescoring driver, newcomer pricing,
 attestation, the subpuzzle baseline, a correction of the simulator's replay
 timing with five-seed replication, a proof-of-work gate baseline, and the
-verification-leverage study with its phone predictions.
+verification-leverage study with its phone predictions. Every run manifest
+records the protocol version it ran under, and a committed audit script
+confirms that each of the 18 predeclared result sets was produced after the
+commit of its governing amendment.
 
 The timeline is short, and every step is dated in the public commit history.
 The docking pipeline was built from 7 September 2026, and the stock
 qualification and matched campaigns ran from 14 to 23 September; the
-adversarial protocol took effect on 22 September, while the matched campaign
+adversarial protocol was written on 22 September, while the matched campaign
 was finishing. The later experiments are fast relative to docking: attacks
 replay units from a fixed corpus, and each availability simulation takes
 seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its

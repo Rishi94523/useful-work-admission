@@ -69,8 +69,8 @@ Our answer is a trade-off. A useful-work gate is characterised by how long
 the server needs to check one admission and by its leverage, the useful work
 it obtains per unit of checking (Section 3.6). Work worth delegating is
 expensive for the server to compute, and without a succinct certificate it is
-also expensive to check: docking buys four to ten units of work per unit
-replayed, but replay makes verifier capacity decide who is admitted under
+also expensive to check: from honest submissions, docking buys four to ten
+units of work per unit replayed, but replay makes verifier capacity decide who is admitted under
 attack. Work that can be checked cheaply, here image classification checked
 algebraically, keeps every device class served but buys little, because at
 this scale the server computes the answer almost as cheaply as it checks it;
@@ -102,7 +102,7 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could. Trace commitment and three scheduler fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically instead of by replay, verify in 0.219–5.69 ms and keep every device class served under attack, but verifying costs the server about as much as computing the answer itself: leverage 0.36–1.43, and at most 2.2 with batching or an optimised native verifier. Docking reaches leverage 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -248,7 +248,16 @@ useful work obtained per unit of verifier work. The delivery D is the bytes a
 client downloads and uploads per admission. Proof of work has V of about a
 microsecond and no useful output. A docking bundle has V = 1.52 s for four
 units of work, L = 4, and L = 1/p in the trusted tier, where only a fraction p
-of units is replayed. Section 5.6 measures V, L and D for a second workload
+of units is replayed. These are honest-submission leverages, as are all
+leverages we report: they assume every admitted unit is useful. Under attack,
+rejected submissions cost verification and yield nothing, and admitted
+bundles may carry fabricated units. By the Proposition, an attacker computing
+m of four units is admitted with probability m/4 per replay and contributes m
+useful units, so useful work per newcomer replay falls from 4 to m²/4, 0.25 at
+m = 1; in the trusted tier a fabricating identity yields no useful work for
+about 1/p units before an audit quarantines it. The classifiers of Section 5.6
+check every layer, so fabricated results are rejected rather than admitted,
+but each rejection still costs V. Section 5.6 measures V, L and D for a second workload
 class whose results are checked algebraically rather than by replay.
 
 ## 4 Methodology
@@ -544,19 +553,25 @@ Table: Rescoring driver against the original driver.
 The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
 that honest search would have found. **Contamination at scale.** Rescoring removes fabricated energies but not
-missing search. Under Section 3.5, an attacker who computes m of a bundle's
-four units is admitted only when the audit lands on a computed unit, so each
-admitted attacker bundle carries 4 − m fabricated units, at most three, into
-the pool. If attackers hold a share s of admitted bundles, the fraction of
-admitted units that are fabricated is s(4 − m)/4, and the campaign's useful
-yield per admission falls to 1 − s(4 − m)/4. Even at s = 1 and m = 1 this is
-75%, and no admitted attacker can exceed it, since m = 0 is never admitted.
-The duplication experiment covers that whole range: replacing up to 75% of a
-job's units with duplicates, which add no new minima, moved projected mean
-ROC-AUC by at most 0.002 on every target, with 95% envelopes within ±0.009.
-Contamination therefore slows the campaign, requiring up to four times as many
-admissions per ligand, rather than corrupting its rankings, provided energies
-are rescored.
+missing search. In the newcomer tier, where every bundle is audited before
+admission, an attacker who computes m of a bundle's four units is admitted
+only when the audit lands on a computed unit (Section 3.5), so each admitted
+attacker bundle carries 4 − m fabricated units, at most three, into the pool.
+If attackers hold a share s of admitted bundles, the fraction of admitted
+units that are fabricated is s(4 − m)/4 and the useful yield per admission is
+1 − s(4 − m)/4. At s = 1 and m = 1, 75% of admitted units are fabricated and
+the useful yield is 25%; no newcomer bundle can carry more, since m = 0 is
+never admitted. The trusted tier, which admits bundles on history without
+auditing each one, has no such bound until a failed audit quarantines the
+identity. The duplication experiment covers the newcomer range for missing
+search spread across a job's units: replacing up to 75% of them with
+duplicates, which add no new minima, moved projected mean ROC-AUC by at most
+0.002 on every target, with 95% envelopes within ±0.009. Under those
+conditions, with energies rescored, contamination slowed the campaign,
+requiring up to four times as many admissions per ligand, without measurably
+changing its rankings. It does not cover attacks that concentrate missing
+search on particular compounds, such as suppressing likely actives, which
+could change rankings and were not tested.
 
 ### 5.5 What does useful work cost compared with proof of work?
 
@@ -678,7 +693,8 @@ at least 90% served in all 360 cells up to sixteen attacker cores, as the
 proof-of-work gate did. What it does not provide is leverage. Figure 5 places
 every measured workload by verification time and leverage: proof of work at a
 microsecond with no useful output, the classifiers at 0.2–6 ms with leverage
-near one, and docking at leverage 4 and 10 with 152–1,520 ms of verification.
+near one, and docking at honest-submission leverage 4 and 10 with 152–1,520 ms
+of verification.
 No workload we measured is both cheap to verify and high in leverage.
 
 Two further amendments asked whether batch size or the verifier's
@@ -705,7 +721,7 @@ staying below 4 (Supplementary Section S6).
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/design_space.pdf}
-\caption{Verifier time per admission against verification leverage for every measured workload. The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
+\caption{Verifier time per admission against verification leverage for every measured workload. Leverage is for honest submissions (Section 3.6). The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
 \label{fig:design}
 \end{figure}
 ```
@@ -785,8 +801,9 @@ backed by decades of public cryptanalysis; the trace-work assumption is backed
 only by the attacks tested here, so we state it as an assumption and an open
 question, not an equivalent guarantee.
 
-**What the useful output is worth.** Docking's leverage is four units per
-replay in the newcomer tier and 1/p in the trusted tier (Section 3.6). A ligand state needs a
+**What the useful output is worth.** Docking's honest-submission leverage is
+four units per replay in the newcomer tier and 1/p in the trusted tier, and
+less under attack (Section 3.6). A ligand state needs a
 median of 140 units, about 35 newcomer admissions or 140 trusted admissions,
 and 140 units are roughly 213 native core-seconds. At an assumed cloud price of
 0.04 US dollars per core-hour, one newcomer admission donates about six
@@ -847,7 +864,8 @@ aggregate-output retrieval when their contributions are present. A dedicated
 late-failure test covers this guard; automatic campaign repair and retraction
 of already-produced scientific results have not been demonstrated. The rescoring
 driver is a verified candidate, not yet serving traffic. Pool poisoning AUCs
-are projections based on exchangeable corpus score shifts. The availability
+are projections based on exchangeable corpus score shifts, and contamination
+targeted at particular compounds was not tested. The availability
 replication measures five-seed variability but keeps arrival rates, device
 speeds, replay cost and attacker strategies fixed. Puzzle RNGs are seeded;
 prototype ticket identifiers and their tie-breaking remain cryptographically

@@ -976,3 +976,88 @@ that the tested adaptive shortcuts were rejected and detected early, and that
 cross-unit reuse offers at most the measured saving; the trace-work assumption
 remains an assumption, now tested beyond truncation. Any failure will be
 reported with its cause.
+
+## Amendment 17 — real-time replay capacity, 29 September 2026
+
+Predeclared before execution. Keep TicketAdmission, molecular search and the
+finalizer unchanged. Use isolated loopback HTTP ledgers, real wall-clock
+arrivals, actual uploads and one native replay worker per newcomer/trusted
+lane. This validates the bounded FIFO ticket prototype, not the separate
+effort-priority simulator or production Internet traffic.
+
+Use the first WEE1 ligand in the frozen inputs and the v2 driver. Prepare
+honest outputs for assigned seeds before the timed arrival window, counting
+preparation separately. These are previously performed one-use scientific
+credits; latency starts at submission, not browser work issuance. Independent
+replications may reuse this fixture corpus, never within a ledger. Fabricated
+submissions carry structurally valid pools and incorrect trace hashes; they
+must occupy actual replay service before rejection. Do not short-circuit them
+with knowledge of the fixture. The PoW control keeps identical uploads, queue,
+HMAC and SQLite operations but substitutes an actual request-bound SHA-256
+check for molecular replay; it measures gate throughput, not useful output.
+
+Calibrate native replay on four distinct seeds before timed cases. Let R be
+the reciprocal median wall time. For each of three repetitions and both
+verification modes, offer honest newcomers and established clients at R/4
+per second per lane and fabricated newcomers at 0, 0.75R and 2R per second.
+Use 12-second arrival windows, 8-second drains, a 5-second submission-to-credit
+deadline, 16 queue seats and the prototype's 16-bit overload puzzle. All entry
+puzzles are genuinely solved; offered arrivals that miss their scheduling
+time are reported. Use at most four submission threads and one sequential
+attacker producer. Report realized attack rate and paid puzzle cost rather
+than treating the requested rate as a measured attacker CPU budget.
+
+Record per-request schedule lag, upload size, response, completion latency,
+deadline success, server process/native-worker CPU and memory, replay times,
+queue occupancy, scientific units persisted and failures. Report actual
+results separately from simulations. Predictions: RT1 all honest replayed
+units agree exactly and no fabricated molecular output earns credit; RT2 at
+2R, newcomer deadline service is lower for replay than PoW; RT3 established
+clients have at least 90% deadline service in each mode's pooled 2R cases.
+Finite small samples and same-machine load generators are explicit limits.
+
+## Amendment 18 — heterogeneous costs and sleeper identities, 29 September 2026
+
+Predeclared before analysis. Reuse the 99 control timings from amendment 16;
+they are existing measurements, not newly collected independent observations.
+Split the 33 molecular jobs by a new salted hash into development and held-out
+sets within each target. Predict held-out unit cost using only development
+target medians. Compare random selection, predicted-cheapest and an explicitly
+unavailable oracle-cheapest bound for four-unit bundles. Evaluate both mixed
+jobs and same-job bundles (the deployed PoolAdmission requests one pool).
+Use 10,000 sampled bundles and five fixed RNG seeds. Count actual measured
+milliseconds, useful units and expected audit acceptance; with m=1 the
+expected cost per accepted bundle is four times the selected cost. Include
+an abstention policy that selects the predicted cheapest half of assignments,
+and charge rejection/probing costs of 0, 1 and 10 ms. This is trace-cost
+resampling, not an observed Internet exploit. Predictions: HC1 oracle mixed
+bundles give a cost ratio below 0.95; HC2 development-only selection has a
+held-out ratio below 0.95. Report same-pool restrictions and prediction error.
+
+Exercise the unchanged PoolAdmission with a simulated clock: 30 identities
+per audit rate (0.02, 0.1, 0.25), each earns trust through three genuinely
+accepted bundle verdicts, waits 600 seconds, and then spends its ten-unit
+trust allowance on fabricated outputs. Use immediate and deferred policies,
+fresh isolated ledgers and measured-control median unit cost. Verdicts are
+controlled trusted test inputs, not actual molecular executions. Record
+upfront work, marginal fraudulent admissions, lifetime admissions, audits,
+quarantines and already-redeemed credits. Prediction SL1 no identity obtains
+more than ten trusted-tier admissions from one grant. Do not assume marginal
+attack cost equals lifetime acquisition cost, or renew trust implicitly.
+
+## Amendment 19 — controlled inference repetition, 29 September 2026
+
+No second computer is available. Repeat native dense inference and verification
+on this host only; this cannot establish cross-host generalization. Use the
+two existing dense models, batches 1 and 32, three sequential sessions, one
+CPU thread, randomized method order, twelve excluded warmups and 64 measured
+requests per cell. Use actual FP32, INT8, exact native inference, verification
+and exact audit; do not import GPU timings from another session. Report CPU
+leverage and label it accordingly. Measure verifier preparation and fused
+native setup separately. Report audit-rate sensitivities 0, 0.02, 0.08, 0.25,
+1 and preparation amortization over 100, 1,000 and 10,000 admissions. Preserve
+all raw timings. Predictions: IR1 every tested honest trace agrees exactly
+and all sampled layer perturbations are rejected; IR2 session median
+verification times differ by at most 25% within each model/batch cell. Any
+failure remains reported. The existing GPU-inclusive 2.21 result remains a
+separate historical measurement, not a baseline for this repetition.

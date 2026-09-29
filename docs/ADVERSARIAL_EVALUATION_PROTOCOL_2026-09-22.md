@@ -1061,3 +1061,26 @@ and all sampled layer perturbations are rejected; IR2 session median
 verification times differ by at most 25% within each model/batch cell. Any
 failure remains reported. The existing GPU-inclusive 2.21 result remains a
 separate historical measurement, not a baseline for this repetition.
+
+## Amendment 19b — portable second-host kernel replication, 29 September 2026
+
+After amendment 19 was committed, the author made a Windows Ryzen 3 laptop
+available. It has Python but no research environment. Add a portable,
+standard-library-only benchmark using the unchanged dense_check.c compiled
+with -O3 -march=x86-64 (not -march=native). Run the exact same DLL, exported
+parameters and 128 quantized test inputs on both computers. Model parameters,
+prepared projections and inputs are public benchmark fixtures, not production
+verification keys. Check all packaged files by SHA-256 before loading code.
+
+Use two dense models, B=1 and B=32, three sessions, twelve warmups and 64
+measured requests, randomized method order. Compare exact native forward,
+verification including SHA-256 and byte parsing, and verification plus exact
+audit. Record preparation/loading separately, correctness and sampled
+perturbation rejection. Report leverage at audit rates 0, 0.02, 0.08, 0.25, 1.
+This isolates cross-host exact-kernel costs: input quantization and sketch
+generation are outside these timings, and PyTorch/GPU fastest-baseline claims
+cannot be inferred from this package. The earlier full-pipeline results remain
+separate. Prediction PH1: exact outputs and all tested rejections agree on both
+hosts. PH2: for each model/batch, cross-host native-reference leverage differs
+by less than a factor of two. Report failures and hardware conditions, including
+AC power and power-saving mode, without collecting hostname or username.

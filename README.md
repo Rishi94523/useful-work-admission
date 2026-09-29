@@ -25,7 +25,7 @@ checks them. Batching and an optimised native verifier did not change this.
 
 Every experiment follows
 [`docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md`](docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md).
-Its nineteen amendments (1–16, with 9b, 14b and 15b) each record predictions
+Its twenty-three amendments (1–19, with 9b, 14b, 15b and 19b) each record predictions
 and thresholds and were committed before the experiment they govern; failed
 predictions are reported, not removed. Run manifests record the protocol
 version they ran under, and
@@ -34,8 +34,9 @@ version they ran under, and
 python scripts/audit_predeclaration.py
 ```
 
-checks that every predeclared result set was produced after its amendment's
-commit. [`STATUS.md`](STATUS.md) summarises what each experiment established
+checks recorded result timestamps against their amendment commits. These local
+timestamps support provenance but do not independently certify first execution.
+[`STATUS.md`](STATUS.md) summarises what each experiment established
 and what it did not.
 
 ## Where each result comes from
@@ -49,6 +50,13 @@ and what it did not.
 | 5.4 Corrupting the science | Pool tampering, poisoning projection, rescoring driver | `scientific_integrity_eval.py`, `verify_driver_v2.py` |
 | 5.5 Availability vs. proof of work | Priority queue, attested lane, corrected replication, PoW gate baseline | `evaluate_priority_admission.py`, `evaluate_attested_admission.py`, `evaluate_admission_amendment12.py`, `evaluate_admission_amendment13.py` and their `analyze_*` scripts |
 | 5.6 Verification leverage | Classifier leverage, availability grid, phones, batching, native verifier | `train_inference_models.py`, `benchmark_inference_leverage.py`, `evaluate_admission_amendment14.py`, `analyze_inference_leverage.py`, `analyze_device_inference.py`, `benchmark_batched_leverage.py`, `benchmark_gpu_central.py`, `benchmark_native_dense.py` and their `analyze_*` scripts |
+
+The focused follow-up in supplementary S7 uses `validate_realtime_admission.py`,
+`validate_cost_aware_admission.py`, `validate_inference_repetition.py` and
+`analyze_followup_validation.py`. A portable second-host kernel replication
+is prepared; its Ryzen 3 result is pending. Real-time FIFO measurements,
+modeled cost selection, and the prior priority-queue simulations are separate
+evidence, not interchangeable deployment claims.
 
 All runners are in `scripts/`. The inference verifier is in
 `research/inference/` (`quantized_net.py`, `batched.py`, and native kernels in

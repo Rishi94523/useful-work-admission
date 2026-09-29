@@ -165,7 +165,7 @@ Amendment 13 reran the amendment-12 grids for the fixed 16-bit and 18-bit puzzle
 
 \section{Inference-leverage methods}
 
-Five classifiers were verified by one generic exact-integer implementation: per-channel int8 weights, signed 7-bit activations with integer requantization, batch normalisation fused into convolutions, and four secret projections per affine layer over the field of size 2\textasciicircum{}31 $-$ 1, with a native C kernel for the projections and nonlinear operations. The MNIST perceptron (784-128-64-10), MNIST convolutional network (two 3x3 convolutions of 8 and 16 channels), CIFAR convolutional network (three convolutions of 16, 32 and 64 channels) and wide perceptron (784-2048-2048-10) were trained with Adam and seed 20260928 (5, 5, 20 and 5 epochs); VGG11-BN is the pretrained model used earlier, evaluated on CIFAR-10.1. Calibration uses the first 256 training images. Timings use one native thread over 128 distinct test inputs with twelve excluded warm-up runs and method order randomised per input; central is the faster of FP32 and native INT8 inference in PyTorch. Every single-entry perturbation of every layer's trace (offsets +1, $-$1 and 2\textasciicircum{}31 $-$ 1) was rejected. Availability used the amendment-13 grid (fixed 16-bit and 18-bit puzzles and the full-patience priority queue; 1--8 workers; 0--16 attacker cores; five seeds) with each model's verification time at an 8\% audit rate.
+Five classifiers were verified by one generic exact-integer implementation: per-channel int8 weights, signed 7-bit activations with integer requantization, batch normalisation fused into convolutions, and four secret projections per affine layer over the field of size 2\textasciicircum{}31 $-$ 1, with a native C kernel for the projections and nonlinear operations. The MNIST perceptron (784-128-64-10), MNIST convolutional network (two 3x3 convolutions of 8 and 16 channels), CIFAR convolutional network (three convolutions of 16, 32 and 64 channels) and wide perceptron (784-2048-2048-10) were trained with Adam and seed 20260928 (5, 5, 20 and 5 epochs); VGG11-BN is the pretrained model used earlier, evaluated on CIFAR-10.1. Calibration uses the first 256 training images. Timings use one native thread over 128 distinct test inputs with twelve excluded warm-up runs and method order randomised per input; central is the faster of FP32 and native INT8 inference in PyTorch. All tested single-entry perturbations, at one selected coordinate per layer with offsets +1, $-$1 and 2\textasciicircum{}31 $-$ 1, were rejected; this was not exhaustive over coordinates. Availability used the amendment-13 grid (fixed 16-bit and 18-bit puzzles and the full-patience priority queue; 1--8 workers; 0--16 attacker cores; five seeds) with each model's verification time at an 8\% audit rate.
 
 Phone timings (amendment 14b) used a page that downloaded each exported model (int8 weights, int32 biases and three inputs) and ran exact integer inference in a web worker, then measured the SHA-256 hashcash rate for three seconds and eight scrypt evaluations with a JavaScript implementation checked against the RFC 7914 test vectors. The scrypt native reference, 62.4 ms, was measured on one idle core of the study host through OpenSSL; the SHA-256 reference, 1.25 million hashes per second, was measured under campaign load, so the SHA-256 gaps may be understated relative to the scrypt gaps. Six reports came from four phones (two each from the iPhone 15 and Galaxy M30s); no timing overlapped a hidden page. Medians pool each phone's runs; dropping the first repetition of each input changed the VGG11-BN budget-to-flagship ratio from 5.72 to 5.71.
 
@@ -224,6 +224,90 @@ Wide MNIST MLP & 32 & 0.532 (GPU) & 1.795 & 21.6 & 0.30 & 0.16 \\
 The eight predictions of amendments 15 and 15b: M1, exact batched verification, held; M2, per-input verification at B = 32 at most a third of that at B = 1 for every model, failed (ratios MNIST MLP 0.06, MNIST CNN 0.70, CIFAR CNN 1.07, Wide MNIST MLP 0.21, VGG11-BN 2.09); M3, some model at leverage 4 or more at B = 32, failed; M4, no model at leverage 1 or more against the GPU, failed (maximum 2.74, the MNIST perceptron at B = 1); N1, exact native verification, held; N2, native verification of the wide perceptron five times faster than the batched verifier, failed (1.9 times); N3, the wide perceptron at leverage 4 or more, failed (2.21; 3.15 without a GPU); N4, the MNIST perceptron below leverage 4, held.
 
 All inference timings used one thread of an AMD Ryzen 7 7435HS laptop CPU under Windows 11, Python 3.14.4, PyTorch 2.14.0 (CPU build) and NumPy 2.4.4; the GPU baseline used an NVIDIA GeForce RTX 4060 Laptop GPU with PyTorch 2.14.0 built for CUDA 13.0, and the native kernels were compiled with GCC 14.2 (MinGW-w64) at -O3 -march=native. The 8\% audit rate was fixed in amendment 14 before measurement without further justification; leverage without audits is reported alongside so that other rates can be applied. The four secret projections per layer are drawn once per verifier instance from operating system randomness and are not refreshed within a run. Because each rejected submission reveals a little about them, a deployment would need to redraw them after a bounded number of rejections, as in the prepared-verification setting of Slalom~\citep{Tramer19}; we did not implement or measure that rotation.
+
+\section{Focused follow-up validation}
+
+\textbf{Real-time ticket queue (amendment 17).} The unchanged TicketAdmission prototype and v2 molecular driver ran in isolated ledgers with actual loopback HTTP, wall-clock arrivals, uploads, hashing, SQLite transactions and native replay. One sequential native worker served each of two reserved lanes. Inputs were the first WEE1 ligand in the frozen input manifest. Four calibration runs gave R = 0.7436 replays/s. Honest arrivals were scheduled at R/4 per lane, and attacker arrivals at 0, 0.75R or 2R. Three repetitions per condition and verifier gave 18 cases. Each case had a 12-second arrival window and 8-second drain; the deadline metric was five seconds from submission start, not an enforced ticket expiry or browser time-to-access guarantee. The finite window contained three honest clients per lane and 0, 7 or 18 attackers. Maximum observed scheduling lag was 5.6 ms.
+
+Honest outputs were genuinely computed before each arrival window as one-use scientific credits. Fixtures could be reused across independent experimental ledgers but never twice within one ledger. Preparation was excluded from submission latency and recorded separately. To prevent expiry during preparation, tickets had a one-hour lifetime; queues retained their 16-seat capacity and 16-bit overload-only entry puzzle. Issuance occurred before the timed window, at a permissive issuance limit, so this experiment does not stress ticket issuance. Clients actually solved entry puzzles when required. A single attacker producer and three honest submission threads shared the host with the server; the offered rate is not a measured attacker core budget. Fabricated payloads carried valid pool structures and wrong trace hashes, and were rejected only after actual replay.
+
+The PoW control carried the same wrapped unit-payload format and a genuinely solved request-bound 16-bit proof, computed before submission in both modes. The control worker checked that proof instead of replaying the molecule. Consequently paid attackers passed the PoW gate even with fabricated molecular content; their output is not credited as scientific work. This is an isolated gate comparison, not a simulation of downstream service load. No attempt was made to match the proof's solve time to four docking units in this follow-up.
+
+\begin{table}[htbp]
+\caption{Actual loopback deadline completions, pooled over three cases per cell. Each entry is successes out of nine offered honest requests; newcomer and established lanes had separate workers.}
+\centering
+\small
+\begin{tabularx}{\textwidth}{Xrrrr}
+\toprule
+Attack rate & Replay newcomer & PoW newcomer & Replay established & PoW established \\
+\midrule
+0 & 9/9 & 9/9 & 9/9 & 9/9 \\
+0.75R & 7/9 & 9/9 & 9/9 & 9/9 \\
+2R & 3/9 & 9/9 & 9/9 & 9/9 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+There were no execution errors. Of 107 completed molecular audits, 51 honest submissions passed and 56 fabricated submissions failed; 123 genuine units were persisted. Median replay service was 1.496 s and native CPU usage per audit was 1.453 s. At 2R, three cases consumed 74.125 native CPU-seconds in total; PoW used no molecular-worker CPU. Harness CPU, which includes both clients and server, was 12.47 and 12.56 s respectively and cannot be reported as server-only CPU. Maximum queue occupancy was nine and maximum queued payload was 684,766 bytes. Total uploads across all 18 cases were 18,052,015 bytes. Peak native-worker working set was 546.35 MiB; this is the native server build, not the optimized browser heap. RT1, RT2 and RT3 held. Small samples, one input, same-machine clients, precomputed honest work, and FIFO scheduling limit generalization; the effort-priority model's numerical predictions remain simulation results.
+
+\textbf{Cost-aware selection (amendment 18).} The 99 saved control timings from amendment 16 were split by salted job hash within each target: 15 development jobs (45 observations) and 18 held-out jobs (54 observations). A target-median predictor used development observations only. Five seeded runs sampled 10,000 four-unit bundles each. Same-job bundles sample with replacement from three timings per job; mixed-job bundles are a counterfactual to the current request API. For one computed unit and one uniform audit, expected time per successful admission is four times selected cost. The oracle assumes unavailable advance knowledge of held-out runtime and is a diagnostic bound, not an implemented attack. Means across resampling seeds are shown below, not confidence intervals over new physical measurements.
+
+\begin{table}[htbp]
+\caption{Expected attacker time divided by honest four-unit time, from existing-control cost resampling.}
+\centering
+\small
+\begin{tabularx}{\textwidth}{Xrrr}
+\toprule
+Bundle & Random unit & Development predictor & Oracle cheapest \\
+\midrule
+Mixed jobs & 1.004 & 0.716 & 0.464 \\
+Same job & 1.001 & 1.001 & 0.848 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+Choosing the predicted cheaper half of offered same-job bundles across jobs gave ratios 0.661, 0.662 and 0.670 at probing costs of 0, 1 and 10 ms per offered bundle. A rejected offer consumes probing cost but no molecular work in this model. This omits real campaign allocation, expiry and identity penalties and should not be interpreted as a demonstrated scheduler exploit. HC1 and HC2 held for mixed-job bundles. Same-pool binding removes the tested target-only within-bundle predictor's advantage but does not establish that all seed-level or cross-assignment selection is harmless.
+
+\textbf{Sleeper identities (amendment 18).} With the unmodified PoolAdmission and a simulated clock, 30 identities per cell acquired trust through three accepted four-unit bundles, waited 600 seconds within the one-hour grant, and attempted ten fabricated trusted units. Trusted verdicts were controlled honest/false test inputs, not newly executed molecules. Four seconds between requests avoided the existing velocity penalty. Deferred credits were redeemed before the subsequent failed replay to count irreversible access. No grant renewal was modeled. Every cell paid 360 unit-equivalents upfront.
+
+\begin{table}[htbp]
+\caption{Fraudulent admissions from one ten-unit grant per sleeper, 30 identities per cell. Failed audits quarantine the identity; prior redeemed access remains counted.}
+\centering
+\small
+\begin{tabularx}{\textwidth}{Xrrrr}
+\toprule
+Audit rate & Immediate admissions & Deferred admissions & Immediate quarantines & Deferred quarantines \\
+\midrule
+0.02 & 250 & 280 & 8 & 4 \\
+0.10 & 159 & 189 & 22 & 19 \\
+0.25 & 85 & 90 & 30 & 30 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+SL1 held: no identity exceeded ten trusted admissions. Molecular work during the attack was zero, while the lifetime acquisition cost was positive. These OS-random audit outcomes are one 30-identity exercise per cell, not five-seed replications or a simultaneous sleeper flood.
+
+\textbf{Controlled inference repetition (amendment 19).} On the original host, three sequential sessions ran the two dense models at B = 1 and B = 32, one CPU thread, twelve warmups and 64 timed requests per cell. Method order was randomized. Baselines were FP32, INT8 and exact native forward execution, all measured in the same session; no previous GPU timing was imported. All reference comparisons and 108 sampled perturbation checks passed (IR1).
+
+\begin{table}[htbp]
+\caption{Full-pipeline CPU-only leverage at 8\% audits, ranges of three session medians; last column is maximum/minimum median verification time across sessions.}
+\centering
+\small
+\begin{tabularx}{\textwidth}{Xrrr}
+\toprule
+Model & B & Leverage range & Timing ratio \\
+\midrule
+MNIST MLP & 1 & 0.686--0.757 & 1.240 \\
+MNIST MLP & 32 & 0.894--0.924 & 1.324 \\
+Wide MNIST MLP & 1 & 2.527--2.935 & 1.267 \\
+Wide MNIST MLP & 32 & 1.780--1.867 & 1.042 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+IR2 failed in two cells against its 1.25 timing-ratio bound. Model/sketch and fused-verifier setup for the wide model took 281--314 ms; amortizing it over 100 admissions reduced B = 1 leverage to 0.229--0.263. Raw records also report rates 0, 0.02, 0.08, 0.25 and 1 and setup amortization over 100, 1,000 and 10,000 admissions. These are separate CPU-only results, not replacements for the historical GPU-inclusive comparisons.
+
+\textbf{Portable replication (amendment 19b), pending second host.} A reviewed Windows package uses the unchanged dense C kernel compiled with -O3 -march=x86-64, the same two models and 128 exported quantized inputs per model. It uses Python's standard library only, checks payload hashes before loading the DLL, and records no hostname, username or IP. The original host passed all reference checks and sampled perturbations over three sessions. Median kernel-relative leverage at 8\% audits was 1.044 and 1.748 for the narrow model at B = 1 and 32, and 4.893 and 5.477 for the wide model. These ratios exclude input quantization and sketch generation and use an exact native forward pass that emits a full trace; they are not leverage against the fastest central implementation. The initially attempted local run could not save its first session because of filesystem sandbox permissions; a complete rerun with permission is preserved separately from that execution note. Ryzen 3 results are pending; no cross-host conclusion or PH2 outcome is available yet.
 
 \bibliographystyle{sn-basic}
 \bibliography{references}

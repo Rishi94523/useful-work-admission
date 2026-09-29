@@ -1,6 +1,54 @@
-# Useful Work Admission — current status, 28 September 2026
+# Useful Work Admission — current status, 29 September 2026
 
 Repository: https://github.com/Rishi94523/useful-work-admission
+
+## Focused validation follow-up (29 September)
+
+Protocols 17–19 were committed at `a2d2af1` before execution; the second-host
+kernel replication (19b) at `83ac5f0`. Historical outputs are preserved. The
+molecular driver, campaign, production scheduler and CDN architecture were
+not changed. `scripts/analyze_followup_validation.py` produces the combined
+summary from recorded outputs.
+
+- **Real HTTP and replay:** 18 FIFO ticket-prototype cases, three repetitions
+  per verifier/load condition, no execution errors. At the highest offered
+  attack rate (1.5/s), 3/9 newcomer requests met the five-second submission
+  deadline under molecular replay, versus 9/9 under the PoW control; reserved
+  established clients were 9/9 under both. Across 107 molecular audits,
+  51 honest submissions passed and 56 fabricated ones failed. RT1–RT3 held.
+  These are small loopback cases with precomputed honest work, not production
+  traffic or validation of the separate priority-queue model's thresholds.
+- **Cost-aware selection:** historical control timings were split into 15
+  development and 18 held-out jobs. Predicted-cheapest selection in hypothetical
+  mixed-job bundles gave expected time-cost ratio 0.716 (oracle 0.464).
+  Current same-pool bundles gave 1.001 with this target-only predictor (oracle
+  0.848). Selecting cheaper offered same-job bundles across jobs gave 0.661,
+  or 0.670 with 10 ms per offer. HC1/HC2 held, but this is cost resampling,
+  not a live scheduler exploit; actual allocation and abandonment penalties
+  were not modeled. Unit-count parity is not heterogeneous time-cost parity.
+- **Sleeper spending:** unchanged scheduler, simulated time and controlled
+  replay verdicts; 30 identities per policy/rate earn three audited bundles,
+  wait 600 s and spend a ten-unit grant. At p=0.1, immediate and deferred modes
+  granted 159 and 189 fraudulent admissions after 360 upfront unit-equivalents
+  per group. Marginal molecular cost was zero; lifetime cost was positive.
+  No identity exceeded ten admissions (SL1); no renewal or live flood tested.
+- **Same-host inference repetition:** three sessions, two dense models,
+  batches 1/32, fastest CPU baseline measured in each session. IR1 exactness
+  and sampled rejection checks passed; IR2 timing stability failed in two
+  cells. Wide-model CPU leverage at 8% audits was 2.53–2.93 (B=1) and
+  1.78–1.87 (B=32). Setup amortized over 100 admissions reduces B=1 to
+  0.23–0.26. These do not replace the old GPU-inclusive result.
+- **Second computer pending:** a 5.5 MB portable Windows package is ready at
+  `tmp/ryzen-verification-benchmark.zip`, with source, checksums and launcher.
+  The original laptop completed it; the Ryzen 3 result is not yet received.
+  Portable kernel-relative leverage is not full-pipeline/PyTorch/GPU leverage.
+
+Runners: `validate_realtime_admission.py`, `validate_cost_aware_admission.py`,
+`validate_inference_repetition.py`, `build_portable_dense_benchmark.py` and
+`portable_dense_benchmark.py`. Data: `local-research/realtime-admission-2026-09-29/`,
+`cost-aware-2026-09-29/`, `inference-repetition-2026-09-29/` and
+`portable-dense-2026-09-29/`. The manuscript and supplementary S7 distinguish
+the measurements, models and pending replication. Zenodo packaging is deferred.
 
 ## Manuscript review correction and replication
 
@@ -628,9 +676,9 @@ verifier). M2 failed: batching cut verification per input only for the dense
 models (to 0.06x and 0.21x at B = 32); convolutional models stayed flat or
 worsened, because the verifier's work per activation dominates and those
 models have many activations per multiply-accumulate. M3 failed: no model
-reached leverage 4 at B = 32 (best 1.05, the wide perceptron); leverage fell
-with batch size for every model, as the server's own batched inference gained
-more than verification. M4 failed: at small batches the GPU was slower than
+reached leverage 4 at B = 32 (best 1.05, the wide perceptron). The narrow
+MNIST perceptron's CPU-relative leverage rose from 0.31 to 0.41 between
+B=1 and B=128, while the other models lost leverage. M4 failed: at small batches the GPU was slower than
 one CPU thread (launch and transfer overhead), so leverage against it reached
 2.7 for the MNIST perceptron at B = 1, falling below 1 by B = 128. Cells whose
 verification exceeds 5.69 ms per admission are not claimed as available.

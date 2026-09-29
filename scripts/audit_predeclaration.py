@@ -6,6 +6,7 @@ Output: local-research/predeclaration-audit/audit.json and a printed table.
 Manifest file times are local filesystem times, a weaker record than the
 commit history; the table reports them as such.
 """
+import argparse
 import datetime as dt
 import hashlib
 import json
@@ -43,7 +44,11 @@ def find_protocol(d, path=''):
 # checked against the commit of the amendment that governs it.
 BY_COMMIT = {'admission-amendment14-2026-09-28': '5105313', 'inference-leverage-2026-09-28': '5105313',
              'batched-leverage-2026-09-28': 'fbe767f', 'native-dense-2026-09-28': 'a1c1d83',
-             'trace-attacks-2026-09-29': '599cc0f'}
+             'trace-attacks-2026-09-29': '599cc0f',
+             'realtime-admission-2026-09-29': 'a2d2af1',
+             'cost-aware-2026-09-29': 'a2d2af1',
+             'inference-repetition-2026-09-29': 'a2d2af1',
+             'portable-dense-2026-09-29': '83ac5f0'}
 PHONES = {'device-timing-subpuzzle': '5a19d42', 'device-inference-2026-09-28': '30992dc'}
 
 
@@ -70,6 +75,9 @@ def extra_rows():
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output', type=Path, default=LR / 'predeclaration-audit' / 'audit.json')
+    args = parser.parse_args()
     versions = protocol_versions(); rows = []
     for f in sorted(LR.rglob('*manifest*.json')):
         try: m = json.loads(f.read_text(encoding='utf-8'))
@@ -83,8 +91,8 @@ def main():
                          'after_commit': bool(ctime and mtime > ctime), 'lag_min': round((mtime - ctime).total_seconds() / 60, 1) if ctime else None})
     # Scientific-campaign manifests hash the benchmark protocol, not this one.
     rows = [r for r in rows if r['protocol_commit']] + extra_rows()
-    out = LR / 'predeclaration-audit'; out.mkdir(exist_ok=True)
-    (out / 'audit.json').write_text(json.dumps(rows, indent=1), encoding='utf-8')
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(rows, indent=1), encoding='utf-8')
     for r in rows:
         print('%-62s %-8s %-25s lag %8s min %s' % (r['manifest'][:62], r['protocol_commit'], (r['commit_time'] or '')[:19], r['lag_min'], 'ok' if r['after_commit'] else 'CHECK'))
     print('%d manifests with a protocol hash; %d matched a committed protocol version; %d written after that commit'

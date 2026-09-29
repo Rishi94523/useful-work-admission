@@ -2,7 +2,7 @@
 
 **Short title.** The Price of Utility
 
-*Draft 3, 25 September 2026. Source of truth for `manuscript.tex`, which
+*Draft 4, 29 September 2026. Source of truth for `manuscript.tex`, which
 `scripts/build_manuscript.py` generates. Related work is included from
 `RELATED_WORK.md`. Every number is taken from `STATUS.md` or from the recorded
 ledgers by committed scripts; re-check before submission. [TODO] marks items
@@ -28,7 +28,7 @@ AutoDock Vina docking units that join a virtual screening campaign and are
 verified by exactly replaying a secretly sampled unit. Decomposed searches
 preserved screening accuracy and reproduced bit for bit on phones; with trace
 commitment and three easily overlooked scheduler fixes, attackers paid about
-what honest clients pay even with free identities, replay caught every tested
+what honest clients pay in equal-unit-cost tests with free identities, replay caught every tested
 attacker-built shortcut through the search, and rescoring stopped
 fabricated energies from reordering results. The price is verification: each
 audit is a molecular replay, so in simulations under attack verifier capacity
@@ -86,9 +86,10 @@ This is a characterisation study. We do not propose useful work as a drop-in
 replacement for proof of work; we measure what making the work useful costs,
 and who pays. We test the trade-off on two workload classes through
 six questions, each answered by a separate experiment under a protocol
-committed before any attack was run. The protocol was amended nineteen times, each amendment's
+committed before any attack was run. The protocol was amended twenty-three times, each amendment's
 predictions committed to version control before the experiment it governs,
-and every miss is reported. The measured answers are our contributions.
+and every miss is reported. The measured answers are our contributions; the
+second-host portable replication remains pending.
 
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
@@ -215,7 +216,7 @@ computation changes the committed bytes. We support the assumption
 empirically (Section 5.3) and discuss its limits in Section 6; we do not prove
 it.
 
-**Proposition.** Under the assumption, with a secret draw derived only after
+**Proposition (equal-cost units).** Under the assumption, with a secret draw derived only after
 commitment and a fresh seed for every re-issued unit, any strategy that
 computes m of a bundle's four units and fabricates the rest has expected work
 per admission of four units, the same as honest work, for every m from 1 to 4.
@@ -229,6 +230,11 @@ before upload let a client abandon exactly when selected. The same premises
 justify treating attempts as independent in the discount-factor intervals.
 The proposition bounds expected work, not its variance, and says nothing about
 the scientific quality of the unaudited units, which Section 5.4 examines.
+Its unit count is not a bound on elapsed time for heterogeneous assignments.
+If the four units cost c_1, ..., c_4, computing a selected subset S costs
+4 · sum(c_i for i in S) / |S| per expected admission, whereas honest work
+costs sum(c_i). Cost-aware selection can therefore violate time-cost parity
+without breaking trace commitment. Section 5.3 measures this distinction.
 
 ### 3.6 Verification time and leverage
 
@@ -265,16 +271,19 @@ The evaluation follows a written protocol dated 22 September 2026 and
 committed to version control on 23 September, before any attack was run.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Nineteen amendments (numbered 1 to 16, with 9b,
-14b and 15b) cover phase operationalisation, the three economic fixes, scientific
+governs, with the original preserved. Twenty-three amendments (numbered 1 to 19, with 9b,
+14b, 15b and 19b) cover phase operationalisation, the three economic fixes, scientific
 integrity, trace commitment, the rescoring driver, newcomer pricing,
 attestation, the subpuzzle baseline, a correction of the simulator's replay
 timing with five-seed replication, a proof-of-work gate baseline, and the
 verification-leverage study with its phone, batching and native-verifier
-predictions, and adaptive attacks on trace commitment. Every run manifest
+predictions, adaptive attacks on trace commitment, real-time replay capacity,
+heterogeneous costs, sleeper identities and controlled inference repetition.
+Every run manifest
 records the protocol version it ran under, and a committed audit script
-confirms that each of the 21 predeclared result sets was produced after the
-commit of its governing amendment.
+checks that each of 25 recorded result sets has a local file timestamp after
+the commit of its governing amendment. Local file timestamps are supporting
+provenance, not independent proof of when an experiment was first executed.
 
 The timeline is short, and every step is dated in the public commit history.
 The docking pipeline was built from 7 September 2026, and the stock
@@ -315,6 +324,8 @@ Table: Evidence supporting the claims and what each experiment does not establis
 | Scientific poisoning | Actual corpus re-finalisation; separately, score-shift resampling | Whole-panel AUC effects are exploratory projections |
 | Browser feasibility | Real phone execution and reference hash checks | Cooperative sessions, selected repeated units; not client attestation |
 | Overload and trust bootstrap | Real queue SQL with modeled arrivals, replay and puzzle costs | Conditional finite-horizon simulations; not measured HTTP throughput |
+| Real-time capacity follow-up | Loopback HTTP, actual wall-clock arrivals and native replay, 18 cases | Isolated FIFO queue on one laptop, precomputed credits and small samples; not the priority-queue simulator or production traffic |
+| Cost selection and sleeper follow-up | Held-out resampling of recorded timings; unchanged scheduler with controlled verdicts | Cost-selection opportunity, not a demonstrated live exploit; sleeper verdicts are not fresh molecular replay |
 | Attestation benefit | Mock issuer, token checks and one-use nullifiers | Assumed quota and token supply; no deployed issuer or blind-signature integration |
 | Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models on one laptop-class host; batches to 128 inputs, a laptop GPU and a native dense verifier; no server-class accelerators |
 
@@ -456,7 +467,8 @@ the first or second of a median 5,384 Monte Carlo steps. The prediction that
 each shortcut would save work if accepted failed for two of them, which saved
 less than predicted, so only the halved local search was a shortcut worth
 attempting. No per-step energy recurred between units of the same job, in
-23.1 million steps, so caching evaluated states across units saves nothing.
+23.1 million recorded steps. This found no reuse of those recorded energies;
+it does not rule out caching intermediate evaluations or reusable subcomputations.
 
 Table: Adaptive shortcuts through the search, each replayed on 99 corpus units. Work saved is what the shortcut would have saved had it been accepted: wall time per energy evaluation for reordered arithmetic, energy evaluations per Monte Carlo step otherwise.
 
@@ -499,6 +511,35 @@ The lowest interval, 0.96 ± 0.09, also permits a modest attacker advantage;
 containing 1.0 does not establish equality or a lower bound of 1.0.
 Identities are free in these experiments, but results apply to the specified
 strategies, attempt model and workload costs, not every possible adversary.
+
+**Heterogeneous costs (amendment 18).** A later cost analysis split the 33
+corpus jobs into 15 development and 18 held-out jobs, retaining the three
+recorded control-unit timings per job. Development target medians predicted
+cost without using held-out runtimes. Across five seeded resampling runs,
+selecting one predicted-cheapest unit from a hypothetical mixed-job bundle
+reduced expected time cost per admission to 0.716 of honest cost; an oracle
+with advance knowledge of runtimes reached 0.464. The deployed request API
+binds a bundle to one pool, where this target-only predictor cannot select
+between its units: its ratio was 1.001, versus an unavailable oracle's 0.848.
+Choosing the predicted cheaper half of offered same-job bundles across jobs
+gave 0.661 before probing cost and 0.670 with 10 ms per offer. This is a
+modeled selection opportunity, not an executed admission bypass: it assumes
+access to assignments across jobs and does not enforce campaign allocation,
+expiry or refusal penalties. Existing concurrent timings and resampling with
+replacement limit the inference. Equal unit counts alone do not establish
+equal attacker time costs.
+
+**Prepaid reputation (amendment 18).** The unchanged scheduler was exercised
+with a simulated clock and controlled trusted replay verdicts. Thirty sleeper
+identities per policy and audit rate earned trust through three accepted
+four-unit bundles, waited 600 s, and then submitted fabricated trusted units.
+At p = 0.1, immediate auditing granted 159 fraudulent admissions across the
+30 identities, and deferred auditing granted 189, including access preceding
+a failed replay. Each group had paid 360 unit-equivalents beforehand. No
+identity exceeded its ten-unit grant. Marginal molecular work during the
+attack was zero; acquisition cost was not. This tests spending one existing
+grant, not unlimited renewal, real-time overload or fresh molecular execution.
+
 Before the fixes, compensating for the measured discounts would have required
 an identity price of 0.5–5.1 honest units. The fixes remove the particular
 reuse, disclosure and early-trust paths responsible for those discounts.
@@ -636,6 +677,21 @@ protected service behind it, which we did not simulate. The comparison
 therefore isolates the availability price of replay verification rather than
 comparing whole deployments.
 
+**Real-time follow-up (amendment 17).** Eighteen isolated loopback HTTP cases
+tested the FIFO ticket prototype with real arrivals, actual uploads and two
+native workers, one reserved per lane. The honest outputs were computed
+before the arrival windows, so latency begins at submission, not browser
+assignment. At the highest offered attack rate, 1.5 fabricated submissions/s,
+3 of 9 newcomers met a five-second deadline with molecular replay, versus
+9 of 9 with the same queue checking a real request-bound hash puzzle.
+Established clients met the deadline in 9 of 9 cases under either verifier.
+Across the molecular cases, all 51 audited honest submissions passed and all
+56 audited fabricated submissions failed; median service was 1.496 s.
+These measurements support the existence of a replay bottleneck and reserved
+capacity's benefit in this prototype. They do not validate the priority
+simulator's numerical threshold or device-specific denial estimates.
+Supplementary Section S7 reports the conditions and boundaries.
+
 A native core hashes about 36 times faster than the budget phone's JavaScript,
 and pricing alone does not remove that disparity. Because trust requires three
 audited bundles, newcomers who are outbid cannot earn trust either: under a
@@ -710,9 +766,10 @@ No workload we measured is both cheap to verify and high in leverage.
 Two further amendments asked whether batch size or the verifier's
 implementation, rather than the method, set that limit. In amendment 15 each
 admission labelled a batch of up to 128 inputs, verified with the same secret
-projections as matrix products. Leverage fell with batch size for every model:
-batching made the server's own inference cheaper per input faster than it
-made verification cheaper, and in convolutional networks, where most output
+projections as matrix products. Batching did not produce high leverage:
+the narrow MNIST perceptron's CPU-relative leverage increased from 0.31 to
+0.41, while the other models lost leverage between batches of 1 and 128.
+In convolutional networks, where most output
 values come from early layers with only 9 to 576 multiply-accumulates each,
 the verifier's work per value dominates. A GPU baseline was slower than one CPU thread at small batches,
 from launch and transfer overhead, so leverage measured against the GPU
@@ -771,6 +828,18 @@ phone gains the same factor at a puzzle gate. It does not remove device
 disparity: the spread from budget phone to flagship fell from 10.2× under
 SHA-256 to 5.2× under scrypt, similar to the 5.7× spread for labelling work
 on the same phones.
+
+**Controlled repetition (amendment 19).** Three later sessions repeated the
+two dense models against the fastest measured CPU option, without importing
+GPU timings from a different session. At 8% audits, the wide model's leverage
+was 2.53–2.93 at B = 1 and 1.78–1.87 at B = 32. All tested exactness and
+perturbation checks passed, but the prediction that session median verification
+times vary by at most 25% failed in two of four configurations. Including
+model/sketch preparation amortized over only 100 admissions reduced the wide
+model's B = 1 leverage to 0.23–0.26. These are CPU-only observations, separate
+from the earlier GPU-inclusive 2.21 result. A portable exact-kernel benchmark
+has been prepared for a second host; its narrower baseline and pending status
+are recorded in Supplementary Section S7.
 
 ## 6 Discussion
 
@@ -865,7 +934,9 @@ deployed challenge services [Turnstile22], which trade privacy for
 discrimination. Against sleeper identities aged during quiet periods
 [Douceur02], useful admission changes the price: earning trust requires three
 replayed bundles, so pre-built reputation is paid for in real, audited
-docking. We have not measured a sleeper-identity attack.
+docking. Amendment 18 now measures one-grant sleeper spending on the scheduler
+with simulated time and controlled verdicts (Section 5.3); it does not measure
+a live coordinated sleeper flood.
 
 **Consent.** Given the history of covert browser mining (Section 2.2), a
 useful-work gate that spends visitors' energy must say so, and it gives them a
@@ -873,13 +944,17 @@ reason a puzzle cannot.
 
 **Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one laptop-class host.
 Availability mechanisms are isolated prototypes, not integrated into the
-deployed scheduler, and their puzzle costs were accounted from measured rates
-rather than executed. Corrected five-seed results retain substantial
+deployed scheduler. The principal availability grids account puzzle costs from
+measured rates rather than execute them; the small amendment-17 FIFO follow-up
+executes puzzles, HTTP requests and replays, with precomputed honest credits.
+Corrected five-seed results retain substantial
 anonymous-newcomer denial at sixteen attacker cores, and the mock-attestation
 lane helps only under assumed honest coverage and attacker token budgets;
 issuer quotas and platform availability are external requirements. Discount-factor intervals assume independent attempts,
 which Section 3.5 argues but does not prove.
-The trusted tier grants unaudited admissions on history, not on the unit.
+Cost-aware selection can undercut time-cost parity across heterogeneous
+assignments; the equal-unit-cost proposition does not rule it out. The
+trusted tier grants unaudited admissions on history, not on the unit.
 The scheduler quarantines contributors after failed replay and blocks
 aggregate-output retrieval when their contributions are present. A dedicated
 late-failure test covers this guard; automatic campaign repair and retraction
@@ -901,7 +976,8 @@ but verification changes the economics of admission. In the two workload
 classes we measured, the work worth delegating was expensive to verify and the
 work cheap to verify bought only modest leverage. Bounded Vina units
 preserve screening performance and reproduce exactly on phones, and the
-tested fixes leave attacker cost near parity, not provably so, and replay
+tested fixes leave attacker unit-count cost near parity, not provably so;
+heterogeneous task selection can still discount elapsed-time cost. Replay
 caught every tested shortcut through the search. Replay
 verification still consumes capacity that a proof-of-work gate does not,
 overload falls first on budget devices, and external attestation helps only
@@ -931,7 +1007,8 @@ Additional file 1 (PDF): Supplementary Information. Complete experimental
 methods (S1), the first four-phone timing study (S2), and all availability
 prediction checks, five-seed service and trust tables and historical
 comparisons (S3), further admission-economics configurations (S4), the
-proof-of-work gate baseline (S5), and the inference-leverage methods (S6).
+proof-of-work gate baseline (S5), inference-leverage methods (S6), and the
+real-time, heterogeneous-cost and repeated-inference follow-up (S7).
 
 ### Availability of data and materials
 

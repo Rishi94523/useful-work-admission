@@ -130,6 +130,21 @@ def design_space():
  ax.set_xlabel('Verifier time per admission (ms, log scale)');ax.set_ylabel('Leverage (log scale)')
  fig.savefig(OUT/'design_space.pdf');plt.close(fig)
 
+def width_sweep():
+ """Amendment 21: leverage against dense-layer width, with the int8 weight download."""
+ path=LR/'width-sweep-2026-09-29/summary.json'
+ if not path.exists():return
+ rows=json.loads(path.read_text(encoding='utf-8'))['rows'];w=[r['width'] for r in rows]
+ fig,ax=plt.subplots(figsize=(4.6,3.0))
+ ax.plot(w,[r['leverage_cpu_no_audit'] for r in rows],'o-',color='#4f81bd',ms=4,label='CPU baseline, no audits')
+ ax.plot(w,[r['leverage_cpu_8pct'] for r in rows],'s-',color='#2e7d32',ms=4,label='CPU baseline, 8% audits')
+ ax.plot(w,[r['leverage_all_8pct'] for r in rows],'v-',color='#c0504d',ms=4,label='GPU-inclusive baseline, 8% audits')
+ ax.axhline(4,color='0.6',lw=0.8,ls='--');ax.text(w[0],4.3,'leverage 4',fontsize=6.5,color='0.4')
+ ax.set_xscale('log',base=2);ax.set_yscale('log');ax.set_xticks(w)
+ ax.set_xticklabels(['%d\n%.1f MB'%(r['width'],r['weight_bytes']/1e6) for r in rows],fontsize=7)
+ ax.set_xlabel('Layer width (int8 weights to download)');ax.set_ylabel('Verification leverage')
+ ax.legend(frameon=False,fontsize=6.5,loc='upper left');fig.savefig(OUT/'width_sweep.pdf');plt.close(fig)
+
 if __name__=='__main__':
- print('device latency samples',device_timing());served_vs_cores();trust_bootstrap();design_space()
+ print('device latency samples',device_timing());served_vs_cores();trust_bootstrap();design_space();width_sweep()
  print('figures in',OUT)

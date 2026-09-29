@@ -86,7 +86,7 @@ This is a characterisation study. We do not propose useful work as a drop-in
 replacement for proof of work; we measure what making the work useful costs,
 and who pays. We test the trade-off on two workload classes through
 six questions, each answered by a separate experiment under a protocol
-committed before any attack was run. The protocol was amended twenty-four times, each amendment's
+committed before any attack was run. The protocol was amended twenty-five times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -95,7 +95,7 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws whose fixes are standard but which surfaced only once identities were priced at zero. Trace commitment and the fixes remove the large measured discounts, leaving estimates near parity with free identities, and replay rejected every tested attacker-built shortcut through the search, 0 of 297 units; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; it passes 4 against a CPU only for layers 4,096 wide, with 16.8 MB of weights per client, and never against a GPU; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -276,10 +276,10 @@ timing with five-seed replication, a proof-of-work gate baseline, and the
 verification-leverage study with its phone, batching and native-verifier
 predictions, adaptive attacks on trace commitment, real-time replay capacity,
 heterogeneous costs, sleeper identities, controlled inference repetition and
-externally screened newcomers.
+externally screened newcomers and layer width.
 Every run manifest
 records the protocol version it ran under, and a committed audit script
-checks, by local file timestamps, that each of 26 recorded result sets
+checks, by local file timestamps, that each of 27 recorded result sets
 postdates the commit of its governing amendment.
 
 The timeline is short, and every step is dated in the public commit history.
@@ -812,6 +812,26 @@ computer. Session timings varied by more than the predicted 25% in two of four
 cells, and counting the verifier's setup over 100 admissions cut the leverage
 to about 0.25 (Supplementary Section S7).
 
+**Layer width (amendment 21).** Prepared projections check a layer of width n
+in O(n) work against O(n²) to compute it, so leverage should grow with width.
+Synthetic n → n → 10 networks confirmed it, and all five predictions held
+(Figure 6). Against the fastest CPU option, leverage at 8% audits rose from
+0.78 at n = 512 to 4.70 at n = 4,096 and 7.90 at n = 8,192, below the cap
+that exact audits set. Reaching 4 needed 16.8 MB of int8 weights per client,
+as much as docking's prepared state, while the budget phone would compute
+such a layer in about 0.1 s by extrapolation: delivery, not phone
+computation, is the constraint. Against a GPU, leverage at 8% audits peaked
+at 1.56 and fell below 1 at the largest widths.
+
+```latex
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/width_sweep.pdf}
+\caption{Verification leverage of synthetic dense networks against layer width, with the int8 weights a client must download. Leverage is taken against the server's fastest CPU option without and with 8\% audits, and at 8\% audits against the fastest option including a laptop GPU. The dashed line marks leverage 4.}
+\label{fig:width}
+\end{figure}
+```
+
 ## 6 Discussion
 
 **The trade-off.** The two workloads fall at opposite ends of one trade-off
@@ -824,9 +844,9 @@ for matrix multiplication [Komargodski25] suggest the region is not empty in
 principle; docking's search does
 not, because its best pose carries no proof that the search was done.
 Neither batching nor an optimised verifier moved a classifier into that
-region, but both were measured on laptop-class hardware; wider dense layers
-or server-class accelerators, which change both sides of the ratio, may land
-elsewhere in Figure 5.
+region. Wider dense layers do, against a CPU, but only by moving the cost into
+the megabytes of weights each client must download, and a GPU on the server
+moves them back out (Figure 6); server-class accelerators were not measured.
 
 **When is useful work worth it?** For docking, only when someone needs the
 output and the verifier can afford replay. A puzzle is strictly better on verifier cost and

@@ -923,3 +923,56 @@ trade-off while wide dense layers can, at the cost of delivering their
 weights. Amendment 14's L5 will be reported as superseded by an optimised
 verifier. If N3 fails, the paper will state that the trade-off held with an
 optimised native verifier.
+
+## Amendment 16 — adaptive attacks on trace commitment, 29 September 2026
+
+Recorded after an external review and before any variant below was built or
+run.
+
+**Context.** Phase 1 tested only truncation: a genuine search stopped early.
+The trace-work assumption (Section 3.5 of the paper) says a matching trace
+needs essentially the honest sequence of evaluations. This amendment tests
+three adaptive shortcuts an attacker could build from the public driver, and
+the reuse of work across units.
+
+**Variants.** Each is built from the frozen v1 driver sources with the same
+build script as the honest driver, changing only what is stated. A control
+build with no change must reproduce the honest driver's output before any
+variant is judged.
+
+- V1, reordered arithmetic: compiled with -ffast-math -march=native instead of
+  -ffp-contract=off, allowing the compiler to reassociate, contract and
+  vectorise floating-point operations. A faster implementation of the same
+  search.
+- V2, skipped local-search evaluations: the local optimiser's step limit per
+  Monte Carlo step halved.
+- V3, skipped refinement: the extra local optimisation given to promising
+  candidates before they are saved is omitted.
+
+Each variant replays the 99 salted-hash corpus units of phase 1 with the
+honest seed and budget, and its pool and trace are compared byte for byte
+with the preserved honest output. We record acceptance, the first step at
+which the trace differs, and the work saved per Monte Carlo step: wall time
+per evaluation for V1, evaluations per step for V2 and V3.
+
+**Reuse.** R1 measures, over every job in the matched corpus, the fraction of
+per-step candidate energies in one unit that are bit-identical to a per-step
+energy in another unit of the same job: the most a cross-unit cache of
+evaluated states could save.
+
+**Predictions.**
+
+- Q1. No variant output is accepted for any sampled unit (0 of 99 for each).
+- Q2. In every sampled unit, each variant's trace first differs from the
+  honest trace within the first 1% of its Monte Carlo steps.
+- Q3. Each variant saves work if it were accepted: V1 at least 10% less wall
+  time per evaluation than the control build, V2 at least 25% fewer
+  evaluations per step, V3 at least 5% fewer.
+- Q4. Fewer than 0.1% of per-step candidate energies in a unit recur
+  bit-identically in another unit of the same job.
+
+**Consequence stated in advance.** If Q1 and Q2 hold, the paper will report
+that the tested adaptive shortcuts were rejected and detected early, and that
+cross-unit reuse offers at most the measured saving; the trace-work assumption
+remains an assumption, now tested beyond truncation. Any failure will be
+reported with its cause.

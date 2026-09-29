@@ -1118,3 +1118,42 @@ admits fabricated outputs before detection and is not a work-enforcement proof.
 Production Turnstile pass rates, token acquisition cost and device UX remain
 unmeasured unless separately collected. Test validation with injected responses;
 public Cloudflare test credentials, if used, test integration only.
+
+## Amendment 21 — verification leverage against layer width, 29 September 2026
+
+Recorded after a review asked where algebraic verification would pay off and
+whether models that large could run on phones, before the sweep below was
+written or run.
+
+**Context.** The measured classifiers are small, and prepared projections
+check a dense layer of width n in O(n) work against O(n²) to compute it, so
+leverage should grow with width. From the amendment-15b measurements (about
+0.1 ns per multiply-accumulate for the server's inference and about 20 ns per
+checked value for the verifier) we expect leverage without audits of roughly
+n/400, while exact audits cap leverage at 8% audits near 12.5 times central
+over audit cost, and the int8 weights a client must download grow as n².
+
+**Design.** Synthetic networks n → n → 10 with ReLU, n in {512, 1024, 2048,
+4096, 8192}, PyTorch default initialisation with a fixed seed per width,
+calibrated on 256 standard-normal inputs, quantized and prepared exactly as
+the classifiers, verified by the unchanged amendment-15b native kernel.
+Per width, at B = 1 on one CPU thread with twelve warm-ups, 64 timed distinct
+inputs and randomised method order: PyTorch FP32 and INT8, the native exact
+forward pass, native verification and native verification with audit. A
+separate run times the same architectures on the RTX 4060 Laptop GPU in FP32
+and FP16 including transfers. Leverage is reported against the fastest CPU
+option and against the fastest option including the GPU, at audit rates 0 and
+8%. Weight bytes are recorded; budget-phone time is extrapolated from the
+amendment-14b wide-perceptron rate and labelled as an extrapolation.
+
+**Predictions.**
+
+- W1. At every width, honest traces are accepted with outputs equal to the
+  reference verifier and every sampled single-entry perturbation is rejected.
+- W2. CPU-relative leverage without audits increases with width and is at
+  least 4 at n = 4096.
+- W3. CPU-relative leverage at 8% audits stays below 12.5 at every width.
+- W4. Leverage at 8% audits against the fastest option including the GPU stays
+  below 4 at every width.
+- W5. At the smallest width whose CPU-relative leverage at 8% audits reaches
+  4, if any, the int8 weights exceed 4 MB.

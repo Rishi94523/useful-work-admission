@@ -54,9 +54,22 @@ and what it did not.
 The focused follow-up in supplementary S7 uses `validate_realtime_admission.py`,
 `validate_cost_aware_admission.py`, `validate_inference_repetition.py` and
 `analyze_followup_validation.py`. A portable second-host kernel replication
-is prepared; its Ryzen 3 result is pending. Real-time FIFO measurements,
+passed on the Ryzen 7 7435HS and Ryzen 5 3500U (both PH1 and PH2). These are
+portable exact-kernel comparisons, not fastest CPU/GPU inference. Real-time FIFO measurements,
 modeled cost selection, and the prior priority-queue simulations are separate
 evidence, not interchangeable deployment claims.
+
+The isolated screened-newcomer prototype is `research/screened_admission.py`;
+run `python -B -m unittest research.tests.test_screened_admission` and
+`python -B scripts/evaluate_screened_admission.py` for amendment 20. Its
+`Siteverify` adapter requires a server-held secret, expected hostname/action,
+and the session binding returned by `ScreenedAdmission.binding(owner)` as
+the widget's `cData`. Only authenticated server sessions may supply `owner`;
+`trusted` and replay verdicts are server-only inputs. Keep secrets in environment
+or deployment bindings, never browser code. No Turnstile widget is configured
+or deployed yet. The comparison injects screening outcomes; it does not measure
+Cloudflare detection accuracy. This prototype is separate from the production
+campaign and the rate-limited mock device-attestation experiment.
 
 All runners are in `scripts/`. The inference verifier is in
 `research/inference/` (`quantized_net.py`, `batched.py`, and native kernels in

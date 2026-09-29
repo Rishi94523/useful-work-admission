@@ -89,7 +89,7 @@ six questions, each answered by a separate experiment under a protocol
 committed before any attack was run. The protocol was amended twenty-three times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions; the
-second-host portable replication remains pending.
+second-host portable replication is reported separately in Supplementary S7.
 
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
@@ -838,7 +838,7 @@ times vary by at most 25% failed in two of four configurations. Including
 model/sketch preparation amortized over only 100 admissions reduced the wide
 model's B = 1 leverage to 0.23–0.26. These are CPU-only observations, separate
 from the earlier GPU-inclusive 2.21 result. A portable exact-kernel benchmark
-has been prepared for a second host; its narrower baseline and pending status
+passed the predeclared checks on a second host; its narrower baseline and results
 are recorded in Supplementary Section S7.
 
 ## 6 Discussion

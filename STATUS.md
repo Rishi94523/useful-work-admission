@@ -2,6 +2,69 @@
 
 Repository: https://github.com/Rishi94523/useful-work-admission
 
+## Screened newcomers (amendment 20, 29 September)
+
+Protocol committed at `4310d9e`. The isolated `ScreenedAdmission` prototype adds
+server-side Siteverify validation, session/hostname/action binding, a three-unit
+five-minute provisional allowance, token reuse prevention, separate lane budgets,
+post-commit audit selection, single-use access credits and session quarantine.
+It does not change the deployed campaign, molecular code or CDN. No production
+Turnstile widget exists yet. Integration follows Cloudflare's Siteverify contract:
+https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+
+Completed 640 policy cases with five seeds per parameter cell. These execute the
+real SQLite policy using an in-memory database, simulated arrivals/clock/verdicts,
+tiny payload fixtures and assumed screening pass rates. They do not measure
+Cloudflare accuracy, Siteverify capacity/latency or fresh molecular performance.
+One reserved worker per lane uses amendment 17's 1.4957105 s replay median.
+The deadline starts at submission, excluding client computation and screening.
+
+At 100 attack attempts/s, 0.2 honest newcomers/s and 100% honest screening pass,
+five seeds give the following totals (each row contains 131 honest newcomers):
+
+| Policy | Assumed attacker pass | Honest within 5 s | Fabricated admissions | Provisional replay CPU, modeled |
+|---|---:|---:|---:|---:|
+| No external screening, replay | N/A | 0/131 | 0 | 0 s (newcomer lane pays replay) |
+| Screening only | 0.1% | 131/131 | 47 | 0 s |
+| Screening + mandatory replay | 0.1% | 128/131 | 0 | 266.24 s |
+| Screening + 10% deferred replay | 0.1% | 29/131 | 13 | 2.99 s |
+| Screening + mandatory replay | 1% | 4/131 | 0 | 644.65 s |
+
+Established-user outcomes were identical in every paired scenario: 134/136
+within five seconds and 136/136 eventually admitted (PN1). The two deadline
+misses arise from their own arrival bursts, not attack interference. Screening
+helped at low bypass and lost that benefit under overload (PN2). The one-worker
+stability condition is honest_rate + attack_rate * bypass < 1 / replay_seconds;
+at these rates the necessary mean-load bound is bypass < 0.469%, not a guarantee
+of a five-second deadline. This is a conditional model, not a Turnstile claim.
+
+Deferred access admitted fabricated work before audit (PN3). In this conservative
+implementation, unsampled outputs occupy the same eight-slot pending allowance
+until expiry. Even without attackers, only 44/131 newcomers obtained admission;
+unchecked science never entered the aggregate. Separate bounded scientific
+staging and later validation would be required to evaluate a deployable deferred
+policy. Increasing a queue or discarding outputs does not solve scientific trust.
+The screening-only baseline collects no science from its provisional users;
+failed checks fall back to the anonymous lane in every screened policy.
+
+Recommendation: test real screening with bounded provisional mandatory replay
+first. Do not equate external screening with device quotas or earned trust.
+Fresh sessions remain unlimited in the attack model; attacker screening cost
+and provider bypass rates are unknown. HTTP flood resistance, durable ledger
+retention/cleanup and production integration still need separate validation.
+All screening policies use the same reserved worker budgets; this is not a
+comparison against an optimally pooled worker baseline. No overload puzzle is
+included in this isolated policy comparison.
+
+Code: `research/screened_admission.py`, `scripts/evaluate_screened_admission.py`,
+`scripts/analyze_screened_admission.py`. Raw results, source hashes, summaries and
+notes on two interrupted harness attempts are kept in ignored
+`local-research/screened-admission-2026-09-29/`. The rerun added expiry/payload
+indexes without changing policy decisions. Five new tests and 29 existing
+admission regression tests pass. Amendment 20 has not been folded into the
+paper's main result claims; the second-host replication has been incorporated
+and all three PDFs rebuilt successfully.
+
 ## Focused validation follow-up (29 September)
 
 Protocols 17–19 were committed at `a2d2af1` before execution; the second-host
@@ -38,10 +101,14 @@ summary from recorded outputs.
   cells. Wide-model CPU leverage at 8% audits was 2.53–2.93 (B=1) and
   1.78–1.87 (B=32). Setup amortized over 100 admissions reduces B=1 to
   0.23–0.26. These do not replace the old GPU-inclusive result.
-- **Second computer pending:** a 5.5 MB portable Windows package is ready at
-  `tmp/ryzen-verification-benchmark.zip`, with source, checksums and launcher.
-  The original laptop completed it; the Ryzen 3 result is not yet received.
-  Portable kernel-relative leverage is not full-pipeline/PyTorch/GPU leverage.
+- **Second computer received:** the laptop reports Ryzen 5 3500U, correcting
+  the earlier Ryzen 3 description. The identical portable package passed PH1
+  exactness/rejection checks and PH2 cross-host leverage bounds. At 8% auditing,
+  narrow B=1/32 leverage is 1.160/2.306 and wide B=1/32 is 4.903/5.748.
+  Cross-host ratios are 1.111, 1.319, 1.002 and 1.050. Both reported AC power,
+  with battery saver off. These exclude preparation and are not fastest
+  CPU/GPU full-pipeline leverage. Original and received raw reports are retained;
+  `summary-second-host.json` preserves the new comparison separately.
 
 Runners: `validate_realtime_admission.py`, `validate_cost_aware_admission.py`,
 `validate_inference_repetition.py`, `build_portable_dense_benchmark.py` and

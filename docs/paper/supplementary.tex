@@ -171,7 +171,7 @@ Phone timings (amendment 14b) used a page that downloaded each exported model (i
 
 Batched verification (amendment 15) used batches of 1, 8, 32 and 128 distinct test inputs per admission, a verifier that checks each layer of the batch with the same four projections as exact binary64 matrix products, and the server's batched PyTorch inference on one thread; a secondary baseline timed the same models on an RTX 4060 Laptop GPU in FP32 and FP16, including host-device transfers. Each size used three warm-up and 24 timed batches. The native verifier (amendment 15b) is a C kernel compiled with -O3 -march=native that verifies a whole dense network in one call and computes the exact integer forward pass used for audits and as a further central baseline. Every perturbation was rejected and outputs matched the per-input verifier in both. Native verification of the wide perceptron took 0.183 ms per admission, 1.9 times faster than the batched numpy verifier; in a hot loop without interleaved requests it took 0.078 ms, a post-hoc diagnostic not used in the results.
 
-The B = 1 rows differ from main-text Table 8 because they come from a separate session and use the batched verifier; central inference on this laptop varied by up to 1.7 times between sessions, so leverages are compared within a session.
+The B = 1 rows differ from main-text Table 9 because they come from a separate session and use the batched verifier; central inference on this laptop varied by up to 1.7 times between sessions, so leverages are compared within a session.
 
 \begin{table}[htbp]
 \caption{Batched verification (amendment 15): server's best batched CPU inference C, verification per admission V at an 8\% audit rate, and leverage against the CPU and GPU baselines.}

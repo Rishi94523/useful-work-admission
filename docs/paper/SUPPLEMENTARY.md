@@ -317,7 +317,7 @@ times faster than the batched numpy verifier; in a hot loop without
 interleaved requests it took 0.078 ms, a post-hoc diagnostic not used in the
 results.
 
-The B = 1 rows differ from main-text Table 8 because they come from a separate
+The B = 1 rows differ from main-text Table 9 because they come from a separate
 session and use the batched verifier; central inference on this laptop varied
 by up to 1.7 times between sessions, so leverages are compared within a
 session.

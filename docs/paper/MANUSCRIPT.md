@@ -28,7 +28,8 @@ AutoDock Vina docking units that join a virtual screening campaign and are
 verified by exactly replaying a secretly sampled unit. Decomposed searches
 preserved screening accuracy and reproduced bit for bit on phones; with trace
 commitment and three easily overlooked scheduler fixes, attackers paid about
-what honest clients pay even with free identities, and rescoring stopped
+what honest clients pay even with free identities, replay caught every tested
+attacker-built shortcut through the search, and rescoring stopped
 fabricated energies from reordering results. The price is verification: each
 audit is a molecular replay, so in simulations under attack verifier capacity
 decides who is admitted and budget phones are denied first. Protecting them needed about five
@@ -91,7 +92,7 @@ and every miss is reported. The measured answers are our contributions.
 
 1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
 2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
-3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws whose fixes are standard but which surfaced only once identities were priced at zero. Trace commitment and the fixes remove the large measured discounts, leaving estimates near parity with free identities; no general lower bound is established (Sections 5.3 and 6).
+3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws whose fixes are standard but which surfaced only once identities were priced at zero. Trace commitment and the fixes remove the large measured discounts, leaving estimates near parity with free identities, and replay rejected every tested attacker-built shortcut through the search, 0 of 297 units; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
 6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
@@ -444,17 +445,27 @@ from 163 KB to 19 KB. Falsifying the best energy by
 0.1–3.0 kcal/mol never changed any output, because the finaliser recomputes
 energies; moving the best pose by 0.1 or 0.5 Å had no effect.
 
-**Adaptive attacks.** Amendment 16 built three further shortcuts from the
-public driver sources and replayed the same 99 units: the search compiled to reorder and vectorise arithmetic
-(-ffast-math), a local optimiser limited to half its steps, and a search that
-skips refining promising candidates. A control build of the unchanged sources
-reproduced all 99. None of the variants was accepted, and every trace departed
-from the honest one at the first or second of a median 5,384 Monte Carlo
-steps. Only the halved local search would have saved much work, 42% of
-evaluations per step; the others saved 5.7% of time and 2.4% of
-evaluations, below the predicted 10% and 5%. No per-step energy recurred
-between units of the same job in 23.1 million steps, so caching evaluated
-states across units saves nothing.
+**Adaptive attacks.** Amendment 16 built three shortcuts through the search
+from the public driver sources and replayed the same 99 units with each
+(Table 5): the search compiled to reorder and vectorise arithmetic, a local
+optimiser limited to half its steps, and a search that skips refining
+promising candidates. A control build of the unchanged sources reproduced all
+99 units. Three of four predictions held. No shortcut was accepted, 0 of 297
+(95% interval [0.00, 0.012]), and every trace departed from the honest one at
+the first or second of a median 5,384 Monte Carlo steps. The prediction that
+each shortcut would save work if accepted failed for two of them, which saved
+less than predicted, so only the halved local search was a shortcut worth
+attempting. No per-step energy recurred between units of the same job, in
+23.1 million steps, so caching evaluated states across units saves nothing.
+
+Table: Adaptive shortcuts through the search, each replayed on 99 corpus units. Work saved is what the shortcut would have saved had it been accepted: wall time per energy evaluation for reordered arithmetic, energy evaluations per Monte Carlo step otherwise.
+
+| Shortcut | Accepted | First differing step | Work saved (predicted) |
+| --- | ---: | ---: | --- |
+| None (control build) | 99/99 reproduced | — | — |
+| Reordered arithmetic (-ffast-math) | 0/99 | 0 | 5.7% (at least 10%) |
+| Local search halved | 0/99 | 0 | 41.6% (at least 25%) |
+| Refinement skipped | 0/99 | 1 | 2.4% (at least 5%) |
 
 **Admission economics with free identities.** We define the attacker discount factor as attacker work per admission divided
 by honest work per admission in the same tier. A hash puzzle is normalised to
@@ -662,7 +673,7 @@ output; the verifier checks each layer with four secret Freivalds projections
 [Freivalds77], as in Slalom [Tramer19], and recomputes only the cheap nonlinear
 operations. We measured five models, from a 110-thousand-parameter MNIST
 perceptron to VGG11-BN on CIFAR-10.1 and a perceptron with two 2,048-wide
-layers, against the server's best native inference (Table 8, Supplementary
+layers, against the server's best native inference (Table 9, Supplementary
 Section S6).
 
 Table: Verification leverage of five labelling models. C is the server's best native inference time and V the verification time, including parsing, hashing, range checks, projections, nonlinear operations and an 8% audit rate; leverage L is C/V, shown without audits and at an 8% audit rate. Accuracy is the quantized model's test accuracy.
@@ -735,7 +746,7 @@ earlier studies lacked. Three predictions were recorded before the page ran
 (amendment 14b), and all held. All 270 classifier traces matched the server's
 expected hashes bit for bit, so algebraic verification needs no tolerance for
 device arithmetic. The budget phone's gap to one native core was 8.0× for
-scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9),
+scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 10),
 though the two native references were measured under different load
 (Supplementary Section S6).
 The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN. The
@@ -744,7 +755,7 @@ hashes per second measured during sustained docking in Section 5.2, while the
 budget phone's barely changed; device spreads therefore depend on session
 conditions, and the capacity model of Section 5.5 uses the earlier rates.
 
-Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
+Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt. SHA-256 rates here were measured in a short burst; the iPhone's is twice its rate during sustained docking, which Sections 5.2 and 5.5 and the capacity model use (budget phone 34,866 hashes/s, hence "about 36" there against 34.7 here).
 
 | Phone | SHA-256/s | Gap | scrypt (ms) | Gap | VGG11-BN (ms) |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -890,7 +901,8 @@ but verification changes the economics of admission. In the two workload
 classes we measured, the work worth delegating was expensive to verify and the
 work cheap to verify bought only modest leverage. Bounded Vina units
 preserve screening performance and reproduce exactly on phones, and the
-tested fixes leave attacker cost near parity, not provably so. Replay
+tested fixes leave attacker cost near parity, not provably so, and replay
+caught every tested shortcut through the search. Replay
 verification still consumes capacity that a proof-of-work gate does not,
 overload falls first on budget devices, and external attestation helps only
 under issuer and token-supply assumptions. These results quantify the practical costs and limits

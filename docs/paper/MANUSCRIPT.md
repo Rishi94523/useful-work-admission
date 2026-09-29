@@ -79,18 +79,13 @@ docking unit requires replay, far more expensive than checking a hash-puzzle
 solution. Scientific inputs may recur, so assignments and one-use credits
 must prevent repeated redemption of the same result. We investigate whether
 decomposition, trace commitment and sampled replay preserve useful output
-while removing exploitable discounts in admission cost. The tested fixes
-remove large observed discounts; they do not establish a lower bound against
-all algorithms, hardware or strategies. Replay capacity and device disparity
-remain material costs.
+while removing exploitable discounts in admission cost.
 
 This is a characterisation study. We do not propose useful work as a drop-in
 replacement for proof of work; we measure what making the work useful costs,
-and who pays. The paper is organised around one thesis: useful computation can
-replace discarded proof of work at a browser gate, but verification changes the
-economics of admission. We test this trade-off on two workload classes through
+and who pays. We test the trade-off on two workload classes through
 six questions, each answered by a separate experiment under a protocol
-committed before any attack was run. The protocol was amended eighteen times, each amendment's
+committed before any attack was run. The protocol was amended nineteen times, each amendment's
 predictions committed to version control before the experiment it governs,
 and every miss is reported. The measured answers are our contributions.
 
@@ -269,15 +264,15 @@ The evaluation follows a written protocol dated 22 September 2026 and
 committed to version control on 23 September, before any attack was run.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Eighteen amendments (numbered 1 to 15, with 9b,
+governs, with the original preserved. Nineteen amendments (numbered 1 to 16, with 9b,
 14b and 15b) cover phase operationalisation, the three economic fixes, scientific
 integrity, trace commitment, the rescoring driver, newcomer pricing,
 attestation, the subpuzzle baseline, a correction of the simulator's replay
 timing with five-seed replication, a proof-of-work gate baseline, and the
 verification-leverage study with its phone, batching and native-verifier
-predictions. Every run manifest
+predictions, and adaptive attacks on trace commitment. Every run manifest
 records the protocol version it ran under, and a committed audit script
-confirms that each of the 20 predeclared result sets was produced after the
+confirms that each of the 21 predeclared result sets was produced after the
 commit of its governing amendment.
 
 The timeline is short, and every step is dated in the public commit history.
@@ -377,9 +372,7 @@ units were bitwise identical to the native reference output across iOS and
 Android. Against a single
 hashcash puzzle calibrated on each device to its median unit, 21.9% of puzzle
 solves exceeded twice the median and none of 64 warm units did
-(Supplementary Section S2). Natively, a docking unit also had half the
-coefficient of variation of a median-matched hashcash puzzle (0.48 against
-0.95).
+(Supplementary Section S2).
 
 A single hash puzzle is not the strongest baseline: deployed proof-of-work
 CAPTCHAs split the work into many small puzzles [FriendlyCaptcha], and the
@@ -420,9 +413,8 @@ The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
 slower at JavaScript hashing, and its first contribution takes about 13 s
 including asset delivery, a real accessibility cost.
 
-All 85 executions in this second study also matched the reference output
-exactly. These repeat four distinct reference units across the five phones;
-they are not 85 distinct molecular workloads.
+All 85 executions in this second study also matched exactly; they repeat
+the same four reference units.
 
 
 ### 5.3 Can clients fake the work cheaply?
@@ -451,6 +443,18 @@ replay check, subject to collision resistance, while cutting median upload
 from 163 KB to 19 KB. Falsifying the best energy by
 0.1–3.0 kcal/mol never changed any output, because the finaliser recomputes
 energies; moving the best pose by 0.1 or 0.5 Å had no effect.
+
+**Adaptive attacks.** Amendment 16 built three further shortcuts from the
+public driver sources and replayed the same 99 units: the search compiled to reorder and vectorise arithmetic
+(-ffast-math), a local optimiser limited to half its steps, and a search that
+skips refining promising candidates. A control build of the unchanged sources
+reproduced all 99. None of the variants was accepted, and every trace departed
+from the honest one at the first or second of a median 5,384 Monte Carlo
+steps. Only the halved local search would have saved much work, 42% of
+evaluations per step; the others saved 5.7% of time and 2.4% of
+evaluations, below the predicted 10% and 5%. No per-step energy recurred
+between units of the same job in 23.1 million steps, so caching evaluated
+states across units saves nothing.
 
 **Admission economics with free identities.** We define the attacker discount factor as attacker work per admission divided
 by honest work per admission in the same tier. A hash puzzle is normalised to
@@ -527,9 +531,6 @@ Table: Corpus re-finalisation measurements; the ROC-AUC entry is a separate expl
 In these tests, fabricated reported energies did not survive final rescoring:
 the finaliser recomputed the output energies from conformations. This does
 not establish biological validity or rule out false positives in screening.
-The largest score improvement across these pool-tampering experiments was
-0.466 kcal/mol, in the 5% fabricated-energy condition. The largest worsening
-was 2.632 kcal/mol at 10% corruption, compared with 1.859 at 5%.
 The merge still ranks and clusters minima by the
 energies clients report and keeps a bounded set for refinement, so fabricated
 minima displace honest ones before refinement sees them. In an exploratory,
@@ -592,7 +593,9 @@ about (R − λ) · r · T. We use this as a capacity model, not a sharp cutoff,
 and tested it on an effort-priority queue following Tor's design, driving the
 real queue code with measured phone and native rates, 40 honest newcomers per
 device class and five seeds (Figure 3). The model's predictions held in 230 of
-240 checks; every check, and how these results relate to an earlier
+240 checks with full-patience honest bids, and in 153 of 240 when honest
+clients bid only 1.25 times the published price against an attacker bidding
+1.5 times it, so the capacity model assumes full-patience bidding; every check, and how these results relate to an earlier
 single-seed run, is in Supplementary Section S3.
 
 At eight replay workers the queue discriminates sharply by device. Against a
@@ -634,10 +637,6 @@ winning the hash auction. We model the issuer with a mock; this is not a
 deployed Privacy Pass integration.
 At an assumed 90% honest token coverage, every attested group reaches trust
 in all five seeds at attacker supply 0, 0.1 or 1 tokens/s with eight workers.
-At zero attacker tokens, mean within-seed median trust times are about
-66 / 23 / 23 s, conditional on success and excluding the initial bundle's
-molecular work, which is already available at first arrival in this harness.
-Later bundles include device-calibrated work time.
 At ten attacker tokens per second, trust fractions fall and vary across
 seeds and device classes (Supplementary Table S4).
 
@@ -739,7 +738,11 @@ device arithmetic. The budget phone's gap to one native core was 8.0× for
 scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 9),
 though the two native references were measured under different load
 (Supplementary Section S6).
-The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN.
+The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN. The
+iPhone's SHA-256 rate here, measured in a short burst, is twice the 181,994
+hashes per second measured during sustained docking in Section 5.2, while the
+budget phone's barely changed; device spreads therefore depend on session
+conditions, and the capacity model of Section 5.5 uses the earlier rates.
 
 Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt.
 
@@ -765,7 +768,9 @@ on the same phones.
 are cheap to check because they are cheap to compute. A useful workload in the empty region
 of Figure 5 would need results that are expensive to produce and cheap to
 check with a certificate, as a hash preimage is for proof of work. Search
-problems with succinct certificates have that shape; docking's search does
+problems with succinct certificates have that shape, and proofs of useful work
+for matrix multiplication [Komargodski25] suggest the region is not empty in
+principle; docking's search does
 not, because its best pose carries no proof that the search was done.
 Neither batching nor an optimised verifier moved a classifier into that
 region, but both were measured on laptop-class hardware; wider dense layers
@@ -794,8 +799,9 @@ question. Each committed energy depends on the full path of evaluations before
 it, because every step starts from the previous accepted state. Approximate
 energies, reordered arithmetic or incremental updates can change
 floating-point rounding and hence the committed bytes; fresh server-drawn
-seeds make one unit's intermediate states unlikely to recur in another. We
-tested truncation only. We know of no method that yields a matching trace with fewer
+seeds make one unit's intermediate states unlikely to recur in another.
+Beyond truncation, the three adaptive shortcuts of Section 5.3 were rejected
+at the first or second step. We know of no method that yields a matching trace with fewer
 evaluations than the honest search, but we have not proved that none exists.
 A lower bound of that kind, for example showing that any accepted trace of N
 steps requires Ω(N) evaluations under stated assumptions about the scoring
@@ -822,7 +828,7 @@ a device class served, spare replay capacity must grow by 1.25 million / (r · T
 replays per second for every attacker core, 1.25 million hashes per second
 being the measured native rate of one core. Each replay occupies a verifier
 core for 1.52 s, so the replay cores needed per attacker core are
-1.52 × 1.25 million / (r · T). With measured rates this is about
+1.52 × 1.25 million / (r · T). With the rates of Section 5.2 this is about
 5.4 replay cores per attacker core for the budget phone, 1.3 for the mid-range
 phone and 1.0 for the flagship. Defending budget phones against a botnet
 therefore requires replay capacity several times the attacker's CPU. This is

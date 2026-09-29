@@ -25,7 +25,7 @@ checks them. Batching and an optimised native verifier did not change this.
 
 Every experiment follows
 [`docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md`](docs/ADVERSARIAL_EVALUATION_PROTOCOL_2026-09-22.md).
-Its eighteen amendments (1–15, with 9b, 14b and 15b) each record predictions
+Its nineteen amendments (1–16, with 9b, 14b and 15b) each record predictions
 and thresholds and were committed before the experiment they govern; failed
 predictions are reported, not removed. Run manifests record the protocol
 version they ran under, and

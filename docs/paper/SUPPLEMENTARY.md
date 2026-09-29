@@ -317,6 +317,11 @@ times faster than the batched numpy verifier; in a hot loop without
 interleaved requests it took 0.078 ms, a post-hoc diagnostic not used in the
 results.
 
+The B = 1 rows differ from main-text Table 8 because they come from a separate
+session and use the batched verifier; central inference on this laptop varied
+by up to 1.7 times between sessions, so leverages are compared within a
+session.
+
 Table: Batched verification (amendment 15): server's best batched CPU inference C, verification per admission V at an 8% audit rate, and leverage against the CPU and GPU baselines.
 
 | Model | B | C, ms (backend) | V, ms | L, CPU | L, GPU |

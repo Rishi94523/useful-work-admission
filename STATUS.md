@@ -782,3 +782,14 @@ evaluation (predicted 10%) and skipped refinement 2.4% of evaluations per step
 (predicted 5%); the halved local search would have saved 41.6%. Q4 held: no
 per-step energy recurred between units of the same job, over 23.1 million
 steps in 4,397 units of the 33 traced corpus jobs.
+
+**Leverage against layer width (amendment 21).** Synthetic n -> n -> 10
+dense networks, n = 512 to 8192, verified by the amendment-15b native kernel
+at B = 1 on one CPU thread; a separate run timed the same architectures on
+the GPU. All five predictions held. Leverage without audits against the
+fastest CPU option rose from 0.81 to 20.91; at 8% audits it first reached 4
+at n = 4096 (4.70, 16.8 MB of int8 weights) and 7.90 at n = 8192 (67.2 MB),
+below the audit cap. Against the fastest option including the GPU, leverage
+at 8% audits peaked at 1.56 (n = 2048) and was 0.87 and 0.79 at the two
+largest widths. Extrapolated budget-phone compute is 106 ms at n = 4096, so
+delivery, not phone computation, is the constraint.

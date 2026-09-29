@@ -49,7 +49,8 @@ BY_COMMIT = {'admission-amendment14-2026-09-28': '5105313', 'inference-leverage-
              'cost-aware-2026-09-29': 'a2d2af1',
              'inference-repetition-2026-09-29': 'a2d2af1',
              'portable-dense-2026-09-29': '83ac5f0',
-             'screened-admission-2026-09-29': '4310d9e'}
+             'screened-admission-2026-09-29': '4310d9e',
+             'width-sweep-2026-09-29': '8e77235'}
 PHONES = {'device-timing-subpuzzle': '5a19d42', 'device-inference-2026-09-28': '30992dc'}
 
 

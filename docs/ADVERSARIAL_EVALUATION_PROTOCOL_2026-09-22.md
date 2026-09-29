@@ -1084,3 +1084,37 @@ separate. Prediction PH1: exact outputs and all tested rejections agree on both
 hosts. PH2: for each model/batch, cross-host native-reference leverage differs
 by less than a factor of two. Report failures and hardware conditions, including
 AC power and power-saving mode, without collecting hostname or username.
+
+## Amendment 20 — externally screened provisional newcomers, 29 September 2026
+
+Keep molecular search, campaign inputs and finalization unchanged. Add an isolated
+admission prototype with Siteverify validation bound to a server session, hostname
+and action. A successful check grants at most three one-run assignments for five
+minutes; it is not device attestation or earned contributor trust. Separate queue,
+byte and issuance budgets protect established users. Failure revokes the session's
+remaining allowance. Unverified scientific outputs cannot enter the aggregate.
+
+Compare no external screening with mandatory replay, screening only, screening
+with mandatory replay, and screening with 10% deferred random replay. Hold the
+three lanes' worker budgets fixed: one worker each, 1.4957105 seconds per replay
+(amendment 17 observed median), eight outstanding outputs per lane. Simulate
+120 seconds of Poisson arrivals plus a 30-second drain, five seeds (0..4),
+honest newcomer and established arrival rates 0.2/s each, attack rates 0, 1, 10,
+100/s, external attacker pass fractions 0.001, 0.01, 0.1, 1 and honest pass
+fractions 0.95 and 1.0. All failed checks fall back to the newcomer lane.
+Use actual ledger operations with a simulated clock and verdicts; no molecular
+or Cloudflare classifier accuracy is measured by these experiments. Each arrival
+is a fresh session, deliberately removing any assumed per-device scarcity.
+
+Report five-second honest admission, malicious admissions, modeled replay CPU,
+retained unverified outputs, rejection and quarantine. Deferred unselected outputs
+remain bounded pending later validation until expiry; they are never called
+scientifically verified. Screening-only performs no useful computation. Report
+one-run honest molecular cost separately and attacker zero-work fabrication.
+Predictions: PN1 trusted-lane outcomes are invariant to attack load for paired
+arrivals; PN2 screening helps newcomer deadlines at low bypass but loses that
+benefit as accepted traffic exceeds its lane capacity; PN3 deferred admission
+admits fabricated outputs before detection and is not a work-enforcement proof.
+Production Turnstile pass rates, token acquisition cost and device UX remain
+unmeasured unless separately collected. Test validation with injected responses;
+public Cloudflare test credentials, if used, test integration only.

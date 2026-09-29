@@ -533,3 +533,39 @@ was 4.903/5.748. Relative to the Ryzen 7 7435HS, the four leverage ratios were
 portable kernel comparison, not end-to-end leverage against optimized CPU/GPU
 inference. The received report and new analysis are preserved separately from
 the original pending-host summary.
+
+## S8 Screened newcomers (amendment 20)
+
+An isolated admission prototype validates a screening token server-side
+(Cloudflare Siteverify contract), bound to a server session, hostname and
+action. A pass grants at most three one-run assignments for five minutes in a
+separate lane; it is not device attestation or earned trust, and a failed
+replay revokes the session's allowance. Failed checks fall back to the
+anonymous lane. Each lane has one replay worker at amendment 17's median
+replay of 1.496 s and eight outstanding outputs. The policy code and SQLite
+ledger are real; arrivals (120 s of Poisson traffic and a 30 s drain), the
+clock, replay verdicts and screening outcomes are simulated, five seeds per
+cell, 640 cases. Every arrival is a fresh session, so no per-device scarcity
+is assumed. The deadline starts at submission and excludes screening time.
+No screening accuracy, Siteverify latency or molecular execution is measured.
+
+Table: Honest newcomers within five seconds and fabricated admissions at 100 attack attempts per second, 0.2 honest newcomers per second, all honest newcomers passing the screen; totals over five seeds.
+
+| Policy | Attacker pass rate | Honest within 5 s | Fabricated admitted |
+| --- | ---: | ---: | ---: |
+| No screening, replay | N/A | 0/131 | 0 |
+| Screening only | 0.1% | 131/131 | 47 |
+| Screening + mandatory replay | 0.1% | 128/131 | 0 |
+| Screening + 10% deferred replay | 0.1% | 29/131 | 13 |
+| Screening only | 1% | 131/131 | 604 |
+| Screening + mandatory replay | 1% | 4/131 | 0 |
+| Screening + 10% deferred replay | 1% | 4/131 | 42 |
+
+Established users were unaffected in every paired case (134 of 136 within five
+seconds). A one-worker lane is stable only while honest arrivals plus attack
+arrivals times the attacker pass rate stay below 1/1.496 per second, which at
+these rates requires a pass rate below about 0.47%. Deferred replay admitted
+fabricated work before any audit, and in this conservative implementation its
+unsampled outputs filled the pending allowance even without attackers; it
+would need separate staging and later validation to be evaluated as a
+deployable policy.

@@ -243,7 +243,8 @@ useful work obtained per unit of verifier work. The delivery D is the bytes a
 client downloads and uploads per admission. Proof of work has V of about a
 microsecond and no useful output. A docking bundle has V = 1.52 s for four
 units of work, L = 4, and L = 1/p in the trusted tier, where only a fraction p
-of units is replayed. These are honest-submission leverages, as are all
+of units is replayed; its D is 11–15 MB downloaded on a visitor's first
+contribution to a target, cached thereafter, and about 19 KB uploaded per unit. These are honest-submission leverages, as are all
 leverages we report: they assume every admitted unit is useful. Under attack,
 rejected submissions cost verification and yield nothing, and admitted
 bundles may carry fabricated units. By the Proposition, an attacker computing
@@ -417,8 +418,9 @@ over a well-designed puzzle. It is an advantage only over a single puzzle.
 ```
 
 The budget phone is 3.7 times slower than the iPhone at docking but 5.2 times
-slower at JavaScript hashing, and its first contribution takes about 13 s
-including asset delivery, a real accessibility cost.
+slower at JavaScript hashing, and its first contribution takes about 13 s:
+downloading the 27.7 MB prepared state, 11–15 MB compressed and cached for
+later admissions, took 3.9 s, restoring it 1.5 s and the unit 7.4 s.
 
 All 85 executions in this second study also matched exactly; they repeat
 the same four reference units.
@@ -942,7 +944,8 @@ replication measures five-seed variability but keeps arrival rates, device
 speeds, replay cost and attacker strategies fixed. Puzzle RNGs are seeded;
 prototype ticket identifiers and their tie-breaking remain cryptographically
 random. The initial bootstrap bundle is assumed ready at arrival. There is
-no integrated production traffic or energy-cost validation.
+no integrated production traffic or energy-cost validation, and the first
+visit to a target downloads 11–15 MB, a barrier on metered mobile data.
 
 
 ## 7 Conclusion

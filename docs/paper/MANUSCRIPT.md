@@ -73,7 +73,8 @@ makes verifier capacity decide who is admitted under attack. Work that can be ch
 algebraically, keeps every device class served but buys little, because at
 this scale the server computes the answer almost as cheaply as it checks it;
 neither batching nor an optimised native verifier raised its leverage above
-2.2. No workload we measured was both cheap to check and high in leverage.
+2.2 against the server's fastest option. No workload we measured was both
+cheap to check and high in leverage by that measure.
 
 Useful work changes both verification cost and answer reuse. Verifying a
 docking unit requires replay, far more expensive than checking a hash-puzzle
@@ -95,13 +96,13 @@ and every miss is reported. The measured answers are our contributions.
 3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws whose fixes are standard but which surfaced only once identities were priced at zero. Trace commitment and the fixes remove the large measured discounts, leaving estimates near parity with free identities, and replay rejected every tested attacker-built shortcut through the search, 0 of 297 units; no general lower bound is established (Sections 5.3 and 6).
 4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
 5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 with batching or an optimised native verifier; it passes 4 against a CPU only for layers 4,096 wide, with 16.8 MB of weights per client, and never against a GPU; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
+6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 against the server's fastest option with batching or an optimised native verifier (3.15 on a server without a GPU). Synthetic dense layers pass 4 only against a CPU, at width 4,096 with 16.8 MB of weights per client, and never against a GPU; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
 does not for proof of work. Availability under a sustained attacker with about
-16 CPU cores is not solved by any configuration we tested, and the attestation
-that helps most is unavailable in Android browsers.
+16 CPU cores is not solved by any configuration without an outside trust
+signal, and the attestation that helps most is unavailable in Android browsers.
 
 ## 2 Related work
 
@@ -268,14 +269,14 @@ The evaluation follows a written protocol dated 22 September 2026 and
 committed to version control on 23 September, before any attack was run.
 Thresholds could not be revised after outcomes were seen; every change is a
 dated amendment committed to version control before the experiment it
-governs, with the original preserved. Twenty-three amendments (numbered 1 to 19, with 9b,
+governs, with the original preserved. Twenty-five amendments (numbered 1 to 21, with 9b,
 14b, 15b and 19b) cover phase operationalisation, the three economic fixes, scientific
 integrity, trace commitment, the rescoring driver, newcomer pricing,
 attestation, the subpuzzle baseline, a correction of the simulator's replay
 timing with five-seed replication, a proof-of-work gate baseline, and the
 verification-leverage study with its phone, batching and native-verifier
 predictions, adaptive attacks on trace commitment, real-time replay capacity,
-heterogeneous costs, sleeper identities, controlled inference repetition and
+heterogeneous costs, sleeper identities, controlled inference repetition,
 externally screened newcomers and layer width.
 Every run manifest
 records the protocol version it ran under, and a committed audit script
@@ -311,6 +312,8 @@ Section 3.5 justifies for the fixed scheduler.
 
 ### 4.3 Measurement boundaries and reproducible methods
 
+Table 1 lists what each experiment establishes and what it does not.
+
 Table: Evidence supporting the claims and what each experiment does not establish.
 
 | Claim | Evidence | Boundary |
@@ -323,7 +326,8 @@ Table: Evidence supporting the claims and what each experiment does not establis
 | Overload and trust bootstrap | Real queue SQL with modeled arrivals, replay and puzzle costs | Conditional finite-horizon simulations; not measured HTTP throughput |
 | Real-time capacity follow-up | Loopback HTTP, actual wall-clock arrivals and native replay, 18 cases | Isolated FIFO queue on one laptop, 18 small cases, precomputed credits; not production traffic |
 | Attestation benefit | Mock issuer, token checks and one-use nullifiers | Assumed quota and token supply; no deployed issuer or blind-signature integration |
-| Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models on one laptop-class host; batches to 128 inputs, a laptop GPU and a native dense verifier; no server-class accelerators |
+| Screened newcomers | Real policy code and ledger with simulated arrivals, clock and verdicts | Assumed screening pass rates; no measured Turnstile accuracy |
+| Inference leverage | Actual exact-integer verification and native inference timings on one host | Five small models and synthetic layers on laptop-class hosts; batches to 128 inputs, a laptop GPU and a native dense verifier; no server-class accelerators |
 
 Supplementary Section S1 gives the complete protocols: target selection and
 input preparation, compute matching and the paired bootstrap, the poisoning
@@ -354,7 +358,7 @@ decoys, passed predeclared ranking and redocking gates with stock Vina
 (ROC-AUC 0.87–0.99). In a matched comparison of 2,073 paired state jobs over
 three seeds with no failures, every ligand state was docked both as one
 exhaustiveness-32 run and as independent units merged by the original
-finaliser, at matched evaluation budget.
+finaliser, at matched evaluation budget (Table 2).
 
 Table: Matched comparison of decomposed and monolithic docking: change in screening ROC-AUC, three seeds, 96-compound panels.
 
@@ -387,7 +391,7 @@ CAPTCHAs split the work into many small puzzles [FriendlyCaptcha], and the
 sum of 64 geometric solve counts is far narrower than one. We therefore ran a
 second page on five phones, interleaving each unit with two single puzzles and
 two 64-subpuzzle puzzles, all calibrated on the device to its median unit
-(amendment 11).
+(amendment 11; Table 3).
 
 Table: Five phones, 16 warm units and 24 solves of each puzzle type per phone, pooled by each device's median unit time as predeclared.
 
@@ -429,7 +433,7 @@ the same four reference units.
 ### 5.3 Can clients fake the work cheaply?
 
 **Unit-level attacks under real replay.** We ran 693 trials on 99 units sampled by salted hash from the corpus, across
-all five targets.
+all five targets (Table 4).
 
 Table: Unit-level attacks judged by exact replay, 99 corpus units.
 
@@ -489,7 +493,7 @@ the same seed, so an attacker who computed one of four units reused it until
 the audit draw landed on it. The audit draw was revealed before upload, so a
 trusted identity could abandon exactly when selected and never be caught. And
 trust was granted after one bundle. Each fix was predeclared and measured
-separately.
+separately (Table 6).
 
 Table: Attacker discount factor on the committed scheduler before and after the three fixes.
 
@@ -509,13 +513,6 @@ containing 1.0 does not establish equality or a lower bound of 1.0.
 Identities are free in these experiments, but results apply to the specified
 strategies, attempt model and workload costs, not every possible adversary.
 
-**Unit costs and sleepers (amendment 18).** Because unit costs vary by
-target, an attacker able to reach cheaper jobs across the campaign would pay
-less time per admission, about two-thirds of honest cost in resampled timings;
-within one job, as the scheduler assigns work, no discount was found (1.001).
-Sleeper identities that earned trust and then spent it on fabricated units
-obtained at most their ten-unit grant each (Supplementary Section S7).
-
 Before the fixes, compensating for the measured discounts would have required
 an identity price of 0.5–5.1 honest units. The fixes remove the particular
 reuse, disclosure and early-trust paths responsible for those discounts.
@@ -524,6 +521,13 @@ Capacity exhaustion by workers who accept units and disappear behaved as a
 threshold rather than proportionally: holders of 4, 8 and 12 of 16 leases
 caused no refusals, and 16 caused 81%. Stateless tickets that allocate seeds
 without reserving queue seats removed the effect in the isolated prototype.
+
+**Unit costs and sleepers (amendment 18).** Because unit costs vary by
+target, an attacker able to reach cheaper jobs across the campaign would pay
+less time per admission, about two-thirds of honest cost in resampled timings;
+within one job, as the scheduler assigns work, no discount was found (1.001).
+Sleeper identities that earned trust and then spent it on fabricated units
+obtained at most their ten-unit grant each (Supplementary Section S7).
 
 Every behaviour in the threat model is covered, though not all by a
 dedicated experiment: A1–A3 above, A4 and A5 by the free-identity admission
@@ -540,7 +544,7 @@ the work an accepted unit requires.
 ### 5.4 Can fabricated work corrupt the science?
 
 We ran the original finaliser over saved corpus pools with units replaced or
-altered. This offline experiment measures damage conditional on malicious
+altered (Table 7). This offline experiment measures damage conditional on malicious
 outputs entering the aggregate; it does not demonstrate a way to bypass the
 admission scheduler. In the scheduler, a bundle rejected by immediate audit
 does not enter the scientific pool. Unaudited outputs in accepted bundles
@@ -566,7 +570,8 @@ non-predeclared resampling projection, mean ROC-AUC changes reached about
 −0.016 at 5% and −0.034 at 10% fabricated units. These are not measured
 whole-panel poisoning outcomes: corpus score shifts were resampled onto
 otherwise unchanged campaign scores (Supplementary Section S1). A revised driver that rescores every submitted minimum from
-its conformation before merging was verified against the same gates.
+its conformation before merging was verified against the same gates
+(Table 8).
 
 Table: Rescoring driver against the original driver.
 
@@ -581,7 +586,9 @@ Table: Rescoring driver against the original driver.
 
 The ±0.0016 AUC range is also a projection. Rescoring addresses fabricated
 energy ordering; it does not certify that unaudited pools contain all minima
-that honest search would have found. **Contamination at scale.** Rescoring removes fabricated energies but not
+that honest search would have found.
+
+**Contamination at scale.** Rescoring removes fabricated energies but not
 missing search. In the newcomer tier, where every bundle is audited before
 admission, an attacker who computes m of a bundle's four units is admitted
 only when the audit lands on a computed unit (Section 3.5), so each admitted
@@ -673,7 +680,8 @@ per-device quota, a separate replay lane lets token holders earn trust without
 winning the hash auction. We model the issuer with a mock; this is not a
 deployed Privacy Pass integration.
 At an assumed 90% honest token coverage, every attested group reaches trust
-in all five seeds at attacker supply 0, 0.1 or 1 tokens/s with eight workers.
+in all five seeds at attacker supply 0, 0.1 or 1 tokens/s with eight workers
+(Figure 4).
 At ten attacker tokens per second, trust fractions fall and vary across
 seeds and device classes (Supplementary Table S4).
 
@@ -738,7 +746,7 @@ every measured workload by verification time and leverage: proof of work at a
 microsecond with no useful output, the classifiers at 0.2–6 ms with leverage
 near one, and docking at honest-submission leverage 4 and 10 with 152–1,520 ms
 of verification.
-No workload we measured is both cheap to verify and high in leverage.
+Against the server's fastest option, no workload we measured is both cheap to verify and high in leverage.
 
 Two further amendments asked whether batch size or the verifier's
 implementation, rather than the method, set that limit. In amendment 15 each
@@ -767,7 +775,7 @@ staying below 4 (Supplementary Section S6).
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/design_space.pdf}
-\caption{Verifier time per admission against verification leverage for every measured workload. All leverage is for honest submissions; docking's is set by its audit rate and falls under attack (Section 3.6). The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload.}
+\caption{Verifier time per admission against verification leverage for every measured workload. All leverage is for honest submissions; docking's is set by its audit rate and falls under attack (Section 3.6). The open circle is the wide perceptron with the native verifier of amendment 15b. The shaded region, cheap to verify with leverage above four, contains no measured workload when leverage is taken against the server's fastest option; against a CPU alone, the widest synthetic layers of Figure 6 would enter it.}
 \label{fig:design}
 \end{figure}
 ```
@@ -783,11 +791,7 @@ device arithmetic. The budget phone's gap to one native core was 8.0× for
 scrypt against 34.7× for SHA-256, less than a third, as predicted (Table 10),
 though the two native references were measured under different load
 (Supplementary Section S6).
-The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN. The
-iPhone's SHA-256 rate here, measured in a short burst, is twice the 181,994
-hashes per second measured during sustained docking in Section 5.2, while the
-budget phone's barely changed; device spreads therefore depend on session
-conditions, and the capacity model of Section 5.5 uses the earlier rates.
+The budget phone took 5.7× as long as the iPhone 15 for VGG11-BN.
 
 Table: Phone timings for the proof-of-work baselines and the largest classifier; medians over each phone's runs. Gap is native speed on one server core divided by phone speed: 1.25 million SHA-256 hashes per second and 62.4 ms per scrypt. SHA-256 rates here were measured in a short burst; the iPhone's is twice its rate during sustained docking, which Sections 5.2 and 5.5 and the capacity model use (budget phone 34,866 hashes/s, hence "about 36" there against 34.7 here).
 
@@ -802,9 +806,11 @@ A memory-hard puzzle therefore cuts an attacker core's advantage over the
 budget phone about fourfold; since the capacity model of Section 5.5 scales a
 device's protection with its rate relative to an attacker core, the budget
 phone gains the same factor at a puzzle gate. It does not remove device
-disparity: the spread from budget phone to flagship fell from 10.2× under
-SHA-256 to 5.2× under scrypt, similar to the 5.7× spread for labelling work
-on the same phones.
+disparity: under scrypt the budget phone still took 5.2× as long as the
+flagship, similar to the 5.7× spread for labelling work. Because the flagship's
+short-burst SHA-256 rate was twice its sustained rate (Table 10), whether
+scrypt narrows the spread between phones, rather than the gap to an attacker
+core, is uncertain.
 
 **Repetition (amendments 19 and 19b).** Three later CPU-only sessions gave
 the wide model leverage 2.53–2.93 at B = 1, and results were exact on a second
@@ -820,8 +826,9 @@ Synthetic n → n → 10 networks confirmed it, and all five predictions held
 that exact audits set. Reaching 4 needed 16.8 MB of int8 weights per client,
 as much as docking's prepared state, while the budget phone would compute
 such a layer in about 0.1 s by extrapolation: delivery, not phone
-computation, is the constraint. Against a GPU, leverage at 8% audits peaked
-at 1.56 and fell below 1 at the largest widths.
+computation, is the constraint. Against the fastest option including the GPU,
+the paper's definition, leverage at 8% audits peaked at 1.56 and fell below 1
+at the largest widths.
 
 ```latex
 \begin{figure}[htbp]
@@ -940,7 +947,7 @@ flood.
 useful-work gate that spends visitors' energy must say so, and it gives them a
 reason a puzzle cannot.
 
-**Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers measured on one laptop-class host.
+**Limitations.** Five phone models (four for the classifier and scrypt timings), two workload classes, five 96-compound panels and five small classifiers and synthetic layers timed on laptop-class hosts.
 Availability mechanisms are isolated prototypes, not integrated into the
 deployed scheduler. The main availability grids account puzzle costs rather than
 execute them; only the small amendment-17 follow-up executes puzzles, HTTP and

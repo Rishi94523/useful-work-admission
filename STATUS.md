@@ -655,3 +655,15 @@ MNIST perceptron stayed below 1. As stated in advance, the paper will report
 that the trade-off held with an optimised native verifier. Post-hoc
 diagnostic: with verification reduced to hashing alone, 8% exact audits would
 cap the wide perceptron near 7 against the GPU.
+
+**Adaptive attacks on trace commitment (amendment 16).** Three attacker-built
+driver variants replayed the 99 phase-1 units against the preserved honest
+outputs; a control build of the unchanged sources reproduced all 99. None was
+accepted (Q1 held), and every variant trace diverged at the first or second
+Monte Carlo step (Q2 held): reordered arithmetic (-ffast-math -march=native)
+at step 0, a halved local-search step limit at step 0, skipped refinement at
+step 1. Q3 failed for two variants: fast-math saved only 5.7% of wall time per
+evaluation (predicted 10%) and skipped refinement 2.4% of evaluations per step
+(predicted 5%); the halved local search would have saved 41.6%. Q4 held: no
+per-step energy recurred between units of the same job, over 23.1 million
+steps in 4,397 units of the 33 traced corpus jobs.

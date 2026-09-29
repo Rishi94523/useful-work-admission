@@ -42,7 +42,8 @@ def find_protocol(d, path=''):
 # phone studies whose reports carry the collector's receipt time. Each is
 # checked against the commit of the amendment that governs it.
 BY_COMMIT = {'admission-amendment14-2026-09-28': '5105313', 'inference-leverage-2026-09-28': '5105313',
-             'batched-leverage-2026-09-28': 'fbe767f', 'native-dense-2026-09-28': 'a1c1d83'}
+             'batched-leverage-2026-09-28': 'fbe767f', 'native-dense-2026-09-28': 'a1c1d83',
+             'trace-attacks-2026-09-29': '599cc0f'}
 PHONES = {'device-timing-subpuzzle': '5a19d42', 'device-inference-2026-09-28': '30992dc'}
 
 

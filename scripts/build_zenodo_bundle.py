@@ -30,6 +30,7 @@ DATA={
  'admission-amendment14-2026-09-28':'Availability with classifier verification in place of replay, 1,800 runs, amendment 14 (Section 5.6)',
  'batched-leverage-2026-09-28':'Batched verification leverage with CPU and GPU central baselines, amendment 15',
  'native-dense-2026-09-28':'Native fused verification of dense networks, amendment 15b',
+ 'trace-attacks-2026-09-29':'Adaptive attacks on trace commitment and cross-unit reuse, amendment 16 (Section 5.3)',
  'predeclaration-audit':'Check that every predeclared result set was produced after its governing amendment commit (Section 4.1; scripts/audit_predeclaration.py)',
  'ticket-prototype-2026-09-24':'Isolated ticket prototype over loopback HTTP (Section 6, Supplementary S3)',
  'ticket-prototype-2026-09-24-wide':'Ticket prototype, wider configuration (Supplementary S3)',

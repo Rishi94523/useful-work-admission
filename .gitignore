@@ -112,3 +112,11 @@ docs/paper/*.fls
 docs/paper/sn-jnl.cls
 docs/paper/sn-basic.bst
 /data/inference-models/
+# Retired Cybersecurity (SpringerOpen) build; the submission is docs/paper/sncs/.
+docs/paper/manuscript.tex
+docs/paper/manuscript-blind.tex
+docs/paper/supplementary.tex
+docs/paper/sncs/*
+!docs/paper/sncs/build_sncs.py
+!docs/paper/sncs/*.tex
+!docs/paper/sncs/references-sncs.bib

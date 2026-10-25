@@ -1,19 +1,23 @@
 # Manuscript
 
-Target: *Cybersecurity* (SpringerOpen), Research article.
+Target: *SN Computer Science* (Springer Nature), Original Research. An earlier
+version prepared for *Cybersecurity* (SpringerOpen) is retired; its generated
+`.tex` files are in the git history up to commit 7a9452d.
 
 - `MANUSCRIPT.md` is the source of truth; `RELATED_WORK.md` supplies Section 2.
 - `references.bib` holds only fields checked against publisher or primary
   records; unconfirmed fields are omitted.
-- `SUPPLEMENTARY.md` is Additional file 1 (full methods, the first phone study,
+- `SUPPLEMENTARY.md` is Online Resource 1 (full methods, the first phone study,
   all availability prediction checks and replicated tables).
-- `manuscript.tex` and `supplementary.tex` are generated. Do not edit them by hand.
+- `sncs/build_sncs.py` applies the journal version's edits and writes
+  `sncs/manuscript-sncs.tex`, `sncs/supplementary-sncs.tex` and
+  `sncs/references-sncs.bib`. These are generated. Do not edit them by hand.
 
 Build:
 
 ```bash
 python scripts/make_paper_figures.py
-python scripts/build_manuscript.py --pdf
+python docs/paper/sncs/build_sncs.py
 ```
 
 The availability figures require the complete corrected amendment-12 ledger,
@@ -38,8 +42,8 @@ if MiKTeX reports that the Perl script engine is missing.
 The Zenodo archive DOI, reserved on 28 September 2026, is 10.5281/zenodo.23005913; it resolves once the record is published at submission. The authors confirmed on 25 September 2026
 that all test phones are theirs and that they ran every phone test.
 
-The Springer Nature class `sn-jnl.cls` and style `sn-basic.bst` (template
-v3.1, December 2024) are not redistributed here. Download the journal article
-template package from Springer Nature's LaTeX author support page and copy
-those two files into this folder. Figures and build outputs are regenerated,
+The Springer Nature class `sn-jnl.cls` and style `bst/sn-mathphys-num.bst`
+(template v3.1, December 2024) are not redistributed here. Download the journal
+article template package from Springer Nature's LaTeX author support page and
+copy those two files into `sncs/`. Figures and build outputs are regenerated,
 not committed.

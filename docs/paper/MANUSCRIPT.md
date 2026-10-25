@@ -2,8 +2,8 @@
 
 **Short title.** The Price of Utility
 
-*Draft 5, 30 September 2026. Source of truth for `manuscript.tex`, which
-`scripts/build_manuscript.py` generates. Related work is included from
+*Draft 5, 30 September 2026. Source of truth for the SN Computer Science
+submission, which `docs/paper/sncs/build_sncs.py` generates. Related work is included from
 `RELATED_WORK.md`. Every number is taken from `STATUS.md` or from the recorded
 ledgers by committed scripts; re-check before submission. [TODO] marks items
 for the author.*

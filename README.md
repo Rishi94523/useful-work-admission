@@ -78,7 +78,7 @@ All runners are in `scripts/`. The inference verifier is in
 ## Results data
 
 Result ledgers are not tracked in git. They are published as a separate data
-archive (withheld during anonymous review, cited in the final paper). Place its
+archive, https://doi.org/10.5281/zenodo.23005913. Place its
 `results/` directory at the repository root as `local-research/`, and its
 `models/inference-models/` at `data/inference-models/`.
 
@@ -89,7 +89,7 @@ python scripts/make_paper_figures.py
 ```
 
 ```bash
-python scripts/build_manuscript.py --pdf
+python docs/paper/sncs/build_sncs.py
 ```
 
 Figures need Python with matplotlib; the PDF build needs LaTeX, latexmk and the

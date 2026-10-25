@@ -2,7 +2,7 @@
 
 **Short title.** The Price of Utility
 
-*Draft 4, 29 September 2026. Source of truth for `manuscript.tex`, which
+*Draft 5, 30 September 2026. Source of truth for `manuscript.tex`, which
 `scripts/build_manuscript.py` generates. Related work is included from
 `RELATED_WORK.md`. Every number is taken from `STATUS.md` or from the recorded
 ledgers by committed scripts; re-check before submission. [TODO] marks items
@@ -27,8 +27,9 @@ committed before each experiment. In the first, each admission carries bounded
 AutoDock Vina docking units that join a virtual screening campaign and are
 verified by exactly replaying a secretly sampled unit. Decomposed searches
 preserved screening accuracy and reproduced bit for bit on phones; with trace
-commitment and three easily overlooked scheduler fixes, attackers paid about
-what honest clients pay even with free identities, replay caught every tested
+commitment and three scheduler fixes, measured attacker costs were near
+honest costs under the tested strategies and cost model, even with free
+identities. Replay caught every tested
 attacker-built shortcut through the search, and rescoring stopped
 fabricated energies from reordering results. The price is verification: each
 audit is a molecular replay, so in simulations under attack verifier capacity
@@ -36,8 +37,9 @@ decides who is admitted and budget phones are denied first. Protecting them need
 replay cores per attacker core, while the same queue with proof-of-work
 verification served every device class. In the second class, image
 classifiers for data labelling are verified algebraically in milliseconds and
-stay available under attack, but verifying them costs the server about as much
-as computing them, even batched or natively optimised. In both workloads we
+stay available in the admission simulations, but on the tested hardware
+verification bought only modest leverage against the fastest measured
+CPU/GPU inference baseline, even batched or natively optimised. In both workloads we
 measured, work worth delegating was expensive to verify, and work cheap to
 verify bought only modest leverage.
 
@@ -83,20 +85,17 @@ must prevent repeated redemption of the same result. We investigate whether
 decomposition, trace commitment and sampled replay preserve useful output
 while removing exploitable discounts in admission cost.
 
-This is a characterisation study. We do not propose useful work as a drop-in
-replacement for proof of work; we measure what making the work useful costs,
-and who pays. We test the trade-off on two workload classes through
-six questions, each answered by a separate experiment under a protocol
-committed before any attack was run. The protocol was amended twenty-five times, each amendment's
-predictions committed to version control before the experiment it governs,
-and every miss is reported. The measured answers are our contributions.
+This is a characterisation study of admission security, scientific output
+and verification economics. Its contributions are three empirical findings:
 
-1. **Can a docking search be split into admission-sized units without changing the science?** On five qualified panels, screening results are preserved at matched evaluation counts (Section 5.1).
-2. **Can browsers reproduce those units exactly?** Every tested unit on five phone models reproduced the reference output bit for bit. Units had a far shorter latency tail than a single hash puzzle, but no advantage over a 64-subpuzzle puzzle (Section 5.2).
-3. **Can clients fake the work cheaply?** Some strategies initially could, through three scheduler flaws whose fixes are standard but which surfaced only once identities were priced at zero. Trace commitment and the fixes remove the large measured discounts, leaving estimates near parity with free identities, and replay rejected every tested attacker-built shortcut through the search, 0 of 297 units; no general lower bound is established (Sections 5.3 and 6).
-4. **Can fabricated outputs corrupt the scientific aggregate?** Yes, once included in the candidate pools: offline pool modification exposes a merge failure that rescoring mitigates. This experiment does not demonstrate an admission bypass (Section 5.4).
-5. **Is useful work better than proof of work?** Not at the gate. The same queue with proof-of-work verification kept every device class served; with replay, verifier capacity decides who is denied, and budget phones go first. An outside trust signal helps only under stated issuer assumptions (Section 5.5).
-6. **Does cheaper verification escape the trade-off?** Not in the workloads we measured. Five image classifiers for data labelling, verified algebraically in 0.219–5.69 ms, keep every device class served under attack but reach honest-submission leverage of only 0.36–1.43, and at most 2.2 against the server's fastest option with batching or an optimised native verifier (3.15 on a server without a GPU). Synthetic dense layers pass 4 only against a CPU, at width 4,096 with 16.8 MB of weights per client, and never against a GPU; docking reaches 4 to 10 only by paying for replay. On phones, classifier results were bit-exact, and a memory-hard puzzle narrowed but did not close the device gap (Section 5.6).
+1. **Useful molecular work can preserve screening quality, yet validating a returned pose does not enforce search effort.** Five qualified 96-compound panels and 2,073 paired state/seed jobs support the distributed decomposition at matched evaluation counts (Section 5.1). Five phone models reproduced the tested units bit for bit (Section 5.2). Pool-only commitments accepted 20/99 quarter-work and 45/99 half-work submissions; trace commitment closed those tested paths (Section 5.3).
+2. **Free identities and limited replay capacity change admission economics.** Three scheduler flaws enabled large measured discounts. Their fixes leave cost estimates near parity under the tested strategies, without establishing a general computational lower bound. Under sustained attack, replay capacity excludes honest newcomers, especially budget phones; reputation and external screening help only under explicit capacity and issuer assumptions (Sections 5.3 and 5.5).
+3. **Cheap algebraic verification does not necessarily make useful delegation economical.** Five classifiers, batching, native verification and synthetic layer-width experiments test whether replay alone causes the bottleneck. Against the fastest measured server option, these workloads achieve only modest leverage; wider layers help against a CPU but lose that advantage against the measured GPU (Section 5.6). Separately, pool rescoring mitigates fabricated-energy poisoning but does not certify missing search or campaign completeness (Section 5.4).
+
+Each experiment used predictions and thresholds committed before its execution;
+later experiments were selected in light of earlier results. Failed predictions
+and historical failures remain reported. Section 4 describes the measurement
+boundaries; the supplement records methods and protocol chronology.
 
 We also report where the approach loses. A puzzle beats useful work on
 verifier cost and freshness, as predicted. Identity cost matters in ways it
@@ -267,30 +266,11 @@ workload class whose results are checked algebraically rather than by replay.
 
 The evaluation follows a written protocol dated 22 September 2026 and
 committed to version control on 23 September, before any attack was run.
-Thresholds could not be revised after outcomes were seen; every change is a
-dated amendment committed to version control before the experiment it
-governs, with the original preserved. Twenty-five amendments (numbered 1 to 21, with 9b,
-14b, 15b and 19b) cover phase operationalisation, the three economic fixes, scientific
-integrity, trace commitment, the rescoring driver, newcomer pricing,
-attestation, the subpuzzle baseline, a correction of the simulator's replay
-timing with five-seed replication, a proof-of-work gate baseline, and the
-verification-leverage study with its phone, batching and native-verifier
-predictions, adaptive attacks on trace commitment, real-time replay capacity,
-heterogeneous costs, sleeper identities, controlled inference repetition,
-externally screened newcomers and layer width.
-Every run manifest
-records the protocol version it ran under, and a committed audit script
-checks, by local file timestamps, that each of 27 recorded result sets
-postdates the commit of its governing amendment.
+Changes to predictions or thresholds were dated amendments committed before
+the experiments they govern, with the originals preserved. Twenty-five
+amendments and the manifest timestamp checks document this sequence
+(Supplementary Section S10). Post-hoc diagnostics are identified separately.
 
-The timeline is short, and every step is dated in the public commit history.
-The docking pipeline was built from 7 September 2026, and the stock
-qualification and matched campaigns ran from 14 to 23 September; the
-adversarial protocol was written on 22 September, while the matched campaign
-was finishing. The later experiments are fast relative to docking: attacks
-replay units from a fixed corpus, and each availability simulation takes
-seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its
-cause and any post-hoc diagnostic separately from the predeclared result.
 The protocol is internally predeclared and timestamped in version control,
 not lodged with a third-party registry. Amendments chose later experiments in
 light of earlier results; what they fix in advance is each experiment's
@@ -298,12 +278,18 @@ predictions and thresholds, not the sequence of experiments.
 
 ### 4.2 Corpus, manifests and statistics
 
-Attacks run on real molecular output, not synthetic records. The corpus is the
+The molecular shortcut and poisoning experiments use actual saved docking
+output. Admission-policy experiments also use controlled verdicts and simulated
+traffic, as distinguished in Table 1. The molecular corpus is the
 set of campaign jobs whose salted hash falls below 5% of the hash space, a rule
 fixed before any attack was designed; 33 jobs across all five targets were
 recovered, containing 4,397 units with raw minima pools, traces and metrics.
-Every run writes a frozen execution manifest recording protocol, corpus, build
-and runner hashes, and re-running with a changed input fails. Proportions are
+Execution manifests record protocol versions and relevant corpus, build and
+runner hashes. Input-freezing guards reject changed-input reruns in the guarded
+corpus experiments; this is not universal enforcement across all runners. In
+particular, the screening and layer-width runners write manifests without a
+changed-input rerun guard. The saved records and recorded hashes, rather than
+such a guard alone, define the reported executions. Proportions are
 reported with exact (Clopper–Pearson) 95% intervals. Attacker discount factors
 are ratios of attempt counts; we report 95% intervals from the geometric
 distribution of attempts per admission, treating attempts as independent, as
@@ -525,7 +511,10 @@ without reserving queue seats removed the effect in the isolated prototype.
 **Unit costs and sleepers (amendment 18).** Because unit costs vary by
 target, an attacker able to reach cheaper jobs across the campaign would pay
 less time per admission, about two-thirds of honest cost in resampled timings;
-within one job, as the scheduler assigns work, no discount was found (1.001).
+within a same-job bundle, the tested development predictor gave no discount
+(1.001). An oracle knowing held-out runtimes gave 0.848 even within one job;
+this is a diagnostic bound, not a demonstrated attack. Server-chosen jobs
+remove the tested target-selection advantage, not every possible runtime discount.
 Sleeper identities that earned trust and then spent it on fabricated units
 obtained at most their ten-unit grant each (Supplementary Section S7).
 
@@ -700,9 +689,11 @@ visitors, and the benefit rests on the assumed issuer quota and token supply.
 **External screening (amendment 20).** A screening service such as Turnstile
 can instead route newcomers it passes to a separate replayed lane. Simulated at
 100 attack attempts per second, that lane served 128 of 131 honest newcomers
-within five seconds, with no fabricated admission, if 0.1% of attackers passed
+within five seconds of result submission, with no fabricated admission, if
+0.1% of attackers passed
 the screen, but 4 of 131 at 1%; the screen alone admitted fabricated work.
-Attacker pass rates are assumed, not measured (Supplementary Section S8).
+Attacker pass rates are assumed, not measured; the deadline excludes both
+screening and client molecular computation (Supplementary Section S8).
 
 ### 5.6 Does cheaper verification escape the trade-off?
 
@@ -712,7 +703,9 @@ algebraically: image classification for data labelling. A client runs a
 small classifier in exact integer arithmetic and uploads every affine layer's
 output; the verifier checks each layer with four secret Freivalds projections
 [Freivalds77], as in Slalom [Tramer19], and recomputes only the cheap nonlinear
-operations. We measured five models, from a 110-thousand-parameter MNIST
+operations. The projection distribution, conditional soundness bound and
+exact arithmetic are specified in Supplementary Section S6; unlimited adaptive
+queries against reused projections are not covered by that bound. We measured five models, from a 110-thousand-parameter MNIST
 perceptron to VGG11-BN on CIFAR-10.1 and a perceptron with two 2,048-wide
 layers, against the server's best native inference (Table 9, Supplementary
 Section S6).
@@ -748,8 +741,7 @@ near one, and docking at honest-submission leverage 4 and 10 with 152–1,520 ms
 of verification.
 Against the server's fastest option, no workload we measured is both cheap to verify and high in leverage.
 
-Two further amendments asked whether batch size or the verifier's
-implementation, rather than the method, set that limit. In amendment 15 each
+We next tested whether batching or native verification could raise leverage. Each
 admission labelled a batch of up to 128 inputs, verified with the same secret
 projections as matrix products. Batching did not produce high leverage:
 the narrow MNIST perceptron's CPU-relative leverage increased from 0.31 to
@@ -760,12 +752,11 @@ the verifier's work per value dominates. A GPU baseline was slower than one CPU 
 from launch and transfer overhead, so leverage measured against the GPU
 alone reached 2.7 for the MNIST perceptron's single inputs, 0.31 against the
 server's fastest option, one CPU thread; against the GPU it fell below 1 for
-every model at 128 inputs. In amendment
-15b a native kernel verified a whole dense network per call, with an exact
+every model at 128 inputs. A native kernel verified a whole dense network per call, with an exact
 native audit, and the native forward pass joined the server's baselines. It
 was exact, but the wide perceptron reached leverage 2.21 at 8% audits against
 the server's fastest option, the GPU, and 3.15 had the server no GPU,
-short of the predicted 4; the 2.2 quoted elsewhere is the former. What remains is per-admission work that does not
+short of the predicted 4. What remains is per-admission work that does not
 shrink with the layer: hashing the trace, quantising the input, entering
 native code with cold caches, and the audits. Of the eight predictions in the
 two amendments, three held: exactness in both, and the narrow perceptron
@@ -812,23 +803,28 @@ short-burst SHA-256 rate was twice its sustained rate (Table 10), whether
 scrypt narrows the spread between phones, rather than the gap to an attacker
 core, is uncertain.
 
-**Repetition (amendments 19 and 19b).** Three later CPU-only sessions gave
+**Repetition and second-host check.** Three later CPU-only sessions gave
 the wide model leverage 2.53–2.93 at B = 1, and results were exact on a second
 computer. Session timings varied by more than the predicted 25% in two of four
 cells, and counting the verifier's setup over 100 admissions cut the leverage
-to about 0.25 (Supplementary Section S7).
+to about 0.25. The second-host check replicated the portable kernel
+comparison, excluding input quantisation and preparation, rather than
+full-pipeline leverage against the fastest CPU/GPU baseline (Supplementary
+Section S7).
 
-**Layer width (amendment 21).** Prepared projections check a layer of width n
+**Layer width.** Prepared projections check a layer of width n
 in O(n) work against O(n²) to compute it, so leverage should grow with width.
 Synthetic n → n → 10 networks confirmed it, and all five predictions held
 (Figure 6). Against the fastest CPU option, leverage at 8% audits rose from
 0.78 at n = 512 to 4.70 at n = 4,096 and 7.90 at n = 8,192, below the cap
 that exact audits set. Reaching 4 needed 16.8 MB of int8 weights per client,
 as much as docking's prepared state, while the budget phone would compute
-such a layer in about 0.1 s by extrapolation: delivery, not phone
-computation, is the constraint. Against the fastest option including the GPU,
+such a layer in about 0.1 s by extrapolation. This suggests a delivery
+bottleneck but is not a measured phone result. Against the fastest option including the GPU,
 the paper's definition, leverage at 8% audits peaked at 1.56 and fell below 1
-at the largest widths.
+at the largest widths. These steady-state ratios exclude preparation,
+which took 0.818 s at width 4,096 and 3.562 s at 8,192; CPU and GPU timings
+used the same seeded models but different input samples (Supplementary Section S9).
 
 ```latex
 \begin{figure}[htbp]
@@ -865,9 +861,9 @@ ligands instead of being discarded.
 **Why not screening alone?** A screening service answers a different
 question. Turnstile itself runs proof-of-work and proof-of-space challenges
 among its browser checks [TurnstileBlog22], so it spends the kind of
-computation this paper studies; it classifies visitors but charges nothing to
-those it passes; and it routes every visitor through a third party, which
-sites that self-host proof of work avoid. Screening and useful work combine
+computation this paper studies. Passing the screen does not require a
+separate useful-work assignment, but screening itself may consume client
+computation. It also introduces an external screening dependency. Screening and useful work combine
 rather than compete, under the same replay-capacity limit (Section 5.5).
 
 **What trace commitment does and does not establish.** The committed trace
@@ -935,9 +931,10 @@ reserved replay capacity, stayed at 60 of 60 (arrivals and replay simulated),
 and a failed audit quarantines a reputed submitter who turns malicious. It
 cannot rescue honest newcomers, who have no more history than attackers; that
 is the trust-bootstrap lockout of Section 5.5, and separating them needs an
-outside signal such as attestation or the cross-site behavioural signals of
-deployed challenge services [Turnstile22], which trade privacy for
-discrimination. Against sleeper identities aged during quiet periods
+outside signal such as device attestation or browser screening
+[Turnstile22]. We do not assume that screening tracks visitors across websites,
+and do not evaluate the provider's privacy or detection guarantees. Its value
+here is conditional on honest coverage and attacker pass rates. Against sleeper identities aged during quiet periods
 [Douceur02], useful admission changes the price: earning trust requires three
 replayed bundles, so pre-built reputation is paid for in real, audited
 docking. Section 5.3 measures one-grant sleeper spending, not a live sleeper
@@ -957,8 +954,13 @@ anonymous-newcomer denial at sixteen attacker cores, and the mock-attestation
 lane helps only under assumed honest coverage and attacker token budgets;
 issuer quotas and platform availability are external requirements. Discount-factor intervals assume independent attempts,
 which Section 3.5 argues but does not prove.
-Time-cost parity assumes server-chosen jobs, and the screening results assume
-attacker pass rates. The
+Near-parity time-cost estimates depend on the tested assignment policy,
+predictor and cost model; server-chosen jobs do not establish a general bound
+against runtime selection. The screening results assume attacker pass rates.
+Classifier projection reuse has no implemented validity window or rejection
+budget, and the fixed-error soundness bound does not establish unrestricted
+adaptive security. Full-pipeline leverage is specific to the measured
+implementations and hardware; the portable replication covers only kernels. The
 trusted tier grants unaudited admissions on history, not on the unit.
 The scheduler quarantines contributors after failed replay and blocks
 aggregate-output retrieval when their contributions are present. A dedicated
@@ -1015,13 +1017,16 @@ prediction checks, five-seed service and trust tables and historical
 comparisons (S3), further admission-economics configurations (S4), the
 proof-of-work gate baseline (S5), inference-leverage methods (S6), and the
 real-time, heterogeneous-cost and repeated-inference follow-up (S7), and the
-screened-newcomer policy comparison (S8).
+screened-newcomer policy comparison (S8), layer-width methods (S9), and
+protocol chronology (S10).
 
 ### Availability of data and materials
 
 Project name: Useful Work Admission research prototype. Project home page: https://github.com/Rishi94523/useful-work-admission.
-Archived version: the submission commit and the result ledgers behind every
-reported number are archived on Zenodo, https://doi.org/10.5281/zenodo.23005913. Operating systems: Windows, Linux, and iOS and Android browsers.
+Archive record: https://doi.org/10.5281/zenodo.23005913. The repository and
+archive manifests identify code and result revisions. Operating systems:
+Windows, Linux, and iOS and Android browsers.
+<!-- Submission check: verify that the Zenodo deposit contains the exact submission revision and all reported result ledgers. -->
 Programming languages: Python, C++, JavaScript and WebAssembly. Licence:
 MIT; AutoDock Vina and other upstream components, fetched and patched at build
 time rather than redistributed, keep their own licences (Vina: Apache 2.0).

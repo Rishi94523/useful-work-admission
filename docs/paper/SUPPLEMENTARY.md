@@ -275,7 +275,7 @@ admitted attackers is outside the model.
 Five classifiers were verified by one generic exact-integer implementation:
 per-channel int8 weights, signed 7-bit activations with integer requantization,
 batch normalisation fused into convolutions, and four secret projections per
-affine layer over the field of size 2^31 − 1, with a native C kernel for the
+affine layer over the field of size 2,147,483,647, with a native C kernel for the
 projections and nonlinear operations. The MNIST perceptron (784-128-64-10),
 MNIST convolutional network (two 3x3 convolutions of 8 and 16 channels), CIFAR
 convolutional network (three convolutions of 16, 32 and 64 channels) and wide
@@ -373,12 +373,76 @@ the GPU baseline used an NVIDIA GeForce RTX 4060 Laptop GPU with PyTorch
 2.14.0 built for CUDA 13.0, and the native kernels were compiled with GCC 14.2
 (MinGW-w64) at -O3 -march=native. The 8% audit rate was fixed in amendment 14
 before measurement without further justification; leverage without audits is
-reported alongside so that other rates can be applied. The four secret
-projections per layer are drawn once per verifier instance from operating
-system randomness and are not refreshed within a run. Because each rejected
-submission reveals a little about them, a deployment would need to redraw
-them after a bounded number of rejections, as in the prepared-verification
-setting of Slalom [Tramer19]; we did not implement or measure that rotation.
+reported alongside so that other rates can be applied.
+
+**Projection sampling and conditional soundness.** For each affine layer,
+the verifier draws four independent vectors with independent uniform entries
+in a prime field of order p, where
+
+```latex
+\[
+p = 2^{31}-1 = 2{,}147{,}483{,}647.
+\]
+```
+
+The `uniform_field` routine draws
+32-bit words from operating-system randomness, rejects words at least 2p,
+and reduces the remainder modulo p; each field element has exactly two
+preimages in the retained range. The vectors and prepared weight projections
+are server secrets. For a fixed nonzero affine-output error vector over the
+field, independent of these secrets, each projection accepts with probability
+1/p and all four accept with probability
+
+```latex
+\[
+p^{-4} = (2^{31}-1)^{-4} \approx 2^{-124}.
+\]
+```
+
+For a fixed invalid network trace, apply this bound at the first invalid
+affine layer; nonlinear operations are recomputed. For a fixed batch, at
+least one invalid column must pass the same four checks. These statements
+assume authenticated model/input assignments, exact arithmetic and enforced
+output ranges that exclude a distinct integer answer congruent modulo p.
+They concern output correctness, not the client's physical computation cost.
+
+Projections are sampled once per verifier instance and reused throughout a
+benchmark run. The verification API returns acceptance or rejection; observed
+decisions can condition subsequent adversarial queries, so the fixed-error
+bound must not be quoted as a per-query guarantee for unrestricted adaptive
+submissions. No enforced epoch length, query/rejection limit or projection
+rotation was implemented or measured. Deployment would require a specified
+secret lifetime and feedback policy with an adaptive-security analysis, or
+fresh independent projections and their preparation costs accounted for.
+The prepared-verification setting of Slalom [Tramer19] motivates this issue;
+our benchmark does not validate such a deployment policy. The reported
+perturbation checks are sampled correctness tests, not cryptanalytic evidence.
+
+**Why binary64 preserves the field checks.** Binary64 represents integers
+exactly through its 53-bit integer precision limit. `FieldRows` splits each
+residue into two base-65,536 limbs and limits a row to 1,048,576 entries.
+Each nonnegative limb dot product satisfies
+
+```latex
+\[
+\sum_{i=1}^{N} a_i b_i \leq 2^{20}(2^{16}-1)^2 < 2^{52} < 2^{53},
+\qquad N \leq 2^{20}.
+\]
+```
+
+Thus every product and partial sum is exact regardless of
+reduction order. Each limb sum is reduced modulo p before reconstruction;
+the high-high term uses the square of the limb base, congruent to 2 modulo p.
+Signed 7-bit activation
+dots use chunks of at most 32,768 entries, whose absolute-sum bound is
+32,768 times 127 times (p - 1), below the same exact-integer limit, followed
+by modular reduction.
+The batched verifier uses these same bounds for matrix products. Quantised
+affine outputs are range-checked within the unique signed field interval,
+and requantisation requires its integer numerator to be below that limit. Thus
+the binary64 path implements exact integer/field arithmetic rather than
+approximate floating-point equality; reference comparisons and sampled
+perturbations additionally check the implementation.
 
 ## S7 Focused follow-up validation
 
@@ -546,7 +610,8 @@ replay of 1.496 s and eight outstanding outputs. The policy code and SQLite
 ledger are real; arrivals (120 s of Poisson traffic and a 30 s drain), the
 clock, replay verdicts and screening outcomes are simulated, five seeds per
 cell, 640 cases. Every arrival is a fresh session, so no per-device scarcity
-is assumed. The deadline starts at submission and excludes screening time.
+is assumed. The deadline starts at result submission and excludes both screening
+time and client molecular computation.
 No screening accuracy, Siteverify latency or molecular execution is measured.
 
 Table: Honest newcomers within five seconds and fabricated admissions at 100 attack attempts per second, 0.2 honest newcomers per second, all honest newcomers passing the screen; totals over five seeds.
@@ -569,3 +634,67 @@ fabricated work before any audit, and in this conservative implementation its
 unsampled outputs filled the pending allowance even without attackers; it
 would need separate staging and later validation to be evaluated as a
 deployable policy.
+
+
+## S9 Layer-width methods (amendment 21)
+
+Synthetic dense n → n → 10 networks with ReLU were constructed at widths
+512, 1,024, 2,048, 4,096 and 8,192 using PyTorch's default linear-layer
+initialisation and seed 20260929 + n. These are scaling diagnostics, not
+trained classifiers or a separately claimed useful workload. The CPU runner
+uses 256 seeded Gaussian calibration inputs, exact quantisation and prepared
+projections, and the unchanged native dense verifier. B = 1, one CPU thread,
+twelve excluded warm-ups and 64 timed distinct Gaussian inputs are used at
+each width. Method order is randomised per request across FP32, INT8, exact
+native forward execution, verification and verification with an exact audit.
+The central CPU baseline is the fastest median of the three forward paths;
+effective verification time is 0.92 times unaudited verification plus 0.08
+times audited verification. Four input traces per width matched the reference
+path, and six sampled single-coordinate perturbations per width were rejected.
+
+The RTX 4060 Laptop GPU runner constructs the same seeded FP32 models and
+their FP16 copies, but uses twenty excluded warm-ups and 64 timed requests
+per precision in separate loops. Timings include host-to-device transfer,
+forward execution, conversion and device-to-host transfer, with explicit CUDA
+synchronisation. Model loading is outside these request timings. CPU inputs
+are drawn after the calibration set, whereas GPU inputs are drawn from the
+start of the same seeded Gaussian generator; the input samples are therefore
+not identical. The combined baseline is the minimum of measured CPU and GPU
+medians, not a paired timing comparison on identical inputs.
+
+CPU preparation timings, including quantisation, sketch preparation and native
+verifier construction, were 119.036, 51.572, 197.916, 817.784 and 3,561.590 ms
+in width order. These are one recorded setup measurement per width, excluded
+from the steady-state leverage ratios; cold or frequently rotated verifiers
+must account for them. Exact values and hashes are recorded by
+`benchmark_width_sweep.py`; GPU records come from `benchmark_width_gpu.py`.
+W1–W5 held in the saved analysis. The budget-phone estimate scales measured
+classifier nanoseconds per multiply-accumulate to these synthetic dimensions;
+no synthetic-width phone run, cold delivery or energy measurement was performed.
+
+## S10 Protocol chronology and audit boundaries
+
+Thresholds could not be revised after outcomes were seen; every change is a
+dated amendment committed to version control before the experiment it
+governs, with the original preserved. Twenty-five amendments (numbered 1 to 21, with 9b,
+14b, 15b and 19b) cover phase operationalisation, the three economic fixes, scientific
+integrity, trace commitment, the rescoring driver, newcomer pricing,
+attestation, the subpuzzle baseline, a correction of the simulator's replay
+timing with five-seed replication, a proof-of-work gate baseline, and the
+verification-leverage study with its phone, batching and native-verifier
+predictions, adaptive attacks on trace commitment, real-time replay capacity,
+heterogeneous costs, sleeper identities, controlled inference repetition,
+externally screened newcomers and layer width.
+Every run manifest
+records the protocol version it ran under, and a committed audit script
+checks, by local file timestamps, that each of 27 recorded result sets
+postdates the commit of its governing amendment.
+
+The timeline is short, and every step is dated in the public commit history.
+The docking pipeline was built from 7 September 2026, and the stock
+qualification and matched campaigns ran from 14 to 23 September; the
+adversarial protocol was written on 22 September, while the matched campaign
+was finishing. The later experiments are fast relative to docking: attacks
+replay units from a fixed corpus, and each availability simulation takes
+seconds to minutes. Implementation was assisted by coding tools (Section 4.4). Where a prediction failed we report the failure, its
+cause and any post-hoc diagnostic separately from the predeclared result.

@@ -67,8 +67,6 @@ DECLARATIONS = r'''\section*{Statements and Declarations}
 
 \bmhead{Author contributions} Conceptualization, methodology, software, validation, formal analysis, data curation, visualization and writing of the original draft: Rishi D V. Investigation (device experiments): Rishi D V, Ram Ganesh Vemula, Sanjay D M and Rithik Madhav V. Writing, review and editing: Ram Ganesh Vemula, Sanjay D M, Rithik Madhav V and Jayashree R. Supervision: Jayashree R. All authors read and approved the final manuscript.
 
-\bmhead{Use of AI tools} The authors used two AI coding assistants, Anthropic Claude (Claude Code) and OpenAI Codex (2026 versions), in three ways. First, to write and debug the experiment software: the docking benchmark runners, the admission and verification prototypes, the analysis scripts, and the figure and manuscript build scripts. Second, to search for references and check their details; the authors verified each reference against its source. Third, to draft and revise text in every section of this article and its supplementary material. The authors directed the study, reviewed and edited all generated code and text, checked every reported number against the recorded data, and take full responsibility for the content of this article.
-
 \bmhead{Supplementary information} Online Resource 1: supplementary methods, phone timing studies, availability prediction checks, further admission-economics configurations, the proof-of-work gate baseline, inference-leverage methods, follow-up validation, the screened-newcomer comparison, layer-width methods, protocol chronology and the mapping of results to protocol amendments.
 '''
 

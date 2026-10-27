@@ -32,7 +32,7 @@ ABSTRACT = [
                 "docking campaign, phone execution, adaptive attacks, admission simulations and a real-time replay test."),
     ('Results', "Splitting docking into admission-sized tasks preserved screening results on the tested panels, and phones "
                 "reproduced the tested units exactly. Once three easily overlooked scheduler flaws were fixed, every tested "
-                "cheating strategy cost about as much as honest work, even with free identities, and replay caught every "
+                "cheating strategy on server-assigned work cost about as much as honest work, even with free identities, and replay caught every "
                 "tested shortcut through the search. Each check is a full replay, so in simulations under attack replay "
                 "capacity decided who was admitted and budget phones were turned away first, while the same queue checking "
                 "proof of work kept every device class at least 90% served. The classifiers were checked in milliseconds and "
@@ -42,10 +42,10 @@ ABSTRACT = [
 ]
 KEYWORDS = ['Proof of work', 'Useful work', 'Admission control', 'Denial of service', 'Verifiable computation', 'Molecular docking']
 
-AUTHORS = r'''\author*[1]{\fnm{Rishi} \sur{D V}}\email{rishidv2005@gmail.com}
-\author[1]{\fnm{Ram Ganesh} \sur{Vemula}}\email{ramganeshvemula@gmail.com}
-\author[1]{\fnm{Rithik Madhav} \sur{V}}\email{rithik7680@gmail.com}
-\author[1]{\fnm{Sanjay} \sur{D M}}\email{sanjaydm23072005@gmail.com}
+AUTHORS = r'''\author*[1]{\fnm{Rishi} \sur{D V}\,\orcidlink{0000-0003-1868-639X}}\email{rishidv2005@gmail.com}
+\author[1]{\fnm{Ram Ganesh} \sur{Vemula}\,\orcidlink{0009-0007-0876-8363}}\email{ramganeshvemula@gmail.com}
+\author[1]{\fnm{Rithik Madhav} \sur{V}\,\orcidlink{0009-0009-1613-5501}}\email{rithik7680@gmail.com}
+\author[1]{\fnm{Sanjay} \sur{D M}\,\orcidlink{0009-0006-7523-0013}}\email{sanjaydm23072005@gmail.com}
 \author[2]{\fnm{Jayashree} \sur{R}\,\orcidlink{0000-0002-9509-0066}}\email{jayashree@pes.edu}
 \affil*[1]{\orgname{PES University}, \orgaddress{\city{Bengaluru}, \state{Karnataka}, \country{India}}}
 \affil[2]{\orgdiv{Department of Computer Science and Engineering (AI \& ML)}, \orgname{PES University}, \orgaddress{\city{Bengaluru}, \state{Karnataka}, \country{India}}}'''
@@ -348,7 +348,9 @@ def supplement(sup):
             r'\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}', r'\newcommand{\botrule}{\bottomrule}',
             r'\providecommand{\bibcommenthead}{}', r'\renewcommand{\thesection}{S\arabic{section}}',
             r'\renewcommand{\thetable}{S\arabic{table}}', r'\renewcommand{\thefigure}{S\arabic{figure}}',
-            r'\title{Online Resource 1\\[4pt]\large ' + TITLE + '}', r'\author{' + SUPP_AUTHORS + '}', r'\date{}',
+            r'\title{Online Resource 1\\[4pt]\large ' + TITLE + r'\\[4pt]\normalsize\textit{SN Computer Science}}',
+            r'\author{' + SUPP_AUTHORS + r'\\[4pt]\small PES University, Bengaluru, Karnataka, India\\'
+            r'\small Corresponding author: Rishi D V, \href{mailto:rishidv2005@gmail.com}{rishidv2005@gmail.com}}', r'\date{}',
             r'\begin{document}', r'\maketitle', '',
             bm.text('Online Resource 1 for the article above. Section and table numbers prefixed S refer to this file; all others refer to the main text.'),
             '', bm.body(content), r'\bibliographystyle{sn-mathphys-num}', r'\bibliography{references-sncs}', r'\end{document}']
